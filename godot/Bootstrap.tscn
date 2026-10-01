@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dolxii1cm8au6"]
+
+[ext_resource type="Script" uid="uid://diskmeqrmjjk8" path="res://GameBootstrap.cs" id="1_e3r5u"]
+
+[node name="GameBoostrap" type="Node3D" unique_id=1524788538]
+script = ExtResource("1_e3r5u")
