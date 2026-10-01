@@ -2,6 +2,10 @@
   <ItemGroup>
     <ProjectReference Include="..\src\RollForHonor.Application\RollForHonor.Application.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Chickensoft.GoDotTest" Version="2.0.47" />
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net9.0</TargetFramework>
