@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_NOLOGO: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Set up Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.7.2
+          use-dotnet: true
+          include-templates: false
+
+      - name: Restore dependencies
+        run: dotnet restore RollForHonor.sln
+
+      - name: Build solution
+        run: dotnet build RollForHonor.sln --configuration Debug --no-restore
+
+      - name: Run .NET tests
+        run: >
+          dotnet test RollForHonor.sln
+          --configuration Debug
+          --no-build
+          --no-restore
+
+      - name: Import Godot project
+        run: godot --headless --editor --path godot --quit
+
+      - name: Run Godot tests
+        run: >
+          godot
+          --headless
+          --path godot
+          --run-tests
+          --quit-on-finish
