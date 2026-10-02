@@ -1,9 +1,16 @@
 namespace RollForHonor.Domain.Combat.Effects;
 
+/// <summary>
+/// Defines the immutable rules shared by instances of a combat effect.
+/// </summary>
 public abstract record CombatEffectDefinition
 {
+    /// <summary>Gets the stable definition identifier.</summary>
     public EffectDefinitionId Id { get; }
 
+    /// <summary>
+    /// Initializes an effect definition with its stable identifier.
+    /// </summary>
     protected CombatEffectDefinition(EffectDefinitionId id)
     {
         ArgumentNullException.ThrowIfNull(id);

@@ -3,8 +3,14 @@ using RollForHonor.Domain.Combat.StateMutations;
 
 namespace RollForHonor.Domain.Combat.Services;
 
+/// <summary>
+/// Calculates atomic health projections without mutating live state.
+/// </summary>
 public sealed class HealthStateProjector : IHealthStateProjector
 {
+    /// <summary>
+    /// Applies the net adjustment and clamps final health to valid bounds.
+    /// </summary>
     public HealthProjection Project(
         CombatantSnapshot combatant,
         IReadOnlyList<HealthAdjustment> adjustments)

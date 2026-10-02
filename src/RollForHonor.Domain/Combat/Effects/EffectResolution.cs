@@ -3,14 +3,23 @@ using RollForHonor.Domain.Combat.StateMutations;
 
 namespace RollForHonor.Domain.Combat.Effects;
 
+/// <summary>
+/// Groups resolved effects, health adjustments, and immediate state changes.
+/// </summary>
 public sealed record EffectResolution
 {
+    /// <summary>Gets effects reported in the combat result.</summary>
     public IReadOnlyList<ResolvedCombatEffect> Effects { get; }
 
+    /// <summary>Gets health mutations produced by the effects.</summary>
     public IReadOnlyList<HealthAdjustment> HealthAdjustments { get; }
 
+    /// <summary>Gets immediate non-health state changes produced by the effects.</summary>
     public IReadOnlyList<ICombatStateChange> StateChanges { get; }
 
+    /// <summary>
+    /// Creates an immutable effect-stage result.
+    /// </summary>
     public EffectResolution(
         IReadOnlyList<ResolvedCombatEffect> effects,
         IReadOnlyList<HealthAdjustment> healthAdjustments,

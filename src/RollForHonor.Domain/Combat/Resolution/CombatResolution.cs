@@ -3,14 +3,29 @@ using RollForHonor.Domain.Dice;
 
 namespace RollForHonor.Domain.Combat.Resolution;
 
+/// <summary>
+/// Contains a complete atomic combat calculation ready for commit.
+/// </summary>
 public sealed record CombatResolution
 {
+    /// <summary>Gets the resolution identifier copied from the request.</summary>
     public Guid ResolutionId { get; }
+
+    /// <summary>Gets the state version on which the calculation was based.</summary>
     public long BasedOnStateVersion { get; }
+
+    /// <summary>Gets the structured combat result.</summary>
     public CombatResult Result { get; }
+
+    /// <summary>Gets the canonical state changes ready for atomic commit.</summary>
     public IReadOnlyList<ICombatStateChange> Changes { get; }
+
+    /// <summary>Gets the dice rolls performed during the resolution.</summary>
     public DiceTrace DiceTrace { get; }
 
+    /// <summary>
+    /// Creates a versioned resolution with its result, state changes, and dice trace.
+    /// </summary>
     public CombatResolution(
         Guid resolutionId,
         long basedOnStateVersion,

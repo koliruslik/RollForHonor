@@ -3,14 +3,29 @@ using RollForHonor.Domain.Combat.State;
 
 namespace RollForHonor.Domain.Combat.Resolution;
 
+/// <summary>
+/// Requests one atomic attack resolution against one target snapshot.
+/// </summary>
 public sealed record CombatRequest
 {
+    /// <summary>Gets the identifier shared with the resulting resolution.</summary>
     public Guid ResolutionId { get; }
+
+    /// <summary>Gets the attacking combatant identifier.</summary>
     public CombatantId SourceId { get; }
+
+    /// <summary>Gets the target combatant identifier.</summary>
     public CombatantId TargetId { get; }
+
+    /// <summary>Gets the attack being resolved.</summary>
     public AttackPayload Attack { get; }
+
+    /// <summary>Gets the state snapshot used for calculation.</summary>
     public CombatStateSnapshot StateSnapshot { get; }
 
+    /// <summary>
+    /// Creates a validated combat resolution request.
+    /// </summary>
     public CombatRequest(
         Guid resolutionId,
         CombatantId sourceId,

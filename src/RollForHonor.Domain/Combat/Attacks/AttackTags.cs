@@ -1,5 +1,8 @@
 namespace RollForHonor.Domain.Combat.Attacks;
 
+/// <summary>
+/// Classifies an attack for rules and modifier selection.
+/// </summary>
 [Flags]
 public enum AttackTags
 {

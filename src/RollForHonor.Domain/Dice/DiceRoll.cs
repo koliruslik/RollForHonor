@@ -1,13 +1,22 @@
 namespace RollForHonor.Domain.Dice;
 
+/// <summary>
+/// Captures the individual results and total of one dice roll.
+/// </summary>
 public sealed record DiceRoll
 {
+    /// <summary>Gets the formula used for the roll.</summary>
     public DiceFormula Formula { get; }
 
+    /// <summary>Gets the result of each individual die.</summary>
     public IReadOnlyList<int> Results { get; }
 
+    /// <summary>Gets the sum of all dice results.</summary>
     public int Total { get; }
 
+    /// <summary>
+    /// Creates a validated result for the supplied formula.
+    /// </summary>
     public DiceRoll(
         DiceFormula formula,
         IReadOnlyList<int> results,

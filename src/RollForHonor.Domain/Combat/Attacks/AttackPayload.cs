@@ -4,18 +4,29 @@ using RollForHonor.Domain.Dice;
 
 namespace RollForHonor.Domain.Combat.Attacks;
 
+/// <summary>
+/// Describes the immutable rules and payload of an attack.
+/// </summary>
 public sealed record AttackPayload
 {
+    /// <summary>Gets the formula used to roll the attack.</summary>
     public DiceFormula AttackRoll { get; }
 
+    /// <summary>Gets the flat modifier applied to the attack roll.</summary>
     public int AttackModifier { get; }
 
+    /// <summary>Gets the attack's typed damage components.</summary>
     public IReadOnlyList<DamageComponent> Damage { get; }
 
+    /// <summary>Gets the effects carried by the attack.</summary>
     public IReadOnlyList<CombatEffectDefinition> Effects { get; }
 
+    /// <summary>Gets the classifications used by combat rules.</summary>
     public AttackTags Tags { get; }
 
+    /// <summary>
+    /// Creates a validated attack payload.
+    /// </summary>
     public AttackPayload(
         DiceFormula attackRoll,
         int attackModifier,

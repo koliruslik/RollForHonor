@@ -9,6 +9,9 @@ using RollForHonor.Domain.Dice;
 
 namespace RollForHonor.Domain.Combat.Services;
 
+/// <summary>
+/// Coordinates the complete atomic resolution of one attack impact.
+/// </summary>
 public sealed class CombatResolver
 {
     private readonly ICombatRequestValidator _requestValidator;
@@ -19,6 +22,9 @@ public sealed class CombatResolver
     private readonly ICombatEffectResolver _effectResolver;
     private readonly IHealthStateProjector _healthStateProjector;
 
+    /// <summary>
+    /// Creates a resolver from the policies responsible for each combat stage.
+    /// </summary>
     public CombatResolver(
         ICombatRequestValidator requestValidator,
         IAttackRollResolver attackRollResolver,
@@ -45,6 +51,9 @@ public sealed class CombatResolver
         _healthStateProjector = healthStateProjector;
     }
 
+    /// <summary>
+    /// Resolves a request into either a rejection or a versioned set of state changes.
+    /// </summary>
     public ICombatResolutionOutcome Resolve(CombatRequest request, IDiceRoller dice)
     {
         ArgumentNullException.ThrowIfNull(request);

@@ -5,15 +5,32 @@ using RollForHonor.Domain.Combat.State;
 
 namespace RollForHonor.Domain.Combat.Resolution;
 
+/// <summary>
+/// Describes the calculated result of an attack against one target.
+/// </summary>
 public sealed record TargetCombatResult
 {
+    /// <summary>Gets the target combatant identifier.</summary>
     public CombatantId TargetId { get; }
+
+    /// <summary>Gets the resolved attack roll.</summary>
     public AttackRollResult AttackRoll { get; }
+
+    /// <summary>Gets the attack outcome category.</summary>
     public AttackOutcome Outcome { get; }
+
+    /// <summary>Gets damage before and after mitigation.</summary>
     public DamageResolution DamageResolution { get; }
+
+    /// <summary>Gets effects reported for the target.</summary>
     public IReadOnlyList<ResolvedCombatEffect> Effects { get; }
+
+    /// <summary>Gets whether the target is defeated after the resolution.</summary>
     public bool IsDefeated { get; }
 
+    /// <summary>
+    /// Creates an immutable target combat result.
+    /// </summary>
     public TargetCombatResult(
         CombatantId targetId,
         AttackRollResult attackRoll,
