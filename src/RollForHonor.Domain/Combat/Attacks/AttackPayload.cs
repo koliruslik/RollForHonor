@@ -15,6 +15,9 @@ public sealed record AttackPayload
     /// <summary>Gets the flat modifier applied to the attack roll.</summary>
     public int AttackModifier { get; }
 
+    /// <summary>Gets the natural-roll rules used to shift the attack outcome.</summary>
+    public NaturalOutcomeShiftRules OutcomeShiftRules { get; }
+
     /// <summary>Gets the attack's typed damage components.</summary>
     public IReadOnlyList<DamageComponent> Damage { get; }
 
@@ -30,6 +33,7 @@ public sealed record AttackPayload
     public AttackPayload(
         DiceFormula attackRoll,
         int attackModifier,
+        NaturalOutcomeShiftRules outcomeShiftRules,
         IReadOnlyList<DamageComponent> damage,
         IReadOnlyList<CombatEffectDefinition> effects,
         AttackTags tags)
@@ -37,6 +41,7 @@ public sealed record AttackPayload
         ArgumentNullException.ThrowIfNull(attackRoll);
         ArgumentNullException.ThrowIfNull(damage);
         ArgumentNullException.ThrowIfNull(effects);
+        ArgumentNullException.ThrowIfNull(outcomeShiftRules);
 
         if (damage.Any(component => component is null))
         {
@@ -66,6 +71,7 @@ public sealed record AttackPayload
 
         AttackRoll = attackRoll;
         AttackModifier = attackModifier;
+        OutcomeShiftRules = outcomeShiftRules;
         Damage = damage.ToArray();
         Effects = effects.ToArray();
         Tags = tags;

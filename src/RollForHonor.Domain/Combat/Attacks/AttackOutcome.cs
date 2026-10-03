@@ -5,9 +5,15 @@ namespace RollForHonor.Domain.Combat.Attacks;
 /// </summary>
 public enum AttackOutcome
 {
-    CriticalFailure,
-    Miss,
+    /// <summary>The target completely avoids the attack.</summary>
+    Evaded,
+
+    /// <summary>The attack makes weak contact.</summary>
     GlancingHit,
+
+    /// <summary>The attack makes normal contact.</summary>
     Hit,
-    CriticalSuccess
+
+    /// <summary>The attack makes critical contact.</summary>
+    CriticalHit
 }
