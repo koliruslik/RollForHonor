@@ -121,6 +121,17 @@ public sealed class CombatRequestValidatorTests
         AssertRejection(rejection, CombatRejectionReason.InvalidAttack);
     }
 
+    [Fact]
+    public void Validate_WhenAttackRollIsNotD20_ReturnsInvalidAttack()
+    {
+        var request = CreateRequest(
+            attack: CreateDamageAttack(new DiceFormula(2, 10)));
+
+        var rejection = _validator.Validate(request);
+
+        AssertRejection(rejection, CombatRejectionReason.InvalidAttack);
+    }
+
     private static CombatRequest CreateRequest(
         CombatantSnapshot? source = null,
         CombatantSnapshot? target = null,
@@ -158,9 +169,11 @@ public sealed class CombatRequestValidatorTests
         return new CombatantId(Guid.NewGuid());
     }
 
-    private static AttackPayload CreateDamageAttack()
+    private static AttackPayload CreateDamageAttack(
+        DiceFormula? attackRoll = null)
     {
         return CreateAttack(
+            attackRoll: attackRoll,
             damage:
             [
                 new DamageComponent(
@@ -171,12 +184,14 @@ public sealed class CombatRequestValidatorTests
     }
 
     private static AttackPayload CreateAttack(
+        DiceFormula? attackRoll = null,
         IReadOnlyList<DamageComponent>? damage = null,
         IReadOnlyList<CombatEffectDefinition>? effects = null)
     {
         return new AttackPayload(
-            new DiceFormula(1, 20),
+            attackRoll ?? new DiceFormula(1, 20),
             attackModifier: 0,
+            NaturalOutcomeShiftRules.Standard,
             damage ?? [],
             effects ?? [],
             AttackTags.Melee);

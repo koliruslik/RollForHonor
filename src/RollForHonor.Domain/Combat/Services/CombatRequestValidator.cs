@@ -37,6 +37,14 @@ public sealed class CombatRequestValidator : ICombatRequestValidator
                 $"Combatant '{request.SourceId}' has conflicting source and target snapshots.");
         }
 
+        if (request.Attack.AttackRoll.Count != 1 ||
+            request.Attack.AttackRoll.Sides != 20)
+        {
+            return new CombatRejection(
+                CombatRejectionReason.InvalidAttack,
+                "An attack roll must use exactly 1d20.");
+        }
+
         if (request.Attack.Effects.Count == 0 && request.Attack.Damage.Count == 0)
         {
             return new CombatRejection(CombatRejectionReason.InvalidAttack,
