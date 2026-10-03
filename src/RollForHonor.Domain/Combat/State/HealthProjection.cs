@@ -36,4 +36,9 @@ public sealed record HealthProjection
         PreviousHealth = previousHealth;
         CurrentHealth = currentHealth;
     }
+
+    public override string ToString()
+    {
+        return $"{CombatantId}: {PreviousHealth} -> {CurrentHealth}";
+    }
 }

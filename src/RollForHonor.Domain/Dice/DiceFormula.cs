@@ -22,4 +22,9 @@ public sealed record DiceFormula
         Count = count;
         Sides = sides;
     }
+
+    public override string ToString()
+    {
+        return $"{Count}d{Sides}";
+    }
 }

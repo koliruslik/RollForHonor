@@ -1,3 +1,4 @@
+using System.Globalization;
 using RollForHonor.Domain.Dice;
 
 namespace RollForHonor.Domain.Combat.Damage;
@@ -34,5 +35,17 @@ public sealed record DamageComponent
         Dice = dice;
         FlatDamage = flatDamage;
         Type = type;
+    }
+
+    public override string ToString()
+    {
+        var flatDamage = FlatDamage switch
+        {
+            > 0 => $" + {FlatDamage.ToString(CultureInfo.InvariantCulture)}",
+            < 0 => $" - {Math.Abs((long)FlatDamage).ToString(CultureInfo.InvariantCulture)}",
+            _ => string.Empty
+        };
+
+        return $"{Dice}{flatDamage} [{Type}]";
     }
 }

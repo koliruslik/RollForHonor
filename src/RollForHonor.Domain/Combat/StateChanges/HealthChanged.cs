@@ -32,4 +32,9 @@ public sealed record HealthChanged : ICombatStateChange
         PreviousHealth = previousHealth;
         CurrentHealth = currentHealth;
     }
+
+    public override string ToString()
+    {
+        return $"{CombatantId}: {PreviousHealth} -> {CurrentHealth}";
+    }
 }

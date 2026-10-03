@@ -22,4 +22,9 @@ public sealed record EffectDefinitionId
 
         Value = value;
     }
+
+    public override string ToString()
+    {
+        return Value.ToString("D");
+    }
 }

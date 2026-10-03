@@ -22,4 +22,9 @@ public sealed record CombatantId
 
         Value = value;
     }
+
+    public override string ToString()
+    {
+        return Value.ToString("D");
+    }
 }

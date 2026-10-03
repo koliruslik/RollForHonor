@@ -26,4 +26,9 @@ public sealed record CombatRejection
         Reason = reason;
         Description = description;
     }
+
+    public override string ToString()
+    {
+        return $"{Reason}: {Description}";
+    }
 }
