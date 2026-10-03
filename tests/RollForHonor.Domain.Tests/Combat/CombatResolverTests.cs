@@ -7,11 +7,18 @@ using RollForHonor.Domain.Combat.State;
 using RollForHonor.Domain.Combat.StateChanges;
 using RollForHonor.Domain.Combat.StateMutations;
 using RollForHonor.Domain.Dice;
+using RollForHonor.Domain.Tests.Diagnostics;
+using Xunit.Abstractions;
 
 namespace RollForHonor.Domain.Tests.Combat;
 
-public sealed class CombatResolverTests
+public sealed class CombatResolverTests : CombatDiagnosticTestBase
 {
+    public CombatResolverTests(ITestOutputHelper output)
+        : base(output)
+    {
+    }
+
     [Fact]
     public void Resolve_WhenCombinedDamageDefeatsTarget_ProducesCanonicalHealthChangesAndDefeat()
     {
@@ -36,7 +43,8 @@ public sealed class CombatResolverTests
             CreateAttack(),
             new CombatStateSnapshot(1, source, target));
 
-        var outcome = resolver.Resolve(request, new FixedDiceRoller());
+        var outcome = LogOutcome(
+            resolver.Resolve(request, new FixedDiceRoller()));
 
         var resolved = Assert.IsType<ResolvedCombat>(outcome);
         var healthChanges = resolved.Resolution.Changes
@@ -105,7 +113,8 @@ public sealed class CombatResolverTests
             CreateAttack(definitions),
             new CombatStateSnapshot(1, source, target));
 
-        var outcome = resolver.Resolve(request, new FixedDiceRoller());
+        var outcome = LogOutcome(
+            resolver.Resolve(request, new FixedDiceRoller()));
 
         var resolved = Assert.IsType<ResolvedCombat>(outcome);
         var actualEffects = resolved.Resolution.Result.Target.Effects;
