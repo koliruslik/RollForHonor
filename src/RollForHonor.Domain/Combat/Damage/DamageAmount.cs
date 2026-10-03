@@ -26,4 +26,9 @@ public sealed record DamageAmount
         Type = type;
         Amount = amount;
     }
+
+    public override string ToString()
+    {
+        return $"{Amount} [{Type}]";
+    }
 }

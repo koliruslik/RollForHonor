@@ -1,3 +1,4 @@
+using System.Globalization;
 using RollForHonor.Domain.Combat.State;
 
 namespace RollForHonor.Domain.Combat.StateMutations;
@@ -29,5 +30,12 @@ public sealed record HealthAdjustment
 
         CombatantId = combatantId;
         Amount = amount;
+    }
+
+    public override string ToString()
+    {
+        var amount = Amount.ToString("+0;-0;0", CultureInfo.InvariantCulture);
+
+        return $"{CombatantId}: {amount} health";
     }
 }

@@ -1,3 +1,4 @@
+using System.Globalization;
 using RollForHonor.Domain.Dice;
 
 namespace RollForHonor.Domain.Combat.Attacks;
@@ -36,5 +37,21 @@ public sealed record AttackRollResult
         Roll = roll;
         Modifier = modifier;
         Total = total;
+    }
+
+    public override string ToString()
+    {
+        var results = string.Join(
+            ", ",
+            Roll.Results.Select(result => result.ToString(CultureInfo.InvariantCulture)));
+
+        var modifier = Modifier switch
+        {
+            > 0 => $" + {Modifier.ToString(CultureInfo.InvariantCulture)}",
+            < 0 => $" - {Math.Abs((long)Modifier).ToString(CultureInfo.InvariantCulture)}",
+            _ => string.Empty
+        };
+
+        return $"{Roll.Formula} [{results}]{modifier} = {Total}";
     }
 }

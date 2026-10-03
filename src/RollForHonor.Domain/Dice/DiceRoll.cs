@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace RollForHonor.Domain.Dice;
 
 /// <summary>
@@ -49,5 +51,14 @@ public sealed record DiceRoll
         Formula = formula;
         Results = results.ToArray();
         Total = total;
+    }
+
+    public override string ToString()
+    {
+        var results = string.Join(
+            ", ",
+            Results.Select(result => result.ToString(CultureInfo.InvariantCulture)));
+
+        return $"{Formula} [{results}] = {Total}";
     }
 }
