@@ -132,13 +132,46 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
         Assert.False(resolved.Resolution.Result.Target.IsDefeated);
     }
 
+    [Fact]
+    public void Resolve_WhenProductionValidatorRejectsRequest_DoesNotStartAttackResolution()
+    {
+        var source = CreateCombatant(health: 50, maxHealth: 100);
+        var target = CreateCombatant(health: 50, maxHealth: 100);
+        var damage = CreateDamage(amount: 0);
+        var effectResolution = new EffectResolution(
+            effects: [],
+            healthAdjustments: [],
+            stateChanges: []);
+        var resolver = CreateResolver(
+            damage,
+            effectResolution,
+            new CombatRequestValidator(),
+            new ThrowingAttackRollResolver());
+        var request = new CombatRequest(
+            Guid.NewGuid(),
+            source.Id,
+            target.Id,
+            CreateAttack(),
+            new CombatStateSnapshot(1, source, target));
+
+        var outcome = LogOutcome(
+            resolver.Resolve(request, new FixedDiceRoller()));
+
+        var rejected = Assert.IsType<RejectedCombat>(outcome);
+        Assert.Equal(
+            CombatRejectionReason.InvalidAttack,
+            rejected.Rejection.Reason);
+    }
+
     private static CombatResolver CreateResolver(
         DamageResolution damage,
-        EffectResolution effectResolution)
+        EffectResolution effectResolution,
+        ICombatRequestValidator? requestValidator = null,
+        IAttackRollResolver? attackRollResolver = null)
     {
         return new CombatResolver(
-            new AcceptingRequestValidator(),
-            new FixedAttackRollResolver(),
+            requestValidator ?? new AcceptingRequestValidator(),
+            attackRollResolver ?? new FixedAttackRollResolver(),
             new HitOutcomePolicy(),
             new FixedAttackDamageResolver(damage.UnmitigatedDamage),
             new FixedDefenseResolver(damage.FinalDamage),
@@ -200,6 +233,19 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
         {
             var roll = new DiceRoll(attack.AttackRoll, [10], 10);
             return new AttackRollResult(roll, attack.AttackModifier, 10);
+        }
+    }
+
+    private sealed class ThrowingAttackRollResolver : IAttackRollResolver
+    {
+        public AttackRollResult Resolve(
+            AttackPayload attack,
+            CombatantSnapshot source,
+            CombatantSnapshot target,
+            IDiceRoller dice)
+        {
+            throw new InvalidOperationException(
+                "Attack resolution must not run for a rejected request.");
         }
     }
 

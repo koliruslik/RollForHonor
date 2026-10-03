@@ -28,6 +28,9 @@ public sealed record CombatantSnapshot
     /// <summary>Gets active effect instances.</summary>
     public IReadOnlyList<CombatEffectSnapshot> Effects { get; }
 
+    /// <summary>Gets whether the combatant has no remaining health.</summary>
+    public bool IsDefeated => Health == 0;
+
     /// <summary>
     /// Creates a validated combatant snapshot.
     /// </summary>
