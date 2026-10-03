@@ -26,4 +26,23 @@ public sealed class CombatStateValidationTests
                 resistances: [],
                 effects: []));
     }
+
+    [Theory]
+    [InlineData(0, true)]
+    [InlineData(1, false)]
+    public void CombatantSnapshot_IsDefeated_ReflectsWhetherHealthIsZero(
+        int health,
+        bool expected)
+    {
+        var snapshot = new CombatantSnapshot(
+            new CombatantId(Guid.NewGuid()),
+            health,
+            maxHealth: 10,
+            armor: 0,
+            evasion: 0,
+            resistances: [],
+            effects: []);
+
+        Assert.Equal(expected, snapshot.IsDefeated);
+    }
 }
