@@ -185,6 +185,7 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
         return new AttackPayload(
             new DiceFormula(1, 20),
             attackModifier: 0,
+            NaturalOutcomeShiftRules.Standard,
             damage: [],
             effects ?? [],
             AttackTags.Melee);
