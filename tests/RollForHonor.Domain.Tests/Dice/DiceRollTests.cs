@@ -1,4 +1,4 @@
-using RollForHonor.Domain.Dice;
+using RollForHonor.Domain.Dice.Models;
 
 namespace RollForHonor.Domain.Tests.Dice;
 

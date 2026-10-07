@@ -1,0 +1,40 @@
+using System.Globalization;
+
+namespace RollForHonor.Domain.Combat.State.Models;
+
+/// <summary>
+/// Proposes a signed health delta within an atomic resolution.
+/// </summary>
+public sealed record HealthAdjustment
+{
+    /// <summary>Gets the combatant whose health is adjusted.</summary>
+    public CombatantId CombatantId { get; }
+
+    /// <summary>Gets the signed health delta; positive heals and negative damages.</summary>
+    public int Amount { get; }
+
+    /// <summary>
+    /// Creates a non-zero health adjustment for a combatant.
+    /// </summary>
+    public HealthAdjustment(CombatantId combatantId, int amount)
+    {
+        ArgumentNullException.ThrowIfNull(combatantId);
+
+        if (amount == 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(amount),
+                "A health adjustment cannot be zero.");
+        }
+
+        CombatantId = combatantId;
+        Amount = amount;
+    }
+
+    public override string ToString()
+    {
+        var amount = Amount.ToString("+0;-0;0", CultureInfo.InvariantCulture);
+
+        return $"{CombatantId}: {amount} health";
+    }
+}

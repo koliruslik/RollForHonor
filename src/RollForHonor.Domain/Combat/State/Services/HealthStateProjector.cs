@@ -1,0 +1,48 @@
+using RollForHonor.Domain.Combat.State.Models;
+
+namespace RollForHonor.Domain.Combat.State.Services;
+
+/// <summary>
+/// Calculates atomic health projections without mutating live state.
+/// </summary>
+public sealed class HealthStateProjector : IHealthStateProjector
+{
+    /// <summary>
+    /// Applies the net adjustment and clamps final health to valid bounds.
+    /// </summary>
+    public HealthProjection Project(
+        CombatantSnapshot combatant,
+        IReadOnlyList<HealthAdjustment> adjustments)
+    {
+        ArgumentNullException.ThrowIfNull(combatant);
+        ArgumentNullException.ThrowIfNull(adjustments);
+
+        if (adjustments.Any(adjustment => adjustment is null))
+        {
+            throw new ArgumentException(
+                "Health adjustments cannot contain null values.",
+                nameof(adjustments));
+        }
+
+        if (adjustments.Any(adjustment => adjustment.CombatantId != combatant.Id))
+        {
+            throw new ArgumentException(
+                "Every health adjustment must target the projected combatant.",
+                nameof(adjustments));
+        }
+
+        var totalAdjustment = adjustments.Sum(
+            adjustment => (long)adjustment.Amount);
+
+        var adjustedHealth = combatant.Health + totalAdjustment;
+        var currentHealth = (int)Math.Clamp(
+            adjustedHealth,
+            0L,
+            combatant.MaxHealth);
+
+        return new HealthProjection(
+            combatant.Id,
+            combatant.Health,
+            currentHealth);
+    }
+}
