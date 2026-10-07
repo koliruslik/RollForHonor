@@ -14,6 +14,9 @@ public sealed record DamageResolution
     /// <summary>
     /// Creates a complete damage resolution.
     /// </summary>
+    /// <param name="unmitigatedDamage">Damage produced before defenses.</param>
+    /// <param name="finalDamage">Damage remaining after defenses.</param>
+    /// <exception cref="ArgumentNullException">Either damage stage is null.</exception>
     public DamageResolution(
         UnmitigatedDamage unmitigatedDamage,
         FinalDamage finalDamage)

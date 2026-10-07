@@ -14,6 +14,9 @@ public sealed record DamageAmount
     /// <summary>
     /// Creates a validated typed damage amount.
     /// </summary>
+    /// <param name="type">A defined damage type.</param>
+    /// <param name="amount">A non-negative integer amount.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The type is undefined or amount is negative.</exception>
     public DamageAmount(DamageType type, int amount)
     {
         if (!Enum.IsDefined(type))
@@ -27,6 +30,7 @@ public sealed record DamageAmount
         Amount = amount;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{Amount} [{Type}]";

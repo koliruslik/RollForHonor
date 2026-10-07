@@ -26,6 +26,13 @@ public sealed record CombatRequest
     /// <summary>
     /// Creates a validated combat resolution request.
     /// </summary>
+    /// <param name="resolutionId">The non-empty identifier copied into the result.</param>
+    /// <param name="sourceId">The expected source combatant identifier.</param>
+    /// <param name="targetId">The expected target combatant identifier.</param>
+    /// <param name="attack">The immutable attack payload to resolve.</param>
+    /// <param name="state">The versioned source and target snapshot.</param>
+    /// <exception cref="ArgumentException"><paramref name="resolutionId"/> is empty.</exception>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
     public CombatRequest(
         Guid resolutionId,
         CombatantId sourceId,

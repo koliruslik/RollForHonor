@@ -20,6 +20,11 @@ public sealed record DamageComponent
     /// <summary>
     /// Creates a validated attack damage component.
     /// </summary>
+    /// <param name="dice">The dice rolled to produce this component.</param>
+    /// <param name="flatDamage">The signed flat value added after the roll.</param>
+    /// <param name="type">A defined damage type.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dice"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
     public DamageComponent(
         DiceFormula dice,
         int flatDamage,
@@ -37,6 +42,7 @@ public sealed record DamageComponent
         Type = type;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         var flatDamage = FlatDamage switch

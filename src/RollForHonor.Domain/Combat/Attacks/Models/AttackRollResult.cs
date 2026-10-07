@@ -20,6 +20,11 @@ public sealed record AttackRollResult
     /// <summary>
     /// Creates a validated attack-roll result.
     /// </summary>
+    /// <param name="roll">The underlying dice roll.</param>
+    /// <param name="modifier">The flat attack modifier.</param>
+    /// <param name="total">The roll total plus the modifier.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="roll"/> is null.</exception>
+    /// <exception cref="ArgumentException"><paramref name="total"/> does not match the roll and modifier.</exception>
     public AttackRollResult(
         DiceRoll roll,
         int modifier,
@@ -39,6 +44,7 @@ public sealed record AttackRollResult
         Total = total;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         var results = string.Join(

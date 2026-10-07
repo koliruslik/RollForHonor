@@ -16,6 +16,9 @@ public sealed record ResolvedCombatEffect
     /// <summary>
     /// Creates a resolved effect for the supplied target.
     /// </summary>
+    /// <param name="targetId">The combatant selected to receive the effect.</param>
+    /// <param name="definition">The resolved effect definition.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public ResolvedCombatEffect(
         CombatantId targetId,
         CombatEffectDefinition definition)

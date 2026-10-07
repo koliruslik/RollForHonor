@@ -34,6 +34,16 @@ public sealed record CombatantSnapshot
     /// <summary>
     /// Creates a validated combatant snapshot.
     /// </summary>
+    /// <param name="id">The combatant identifier.</param>
+    /// <param name="health">Current health from zero through maximum health.</param>
+    /// <param name="maxHealth">Positive maximum health.</param>
+    /// <param name="armor">Armor available to defense rules.</param>
+    /// <param name="evasion">Evasion available to attack rules.</param>
+    /// <param name="resistances">Typed resistance values.</param>
+    /// <param name="effects">Active effect instances.</param>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Health bounds are invalid.</exception>
+    /// <exception cref="ArgumentException">A collection contains a null item.</exception>
     public CombatantSnapshot(
         CombatantId id,
         int health,

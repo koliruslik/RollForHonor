@@ -13,6 +13,8 @@ public sealed record CombatantDefeated : ICombatStateChange
     /// <summary>
     /// Creates a defeat state change for a combatant.
     /// </summary>
+    /// <param name="combatantId">The combatant that transitioned to zero health.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="combatantId"/> is null.</exception>
     public CombatantDefeated(CombatantId combatantId)
     {
         ArgumentNullException.ThrowIfNull(combatantId);

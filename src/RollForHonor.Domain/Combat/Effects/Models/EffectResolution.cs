@@ -11,7 +11,7 @@ public sealed record EffectResolution
     /// <summary>Gets effects reported in the combat result.</summary>
     public IReadOnlyList<ResolvedCombatEffect> Effects { get; }
 
-    /// <summary>Gets health mutations produced by the effects.</summary>
+    /// <summary>Gets proposed health adjustments produced by the effects.</summary>
     public IReadOnlyList<HealthAdjustment> HealthAdjustments { get; }
 
     /// <summary>Gets immediate non-health state changes produced by the effects.</summary>
@@ -20,6 +20,13 @@ public sealed record EffectResolution
     /// <summary>
     /// Creates an immutable effect-stage result.
     /// </summary>
+    /// <param name="effects">Effects reported in the combat result.</param>
+    /// <param name="healthAdjustments">Signed health adjustments for later projection.</param>
+    /// <param name="stateChanges">Immediate non-health state changes.</param>
+    /// <exception cref="ArgumentNullException">A collection argument is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// A collection contains null, or state changes contain projected health or defeat changes.
+    /// </exception>
     public EffectResolution(
         IReadOnlyList<ResolvedCombatEffect> effects,
         IReadOnlyList<HealthAdjustment> healthAdjustments,

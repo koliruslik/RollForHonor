@@ -19,6 +19,11 @@ public sealed record HealthChanged : ICombatStateChange
     /// <summary>
     /// Creates a validated health state change.
     /// </summary>
+    /// <param name="combatantId">The combatant whose health changed.</param>
+    /// <param name="previousHealth">The non-negative health before the change.</param>
+    /// <param name="currentHealth">The non-negative health after the change.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="combatantId"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Either health value is negative.</exception>
     public HealthChanged(
         CombatantId combatantId,
         int previousHealth,
@@ -33,6 +38,7 @@ public sealed record HealthChanged : ICombatStateChange
         CurrentHealth = currentHealth;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{CombatantId}: {PreviousHealth} -> {CurrentHealth}";

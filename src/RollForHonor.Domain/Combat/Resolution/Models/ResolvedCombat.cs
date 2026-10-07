@@ -13,6 +13,8 @@ public sealed record ResolvedCombat : ICombatResolutionOutcome
     /// <summary>
     /// Creates a resolved combat outcome.
     /// </summary>
+    /// <param name="resolution">The complete versioned calculation.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="resolution"/> is null.</exception>
     public ResolvedCombat(CombatResolution resolution)
     {
         ArgumentNullException.ThrowIfNull(resolution);

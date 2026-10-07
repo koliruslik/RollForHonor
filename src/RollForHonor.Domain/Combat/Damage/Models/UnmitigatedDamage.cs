@@ -14,6 +14,9 @@ public sealed record UnmitigatedDamage
     /// <summary>
     /// Creates an unmitigated damage result and its breakdown.
     /// </summary>
+    /// <param name="breakdown">The ordered calculation trace before defenses.</param>
+    /// <param name="damage">Typed damage to pass into defense resolution.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public UnmitigatedDamage(
         DamageBreakdown breakdown,
         DamagePacket damage)

@@ -8,7 +8,11 @@ namespace RollForHonor.Domain.Combat.Resolution.Services;
 public interface ICombatRequestValidator
 {
     /// <summary>
-    /// Returns a rejection when the request is invalid; otherwise returns null.
+    /// Checks identities, source state, attack-roll shape, and whether the attack
+    /// contains damage or effects before any dice are rolled.
     /// </summary>
+    /// <param name="request">The complete combat request to validate.</param>
+    /// <returns>The first rejection found, or <see langword="null"/> when valid.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="request"/> is null.</exception>
     CombatRejection? Validate(CombatRequest request);
 }

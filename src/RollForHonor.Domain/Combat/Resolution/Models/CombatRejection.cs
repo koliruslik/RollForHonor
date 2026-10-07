@@ -14,6 +14,10 @@ public sealed record CombatRejection
     /// <summary>
     /// Creates a rejection with a reason and human-readable description.
     /// </summary>
+    /// <param name="reason">A defined rejection category.</param>
+    /// <param name="description">A non-empty explanation suitable for diagnostics.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="reason"/> is undefined.</exception>
+    /// <exception cref="ArgumentException"><paramref name="description"/> is empty or whitespace.</exception>
     public CombatRejection(CombatRejectionReason reason, string description)
     {
         if (!Enum.IsDefined(reason))
@@ -27,6 +31,7 @@ public sealed record CombatRejection
         Description = description;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{Reason}: {Description}";

@@ -16,6 +16,9 @@ public sealed record ResistanceValue
     /// <summary>
     /// Creates a validated typed resistance.
     /// </summary>
+    /// <param name="type">A defined damage type.</param>
+    /// <param name="value">The resistance coefficient consumed by defense rules.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
     public ResistanceValue(DamageType type, decimal value)
     {
         if (!Enum.IsDefined(type))
@@ -27,6 +30,7 @@ public sealed record ResistanceValue
         Value = value;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"[{Type}]: {Value}";

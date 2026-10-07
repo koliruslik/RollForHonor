@@ -29,6 +29,14 @@ public sealed class CombatResolver
     /// <summary>
     /// Creates a resolver from the policies responsible for each combat stage.
     /// </summary>
+    /// <param name="requestValidator">Validates requests before resolution begins.</param>
+    /// <param name="attackRollResolver">Produces the attack roll.</param>
+    /// <param name="attackOutcomePolicy">Classifies the attack outcome.</param>
+    /// <param name="damageResolver">Calculates damage before defenses.</param>
+    /// <param name="defenseResolver">Applies target defenses.</param>
+    /// <param name="effectResolver">Resolves immediate combat effects.</param>
+    /// <param name="healthStateProjector">Projects final health without mutation.</param>
+    /// <exception cref="ArgumentNullException">Any collaborator is null.</exception>
     public CombatResolver(
         ICombatRequestValidator requestValidator,
         IAttackRollResolver attackRollResolver,
@@ -56,8 +64,20 @@ public sealed class CombatResolver
     }
 
     /// <summary>
-    /// Resolves a request into either a rejection or a versioned set of state changes.
+    /// Runs one atomic impact pipeline and returns either a validation rejection or
+    /// a versioned resolution with results, proposed state changes, and dice trace.
     /// </summary>
+    /// <param name="request">The attack and immutable source/target snapshot.</param>
+    /// <param name="dice">The dice source shared by every stage of this resolution.</param>
+    /// <returns>A rejected or successfully resolved combat outcome.</returns>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// An effect adjusts a combatant outside the supplied snapshot.
+    /// </exception>
+    /// <remarks>
+    /// The method proposes changes but never applies them to live state. Exceptions
+    /// from injected collaborators are propagated.
+    /// </remarks>
     public ICombatResolutionOutcome Resolve(CombatRequest request, IDiceRoller dice)
     {
         ArgumentNullException.ThrowIfNull(request);

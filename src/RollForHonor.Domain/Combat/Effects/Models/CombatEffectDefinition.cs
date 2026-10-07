@@ -11,6 +11,8 @@ public abstract record CombatEffectDefinition
     /// <summary>
     /// Initializes an effect definition with its stable identifier.
     /// </summary>
+    /// <param name="id">The non-null identifier shared by instances of this definition.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="id"/> is null.</exception>
     protected CombatEffectDefinition(EffectDefinitionId id)
     {
         ArgumentNullException.ThrowIfNull(id);

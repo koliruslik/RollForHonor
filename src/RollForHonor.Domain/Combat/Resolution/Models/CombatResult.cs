@@ -16,6 +16,9 @@ public sealed record CombatResult
     /// <summary>
     /// Creates a combat result for one source and target.
     /// </summary>
+    /// <param name="sourceId">The attacking combatant identifier.</param>
+    /// <param name="target">The complete result calculated for the target.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public CombatResult(
         CombatantId sourceId,
         TargetCombatResult target)

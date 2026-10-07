@@ -10,8 +10,15 @@ namespace RollForHonor.Domain.Combat.Attacks.Services;
 public interface IAttackRollResolver
 {
     /// <summary>
-    /// Rolls and modifies an attack for the supplied source and target.
+    /// Rolls the attack once and adds its flat attack modifier using checked arithmetic.
     /// </summary>
+    /// <param name="attack">The attack whose roll formula and modifier are applied.</param>
+    /// <param name="source">The attacking combatant available to source-dependent rules.</param>
+    /// <param name="target">The target available to target-dependent rules.</param>
+    /// <param name="dice">The dice source that records the performed attack roll.</param>
+    /// <returns>The original dice roll, applied modifier, and final total.</returns>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="OverflowException">The roll total and modifier exceed the integer range.</exception>
     AttackRollResult Resolve(
         AttackPayload attack,
         CombatantSnapshot source,

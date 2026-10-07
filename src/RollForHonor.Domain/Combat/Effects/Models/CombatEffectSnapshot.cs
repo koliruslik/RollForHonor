@@ -14,6 +14,9 @@ public sealed record CombatEffectSnapshot
     /// <summary>
     /// Creates a snapshot for an applied effect instance.
     /// </summary>
+    /// <param name="id">The runtime instance identifier.</param>
+    /// <param name="definition">The immutable rules used by the instance.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public CombatEffectSnapshot(
         EffectInstanceId id,
         CombatEffectDefinition definition)

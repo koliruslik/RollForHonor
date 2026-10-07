@@ -11,6 +11,8 @@ public sealed record EffectDefinitionId
     /// <summary>
     /// Creates a non-empty effect definition identifier.
     /// </summary>
+    /// <param name="value">The underlying non-empty GUID.</param>
+    /// <exception cref="ArgumentException"><paramref name="value"/> is empty.</exception>
     public EffectDefinitionId(Guid value)
     {
         if (value == Guid.Empty)
@@ -23,6 +25,7 @@ public sealed record EffectDefinitionId
         Value = value;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return Value.ToString("D");

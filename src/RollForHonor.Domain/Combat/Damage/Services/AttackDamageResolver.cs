@@ -6,10 +6,16 @@ using RollForHonor.Domain.Dice.Services;
 
 namespace RollForHonor.Domain.Combat.Damage.Services;
 
+/// <summary>
+/// Resolves typed attack damage before armor, resistances, and other target defenses.
+/// </summary>
 public class AttackDamageResolver : IAttackDamageResolver
 {
     private readonly DamageMultipliers _multipliers;
 
+    /// <summary>Creates a resolver with outcome-specific damage scaling.</summary>
+    /// <param name="multipliers">The non-null multiplier configuration.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="multipliers"/> is null.</exception>
     public AttackDamageResolver(DamageMultipliers multipliers)
     {
         ArgumentNullException.ThrowIfNull(multipliers);
@@ -17,6 +23,7 @@ public class AttackDamageResolver : IAttackDamageResolver
         _multipliers = multipliers;
     }
 
+    /// <inheritdoc />
     public UnmitigatedDamage Resolve(
         AttackPayload attack,
         CombatantSnapshot source,

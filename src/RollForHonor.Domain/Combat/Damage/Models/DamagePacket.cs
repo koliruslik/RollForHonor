@@ -11,6 +11,9 @@ public sealed record DamagePacket
     /// <summary>
     /// Creates an immutable packet from typed damage amounts.
     /// </summary>
+    /// <param name="components">Typed amounts preserved in their supplied order.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="components"/> is null.</exception>
+    /// <exception cref="ArgumentException"><paramref name="components"/> contains a null item.</exception>
     public DamagePacket(IReadOnlyList<DamageAmount> components)
     {
         ArgumentNullException.ThrowIfNull(components);
@@ -28,6 +31,8 @@ public sealed record DamagePacket
     /// <summary>
     /// Returns the total damage across all packet components.
     /// </summary>
+    /// <returns>The checked sum of every component amount.</returns>
+    /// <exception cref="OverflowException">The total exceeds the integer range.</exception>
     public int Sum()
     {
         return Components.Sum(component => component.Amount);

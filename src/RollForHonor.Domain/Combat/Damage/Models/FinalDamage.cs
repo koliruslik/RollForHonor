@@ -14,6 +14,9 @@ public sealed record FinalDamage
     /// <summary>
     /// Creates a final damage result and its breakdown.
     /// </summary>
+    /// <param name="breakdown">The complete ordered calculation trace.</param>
+    /// <param name="damage">Typed damage remaining after defenses.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public FinalDamage(
         DamageBreakdown breakdown,
         DamagePacket damage)
@@ -28,6 +31,8 @@ public sealed record FinalDamage
     /// <summary>
     /// Returns the total final damage across all damage types.
     /// </summary>
+    /// <returns>The checked sum of all remaining damage.</returns>
+    /// <exception cref="OverflowException">The total exceeds the integer range.</exception>
     public int Sum()
     {
         return Damage.Sum();

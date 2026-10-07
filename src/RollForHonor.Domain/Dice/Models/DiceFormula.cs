@@ -14,6 +14,9 @@ public sealed record DiceFormula
     /// <summary>
     /// Creates a validated dice formula.
     /// </summary>
+    /// <param name="count">The positive number of dice.</param>
+    /// <param name="sides">The number of sides per die; at least two.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The count or side count is below its minimum.</exception>
     public DiceFormula(int count, int sides)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(count, 1);
@@ -23,6 +26,7 @@ public sealed record DiceFormula
         Sides = sides;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{Count}d{Sides}";

@@ -30,6 +30,15 @@ public sealed record AttackPayload
     /// <summary>
     /// Creates a validated attack payload.
     /// </summary>
+    /// <param name="attackRoll">The formula used by the attack-roll stage.</param>
+    /// <param name="attackModifier">The flat value added to the attack roll.</param>
+    /// <param name="outcomeShiftRules">Natural-roll rules that shift the classified outcome.</param>
+    /// <param name="damage">Typed dice and flat damage components.</param>
+    /// <param name="effects">Effect definitions carried by the attack.</param>
+    /// <param name="tags">Known classifications used by conditional rules.</param>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="ArgumentException">A damage or effect collection contains a null item.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="tags"/> contains an unknown flag.</exception>
     public AttackPayload(
         DiceFormula attackRoll,
         int attackModifier,

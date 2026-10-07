@@ -17,6 +17,9 @@ public sealed record EffectRemoved : ICombatStateChange
     /// <summary>
     /// Creates an effect-removed state change.
     /// </summary>
+    /// <param name="combatantId">The combatant losing the effect.</param>
+    /// <param name="effectId">The runtime effect instance to remove.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public EffectRemoved(
         CombatantId combatantId,
         EffectInstanceId effectId)

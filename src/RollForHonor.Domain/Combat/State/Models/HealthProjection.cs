@@ -23,6 +23,11 @@ public sealed record HealthProjection
     /// <summary>
     /// Creates a projected health transition for a combatant.
     /// </summary>
+    /// <param name="combatantId">The projected combatant identifier.</param>
+    /// <param name="previousHealth">The non-negative health before projection.</param>
+    /// <param name="currentHealth">The non-negative projected health.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="combatantId"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Either health value is negative.</exception>
     public HealthProjection(
         CombatantId combatantId,
         int previousHealth,
@@ -37,6 +42,7 @@ public sealed record HealthProjection
         CurrentHealth = currentHealth;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{CombatantId}: {PreviousHealth} -> {CurrentHealth}";

@@ -19,6 +19,11 @@ public sealed record NaturalOutcomeShiftRules
     /// <summary>
     /// Creates validated natural-roll outcome shift rules.
     /// </summary>
+    /// <param name="downgradeMaximum">Highest natural d20 value that lowers the outcome.</param>
+    /// <param name="upgradeMinimum">Lowest natural d20 value that raises the outcome.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// A threshold is outside 1 through 20, or the downgrade range overlaps the upgrade range.
+    /// </exception>
     public NaturalOutcomeShiftRules(
         int downgradeMaximum,
         int upgradeMinimum)

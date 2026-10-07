@@ -17,6 +17,9 @@ public sealed record EffectApplied : ICombatStateChange
     /// <summary>
     /// Creates an effect-applied state change.
     /// </summary>
+    /// <param name="combatantId">The combatant receiving the effect.</param>
+    /// <param name="effect">The effect instance to add.</param>
+    /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public EffectApplied(
         CombatantId combatantId,
         CombatEffectSnapshot effect)

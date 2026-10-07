@@ -11,6 +11,9 @@ public sealed record DamageBreakdown
     /// <summary>
     /// Creates an immutable non-empty damage breakdown.
     /// </summary>
+    /// <param name="steps">The calculation stages in execution order.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="steps"/> is null.</exception>
+    /// <exception cref="ArgumentException">The collection is empty or contains a null step.</exception>
     public DamageBreakdown(IReadOnlyList<DamageStep> steps)
     {
         ArgumentNullException.ThrowIfNull(steps);

@@ -31,6 +31,15 @@ public sealed record TargetCombatResult
     /// <summary>
     /// Creates an immutable target combat result.
     /// </summary>
+    /// <param name="targetId">The affected combatant identifier.</param>
+    /// <param name="attackRoll">The resolved attack roll.</param>
+    /// <param name="outcome">A defined attack outcome.</param>
+    /// <param name="damageResolution">Damage before and after defenses.</param>
+    /// <param name="effects">Effects reported for this target.</param>
+    /// <param name="isDefeated">Whether projected final health is zero.</param>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="outcome"/> is undefined.</exception>
+    /// <exception cref="ArgumentException"><paramref name="effects"/> contains a null item.</exception>
     public TargetCombatResult(
         CombatantId targetId,
         AttackRollResult attackRoll,

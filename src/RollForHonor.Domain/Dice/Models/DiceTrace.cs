@@ -11,6 +11,9 @@ public sealed record DiceTrace
     /// <summary>
     /// Creates an immutable trace from the supplied rolls.
     /// </summary>
+    /// <param name="rolls">The rolls in their execution order.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="rolls"/> is null.</exception>
+    /// <exception cref="ArgumentException"><paramref name="rolls"/> contains a null item.</exception>
     public DiceTrace(IReadOnlyList<DiceRoll> rolls)
     {
         ArgumentNullException.ThrowIfNull(rolls);

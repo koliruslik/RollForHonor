@@ -9,8 +9,11 @@ namespace RollForHonor.Domain.Combat.Damage.Services;
 public interface IDefenseResolver
 {
     /// <summary>
-    /// Resolves the typed damage that remains after target mitigation.
+    /// Applies target-specific defenses while preserving typed damage and its breakdown.
     /// </summary>
+    /// <param name="unmitigatedDamage">Damage produced before target defenses.</param>
+    /// <param name="target">The target whose defenses are applied.</param>
+    /// <returns>The typed damage remaining after mitigation.</returns>
     FinalDamage Resolve(
         UnmitigatedDamage unmitigatedDamage,
         CombatantSnapshot target);

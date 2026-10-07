@@ -13,6 +13,8 @@ public sealed record RejectedCombat : ICombatResolutionOutcome
     /// <summary>
     /// Creates a rejected combat outcome.
     /// </summary>
+    /// <param name="rejection">The validated reason resolution did not begin.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="rejection"/> is null.</exception>
     public RejectedCombat(CombatRejection rejection)
     {
         ArgumentNullException.ThrowIfNull(rejection);

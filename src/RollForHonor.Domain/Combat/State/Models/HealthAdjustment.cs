@@ -16,6 +16,10 @@ public sealed record HealthAdjustment
     /// <summary>
     /// Creates a non-zero health adjustment for a combatant.
     /// </summary>
+    /// <param name="combatantId">The combatant whose health is adjusted.</param>
+    /// <param name="amount">A non-zero signed delta; positive heals and negative damages.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="combatantId"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="amount"/> is zero.</exception>
     public HealthAdjustment(CombatantId combatantId, int amount)
     {
         ArgumentNullException.ThrowIfNull(combatantId);
@@ -31,6 +35,7 @@ public sealed record HealthAdjustment
         Amount = amount;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         var amount = Amount.ToString("+0;-0;0", CultureInfo.InvariantCulture);

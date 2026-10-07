@@ -17,6 +17,11 @@ public sealed record DamageStep
     /// <summary>
     /// Creates a validated damage-calculation step.
     /// </summary>
+    /// <param name="type">A defined calculation-stage type.</param>
+    /// <param name="input">The packet entering the stage.</param>
+    /// <param name="output">The packet produced by the stage.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
+    /// <exception cref="ArgumentNullException">The input or output packet is null.</exception>
     public DamageStep(
         DamageStepType type,
         DamagePacket input,

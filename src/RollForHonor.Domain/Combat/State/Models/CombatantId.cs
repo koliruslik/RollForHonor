@@ -11,6 +11,8 @@ public sealed record CombatantId
     /// <summary>
     /// Creates a non-empty combatant identifier.
     /// </summary>
+    /// <param name="value">The underlying non-empty GUID.</param>
+    /// <exception cref="ArgumentException"><paramref name="value"/> is empty.</exception>
     public CombatantId(Guid value)
     {
         if (value == Guid.Empty)
@@ -23,6 +25,7 @@ public sealed record CombatantId
         Value = value;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return Value.ToString("D");

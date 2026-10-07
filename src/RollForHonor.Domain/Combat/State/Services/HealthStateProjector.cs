@@ -7,9 +7,7 @@ namespace RollForHonor.Domain.Combat.State.Services;
 /// </summary>
 public sealed class HealthStateProjector : IHealthStateProjector
 {
-    /// <summary>
-    /// Applies the net adjustment and clamps final health to valid bounds.
-    /// </summary>
+    /// <inheritdoc />
     public HealthProjection Project(
         CombatantSnapshot combatant,
         IReadOnlyList<HealthAdjustment> adjustments)

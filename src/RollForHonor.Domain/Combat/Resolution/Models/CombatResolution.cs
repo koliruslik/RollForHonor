@@ -26,6 +26,16 @@ public sealed record CombatResolution
     /// <summary>
     /// Creates a versioned resolution with its result, state changes, and dice trace.
     /// </summary>
+    /// <param name="resolutionId">The non-empty identifier copied from the request.</param>
+    /// <param name="basedOnStateVersion">The non-negative snapshot version used for calculation.</param>
+    /// <param name="result">The structured source and target result.</param>
+    /// <param name="changes">Canonical state changes in commit order.</param>
+    /// <param name="diceTrace">All rolls performed during the resolution.</param>
+    /// <exception cref="ArgumentException">
+    /// The resolution identifier is empty or the change collection contains null.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">The state version is negative.</exception>
+    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
     public CombatResolution(
         Guid resolutionId,
         long basedOnStateVersion,

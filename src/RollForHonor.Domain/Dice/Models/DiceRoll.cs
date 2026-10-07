@@ -19,6 +19,13 @@ public sealed record DiceRoll
     /// <summary>
     /// Creates a validated result for the supplied formula.
     /// </summary>
+    /// <param name="formula">The formula that produced the roll.</param>
+    /// <param name="results">One in-range value for every die in the formula.</param>
+    /// <param name="total">The sum of all individual results.</param>
+    /// <exception cref="ArgumentNullException">The formula or result collection is null.</exception>
+    /// <exception cref="ArgumentException">The result count or total does not match the roll.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">An individual result is outside the die range.</exception>
+    /// <exception cref="OverflowException">Summing the results exceeds the integer range.</exception>
     public DiceRoll(
         DiceFormula formula,
         IReadOnlyList<int> results,
@@ -53,6 +60,7 @@ public sealed record DiceRoll
         Total = total;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         var results = string.Join(

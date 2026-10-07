@@ -11,8 +11,16 @@ namespace RollForHonor.Domain.Combat.Effects.Services;
 public interface ICombatEffectResolver
 {
     /// <summary>
-    /// Resolves effects after attack outcome and final damage are known.
+    /// Resolves immediate attack effects after the outcome and both damage stages are known.
     /// </summary>
+    /// <param name="attack">The attack carrying the effect definitions.</param>
+    /// <param name="source">The combatant applying the effects.</param>
+    /// <param name="target">The combatant receiving the effects.</param>
+    /// <param name="attackRoll">The previously resolved attack roll.</param>
+    /// <param name="outcome">The classified attack outcome.</param>
+    /// <param name="damage">Damage before target defenses.</param>
+    /// <param name="finalDamage">Damage remaining after target defenses.</param>
+    /// <returns>Resolved effects, health adjustments, and immediate state changes.</returns>
     EffectResolution Resolve(
         AttackPayload attack,
         CombatantSnapshot source,
