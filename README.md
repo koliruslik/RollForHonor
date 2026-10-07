@@ -12,8 +12,9 @@ deterministic, testable combat foundation before expanding into full gameplay.
 The current version is a technical foundation rather than a complete playable
 game.
 
-The latest completed milestone introduces configurable d20 attack outcome
-rules. An attack is evaluated against the target's evasion and classified as:
+The latest combat milestone adds production weapon raw-damage resolution to
+the configurable d20 attack outcome rules. An attack is evaluated against the
+target's evasion and classified as:
 
 | Attack margin | Outcome |
 | ---: | --- |
@@ -26,6 +27,13 @@ Natural-roll thresholds can upgrade or downgrade the resulting outcome by one
 step. The standard configuration uses a natural `1` for downgrades and a
 natural `20` for upgrades.
 
+Every typed weapon-damage component rolls through the supplied deterministic
+dice source and adds its flat bonus. A component cannot fall below zero. The
+configured multiplier for the resolved attack outcome is then applied to each
+component independently, with fractional results rounded upward before target
+defenses are evaluated. The result preserves damage types and an ordered
+calculation breakdown.
+
 ## Implemented
 
 - deterministic dice formulas, rolls, and trace data;
@@ -35,6 +43,10 @@ natural `20` for upgrades.
 - structured combat results with proposed state changes;
 - configurable d20 attack outcome rules;
 - configurable natural-roll upgrades and downgrades;
+- configurable outcome multipliers for weapon raw damage;
+- typed weapon damage dice, flat bonuses, zero clamping, and per-component
+  upward rounding;
+- ordered raw-damage calculation breakdowns before target defenses;
 - engine-independent Domain logic;
 - automated Domain and Application tests;
 - headless Godot runtime tests;
@@ -104,7 +116,7 @@ The pipeline:
 
 Near-term development remains combat-first and includes:
 
-- weapon raw damage;
+- combat Domain organization and documentation refinement;
 - armor, resistance, and defense rules;
 - combat effects and resource costs;
 - persistent-effect ticks;
