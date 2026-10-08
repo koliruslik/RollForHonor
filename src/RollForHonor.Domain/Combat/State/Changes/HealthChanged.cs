@@ -1,0 +1,46 @@
+using RollForHonor.Domain.Combat.State.Models;
+
+namespace RollForHonor.Domain.Combat.State.Changes;
+
+/// <summary>
+/// Records the canonical health transition of a combatant.
+/// </summary>
+public sealed record HealthChanged : ICombatStateChange
+{
+    /// <summary>Gets the affected combatant identifier.</summary>
+    public CombatantId CombatantId { get; }
+
+    /// <summary>Gets health before the committed transition.</summary>
+    public int PreviousHealth { get; }
+
+    /// <summary>Gets health after the committed transition.</summary>
+    public int CurrentHealth { get; }
+
+    /// <summary>
+    /// Creates a validated health state change.
+    /// </summary>
+    /// <param name="combatantId">The combatant whose health changed.</param>
+    /// <param name="previousHealth">The non-negative health before the change.</param>
+    /// <param name="currentHealth">The non-negative health after the change.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="combatantId"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Either health value is negative.</exception>
+    public HealthChanged(
+        CombatantId combatantId,
+        int previousHealth,
+        int currentHealth)
+    {
+        ArgumentNullException.ThrowIfNull(combatantId);
+        ArgumentOutOfRangeException.ThrowIfNegative(previousHealth);
+        ArgumentOutOfRangeException.ThrowIfNegative(currentHealth);
+
+        CombatantId = combatantId;
+        PreviousHealth = previousHealth;
+        CurrentHealth = currentHealth;
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"{CombatantId}: {PreviousHealth} -> {CurrentHealth}";
+    }
+}

@@ -1,7 +1,8 @@
 using System.Text;
-using RollForHonor.Domain.Combat.Damage;
-using RollForHonor.Domain.Combat.Effects;
-using RollForHonor.Domain.Combat.Resolution;
+using RollForHonor.Domain.Combat.Damage.Models;
+using RollForHonor.Domain.Combat.Effects.Models;
+using RollForHonor.Domain.Combat.Resolution.Models;
+using RollForHonor.Domain.Combat.Resolution.Services;
 
 namespace RollForHonor.Domain.Tests.Diagnostics;
 
@@ -10,7 +11,7 @@ internal static class CombatResolutionDiagnosticFormatter
     public static string Format(ICombatResolutionOutcome outcome)
     {
         ArgumentNullException.ThrowIfNull(outcome);
-        
+
         return outcome switch
         {
             ResolvedCombat resolved => FormatResolved(resolved.Resolution),
@@ -59,7 +60,7 @@ internal static class CombatResolutionDiagnosticFormatter
 
         return builder.ToString();
     }
-    
+
     private static void AppendDamage(
         StringBuilder builder,
         FinalDamage damage)

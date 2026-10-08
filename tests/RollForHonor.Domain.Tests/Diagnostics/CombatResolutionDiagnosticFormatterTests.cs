@@ -1,9 +1,10 @@
-using RollForHonor.Domain.Combat.Attacks;
-using RollForHonor.Domain.Combat.Damage;
-using RollForHonor.Domain.Combat.Effects;
-using RollForHonor.Domain.Combat.Resolution;
-using RollForHonor.Domain.Combat.State;
-using RollForHonor.Domain.Dice;
+using RollForHonor.Domain.Combat.Attacks.Models;
+using RollForHonor.Domain.Combat.Damage.Models;
+using RollForHonor.Domain.Combat.Effects.Models;
+using RollForHonor.Domain.Combat.Resolution.Models;
+using RollForHonor.Domain.Combat.Resolution.Services;
+using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Dice.Models;
 
 namespace RollForHonor.Domain.Tests.Diagnostics;
 

@@ -63,6 +63,11 @@ The project follows an inward dependency direction:
 `RollForHonor.Domain` contains deterministic game rules, combat contracts,
 value objects, validation, and resolution policies.
 
+Combat code is organized by feature (`Attacks`, `Damage`, `Effects`,
+`Resolution`, and `State`). Within each feature, immutable data belongs to
+`Models`, while contracts and executable rule implementations belong to
+`Services`. Tunable damage coefficients are kept in `Configuration`.
+
 The Domain layer does not depend on Godot. It calculates combat results without
 directly mutating live game state.
 
@@ -94,6 +99,9 @@ use cases.
 | Path | Purpose |
 | --- | --- |
 | `src/RollForHonor.Domain` | Engine-independent game and combat rules |
+| `src/RollForHonor.Domain/Combat/*/Models` | Immutable combat data, results, snapshots, and value objects |
+| `src/RollForHonor.Domain/Combat/*/Services` | Combat contracts and deterministic rule implementations |
+| `src/RollForHonor.Domain/Combat/Damage/Configuration` | Tunable raw-damage coefficients |
 | `src/RollForHonor.Application` | Application use cases and orchestration |
 | `godot` | Godot project and engine integration |
 | `tests/RollForHonor.Domain.Tests` | Domain unit tests |
@@ -116,7 +124,6 @@ The pipeline:
 
 Near-term development remains combat-first and includes:
 
-- combat Domain organization and documentation refinement;
 - armor, resistance, and defense rules;
 - combat effects and resource costs;
 - persistent-effect ticks;

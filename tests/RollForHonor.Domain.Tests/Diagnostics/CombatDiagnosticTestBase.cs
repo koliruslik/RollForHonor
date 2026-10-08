@@ -1,4 +1,4 @@
-using RollForHonor.Domain.Combat.Resolution;
+using RollForHonor.Domain.Combat.Resolution.Services;
 using Xunit.Abstractions;
 
 namespace RollForHonor.Domain.Tests.Diagnostics;
