@@ -5,6 +5,12 @@ namespace RollForHonor.Domain.Combat.State.Models;
 /// <summary>
 /// Associates a resistance value with a damage type.
 /// </summary>
+/// <remarks>
+/// DefenseResolver interprets the value as a fractional reduction: 0.25 means
+/// 25% less damage, and -0.25 means 25% more damage. It requires values no greater
+/// than one and a unique entry per type in the target snapshot. This value object
+/// validates the type only; defense-specific constraints are checked by the resolver.
+/// </remarks>
 public sealed record ResistanceValue
 {
     /// <summary>Gets the resisted damage type.</summary>

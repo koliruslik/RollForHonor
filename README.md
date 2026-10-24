@@ -34,6 +34,17 @@ component independently, with fractional results rounded upward before target
 defenses are evaluated. The result preserves damage types and an ordered
 calculation breakdown.
 
+Defense resolution now applies a replaceable armor formula once to the combined
+piercing, bludgeoning, and slashing damage of a hit. The remaining physical
+damage is distributed proportionally across its original typed components,
+rounding each upward. Typed resistances then reduce the matching components;
+negative resistance values represent weaknesses. Both defense stages preserve
+the existing calculation history and append their input and output packets.
+Resistance values use fractions (`0.25` means 25% reduction), must not exceed
+`1`, and must be unique per type in a combatant snapshot. This is a shared rule
+for players and enemies; equipment-driven stat aggregation is not implemented.
+A concrete armor formula and its tuning remain to be selected and implemented.
+
 ## Implemented
 
 - deterministic dice formulas, rolls, and trace data;
@@ -47,6 +58,8 @@ calculation breakdown.
 - typed weapon damage dice, flat bonuses, zero clamping, and per-component
   upward rounding;
 - ordered raw-damage calculation breakdowns before target defenses;
+- typed defense resolution with a replaceable armor-formula contract,
+  resistances, weaknesses, and ordered before/after breakdowns;
 - engine-independent Domain logic;
 - automated Domain and Application tests;
 - headless Godot runtime tests;
@@ -124,7 +137,7 @@ The pipeline:
 
 Near-term development remains combat-first and includes:
 
-- armor, resistance, and defense rules;
+- a concrete armor formula and defense tuning;
 - combat effects and resource costs;
 - persistent-effect ticks;
 - projectile impact resolution;

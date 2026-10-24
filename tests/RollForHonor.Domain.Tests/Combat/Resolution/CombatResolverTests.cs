@@ -167,18 +167,46 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             rejected.Rejection.Reason);
     }
 
+    [Fact]
+    public void Resolve_WhenProductionDefensesAreUsed_ProjectsHealthFromDamageAfterResistances()
+    {
+        var source = CreateCombatant(health: 100, maxHealth: 100);
+        var target = new CombatantSnapshot(
+            new CombatantId(Guid.NewGuid()), health: 100, maxHealth: 100,
+            armor: 100, evasion: 0,
+            resistances: [new ResistanceValue(DamageType.Slashing, 0.5m)], effects: []);
+        var resolver = CreateResolver(
+            CreateDamage(amount: 80),
+            new EffectResolution([], [], []),
+            defenseResolver: new DefenseResolver(new HalfDamageArmorFormula()));
+        var request = new CombatRequest(
+            Guid.NewGuid(), source.Id, target.Id, CreateAttack(),
+            new CombatStateSnapshot(1, source, target));
+
+        var outcome = LogOutcome(resolver.Resolve(request, new FixedDiceRoller()));
+
+        var resolved = Assert.IsType<ResolvedCombat>(outcome);
+        var change = Assert.Single(resolved.Resolution.Changes.OfType<HealthChanged>());
+        Assert.Equal(target.Id, change.CombatantId);
+        Assert.Equal(100, change.PreviousHealth);
+        Assert.Equal(80, change.CurrentHealth);
+        Assert.Empty(resolved.Resolution.Changes.OfType<CombatantDefeated>());
+        Assert.Equal(100, target.Health);
+    }
+
     private static CombatResolver CreateResolver(
         DamageResolution damage,
         EffectResolution effectResolution,
         ICombatRequestValidator? requestValidator = null,
-        IAttackRollResolver? attackRollResolver = null)
+        IAttackRollResolver? attackRollResolver = null,
+        IDefenseResolver? defenseResolver = null)
     {
         return new CombatResolver(
             requestValidator ?? new AcceptingRequestValidator(),
             attackRollResolver ?? new FixedAttackRollResolver(),
             new HitOutcomePolicy(),
             new FixedAttackDamageResolver(damage.UnmitigatedDamage),
-            new FixedDefenseResolver(damage.FinalDamage),
+            defenseResolver ?? new FixedDefenseResolver(damage.FinalDamage),
             new FixedEffectResolver(effectResolution),
             new HealthStateProjector());
     }
@@ -284,6 +312,11 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
         {
             return _damage;
         }
+    }
+
+    private sealed class HalfDamageArmorFormula : IArmorFormula
+    {
+        public int Apply(int damage, int armor) => damage / 2;
     }
 
     private sealed class FixedDefenseResolver : IDefenseResolver
