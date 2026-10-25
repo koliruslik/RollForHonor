@@ -24,6 +24,9 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
     /// 0.25 reduces damage by 25%, zero leaves it unchanged, and -0.25 increases it
     /// by 25%. Missing resistances count as zero. Each stage rounds each affected
     /// component upward. Empty and zero damage do not invoke the armor formula.
+    /// Positive physical input retains at least one physical damage after resistances.
+    /// If both defenses erase it, a finalization step restores one point to the first
+    /// originally positive physical component, preserving component order and types.
     /// </returns>
     /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     /// <exception cref="ArgumentException">Target resistances contain duplicate types or values above one.</exception>
@@ -58,7 +61,35 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
             afterArmor,
             afterResistances));
 
-        return new FinalDamage(new DamageBreakdown(steps), afterResistances);
+        var finalDamage = PreserveMinimumPhysicalDamage(damage.Damage, afterResistances);
+        if (!ReferenceEquals(finalDamage, afterResistances))
+        {
+            steps.Add(new DamageStep(
+                DamageStepType.Finalization,
+                afterResistances,
+                finalDamage));
+        }
+
+        return new FinalDamage(new DamageBreakdown(steps), finalDamage);
+    }
+
+    private static DamagePacket PreserveMinimumPhysicalDamage(DamagePacket original, DamagePacket mitigated)
+    {
+        if (mitigated.Components.Any(c => c.Type.IsPhysical() && c.Amount > 0))
+            return mitigated;
+
+        for (var index = 0; index < original.Components.Count; index++)
+        {
+            var component = original.Components[index];
+            if (!component.Type.IsPhysical() || component.Amount == 0)
+                continue;
+
+            var components = mitigated.Components.ToArray();
+            components[index] = new DamageAmount(component.Type, 1);
+            return new DamagePacket(components);
+        }
+
+        return mitigated;
     }
 
     private DamagePacket ApplyArmor(DamagePacket damage, int armor)

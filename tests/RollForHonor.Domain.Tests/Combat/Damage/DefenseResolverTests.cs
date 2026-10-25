@@ -146,7 +146,7 @@ public sealed class DefenseResolverTests
     }
 
     [Theory]
-    [InlineData(0, 0)]
+    [InlineData(0, 1)]
     [InlineData(10, 10)]
     public void Resolve_WhenArmorFullyAbsorbsOrPassesDamage_PreservesTypedComponents(int remaining, int expected)
     {
@@ -246,6 +246,63 @@ public sealed class DefenseResolverTests
 
         Assert.Throws<OverflowException>(() =>
             resolver.Resolve(CreateDamage((DamageType.Fire, int.MaxValue)), target));
+    }
+
+    [Fact]
+    public void Resolve_WhenAllPhysicalTypesAreResisted_RestoresOnlyOnePointAndRecordsFinalization()
+    {
+        var input = CreateDamage(
+            (DamageType.Fire, 10), (DamageType.Piercing, 0),
+            (DamageType.Slashing, 30), (DamageType.Slashing, 20),
+            (DamageType.Bludgeoning, 10));
+        var target = CreateTarget(armor: 500, resistances:
+        [
+            new ResistanceValue(DamageType.Slashing, 1m),
+            new ResistanceValue(DamageType.Bludgeoning, 1m)
+        ]);
+        var resolver = new DefenseResolver(new HitMagnitudeArmorFormula());
+
+        var result = resolver.Resolve(input, target);
+
+        AssertDamage(result.Damage,
+            (DamageType.Fire, 10), (DamageType.Piercing, 0),
+            (DamageType.Slashing, 1), (DamageType.Slashing, 0),
+            (DamageType.Bludgeoning, 0));
+        var finalization = result.Breakdown.Steps[^1];
+        Assert.Equal(DamageStepType.Finalization, finalization.Type);
+        Assert.Same(result.Breakdown.Steps[^2].Output, finalization.Input);
+        Assert.Same(result.Damage, finalization.Output);
+        AssertDamage(finalization.Input,
+            (DamageType.Fire, 10), (DamageType.Piercing, 0),
+            (DamageType.Slashing, 0), (DamageType.Slashing, 0),
+            (DamageType.Bludgeoning, 0));
+        Assert.Equal(30, input.Damage.Components[2].Amount);
+    }
+
+    [Fact]
+    public void Resolve_WhenPhysicalDamageSurvives_DoesNotAddMinimumToOtherComponents()
+    {
+        var resolver = new DefenseResolver(new HitMagnitudeArmorFormula());
+        var target = CreateTarget(resistances: [new ResistanceValue(DamageType.Slashing, 1m)]);
+
+        var result = resolver.Resolve(
+            CreateDamage((DamageType.Slashing, 5), (DamageType.Piercing, 3)), target);
+
+        AssertDamage(result.Damage, (DamageType.Slashing, 0), (DamageType.Piercing, 3));
+        Assert.DoesNotContain(result.Breakdown.Steps, s => s.Type == DamageStepType.Finalization);
+    }
+
+    [Fact]
+    public void Resolve_WhenOnlyNonPhysicalDamageIsPositive_DoesNotCreatePhysicalDamage()
+    {
+        var resolver = new DefenseResolver(UnexpectedArmorFormula());
+        var target = CreateTarget(resistances: [new ResistanceValue(DamageType.Fire, 1m)]);
+
+        var result = resolver.Resolve(
+            CreateDamage((DamageType.Piercing, 0), (DamageType.Fire, 10)), target);
+
+        AssertDamage(result.Damage, (DamageType.Piercing, 0), (DamageType.Fire, 0));
+        Assert.DoesNotContain(result.Breakdown.Steps, s => s.Type == DamageStepType.Finalization);
     }
 
     private static UnmitigatedDamage CreateDamage(params (DamageType Type, int Amount)[] components)
