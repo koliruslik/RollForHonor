@@ -43,7 +43,14 @@ the existing calculation history and append their input and output packets.
 Resistance values use fractions (`0.25` means 25% reduction), must not exceed
 `1`, and must be unique per type in a combatant snapshot. This is a shared rule
 for players and enemies; equipment-driven stat aggregation is not implemented.
-A concrete armor formula and its tuning remain to be selected and implemented.
+`HitMagnitudeArmorFormula` uses `A / (A + 5D)` as the reduction fraction,
+where `A` is armor and `D` is combined physical hit damage. Remaining damage
+rounds upward; non-positive armor provides no reduction. There is no percentage
+reduction cap. After resistances, a hit with positive physical input retains at
+least one physical damage in total. If needed, a finalization step restores one
+point to the first originally positive physical component, preserving types and
+order. Zero physical input remains zero; non-physical damage has no such floor.
+Effects resolve afterward and may independently change the final health result.
 
 ## Implemented
 
@@ -137,7 +144,7 @@ The pipeline:
 
 Near-term development remains combat-first and includes:
 
-- a concrete armor formula and defense tuning;
+- defense balance tuning;
 - combat effects and resource costs;
 - persistent-effect ticks;
 - projectile impact resolution;
