@@ -1,18 +1,19 @@
-﻿namespace RollForHonor.Domain.Combat.Damage.Models;
+namespace RollForHonor.Domain.Combat.Damage.Models;
 
-public class DamageCalculationResult
+/// <summary>Pairs typed damage at any calculation stage with its ordered arithmetic history.</summary>
+public sealed class DamageCalculationResult
 {
     /// <summary>Gets the calculation audit trail.</summary>
     public DamageBreakdown Breakdown { get; }
 
-    /// <summary>Gets the typed damage remaining after mitigation.</summary>
+    /// <summary>Gets the typed damage at this stage.</summary>
     public DamagePacket Damage { get; }
 
     /// <summary>
-    /// Creates a final damage result and its breakdown.
+    /// Creates a damage calculation result and its breakdown.
     /// </summary>
-    /// <param name="breakdown">The complete ordered calculation trace.</param>
-    /// <param name="damage">Typed damage remaining after defenses.</param>
+    /// <param name="breakdown">The ordered history up to this stage.</param>
+    /// <param name="damage">Typed damage at this stage.</param>
     /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public DamageCalculationResult(
         DamageBreakdown breakdown,
@@ -26,7 +27,7 @@ public class DamageCalculationResult
     }
 
     /// <summary>
-    /// Returns the total final damage across all damage types.
+    /// Returns the total damage at this stage across all damage types.
     /// </summary>
     /// <returns>The checked sum of all remaining damage.</returns>
     /// <exception cref="OverflowException">The total exceeds the integer range.</exception>

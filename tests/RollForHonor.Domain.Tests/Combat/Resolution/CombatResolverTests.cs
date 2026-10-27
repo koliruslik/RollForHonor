@@ -6,6 +6,7 @@ using RollForHonor.Domain.Combat.Effects.Models;
 using RollForHonor.Domain.Combat.Effects.Services;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.Resolution.Services;
+using RollForHonor.Domain.Combat.Resolution.Services.Steps;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Combat.State.Services;
 using RollForHonor.Domain.Combat.State.Changes;
@@ -206,12 +207,17 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
     {
         return new CombatResolver(
             requestValidator ?? new AcceptingRequestValidator(),
-            attackRollResolver ?? new FixedAttackRollResolver(),
-            new HitOutcomePolicy(),
-            new FixedAttackDamageResolver(damage.BeforeDefenses),
-            defenseResolver ?? new FixedDefenseResolver(damage.AfterDefenses),
-            new FixedEffectResolver(effectResolution),
-            new HealthStateProjector());
+            new CombatPipeline(
+            [
+                new AttackRollStep(attackRollResolver ?? new FixedAttackRollResolver()),
+                new AttackOutcomeStep(new HitOutcomePolicy()),
+                new AttackDamageStep(new FixedAttackDamageResolver(damage.BeforeDefenses)),
+                new DefenseStep(defenseResolver ?? new FixedDefenseResolver(damage.AfterDefenses)),
+                new ApplyEffectsStep([new FixedHealthEffect(effectResolution.HealthAdjustments)]),
+                new ApplyNewEffectsStep(new FixedEffectResolver(new EffectResolution(
+                    effectResolution.Effects, [], effectResolution.StateChanges))),
+            ]),
+            new CombatResolutionBuilder(new HealthStateProjector()));
     }
 
     private static AttackPayload CreateAttack(
@@ -343,17 +349,15 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             _resolution = resolution;
         }
 
-        public EffectResolution Resolve(
-            AttackPayload attack,
-            CombatantSnapshot source,
-            CombatantSnapshot target,
-            AttackRollResult attackRoll,
-            AttackOutcome outcome,
-            DamageCalculationResult damage,
-            DamageCalculationResult finalDamage)
+        public EffectResolution Resolve(CombatContext context) => _resolution;
+    }
+
+    private sealed class FixedHealthEffect(IReadOnlyList<HealthAdjustment> adjustments) : ICombatEffect
+    {
+        public CombatContext Apply(CombatContext context, IDiceRoller dice) => context with
         {
-            return _resolution;
-        }
+            HealthAdjustments = context.HealthAdjustments.AddRange(adjustments)
+        };
     }
 
     private sealed class FixedDiceRoller : IDiceRoller

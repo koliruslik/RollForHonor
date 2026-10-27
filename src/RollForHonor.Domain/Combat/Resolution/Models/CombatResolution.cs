@@ -1,5 +1,6 @@
 using RollForHonor.Domain.Combat.State.Changes;
 using RollForHonor.Domain.Dice.Models;
+using System.Collections.Immutable;
 
 namespace RollForHonor.Domain.Combat.Resolution.Models;
 
@@ -8,6 +9,9 @@ namespace RollForHonor.Domain.Combat.Resolution.Models;
 /// </summary>
 public sealed record CombatResolution
 {
+    /// <summary>Gets completed pipeline steps, nested executions and mandatory finalization.</summary>
+    public ImmutableArray<CombatStepTrace> StepTrace { get; }
+
     /// <summary>Gets the resolution identifier copied from the request.</summary>
     public Guid ResolutionId { get; }
 
@@ -31,17 +35,19 @@ public sealed record CombatResolution
     /// <param name="result">The structured source and target result.</param>
     /// <param name="changes">Canonical state changes in commit order.</param>
     /// <param name="diceTrace">All rolls performed during the resolution.</param>
+    /// <param name="stepTrace">Completed nested executions, or null for an empty trace.</param>
     /// <exception cref="ArgumentException">
-    /// The resolution identifier is empty or the change collection contains null.
+    /// The resolution identifier is empty, or a change or step collection contains null.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">The state version is negative.</exception>
-    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="ArgumentNullException">The result, changes or dice trace is null.</exception>
     public CombatResolution(
         Guid resolutionId,
         long basedOnStateVersion,
         CombatResult result,
         IReadOnlyList<ICombatStateChange> changes,
-        DiceTrace diceTrace)
+        DiceTrace diceTrace,
+        IReadOnlyList<CombatStepTrace>? stepTrace = null)
     {
         if (resolutionId == Guid.Empty)
         {
@@ -63,5 +69,8 @@ public sealed record CombatResolution
         Result = result;
         Changes = changes.ToArray();
         DiceTrace = diceTrace;
+        StepTrace = stepTrace?.ToImmutableArray() ?? [];
+        if (StepTrace.Any(step => step is null))
+            throw new ArgumentException("Step trace cannot contain null.", nameof(stepTrace));
     }
 }

@@ -6,23 +6,23 @@ using RollForHonor.Domain.Combat.State.Models;
 namespace RollForHonor.Domain.Combat.Resolution.Models;
 
 /// <summary>
-/// Describes the calculated result of an attack against one target.
+/// Describes an action against one target, including actions without attack or damage stages.
 /// </summary>
 public sealed record TargetCombatResult
 {
     /// <summary>Gets the target combatant identifier.</summary>
     public CombatantId TargetId { get; }
 
-    /// <summary>Gets the resolved attack roll.</summary>
-    public AttackRollResult AttackRoll { get; }
+    /// <summary>Gets the resolved roll, or null if the pipeline contains no roll step.</summary>
+    public AttackRollResult? AttackRoll { get; }
 
-    /// <summary>Gets the attack outcome category.</summary>
-    public AttackOutcome Outcome { get; }
+    /// <summary>Gets the attack outcome category, or null when no outcome step ran.</summary>
+    public AttackOutcome? Outcome { get; }
 
-    /// <summary>Gets damage before and after mitigation.</summary>
-    public DamageResolution DamageResolution { get; }
+    /// <summary>Gets damage before and after mitigation, or null for non-damaging actions.</summary>
+    public DamageResolution? DamageResolution { get; }
 
-    /// <summary>Gets effects reported for the target.</summary>
+    /// <summary>Gets effects reported by the action, each with its actual recipient ID.</summary>
     public IReadOnlyList<ResolvedCombatEffect> Effects { get; }
 
     /// <summary>Gets whether the target is defeated after the resolution.</summary>
@@ -32,28 +32,26 @@ public sealed record TargetCombatResult
     /// Creates an immutable target combat result.
     /// </summary>
     /// <param name="targetId">The affected combatant identifier.</param>
-    /// <param name="attackRoll">The resolved attack roll.</param>
-    /// <param name="outcome">A defined attack outcome.</param>
-    /// <param name="damageResolution">Damage before and after defenses.</param>
-    /// <param name="effects">Effects reported for this target.</param>
+    /// <param name="attackRoll">The resolved attack roll, or null when omitted.</param>
+    /// <param name="outcome">A defined attack outcome, or null when omitted.</param>
+    /// <param name="damageResolution">Damage stages, or null for non-damaging actions.</param>
+    /// <param name="effects">Effects reported by the action, with explicit recipient identities.</param>
     /// <param name="isDefeated">Whether projected final health is zero.</param>
-    /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
+    /// <exception cref="ArgumentNullException">The target ID or effect collection is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="outcome"/> is undefined.</exception>
     /// <exception cref="ArgumentException"><paramref name="effects"/> contains a null item.</exception>
     public TargetCombatResult(
         CombatantId targetId,
-        AttackRollResult attackRoll,
-        AttackOutcome outcome,
-        DamageResolution damageResolution,
+        AttackRollResult? attackRoll,
+        AttackOutcome? outcome,
+        DamageResolution? damageResolution,
         IReadOnlyList<ResolvedCombatEffect> effects,
         bool isDefeated)
     {
         ArgumentNullException.ThrowIfNull(targetId);
-        ArgumentNullException.ThrowIfNull(attackRoll);
-        ArgumentNullException.ThrowIfNull(damageResolution);
         ArgumentNullException.ThrowIfNull(effects);
 
-        if (!Enum.IsDefined(outcome))
+        if (outcome is not null && !Enum.IsDefined(outcome.Value))
         {
             throw new ArgumentOutOfRangeException(nameof(outcome));
         }

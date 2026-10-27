@@ -12,8 +12,8 @@ deterministic, testable combat foundation before expanding into full gameplay.
 The current version is a technical foundation rather than a complete playable
 game.
 
-The latest combat milestone adds production weapon raw-damage resolution to
-the configurable d20 attack outcome rules. An attack is evaluated against the
+Combat calculation uses explicitly composed steps, including production weapon
+damage and defense rules. An ordinary attack is evaluated against the
 target's evasion and classified as:
 
 | Attack margin | Outcome |
@@ -50,7 +50,11 @@ reduction cap. After resistances, a hit with positive physical input retains at
 least one physical damage in total. If needed, a finalization step restores one
 point to the first originally positive physical component, preserving types and
 order. Zero physical input remains zero; non-physical damage has no such floor.
-Effects resolve afterward and may independently change the final health result.
+Existing effect behaviors can be scheduled explicitly before or after calculation
+stages. New status application is separate from executing existing behavior.
+Status definitions choose the source or target as recipient; a new instance
+replaces existing instances with the same definition ID on that recipient.
+Instance identities are derived deterministically through an injected factory.
 
 ## Implemented
 
@@ -59,6 +63,10 @@ Effects resolve afterward and may independently change the final health result.
 - combat request validation before dice are rolled;
 - atomic resolution of one impact against one target;
 - structured combat results with proposed state changes;
+- composable, nested calculation steps that return immutable contexts;
+- explicit effect-behavior groups and separate new-status application;
+- once-only health collection, projection, and canonical result finalization;
+- ordered step traces with nested executions and dice-trace index ranges;
 - configurable d20 attack outcome rules;
 - configurable natural-roll upgrades and downgrades;
 - configurable outcome multipliers for weapon raw damage;
@@ -90,6 +98,69 @@ Combat code is organized by feature (`Attacks`, `Damage`, `Effects`,
 
 The Domain layer does not depend on Godot. It calculates combat results without
 directly mutating live game state.
+
+### Calculation pipeline
+
+`CombatResolver` validates the request before any step or dice roll, runs the
+calculation pipeline supplied by its caller, and always calls
+`CombatResolutionBuilder` after successful calculation. An ordinary calculation
+pipeline can be assembled as:
+
+```text
+AttackRollStep
+AttackOutcomeStep
+AttackDamageStep
+ApplyEffectsStep (explicit pre-defense behaviors)
+DefenseStep
+ApplyEffectsStep (explicit post-defense behaviors)
+ApplyNewEffectsStep
+```
+
+Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
+pipeline executor, resolver, and mandatory result builder remain directly under
+`Services`.
+
+Finalization is not part of the configurable list. `CombatResolutionBuilder`
+always collects health adjustments, projects health, builds state changes and
+constructs the result, in that order. These operations are private methods,
+so composition cannot omit, repeat or reorder them. The calculation context
+contains only inputs and intermediate proposals, without finalization flags.
+
+Each `ICombatStep` takes the current `CombatContext` and the shared `IDiceRoller`,
+and returns a context retaining prior results. Constructors receive calculation
+dependencies. `CombatPipeline` copies its step sequence, preserves order, and
+stops on an exception or invalid result. It rejects steps that replace the
+original request or overwrite preceding execution traces. Calculation steps
+reject missing prerequisites and repeated execution where applicable.
+
+`ApplyEffectsStep` accepts a copied list of `ICombatEffect` implementations.
+Its caller decides which behaviors run and where; an empty group is valid.
+Effects may read available rolls/damage, transform calculations, and append
+addressed health or status proposals. They do not commit state. Newly proposed
+statuses are not discovered and executed automatically during the same action.
+The status application resolver currently has no immunity or hit-condition
+policy: composition must choose when to invoke it.
+
+Damage may omit defenses deliberately; finalization then collects the
+pre-defense damage. Non-damaging assemblies may omit damage and defense stages
+entirely, with absent results represented explicitly rather than fake damage.
+All health proposals are combined before one clamped projection per distinct
+participant, including self-target actions. Effects finish inside the calculation
+pipeline before mandatory finalization begins. Rebuilding the same context does
+not mutate it or collect damage a second time into its proposals.
+
+`CombatResolution.StepTrace` records completed outer and nested steps, including
+effect names and half-open ranges into the shared dice trace. The mandatory
+result builder appends its own finalization record with four ordered children.
+The trace contains no
+wall-clock time and is diagnostic data, not a persistence or replay format.
+`DamageBreakdown` remains the numerical input/output history for damage
+arithmetic. Failed executions propagate exceptions and do not return a partial
+successful resolution.
+
+Production lifesteal, healing bonuses, periodic effect behavior, and runtime
+pipeline selection remain future work. Integration tests use example effects
+to verify extension through the full resolver without changing its code.
 
 ### Application
 

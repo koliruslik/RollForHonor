@@ -3,6 +3,7 @@ using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.Effects.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.Resolution.Services;
+using RollForHonor.Domain.Combat.State.Changes;
 
 namespace RollForHonor.Domain.Tests.Diagnostics;
 
@@ -41,8 +42,15 @@ internal static class CombatResolutionDiagnosticFormatter
         builder.AppendLine($"│ Outcome    : {target.Outcome}");
         builder.AppendLine($"│ Defeated   : {target.IsDefeated}");
 
-        AppendDamage(builder, target.DamageResolution.AfterDefenses);
+        if (target.DamageResolution is not null)
+            AppendDamage(builder, target.DamageResolution.AfterDefenses);
+        else
+            builder.AppendLine("│ Damage     : none");
         AppendEffects(builder, target.Effects);
+        builder.AppendLine("├─ HEALTH CHANGES");
+        foreach (var change in resolution.Changes.OfType<HealthChanged>())
+            builder.AppendLine($"│ {change.CombatantId}: {change.PreviousHealth} -> {change.CurrentHealth}");
+        AppendSteps(builder, resolution.StepTrace, 0);
 
         builder.Append("└─ END");
 
@@ -59,6 +67,17 @@ internal static class CombatResolutionDiagnosticFormatter
         builder.Append("└─ END");
 
         return builder.ToString();
+    }
+
+    private static void AppendSteps(StringBuilder builder, IEnumerable<CombatStepTrace> steps, int depth)
+    {
+        if (depth == 0)
+            builder.AppendLine("├─ STEPS");
+        foreach (var step in steps)
+        {
+            builder.AppendLine($"│ {new string(' ', depth * 2)}{step.Name} [dice {step.DiceStartIndex}..{step.DiceEndIndex})");
+            AppendSteps(builder, step.Children, depth + 1);
+        }
     }
 
     private static void AppendDamage(
