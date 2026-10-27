@@ -24,7 +24,10 @@ public sealed record AttackRollResult
     /// <param name="modifier">The flat attack modifier.</param>
     /// <param name="total">The roll total plus the modifier.</param>
     /// <exception cref="ArgumentNullException"><paramref name="roll"/> is null.</exception>
-    /// <exception cref="ArgumentException"><paramref name="total"/> does not match the roll and modifier.</exception>
+    /// <exception cref="ArgumentException">
+    /// The total does not match the mathematical sum of the roll and modifier,
+    /// including a wrapped integer result from overflow.
+    /// </exception>
     public AttackRollResult(
         DiceRoll roll,
         int modifier,
@@ -32,7 +35,7 @@ public sealed record AttackRollResult
     {
         ArgumentNullException.ThrowIfNull(roll);
 
-        if (roll.Total + modifier != total)
+        if ((long)roll.Total + modifier != total)
         {
             throw new ArgumentException(
                 "The total must equal the roll total plus the modifier.",

@@ -206,30 +206,6 @@ public sealed class DefenseResolverTests
     }
 
     [Fact]
-    public void Resolve_WhenResistanceExceedsOne_RejectsBeforeArmor()
-    {
-        var resolver = new DefenseResolver(UnexpectedArmorFormula());
-        var target = CreateTarget(resistances: [new ResistanceValue(DamageType.Fire, 1.01m)]);
-
-        Assert.Throws<ArgumentException>(() =>
-            resolver.Resolve(CreateDamage((DamageType.Piercing, 10)), target));
-    }
-
-    [Fact]
-    public void Resolve_WhenResistanceTypesAreDuplicated_RejectsBeforeArmor()
-    {
-        var resolver = new DefenseResolver(UnexpectedArmorFormula());
-        var target = CreateTarget(resistances:
-        [
-            new ResistanceValue(DamageType.Fire, 0.25m),
-            new ResistanceValue(DamageType.Fire, 0.5m)
-        ]);
-
-        Assert.Throws<ArgumentException>(() =>
-            resolver.Resolve(CreateDamage((DamageType.Piercing, 10)), target));
-    }
-
-    [Fact]
     public void Resolve_WhenPhysicalSumOverflows_ThrowsBeforeArmor()
     {
         var resolver = new DefenseResolver(UnexpectedArmorFormula());

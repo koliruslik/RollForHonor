@@ -64,8 +64,8 @@ public sealed record EffectResolution
                 nameof(stateChanges));
         }
 
-        Effects = effects.ToArray();
-        HealthAdjustments = healthAdjustments.ToArray();
-        StateChanges = stateChanges.ToArray();
+        Effects = Array.AsReadOnly(effects.ToArray());
+        HealthAdjustments = Array.AsReadOnly(healthAdjustments.ToArray());
+        StateChanges = Array.AsReadOnly(stateChanges.ToArray());
     }
 }

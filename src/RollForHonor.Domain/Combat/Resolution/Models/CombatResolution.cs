@@ -67,7 +67,7 @@ public sealed record CombatResolution
         ResolutionId = resolutionId;
         BasedOnStateVersion = basedOnStateVersion;
         Result = result;
-        Changes = changes.ToArray();
+        Changes = Array.AsReadOnly(changes.ToArray());
         DiceTrace = diceTrace;
         StepTrace = stepTrace?.ToImmutableArray() ?? [];
         if (StepTrace.Any(step => step is null))

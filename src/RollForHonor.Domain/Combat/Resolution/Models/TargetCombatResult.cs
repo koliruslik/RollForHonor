@@ -67,7 +67,7 @@ public sealed record TargetCombatResult
         AttackRoll = attackRoll;
         Outcome = outcome;
         DamageResolution = damageResolution;
-        Effects = effects.ToArray();
+        Effects = Array.AsReadOnly(effects.ToArray());
         IsDefeated = isDefeated;
     }
 }

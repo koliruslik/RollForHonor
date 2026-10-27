@@ -43,6 +43,8 @@ the existing calculation history and append their input and output packets.
 Resistance values use fractions (`0.25` means 25% reduction), must not exceed
 `1`, and must be unique per type in a combatant snapshot. This is a shared rule
 for players and enemies; equipment-driven stat aggregation is not implemented.
+Snapshot construction rejects duplicate or above-one resistances before a request
+can enter the pipeline. Defense calculation retains its defensive validation.
 `HitMagnitudeArmorFormula` uses `A / (A + 5D)` as the reduction fraction,
 where `A` is armor and `D` is combined physical hit damage. Remaining damage
 rounds upward; non-positive armor provides no reduction. There is no percentage
@@ -132,6 +134,12 @@ dependencies. `CombatPipeline` copies its step sequence, preserves order, and
 stops on an exception or invalid result. It rejects steps that replace the
 original request or overwrite preceding execution traces. Calculation steps
 reject missing prerequisites and repeated execution where applicable.
+
+Domain models defensively copy collection inputs and expose immutable collections
+or read-only wrappers, including damage packets, participant snapshots, dice data
+and final proposals. Casting a public read-only list to a mutable interface cannot
+change its contents. Attack-roll result construction validates the mathematical
+sum in a wider integer type and rejects overflow-wrapped totals.
 
 `ApplyEffectsStep` accepts a copied list of `ICombatEffect` implementations.
 Its caller decides which behaviors run and where; an empty group is valid.
