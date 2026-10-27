@@ -1,9 +1,6 @@
-namespace RollForHonor.Domain.Combat.Damage.Models;
+﻿namespace RollForHonor.Domain.Combat.Damage.Models;
 
-/// <summary>
-/// Contains typed damage remaining after target defenses.
-/// </summary>
-public sealed record FinalDamage
+public class DamageCalculationResult
 {
     /// <summary>Gets the calculation audit trail.</summary>
     public DamageBreakdown Breakdown { get; }
@@ -17,7 +14,7 @@ public sealed record FinalDamage
     /// <param name="breakdown">The complete ordered calculation trace.</param>
     /// <param name="damage">Typed damage remaining after defenses.</param>
     /// <exception cref="ArgumentNullException">Either argument is null.</exception>
-    public FinalDamage(
+    public DamageCalculationResult(
         DamageBreakdown breakdown,
         DamagePacket damage)
     {

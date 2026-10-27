@@ -208,8 +208,8 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             requestValidator ?? new AcceptingRequestValidator(),
             attackRollResolver ?? new FixedAttackRollResolver(),
             new HitOutcomePolicy(),
-            new FixedAttackDamageResolver(damage.UnmitigatedDamage),
-            defenseResolver ?? new FixedDefenseResolver(damage.FinalDamage),
+            new FixedAttackDamageResolver(damage.BeforeDefenses),
+            defenseResolver ?? new FixedDefenseResolver(damage.AfterDefenses),
             new FixedEffectResolver(effectResolution),
             new HealthStateProjector());
     }
@@ -235,8 +235,8 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             [new DamageStep(DamageStepType.Finalization, packet, packet)]);
 
         return new DamageResolution(
-            new UnmitigatedDamage(breakdown, packet),
-            new FinalDamage(breakdown, packet));
+            new DamageCalculationResult(breakdown, packet),
+            new DamageCalculationResult(breakdown, packet));
     }
 
     private static CombatantSnapshot CreateCombatant(int health, int maxHealth)
@@ -299,14 +299,14 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
 
     private sealed class FixedAttackDamageResolver : IAttackDamageResolver
     {
-        private readonly UnmitigatedDamage _damage;
+        private readonly DamageCalculationResult _damage;
 
-        public FixedAttackDamageResolver(UnmitigatedDamage damage)
+        public FixedAttackDamageResolver(DamageCalculationResult damage)
         {
             _damage = damage;
         }
 
-        public UnmitigatedDamage Resolve(
+        public DamageCalculationResult Resolve(
             AttackPayload attack,
             CombatantSnapshot source,
             AttackRollResult attackRoll,
@@ -319,15 +319,15 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
 
     private sealed class FixedDefenseResolver : IDefenseResolver
     {
-        private readonly FinalDamage _damage;
+        private readonly DamageCalculationResult _damage;
 
-        public FixedDefenseResolver(FinalDamage damage)
+        public FixedDefenseResolver(DamageCalculationResult damage)
         {
             _damage = damage;
         }
 
-        public FinalDamage Resolve(
-            UnmitigatedDamage unmitigatedDamage,
+        public DamageCalculationResult Resolve(
+            DamageCalculationResult unmitigatedDamage,
             CombatantSnapshot target)
         {
             return _damage;
@@ -349,8 +349,8 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             CombatantSnapshot target,
             AttackRollResult attackRoll,
             AttackOutcome outcome,
-            UnmitigatedDamage damage,
-            FinalDamage finalDamage)
+            DamageCalculationResult damage,
+            DamageCalculationResult finalDamage)
         {
             return _resolution;
         }

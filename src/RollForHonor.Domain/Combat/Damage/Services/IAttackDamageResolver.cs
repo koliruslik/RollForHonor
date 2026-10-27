@@ -29,7 +29,7 @@ public interface IAttackDamageResolver
     /// <remarks>
     /// Does not mutate combatant snapshots. Dice-source exceptions are propagated.
     /// </remarks>
-    UnmitigatedDamage Resolve(
+    DamageCalculationResult Resolve(
         AttackPayload attack,
         CombatantSnapshot source,
         AttackRollResult attackRoll,

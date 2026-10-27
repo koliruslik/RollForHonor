@@ -305,10 +305,10 @@ public sealed class DefenseResolverTests
         Assert.DoesNotContain(result.Breakdown.Steps, s => s.Type == DamageStepType.Finalization);
     }
 
-    private static UnmitigatedDamage CreateDamage(params (DamageType Type, int Amount)[] components)
+    private static DamageCalculationResult CreateDamage(params (DamageType Type, int Amount)[] components)
     {
         var packet = new DamagePacket(components.Select(c => new DamageAmount(c.Type, c.Amount)).ToArray());
-        return new UnmitigatedDamage(
+        return new DamageCalculationResult(
             new DamageBreakdown([new DamageStep(DamageStepType.AttackQuality, packet, packet)]), packet);
     }
 

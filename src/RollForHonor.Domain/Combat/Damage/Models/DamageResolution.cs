@@ -6,10 +6,10 @@ namespace RollForHonor.Domain.Combat.Damage.Models;
 public sealed record DamageResolution
 {
     /// <summary>Gets damage before target defenses.</summary>
-    public UnmitigatedDamage UnmitigatedDamage { get; }
+    public DamageCalculationResult BeforeDefenses { get; }
 
     /// <summary>Gets damage remaining after target defenses.</summary>
-    public FinalDamage FinalDamage { get; }
+    public DamageCalculationResult AfterDefenses { get; }
 
     /// <summary>
     /// Creates a complete damage resolution.
@@ -18,13 +18,13 @@ public sealed record DamageResolution
     /// <param name="finalDamage">Damage remaining after defenses.</param>
     /// <exception cref="ArgumentNullException">Either damage stage is null.</exception>
     public DamageResolution(
-        UnmitigatedDamage unmitigatedDamage,
-        FinalDamage finalDamage)
+        DamageCalculationResult unmitigatedDamage,
+        DamageCalculationResult finalDamage)
     {
         ArgumentNullException.ThrowIfNull(unmitigatedDamage);
         ArgumentNullException.ThrowIfNull(finalDamage);
 
-        UnmitigatedDamage = unmitigatedDamage;
-        FinalDamage = finalDamage;
+        BeforeDefenses = unmitigatedDamage;
+        AfterDefenses = finalDamage;
     }
 }

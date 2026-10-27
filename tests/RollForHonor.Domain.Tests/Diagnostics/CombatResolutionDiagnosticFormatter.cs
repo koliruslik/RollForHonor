@@ -41,7 +41,7 @@ internal static class CombatResolutionDiagnosticFormatter
         builder.AppendLine($"│ Outcome    : {target.Outcome}");
         builder.AppendLine($"│ Defeated   : {target.IsDefeated}");
 
-        AppendDamage(builder, target.DamageResolution.FinalDamage);
+        AppendDamage(builder, target.DamageResolution.AfterDefenses);
         AppendEffects(builder, target.Effects);
 
         builder.Append("└─ END");
@@ -63,7 +63,7 @@ internal static class CombatResolutionDiagnosticFormatter
 
     private static void AppendDamage(
         StringBuilder builder,
-        FinalDamage damage)
+        DamageCalculationResult damage)
     {
         var totalsByType = damage.Damage.Components
             .GroupBy(component => component.Type)

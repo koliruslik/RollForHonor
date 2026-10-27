@@ -27,6 +27,6 @@ public interface ICombatEffectResolver
         CombatantSnapshot target,
         AttackRollResult attackRoll,
         AttackOutcome outcome,
-        UnmitigatedDamage damage,
-        FinalDamage finalDamage);
+        DamageCalculationResult damage,
+        DamageCalculationResult finalDamage);
 }

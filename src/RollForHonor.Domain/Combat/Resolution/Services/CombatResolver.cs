@@ -123,7 +123,7 @@ public sealed class CombatResolver
 
         var healthAdjustments = CollectHealthAdjustments(
             target,
-            damageResolution.FinalDamage,
+            damageResolution.AfterDefenses,
             effectResolution);
 
         var healthProjections = ProjectHealth(
@@ -186,13 +186,13 @@ public sealed class CombatResolver
             target,
             attackRoll,
             outcome,
-            damageResolution.UnmitigatedDamage,
-            damageResolution.FinalDamage);
+            damageResolution.BeforeDefenses,
+            damageResolution.AfterDefenses);
     }
 
     private static IReadOnlyList<HealthAdjustment> CollectHealthAdjustments(
         CombatantSnapshot target,
-        FinalDamage finalDamage,
+        DamageCalculationResult finalDamage,
         EffectResolution effectResolution)
     {
         var adjustments = new List<HealthAdjustment>();
