@@ -158,8 +158,8 @@ public sealed class CombatResolutionDiagnosticFormatterTests
         ]);
 
         var damageResolution = new DamageResolution(
-            new UnmitigatedDamage(damageBreakdown, damagePacket),
-            new FinalDamage(damageBreakdown, damagePacket));
+            new DamageCalculationResult(damageBreakdown, damagePacket),
+            new DamageCalculationResult(damageBreakdown, damagePacket));
 
         var effects = (effectDefinitions ?? [])
             .Select(definition => new ResolvedCombatEffect(

@@ -32,6 +32,6 @@ public sealed record DamageBreakdown
                 nameof(steps));
         }
 
-        Steps = steps.ToArray();
+        Steps = Array.AsReadOnly(steps.ToArray());
     }
 }

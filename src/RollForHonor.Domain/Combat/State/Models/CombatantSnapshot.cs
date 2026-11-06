@@ -39,11 +39,13 @@ public sealed record CombatantSnapshot
     /// <param name="maxHealth">Positive maximum health.</param>
     /// <param name="armor">Armor available to defense rules.</param>
     /// <param name="evasion">Evasion available to attack rules.</param>
-    /// <param name="resistances">Typed resistance values.</param>
+    /// <param name="resistances">Unique typed resistance fractions no greater than one; negatives represent weaknesses.</param>
     /// <param name="effects">Active effect instances.</param>
     /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Health bounds are invalid.</exception>
-    /// <exception cref="ArgumentException">A collection contains a null item.</exception>
+    /// <exception cref="ArgumentException">
+    /// A collection contains null, resistance types are duplicated, or a resistance exceeds one.
+    /// </exception>
     public CombatantSnapshot(
         CombatantId id,
         int health,
@@ -67,14 +69,25 @@ public sealed record CombatantSnapshot
         ArgumentNullException.ThrowIfNull(resistances);
         ArgumentNullException.ThrowIfNull(effects);
 
-        if (resistances.Any(resistance => resistance is null))
+        var resistanceValues = resistances.ToArray();
+        var effectValues = effects.ToArray();
+
+        if (resistanceValues.Any(resistance => resistance is null))
         {
             throw new ArgumentException(
                 "Combatant resistances cannot contain null values.",
                 nameof(resistances));
         }
 
-        if (effects.Any(effect => effect is null))
+        if (resistanceValues.Any(resistance => resistance.Value > 1m)
+            || resistanceValues.Select(resistance => resistance.Type).Distinct().Count() != resistanceValues.Length)
+        {
+            throw new ArgumentException(
+                "Combatant resistances must have unique types and values no greater than one.",
+                nameof(resistances));
+        }
+
+        if (effectValues.Any(effect => effect is null))
         {
             throw new ArgumentException(
                 "Combatant effects cannot contain null values.",
@@ -86,7 +99,7 @@ public sealed record CombatantSnapshot
         MaxHealth = maxHealth;
         Armor = armor;
         Evasion = evasion;
-        Resistances = resistances.ToArray();
-        Effects = effects.ToArray();
+        Resistances = Array.AsReadOnly(resistanceValues);
+        Effects = Array.AsReadOnly(effectValues);
     }
 }

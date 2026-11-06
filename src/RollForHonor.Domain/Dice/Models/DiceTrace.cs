@@ -25,6 +25,6 @@ public sealed record DiceTrace
                 nameof(rolls));
         }
 
-        Rolls = rolls.ToArray();
+        Rolls = Array.AsReadOnly(rolls.ToArray());
     }
 }

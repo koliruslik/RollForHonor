@@ -25,7 +25,7 @@ public sealed record DamagePacket
                 nameof(components));
         }
 
-        Components = components.ToArray();
+        Components = Array.AsReadOnly(components.ToArray());
     }
 
     /// <summary>

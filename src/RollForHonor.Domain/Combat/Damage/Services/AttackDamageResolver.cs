@@ -24,7 +24,7 @@ public class AttackDamageResolver : IAttackDamageResolver
     }
 
     /// <inheritdoc />
-    public UnmitigatedDamage Resolve(
+    public DamageCalculationResult Resolve(
         AttackPayload attack,
         CombatantSnapshot source,
         AttackRollResult attackRoll,
@@ -51,7 +51,7 @@ public class AttackDamageResolver : IAttackDamageResolver
         var multipliedDamage = MultiplyDamage(multiplier, damageWithModifiers);
         steps.Add(new DamageStep(DamageStepType.AttackQuality, damageWithModifiers, multipliedDamage));
 
-        return new UnmitigatedDamage(new DamageBreakdown(steps), multipliedDamage);
+        return new DamageCalculationResult(new DamageBreakdown(steps), multipliedDamage);
     }
 
     private static DamagePacket ResolveComponents(IReadOnlyList<DamageComponent> components, IDiceRoller dice)

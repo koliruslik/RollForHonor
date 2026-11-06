@@ -67,6 +67,23 @@ public sealed class HealthStateProjectorTests
             () => _projector.Project(combatant, new[] { adjustment }));
     }
 
+    [Theory]
+    [InlineData(int.MaxValue, int.MaxValue, 100)]
+    [InlineData(int.MinValue, int.MinValue, 0)]
+    [InlineData(int.MaxValue, int.MinValue, 49)]
+    public void Project_WhenCombinedAdjustmentsReachIntegerLimits_UsesWideSumBeforeClamping(
+        int first, int second, int expected)
+    {
+        var combatant = CreateCombatant(health: 50, maxHealth: 100);
+
+        var result = _projector.Project(combatant,
+            [new HealthAdjustment(combatant.Id, first), new HealthAdjustment(combatant.Id, second)]);
+
+        Assert.Equal(expected, result.CurrentHealth);
+        Assert.Equal(expected == 0, result.BecameDefeated);
+        Assert.Equal(50, combatant.Health);
+    }
+
     private static CombatantSnapshot CreateCombatant(int health, int maxHealth)
     {
         return new CombatantSnapshot(

@@ -81,8 +81,8 @@ public sealed record AttackPayload
         AttackRoll = attackRoll;
         AttackModifier = attackModifier;
         OutcomeShiftRules = outcomeShiftRules;
-        Damage = damage.ToArray();
-        Effects = effects.ToArray();
+        Damage = Array.AsReadOnly(damage.ToArray());
+        Effects = Array.AsReadOnly(effects.ToArray());
         Tags = tags;
     }
 }

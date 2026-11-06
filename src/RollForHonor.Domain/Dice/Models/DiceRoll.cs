@@ -56,7 +56,7 @@ public sealed record DiceRoll
         }
 
         Formula = formula;
-        Results = results.ToArray();
+        Results = Array.AsReadOnly(results.ToArray());
         Total = total;
     }
 

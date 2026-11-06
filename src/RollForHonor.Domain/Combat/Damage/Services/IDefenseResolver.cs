@@ -14,7 +14,7 @@ public interface IDefenseResolver
     /// <param name="unmitigatedDamage">Damage produced before target defenses.</param>
     /// <param name="target">The target whose defenses are applied.</param>
     /// <returns>The typed damage remaining after mitigation.</returns>
-    FinalDamage Resolve(
-        UnmitigatedDamage unmitigatedDamage,
+    DamageCalculationResult Resolve(
+        DamageCalculationResult unmitigatedDamage,
         CombatantSnapshot target);
 }

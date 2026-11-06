@@ -32,7 +32,7 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
     /// <exception cref="ArgumentException">Target resistances contain duplicate types or values above one.</exception>
     /// <exception cref="InvalidOperationException">The armor formula returns damage outside zero through the physical input sum.</exception>
     /// <exception cref="OverflowException">A physical sum or scaled component exceeds the supported numeric range.</exception>
-    public FinalDamage Resolve(UnmitigatedDamage damage, CombatantSnapshot target)
+    public DamageCalculationResult Resolve(DamageCalculationResult damage, CombatantSnapshot target)
     {
         ArgumentNullException.ThrowIfNull(damage);
         ArgumentNullException.ThrowIfNull(target);
@@ -70,7 +70,7 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
                 finalDamage));
         }
 
-        return new FinalDamage(new DamageBreakdown(steps), finalDamage);
+        return new DamageCalculationResult(new DamageBreakdown(steps), finalDamage);
     }
 
     private static DamagePacket PreserveMinimumPhysicalDamage(DamagePacket original, DamagePacket mitigated)
