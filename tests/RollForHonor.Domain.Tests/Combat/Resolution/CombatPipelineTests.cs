@@ -18,7 +18,7 @@ using Xunit.Abstractions;
 
 namespace RollForHonor.Domain.Tests.Combat.Resolution;
 
-public sealed class CombatPipelineTests(ITestOutputHelper output) : CombatDiagnosticTestBase(output)
+public sealed partial class CombatPipelineTests(ITestOutputHelper output) : CombatDiagnosticTestBase(output)
 {
     [Fact]
     public void Resolve_WithProductionSteps_CombinesDamageLifestealAndReflectionOnce()

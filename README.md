@@ -170,6 +170,19 @@ Production lifesteal, healing bonuses, periodic effect behavior, and runtime
 pipeline selection remain future work. Integration tests use example effects
 to verify extension through the full resolver without changing its code.
 
+Effect contract tests exercise every calculation boundary, ordered context
+transformations, damage changes on either side of defenses, shared dice traces,
+atomic health projection, failure propagation, and status replacement isolation.
+A test-only consumer projects armor, evasion, and resistance from base stats plus
+an applied status into a fresh snapshot for a later action, including removal
+and repeated projection without accumulating bonuses. This illustrates the
+consumer boundary; production stat aggregation and Application state commits
+remain future work.
+
+Regression tests also cover exact d20 margin boundaries and natural-roll shifts,
+effect instance identity inputs, rejection of health-changing status application,
+repeated calculation stages, and health sums beyond the 32-bit integer range.
+
 ### Application
 
 `RollForHonor.Application` is reserved for use cases, transaction coordination,
