@@ -80,7 +80,7 @@ public sealed partial class CombatPipelineTests(ITestOutputHelper output) : Comb
         Assert.Null(result.Result.Target.Outcome);
         Assert.Null(result.Result.Target.DamageResolution);
         Assert.Single(dice.Trace.Rolls);
-        Assert.DoesNotContain(result.StepTrace, t => t.Name is nameof(AttackDamageStep) or nameof(DefenseStep));
+        Assert.DoesNotContain(result.StepTrace, t => t.Name is nameof(RawDamageStep) or nameof(AttackQualityStep) or nameof(DefenseStep));
         var text = CombatResolutionDiagnosticFormatter.Format(new ResolvedCombat(result));
         Assert.Contains("Damage     : none", text);
         Assert.Contains("HealingEffects", text);
@@ -159,7 +159,7 @@ public sealed partial class CombatPipelineTests(ITestOutputHelper output) : Comb
         var raw = result.StepTrace[1];
         Assert.Equal(0, raw.DiceStartIndex);
         Assert.Equal(2, raw.DiceEndIndex);
-        Assert.Equal(new[] { nameof(AttackRollStep), nameof(AttackOutcomeStep), nameof(AttackDamageStep) },
+        Assert.Equal(new[] { nameof(AttackRollStep), nameof(AttackOutcomeStep), nameof(RawDamageStep), nameof(AttackQualityStep) },
             raw.Children.Select(t => t.Name));
         Assert.Equal(1, raw.Children[0].DiceEndIndex);
         Assert.Equal(1, raw.Children[1].DiceStartIndex);
@@ -192,8 +192,7 @@ public sealed partial class CombatPipelineTests(ITestOutputHelper output) : Comb
         Assert.Throws<InvalidOperationException>(() => new DefenseStep(
             new DefenseResolver(new HitMagnitudeArmorFormula())).Execute(initial, dice));
         Assert.Throws<InvalidOperationException>(() => new AttackOutcomeStep(new D20AttackOutcomePolicy()).Execute(initial, dice));
-        Assert.Throws<InvalidOperationException>(() => new AttackDamageStep(
-            new AttackDamageResolver(new DamageMultipliers(0, 1, 1, 1))).Execute(initial, dice));
+        Assert.Throws<InvalidOperationException>(() => QualityDamage().Execute(initial, dice));
         Assert.Empty(dice.Trace.Rolls);
 
         var rolled = new AttackRollStep(new AttackRollResolver()).Execute(initial, dice);
@@ -219,8 +218,8 @@ public sealed partial class CombatPipelineTests(ITestOutputHelper output) : Comb
         Assert.Equal(first.Changes.ToArray(), repeated.Changes.ToArray());
         Assert.Empty(calculated.HealthAdjustments);
         Assert.Empty(calculated.StateChanges);
-        Assert.Equal(3, calculated.StepTrace.Length);
-        Assert.Equal(4, first.StepTrace.Length);
+        Assert.Equal(4, calculated.StepTrace.Length);
+        Assert.Equal(5, first.StepTrace.Length);
         var finalization = first.StepTrace[^1];
         Assert.Equal(nameof(CombatResolutionBuilder), finalization.Name);
         Assert.Equal(new[] { "CollectHealthAdjustments", "ProjectHealth", "BuildStateChanges", "BuildCombatResult" },
@@ -319,7 +318,8 @@ public sealed partial class CombatPipelineTests(ITestOutputHelper output) : Comb
     [
         new AttackRollStep(new AttackRollResolver()),
         new AttackOutcomeStep(new D20AttackOutcomePolicy()),
-        new AttackDamageStep(new AttackDamageResolver(new DamageMultipliers(0m, 1m, 1m, 1m)))
+        new RawDamageStep(new RawDamageResolver()),
+        new AttackQualityStep(new AttackQualityDamageResolver(new DamageMultipliers(0m, 1m, 1m, 1m)))
     ];
 
     private static CombatRequest CreateRequest(CombatantSnapshot? source = null, CombatantSnapshot? target = null,

@@ -111,12 +111,26 @@ pipeline can be assembled as:
 ```text
 AttackRollStep
 AttackOutcomeStep
-AttackDamageStep
+RawDamageStep
+AttackQualityStep
 ApplyEffectsStep (explicit pre-defense behaviors)
 DefenseStep
 ApplyEffectsStep (explicit post-defense behaviors)
 ApplyNewEffectsStep
 ```
+
+`RawDamageStep` rolls typed damage components and adds their flat bonuses without
+requiring an attack roll or outcome. `AttackQualityStep` separately applies the
+configured outcome multiplier before defenses, rounding each component upward.
+Omitting the quality step leaves damage unscaled (effectively a multiplier of
+one), even when an outcome is present. A direct-damage calculation can therefore
+use `RawDamageStep` followed by the applicable defenses without rolling to hit.
+Effects may also run between raw damage and outcome scaling. The quality step
+rejects missing prerequisites, repeated scaling, and execution after defenses.
+
+The request payload and default request validator still describe an attack and
+require a live source and a `1d20` attack formula, even if that formula is not
+rolled by the selected pipeline. Broader action input contracts remain future work.
 
 Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
 pipeline executor, resolver, and mandatory result builder remain directly under
@@ -182,6 +196,9 @@ remain future work.
 Regression tests also cover exact d20 margin boundaries and natural-roll shifts,
 effect instance identity inputs, rejection of health-changing status application,
 repeated calculation stages, and health sums beyond the 32-bit integer range.
+Independent-damage tests verify damage rolls without attack rolls, omitted
+quality scaling, effects at each boundary, per-component rounding, and expected
+attack outcomes through defenses and final health projection.
 
 ### Application
 
