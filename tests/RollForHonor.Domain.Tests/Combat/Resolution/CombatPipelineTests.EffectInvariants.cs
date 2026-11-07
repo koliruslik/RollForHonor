@@ -21,9 +21,10 @@ public sealed partial class CombatPipelineTests
     [InlineData(0)] // Before rolling.
     [InlineData(1)] // Between roll and outcome.
     [InlineData(2)] // Between outcome and raw damage.
-    [InlineData(3)] // Between raw damage and defenses.
-    [InlineData(4)] // Between defenses and status application.
-    [InlineData(5)] // Between status application and mandatory finalization.
+    [InlineData(3)] // Between raw damage and attack quality.
+    [InlineData(4)] // Between attack quality and defenses.
+    [InlineData(5)] // Between defenses and status application.
+    [InlineData(6)] // Between status application and mandatory finalization.
     public void Effects_RunAtEveryCalculationBoundary_WithOnlyResultsAvailableAtThatPoint(int position)
     {
         var request = CreateRequest(effects: [new TestDefinition()]);
@@ -34,8 +35,9 @@ public sealed partial class CombatPipelineTests
             Assert.Equal(position >= 1, context.AttackRoll is not null);
             Assert.Equal(position >= 2, context.AttackOutcome is not null);
             Assert.Equal(position >= 3, context.BeforeDefenses is not null);
-            Assert.Equal(position >= 4, context.AfterDefenses is not null);
-            Assert.Equal(position >= 5, context.NewEffectsResolved);
+            Assert.Equal(position >= 4, context.BeforeDefenses?.Breakdown.Steps.Any(s => s.Type == DamageStepType.AttackQuality) ?? false);
+            Assert.Equal(position >= 5, context.AfterDefenses is not null);
+            Assert.Equal(position >= 6, context.NewEffectsResolved);
             Assert.DoesNotContain(context.StateChanges, c => c is HealthChanged or CombatantDefeated);
             return context with
             {
@@ -84,7 +86,7 @@ public sealed partial class CombatPipelineTests
         var result = Resolve(Resolver([
             steps[0], steps[1],
             new ApplyEffectsStep([new ProbeEffect((context, _) => context with { AttackOutcome = AttackOutcome.Evaded })]),
-            steps[2]
+            steps[2], steps[3]
         ]), CreateRequest(), dice);
 
         Assert.Equal(AttackOutcome.Evaded, result.Result.Target.Outcome);
@@ -341,7 +343,7 @@ public sealed partial class CombatPipelineTests
         var result = Resolve(Resolver([
             steps[0], steps[1],
             new ApplyEffectsStep([new ProbeEffect((context, _) => context with { AttackOutcome = AttackOutcome.Evaded })]),
-            steps[2], StatusApplication()
+            steps[2], steps[3], StatusApplication()
         ]), request, new CountingDice());
 
         Assert.Equal(AttackOutcome.Evaded, result.Result.Target.Outcome);
@@ -470,14 +472,15 @@ public sealed partial class CombatPipelineTests
     }
 
     [Fact]
-    public void DamageStep_RejectsMissingOutcome_AfterAnOtherwiseValidRoll()
+    public void QualityStep_RejectsMissingOutcome_AfterRollAndRawDamage()
     {
         var dice = new CountingDice();
         var rolled = new AttackRollStep(new AttackRollResolver()).Execute(new CombatContext(CreateRequest()), dice);
+        var raw = RawDamage().Execute(rolled, dice);
 
-        Assert.Throws<InvalidOperationException>(() => CalculationSteps()[2].Execute(rolled, dice));
-        Assert.Single(dice.Trace.Rolls);
-        Assert.Null(rolled.BeforeDefenses);
+        Assert.Throws<InvalidOperationException>(() => CalculationSteps()[3].Execute(raw, dice));
+        Assert.Equal(2, dice.Trace.Rolls.Count);
+        Assert.Single(raw.BeforeDefenses!.Breakdown.Steps);
     }
 
     [Fact]

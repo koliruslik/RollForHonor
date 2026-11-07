@@ -211,7 +211,7 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
             [
                 new AttackRollStep(attackRollResolver ?? new FixedAttackRollResolver()),
                 new AttackOutcomeStep(new HitOutcomePolicy()),
-                new AttackDamageStep(new FixedAttackDamageResolver(damage.BeforeDefenses)),
+                new RawDamageStep(new FixedRawDamageResolver(damage.BeforeDefenses)),
                 new DefenseStep(defenseResolver ?? new FixedDefenseResolver(damage.AfterDefenses)),
                 new ApplyEffectsStep([new FixedHealthEffect(effectResolution.HealthAdjustments)]),
                 new ApplyNewEffectsStep(new FixedEffectResolver(new EffectResolution(
@@ -303,20 +303,17 @@ public sealed class CombatResolverTests : CombatDiagnosticTestBase
         }
     }
 
-    private sealed class FixedAttackDamageResolver : IAttackDamageResolver
+    private sealed class FixedRawDamageResolver : IRawDamageResolver
     {
         private readonly DamageCalculationResult _damage;
 
-        public FixedAttackDamageResolver(DamageCalculationResult damage)
+        public FixedRawDamageResolver(DamageCalculationResult damage)
         {
             _damage = damage;
         }
 
         public DamageCalculationResult Resolve(
-            AttackPayload attack,
-            CombatantSnapshot source,
-            AttackRollResult attackRoll,
-            AttackOutcome outcome,
+            IReadOnlyList<DamageComponent> components,
             IDiceRoller dice)
         {
             return _damage;
