@@ -226,6 +226,61 @@ defenses, self-target snapshots, removed effects, and rejection of proposals to
 historical source state. State projection in tests is a test consumer, not a
 production Application commit implementation.
 
+### Multi-impact scenario tests
+
+`tests/RollForHonor.Domain.Tests/Combat/Scenarios` exercises real Domain validators,
+attack, damage, defense, status and finalization services through a small stateful
+`TestCombatApplication`. The fake applies HP/status proposals, rebuilds fresh
+snapshots, advances a fixture-wide version and records committed resolutions.
+One test action groups several impacts; each impact has its own resolution ID.
+Changes are staged before publishing, and stale or duplicate results are rejected.
+
+The scenarios cover:
+
+| Scenario | Expected behavior |
+| --- | --- |
+| One attack, three targets | Independent defenses yield 6, 3 and 3 damage; distinct resolutions share one test action |
+| Three hits on one target | HP changes 15 -> 9 -> 3 -> 0; defeat occurs only on the final hit |
+| Resistance applied by an earlier hit | Damage changes 6 -> 3 -> 3; replacement keeps one instance and does not accumulate bonuses |
+| Status removal | After a protected hit, removal restores base defense for the next hit |
+| Tick between hits | HP changes 50 -> 44 -> 40 -> 34 using committed state at each step |
+| Source actually killed after application | A later tick uses its captured source and changes only the current recipient |
+| Stale result | Neither HP nor statuses are applied; recalculation uses the new version |
+| Duplicate result | Damage, effects and version advancement are not applied twice |
+| Domain rejection | No dice, commit or version advancement; another valid action can still resolve |
+| Pipeline exception after proposals | No partial HP/status changes are published |
+| Changes to both participants | Source healing and target damage become visible at one commit version |
+
+Run just these scenarios with:
+
+```powershell
+dotnet test tests/RollForHonor.Domain.Tests --filter FullyQualifiedName~MultiImpactScenarioTests
+```
+
+These scenarios use the existing opt-in `CombatDiagnosticTestBase` output for
+every returned impact or tick outcome, including Domain rejections. To see
+successful tests' detailed output in PowerShell:
+
+```powershell
+$env:RFH_COMBAT_DIAGNOSTICS = '1'
+try {
+    dotnet test tests/RollForHonor.Domain.Tests --filter FullyQualifiedName~MultiImpactScenarioTests --logger "console;verbosity=detailed"
+} finally {
+    Remove-Item Env:RFH_COMBAT_DIAGNOSTICS
+}
+```
+
+The diagnostic contains calculated proposals, including ones the fake later
+rejects as stale or duplicated; it is not a log of committed live state.
+Diagnostics are disabled by default and are not required for test assertions.
+
+The fake's action grouping, commit guards and single explicit resistance-buff
+fixture are test infrastructure. These checks do not implement or verify production
+attack acceptance, resource spending, cooldowns, concurrency, projectile physics,
+or scheduling. Ordinary impacts in these fixtures use a fresh living source;
+projectile source-capture and post-launch source-lifetime rules remain separate
+decisions. No new Domain contracts or production Application service are introduced.
+
 ### Application
 
 `RollForHonor.Application` is reserved for use cases, transaction coordination,
