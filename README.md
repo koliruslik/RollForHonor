@@ -67,6 +67,8 @@ Instance identities are derived deterministically through an injected factory.
 - structured combat results with proposed state changes;
 - composable, nested calculation steps that return immutable contexts;
 - explicit effect-behavior groups and separate new-status application;
+- captured effect-source snapshots and periodic damage formulas rerolled per tick;
+- effect-tick requests without attack payloads or hit rolls, using current recipient state;
 - once-only health collection, projection, and canonical result finalization;
 - ordered step traces with nested executions and dice-trace index ranges;
 - configurable d20 attack outcome rules;
@@ -79,6 +81,7 @@ Instance identities are derived deterministically through an injected factory.
   resistances, weaknesses, and ordered before/after breakdowns;
 - engine-independent Domain logic;
 - automated Domain and Application tests;
+- a standalone console host for smoke scenarios and opt-in performance measurements;
 - headless Godot runtime tests;
 - continuous integration with GitHub Actions.
 
@@ -128,9 +131,27 @@ use `RawDamageStep` followed by the applicable defenses without rolling to hit.
 Effects may also run between raw damage and outcome scaling. The quality step
 rejects missing prerequisites, repeated scaling, and execution after defenses.
 
-The request payload and default request validator still describe an attack and
-require a live source and a `1d20` attack formula, even if that formula is not
-rolled by the selected pipeline. Broader action input contracts remain future work.
+`CombatRequest` has separate constructor overloads for an ordinary attack and
+an applied periodic-damage effect. Only attacks require a living source and a
+`1d20` formula. Tick requests contain no `AttackPayload`; they use the source
+snapshot captured by `CombatEffectResolver` on application and a fresh recipient
+snapshot. Validation rejects a tick if its effect is no longer active on that
+recipient. Attack-specific steps reject tick inputs before rolling dice.
+
+`PeriodicDamageEffectDefinition` retains copied typed formulas (for example,
+`1d6 + 3`), including source-dependent bonuses supplied by its caller at
+application time. Every tick rolls these formulas anew. Source changes or death
+do not change an existing instance. Older manually constructed effect snapshots
+without a captured source remain valid statuses but cannot produce damage ticks.
+For ticks, finalization projects only the current recipient; the historical
+source is never a state-change recipient. When source and recipient IDs match,
+current recipient health still takes precedence over the captured health.
+
+Ticks reuse `CombatResolver`, `RawDamageStep`, optional explicitly chosen defense
+steps, and mandatory finalization. No universal periodic-defense rule, duration,
+scheduler, production stat aggregation, or new reapplication policy is introduced.
+Application integration will select active effects, assemble pipelines, schedule
+ticks and commit state. The existing replacement-by-definition behavior remains.
 
 Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
 pipeline executor, resolver, and mandatory result builder remain directly under
@@ -199,6 +220,11 @@ repeated calculation stages, and health sums beyond the 32-bit integer range.
 Independent-damage tests verify damage rolls without attack rolls, omitted
 quality scaling, effects at each boundary, per-component rounding, and expected
 attack outcomes through defenses and final health projection.
+Periodic integration tests cover all four production attack outcomes, sequential
+health/version transitions, source capture and death, fresh tick rolls and target
+defenses, self-target snapshots, removed effects, and rejection of proposals to
+historical source state. State projection in tests is a test consumer, not a
+production Application commit implementation.
 
 ### Application
 
@@ -213,6 +239,43 @@ combat application flow.
 `RollForHonor.Godot` is the engine-facing layer responsible for scenes,
 presentation, input, runtime composition, and future integration of combat
 use cases.
+
+### Console scenarios
+
+`tools/RollForHonor.Console` is a separate executable host referencing Domain,
+outside Infrastructure and Godot. It currently runs combat scenarios; full
+console gameplay and Application integration remain future work.
+
+From the repository root:
+
+```powershell
+dotnet run --project tools/RollForHonor.Console -- smoke
+dotnet run --project tools/RollForHonor.Console -c Release -- benchmark --scenario all --iterations 10000 --warmup 500 --samples 5 --seed 42
+dotnet run --project tools/RollForHonor.Console -c Release -- benchmark --scenario attack --json benchmark.json
+```
+
+With no arguments it runs smoke checks. Smoke uses scripted dice and checks
+explicit outcomes for evaded, glancing, normal and critical attacks, a sequence
+ending in defeat, and effect application followed by ticks after source death.
+It returns a nonzero exit code on failure and runs in CI. Invalid CLI arguments
+return exit code 2.
+
+Benchmark mode is opt-in and has no hardware-dependent pass threshold. Select
+`attack`, `effect`, `sequence`, or `all`. Each sample uses the same seed, performs
+an unmeasured warmup, then measures an exact operation count on one thread. A
+sequence operation calculates four attacks with local recipient-state projection;
+the other operations calculate one resolution each against fixed recipient
+fixtures. The effect fixture is applied before measurement, so this scenario
+measures ticks, not application or scheduling.
+
+The console reports median/range of sample resolution throughput and allocated
+bytes per operation. Optional JSON includes each sample's elapsed time,
+operations and resolutions per second, allocation, GC counts and checksum,
+plus runtime, OS, architecture, configuration and workload settings. Measurement
+includes request construction, dice and step traces, finalization and result
+consumption. It excludes fixture setup, Godot, rendering, production commits and
+concurrency; throughput is not an estimate of the game's supported entity count.
+Benchmark reports are machine-specific artifacts, not committed baselines.
 
 ## Technology
 
@@ -235,6 +298,7 @@ use cases.
 | `godot` | Godot project and engine integration |
 | `tests/RollForHonor.Domain.Tests` | Domain unit tests |
 | `tests/RollForHonor.Application.Tests` | Application tests |
+| `tools/RollForHonor.Console` | Standalone smoke and benchmark scenarios |
 | `.github/workflows` | Continuous integration configuration |
 
 ## Verification
@@ -246,8 +310,9 @@ The pipeline:
 1. restores .NET dependencies;
 2. builds the complete solution;
 3. runs Domain and Application tests;
-4. imports the Godot project in headless mode;
-5. runs the Godot test suite.
+4. runs the console smoke scenarios;
+5. imports the Godot project in headless mode;
+6. runs the Godot test suite.
 
 ## Roadmap
 
@@ -255,7 +320,7 @@ Near-term development remains combat-first and includes:
 
 - defense balance tuning;
 - combat effects and resource costs;
-- persistent-effect ticks;
+- persistent-effect scheduling and effect-specific gameplay policies;
 - projectile impact resolution;
 - application-level state commits;
 - Godot combat presentation and runtime integration.
