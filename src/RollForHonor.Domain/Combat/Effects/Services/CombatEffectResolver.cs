@@ -21,10 +21,13 @@ public sealed class CombatEffectResolver : ICombatEffectResolver
 
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">The context is null.</exception>
+    /// <exception cref="InvalidOperationException">The request is a tick rather than a new attack payload.</exception>
     public EffectResolution Resolve(CombatContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
         var request = context.Request;
+        var attack = request.Attack
+            ?? throw new InvalidOperationException("New status application requires an attack payload.");
         var snapshot = request.StateSnapshot;
         var participants = new[] { snapshot.Source, snapshot.Target }.DistinctBy(c => c.Id);
         var effective = participants.ToDictionary(c => c.Id, c => c.Effects.ToList());
@@ -38,9 +41,9 @@ public sealed class CombatEffectResolver : ICombatEffectResolver
         }
         var selections = new List<ResolvedCombatEffect>();
         var changes = new List<ICombatStateChange>();
-        for (var index = 0; index < request.Attack.Effects.Count; index++)
+        for (var index = 0; index < attack.Effects.Count; index++)
         {
-            var definition = request.Attack.Effects[index];
+            var definition = attack.Effects[index];
             var recipient = definition.Recipient == EffectRecipient.Source ? snapshot.Source : snapshot.Target;
             var instances = effective[recipient.Id];
             foreach (var old in instances.Where(effect => effect.Definition.Id == definition.Id).ToArray())
@@ -49,7 +52,7 @@ public sealed class CombatEffectResolver : ICombatEffectResolver
                 instances.Remove(old);
             }
             var instance = new CombatEffectSnapshot(
-                _ids.Create(request.ResolutionId, recipient.Id, definition.Id, index), definition);
+                _ids.Create(request.ResolutionId, recipient.Id, definition.Id, index), definition, snapshot.Source);
             instances.Add(instance);
             changes.Add(new EffectApplied(recipient.Id, instance));
             selections.Add(new ResolvedCombatEffect(recipient.Id, definition));

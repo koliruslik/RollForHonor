@@ -30,7 +30,9 @@ public sealed class AttackRollStep : ICombatStep
             throw new InvalidOperationException("Attack roll has already been resolved");
         }
 
-        var attackRollResult = _rollResolver.Resolve(context.Request.Attack, context.Request.StateSnapshot.Source,
+        var attack = context.Request.Attack
+            ?? throw new InvalidOperationException("Attack roll requires an attack payload.");
+        var attackRollResult = _rollResolver.Resolve(attack, context.Request.StateSnapshot.Source,
             context.Request.StateSnapshot.Target, dice);
 
         return context with { AttackRoll = attackRollResult };

@@ -55,6 +55,9 @@ jobs:
           --no-build
           --no-restore
 
+      - name: Run console smoke scenarios
+        run: dotnet run --project tools/RollForHonor.Console --configuration Debug --no-build --no-restore -- smoke
+
       - name: Import Godot project
         run: godot --headless --editor --path godot --quit
 

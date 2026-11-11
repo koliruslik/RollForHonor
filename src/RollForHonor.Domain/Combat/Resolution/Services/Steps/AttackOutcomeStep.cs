@@ -29,7 +29,9 @@ public sealed class AttackOutcomeStep : ICombatStep
         if (context.AttackOutcome is not null)
             throw new InvalidOperationException("Attack outcome has already been resolved.");
 
-        var outcome = _outcomePolicy.Determine(context.Request.Attack, context.Request.StateSnapshot.Source,
+        var attack = context.Request.Attack
+            ?? throw new InvalidOperationException("Attack outcome requires an attack payload.");
+        var outcome = _outcomePolicy.Determine(attack, context.Request.StateSnapshot.Source,
             context.Request.StateSnapshot.Target, attackRoll);
 
         return context with { AttackOutcome = outcome };
