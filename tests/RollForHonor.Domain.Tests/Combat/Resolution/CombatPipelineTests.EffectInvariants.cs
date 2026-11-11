@@ -409,7 +409,7 @@ public sealed partial class CombatPipelineTests
         var baseline = Resolve(resolver, CreateRequest(target: baseTarget), new CountingDice());
         var nextInput = CreateRequest(target: projected);
         var nextRequest = new CombatRequest(nextInput.ResolutionId, nextInput.SourceId, nextInput.TargetId,
-            nextInput.Attack, new CombatStateSnapshot(application.BasedOnStateVersion + 1,
+            Assert.IsType<AttackPayload>(nextInput.Attack), new CombatStateSnapshot(application.BasedOnStateVersion + 1,
                 nextInput.StateSnapshot.Source, projected));
         var next = Resolve(resolver, nextRequest, new CountingDice());
         var rebuilt = Resolve(resolver, CreateRequest(target: projectedAgain), new CountingDice());

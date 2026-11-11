@@ -34,7 +34,8 @@ public sealed class CombatResolutionBuilder
     /// <exception cref="ArgumentNullException">An argument is null.</exception>
     /// <exception cref="InvalidOperationException">
     /// Post-defense damage has no original result, a proposal targets an unknown participant,
-    /// a calculation attempts to prebuild health/defeat changes, or a state change is unsupported.
+    /// a calculation attempts to prebuild health/defeat changes, targets a historical tick source,
+    /// or a state change is unsupported.
     /// </exception>
     /// <exception cref="OverflowException">Combined direct damage exceeds the supported integer range.</exception>
     public CombatResolution Build(CombatContext context, DiceTrace diceTrace)
@@ -42,7 +43,7 @@ public sealed class CombatResolutionBuilder
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(diceTrace);
         var adjustments = CollectHealthAdjustments(context);
-        var projections = ProjectHealth(context.Request.StateSnapshot, adjustments);
+        var projections = ProjectHealth(context.Request, adjustments);
         var changes = BuildStateChanges(context, projections);
         var result = BuildCombatResult(context, projections);
         var diceCount = diceTrace.Rolls.Count;
@@ -68,10 +69,12 @@ public sealed class CombatResolutionBuilder
             : context.HealthAdjustments;
     }
 
-    private ImmutableArray<HealthProjection> ProjectHealth(CombatStateSnapshot snapshot,
+    private ImmutableArray<HealthProjection> ProjectHealth(CombatRequest request,
         IReadOnlyList<HealthAdjustment> adjustments)
     {
-        var participants = snapshot.Source.Id == snapshot.Target.Id
+        var snapshot = request.StateSnapshot;
+        var participants = request.TickEffect is not null ? new[] { snapshot.Target }
+            : snapshot.Source.Id == snapshot.Target.Id
             ? new[] { snapshot.Source } : new[] { snapshot.Source, snapshot.Target };
         var ids = participants.Select(participant => participant.Id).ToHashSet();
         if (adjustments.Any(adjustment => !ids.Contains(adjustment.CombatantId)))
@@ -94,7 +97,7 @@ public sealed class CombatResolutionBuilder
                     "Only result finalization may propose health and defeat changes."),
                 _ => throw new InvalidOperationException("Unsupported combat state change.")
             };
-            if (id != snapshot.Source.Id && id != snapshot.Target.Id)
+            if (id != snapshot.Target.Id && (context.Request.TickEffect is not null || id != snapshot.Source.Id))
                 throw new InvalidOperationException("A state change targets a combatant outside the snapshot.");
         }
         var changes = ImmutableArray.CreateBuilder<ICombatStateChange>();

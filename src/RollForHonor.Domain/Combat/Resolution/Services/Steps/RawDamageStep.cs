@@ -23,6 +23,6 @@ public sealed class RawDamageStep : ICombatStep
         ArgumentNullException.ThrowIfNull(dice);
         if (context.BeforeDefenses is not null || context.AfterDefenses is not null)
             throw new InvalidOperationException("Damage has already been resolved.");
-        return context with { BeforeDefenses = _resolver.Resolve(context.Request.Attack.Damage, dice) };
+        return context with { BeforeDefenses = _resolver.Resolve(context.Request.Damage, dice) };
     }
 }

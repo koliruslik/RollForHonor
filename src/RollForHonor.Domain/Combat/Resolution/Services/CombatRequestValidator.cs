@@ -24,6 +24,14 @@ public sealed class CombatRequestValidator : ICombatRequestValidator
                 $"Target combatant '{request.TargetId}' does not match snapshot target '{request.StateSnapshot.Target.Id}'.");
         }
 
+        if (request.TickEffect is { } effect)
+        {
+            if (!request.StateSnapshot.Target.Effects.Contains(effect))
+                return new CombatRejection(CombatRejectionReason.InvalidState,
+                    "The ticked effect is not present in the current recipient snapshot.");
+            return null;
+        }
+
         if (request.StateSnapshot.Source.IsDefeated)
         {
             return new CombatRejection(CombatRejectionReason.SourceDefeated,
@@ -37,15 +45,16 @@ public sealed class CombatRequestValidator : ICombatRequestValidator
                 $"Combatant '{request.SourceId}' has conflicting source and target snapshots.");
         }
 
-        if (request.Attack.AttackRoll.Count != 1 ||
-            request.Attack.AttackRoll.Sides != 20)
+        var attack = request.Attack!;
+        if (attack.AttackRoll.Count != 1 ||
+            attack.AttackRoll.Sides != 20)
         {
             return new CombatRejection(
                 CombatRejectionReason.InvalidAttack,
                 "An attack roll must use exactly 1d20.");
         }
 
-        if (request.Attack.Effects.Count == 0 && request.Attack.Damage.Count == 0)
+        if (attack.Effects.Count == 0 && attack.Damage.Count == 0)
         {
             return new CombatRejection(CombatRejectionReason.InvalidAttack,
                 "An attack must contain at least one damage component or combat effect.");
