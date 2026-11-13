@@ -24,4 +24,10 @@
     <ProjectReference Include="..\..\src\RollForHonor.Application\RollForHonor.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\RollForHonor.Domain.Tests\Diagnostics\CombatDiagnosticTestBase.cs" Link="Diagnostics\CombatDiagnosticTestBase.cs" />
+    <Compile Include="..\RollForHonor.Domain.Tests\Diagnostics\CombatDiagnosticOutput.cs" Link="Diagnostics\CombatDiagnosticOutput.cs" />
+    <Compile Include="..\RollForHonor.Domain.Tests\Diagnostics\CombatResolutionDiagnosticFormatter.cs" Link="Diagnostics\CombatResolutionDiagnosticFormatter.cs" />
+  </ItemGroup>
+
 </Project>
