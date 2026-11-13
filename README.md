@@ -80,6 +80,8 @@ Instance identities are derived deterministically through an injected factory.
 - typed defense resolution with a replaceable armor-formula contract,
   resistances, weaknesses, and ordered before/after breakdowns;
 - engine-independent Domain logic;
+- an engine-independent Application impact use case with fresh per-impact state reads,
+  separate snapshot construction, pipeline composition and version-checked commit ports;
 - automated Domain and Application tests;
 - a standalone console host for smoke scenarios and opt-in performance measurements;
 - headless Godot runtime tests;
@@ -150,8 +152,11 @@ current recipient health still takes precedence over the captured health.
 Ticks reuse `CombatResolver`, `RawDamageStep`, optional explicitly chosen defense
 steps, and mandatory finalization. No universal periodic-defense rule, duration,
 scheduler, production stat aggregation, or new reapplication policy is introduced.
-Application integration will select active effects, assemble pipelines, schedule
-ticks and commit state. The existing replacement-by-definition behavior remains.
+Application owns active-effect selection and pipeline assembly. Its impact use
+case now invokes a supplied pipeline factory against current participant data
+and attempts commit through an adapter. Tick scheduling, runtime adapters and
+full production effect aggregation remain future work. The existing
+replacement-by-definition behavior remains.
 
 Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
 pipeline executor, resolver, and mandatory result builder remain directly under
@@ -211,7 +216,7 @@ atomic health projection, failure propagation, and status replacement isolation.
 A test-only consumer projects armor, evasion, and resistance from base stats plus
 an applied status into a fresh snapshot for a later action, including removal
 and repeated projection without accumulating bonuses. This illustrates the
-consumer boundary; production stat aggregation and Application state commits
+consumer boundary; production stat aggregation and runtime state adapters
 remain future work.
 
 Regression tests also cover exact d20 margin boundaries and natural-roll shifts,
@@ -278,16 +283,63 @@ The fake's action grouping, commit guards and single explicit resistance-buff
 fixture are test infrastructure. These checks do not implement or verify production
 attack acceptance, resource spending, cooldowns, concurrency, projectile physics,
 or scheduling. Ordinary impacts in these fixtures use a fresh living source;
-projectile source-capture and post-launch source-lifetime rules remain separate
-decisions. No new Domain contracts or production Application service are introduced.
+active attacks now read source parameters at impact time. Post-launch
+source-lifetime rules remain a separate decision. These C10 fixtures remain
+Domain scenarios; the Application integration tests below exercise the actual use case.
 
 ### Application
 
-`RollForHonor.Application` is reserved for use cases, transaction coordination,
-state commits, and ports to external systems.
+`RollForHonor.Application` coordinates one target impact through
+`CombatImpactService`. An `AttackInstance` retains its source identity and base
+`AttackPayload`; `Resolve(targetId)` performs a new read and calculation for
+each eligible contact. Source combat effects and target defenses are observed
+at impact time, rather than being frozen at attack construction. This differs
+from applied periodic effects, which retain their captured source parameters.
 
-This layer is still at an early stage and does not yet contain the complete
-combat application flow.
+The use case:
+
+1. reads current source and target data at one consistent version through
+   `ICombatStateAdapter`;
+2. invokes `ICombatSnapshotBuilder` to construct a per-impact snapshot;
+3. asks `ICombatPipelineFactory` to select applicable behaviors and compose steps;
+4. creates a unique resolution identity and uses a fresh, empty-trace dice source;
+5. executes the existing Domain resolver and mandatory finalization;
+6. attempts atomic commit only for a resolved proposal.
+
+`CombatStateRead` reuses existing immutable `CombatantSnapshot` views as adapter
+read data; it does not prescribe a live entity model or database. The default
+`CombatSnapshotBuilder` assembles those views and their version into
+`CombatStateSnapshot`. Full equipment/stat aggregation is not implemented.
+Pipeline composition is explicitly supplied and invoked anew per impact.
+
+`CombatImpactResult` separates the Domain outcome from `Applied`,
+`VersionConflict`, or `AlreadyApplied` commit status. Domain rejection has no
+commit status and does not reach the adapter's commit method. Version conflicts
+are returned without automatic retries or extra dice rolls. Exceptions propagate;
+the adapter contract requires that failed commit leaves all proposed changes
+unpublished. Snapshot version and participant identities are checked before
+calculation, and each impact requires an empty dice trace.
+
+The Application test project now uses real use-case orchestration and Domain
+services with a stateful in-memory test adapter. Tests cover multiple targets,
+successive HP/defeat transitions, source buffs added/removed after attack
+construction, updated target resistance, status replacement, version conflict
+and explicit retry, Domain/pipeline/adapter failure, replay protection, inconsistent
+snapshots, self-targeting, changes to both participants and dice-trace isolation.
+The existing opt-in combat diagnostic formatter is reused through linked test
+sources, without a production logging dependency.
+
+```powershell
+dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~CombatImpactServiceTests
+```
+
+`AttackInstance` is currently an impact context. Its constructor does not accept
+an attack action, spend resources or start cooldowns. Projectile lifetime,
+termination/contact policies, repeated hits on one target, runtime state storage,
+Godot adapters, UI publication and console integration remain separate work.
+The existing ordinary-attack validator still requires a living source;
+post-launch source death is an open rule, not silently handled by a frozen
+launch snapshot. Resource-cost and cooldown orchestration remain C09.
 
 ### Godot
 
@@ -377,7 +429,7 @@ Near-term development remains combat-first and includes:
 - combat effects and resource costs;
 - persistent-effect scheduling and effect-specific gameplay policies;
 - projectile impact resolution;
-- application-level state commits;
+- runtime state adapters and committed-result presentation;
 - Godot combat presentation and runtime integration.
 
 Player movement, procedural maps, and saving and loading will follow the
