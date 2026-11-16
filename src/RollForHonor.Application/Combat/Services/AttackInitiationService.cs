@@ -1,4 +1,5 @@
 using RollForHonor.Application.Combat.Models;
+using RollForHonor.Application.Combat.Diagnostics;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Resources.Services;
@@ -13,6 +14,7 @@ public sealed class AttackInitiationService
     private readonly IResourceCostModifierProvider _modifiers;
     private readonly CombatImpactService _impacts;
     private readonly Func<TimeSpan> _now;
+    private readonly ICombatDiagnostics? _diagnostics;
 
     /// <summary>Creates an engine-independent launch coordinator.</summary>
     /// <param name="state">Atomic initiation reads and commits.</param>
@@ -20,14 +22,17 @@ public sealed class AttackInitiationService
     /// <param name="modifiers">Application-owned selection of current source cost modifiers.</param>
     /// <param name="impacts">The existing per-impact use case.</param>
     /// <param name="now">The monotonic game timeline; pause/time scaling belong to the host.</param>
+    /// <param name="diagnostics">Optional diagnostic output, isolated from launch success.</param>
+    /// <remarks>Diagnostics are optional and their failures are isolated from launch.</remarks>
     public AttackInitiationService(IAttackInitiationAdapter state, IResourceCostResolver costs,
-        IResourceCostModifierProvider modifiers, CombatImpactService impacts, Func<TimeSpan> now)
+        IResourceCostModifierProvider modifiers, CombatImpactService impacts, Func<TimeSpan> now, ICombatDiagnostics? diagnostics = null)
     {
         _state = state ?? throw new ArgumentNullException(nameof(state));
         _costs = costs ?? throw new ArgumentNullException(nameof(costs));
         _modifiers = modifiers ?? throw new ArgumentNullException(nameof(modifiers));
         _impacts = impacts ?? throw new ArgumentNullException(nameof(impacts));
         _now = now ?? throw new ArgumentNullException(nameof(now));
+        _diagnostics = diagnostics;
     }
 
     /// <summary>Attempts one accepted launch without calculating a hit or creating an engine projectile.</summary>
@@ -41,14 +46,23 @@ public sealed class AttackInitiationService
         if (requestId == Guid.Empty) throw new ArgumentException("A launch request identity cannot be empty.", nameof(requestId));
         ArgumentNullException.ThrowIfNull(sourceId);
         ArgumentNullException.ThrowIfNull(definition);
+        return AttackStartDiagnostics.Run(_diagnostics, requestId, sourceId, definition,
+            diagnostics => StartCore(requestId, sourceId, definition, diagnostics));
+    }
+
+    private AttackStartResult StartCore(Guid requestId, CombatantId sourceId, AttackDefinition definition,
+        AttackStartDiagnostics diagnostics)
+    {
         var state = _state.ReadForStart(sourceId, definition.Key, requestId)
             ?? throw new InvalidOperationException("The initiation adapter returned null.");
+        diagnostics.ObserveState(state);
         if (state.Source.Id != sourceId)
             throw new InvalidOperationException("The initiation read does not match the requested source.");
         if (state.StartedAttackId is { } previous)
             return new AttackStartResult(AttackStartStatus.AlreadyStarted, attackId: previous);
         if (state.Source.IsDefeated) return new AttackStartResult(AttackStartStatus.SourceDefeated);
         var now = _now();
+        diagnostics.ObserveTime(now);
         if (now < state.ReadyAt) return new AttackStartResult(AttackStartStatus.OnCooldown);
 
         var modifiers = _modifiers.GetReductions(state.Source)
@@ -62,6 +76,7 @@ public sealed class AttackInitiationService
         var readyAt = now + definition.Cooldown;
         var attack = new AttackInstance(sourceId, definition.Attack, _impacts);
         var proposal = new AttackStartProposal(requestId, attack.Id, sourceId, definition.Key, state.Version, costs, readyAt);
+        diagnostics.ObserveProposal(proposal);
         return _state.TryStart(proposal) switch
         {
             CombatCommitStatus.Applied => new AttackStartResult(AttackStartStatus.Started, attack, costs: costs),
