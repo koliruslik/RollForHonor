@@ -9,6 +9,8 @@ namespace RollForHonor.Application.Combat.Models;
 /// This is an impact context, not attack acceptance or a projectile. Construction does not spend
 /// resources or start cooldowns. Runtime lifetime and contact eligibility are separate policies.
 /// Source statistics are read afresh for each impact rather than retained here.
+/// External callers obtain instances from a successful AttackInitiationService start;
+/// the internal constructor does not itself perform acceptance or resource operations.
 /// </remarks>
 public sealed class AttackInstance
 {
@@ -26,7 +28,7 @@ public sealed class AttackInstance
     /// <param name="attack">The non-null base attack description.</param>
     /// <param name="impacts">The non-null Application impact use case.</param>
     /// <exception cref="ArgumentNullException">An argument is null.</exception>
-    public AttackInstance(CombatantId sourceId, AttackPayload attack, CombatImpactService impacts)
+    internal AttackInstance(CombatantId sourceId, AttackPayload attack, CombatImpactService impacts)
     {
         ArgumentNullException.ThrowIfNull(sourceId);
         ArgumentNullException.ThrowIfNull(attack);
