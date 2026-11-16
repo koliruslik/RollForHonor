@@ -14,12 +14,16 @@ public sealed record AttackDefinition
     public TimeSpan Cooldown { get; }
     /// <summary>Gets immutable base costs, unique by resource.</summary>
     public IReadOnlyList<ResourceAmount> BaseCosts { get; }
+    /// <summary>Gets the configured contact and lifetime rules.</summary>
+    public AttackExecutionRules ExecutionRules { get; }
     /// <summary>Creates an attack definition without performing any launch.</summary>
     /// <param name="key">The nonblank cooldown/content key.</param>
     /// <param name="attack">The base impact description.</param>
     /// <param name="cooldown">A nonnegative duration.</param>
     /// <param name="baseCosts">Unique, non-null resource costs.</param>
-    public AttackDefinition(string key, AttackPayload attack, TimeSpan cooldown, IReadOnlyList<ResourceAmount> baseCosts)
+    /// <param name="executionRules">Optional contact/lifetime rules; absent preserves unrestricted impacts until the host ends the attack.</param>
+    public AttackDefinition(string key, AttackPayload attack, TimeSpan cooldown, IReadOnlyList<ResourceAmount> baseCosts,
+        AttackExecutionRules? executionRules = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(attack);
@@ -32,5 +36,6 @@ public sealed record AttackDefinition
         Attack = attack;
         Cooldown = cooldown;
         BaseCosts = Array.AsReadOnly(costs);
+        ExecutionRules = executionRules ?? new AttackExecutionRules();
     }
 }

@@ -59,6 +59,14 @@
     "Benchmark - Sequence": {
       "commandName": "Project",
       "commandLineArgs": "benchmark --scenario sequence --iterations 10000 --warmup 500 --samples 5 --seed 42 --json artifacts/benchmark-sequence.json"
+    },
+    "Contacts - Summary + JSONL": {
+      "commandName": "Project",
+      "commandLineArgs": "contacts --jsonl artifacts/contacts.jsonl"
+    },
+    "Contacts - Steps": {
+      "commandName": "Project",
+      "commandLineArgs": "contacts --view steps"
     }
   }
 }

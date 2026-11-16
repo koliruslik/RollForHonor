@@ -43,6 +43,61 @@ internal static class DiagnosticDemo
         starts.Start(Guid.NewGuid(), state.Source.Id, definition);
     }
 
+    /// <summary>Exercises contact admission and termination with real launches and impacts.</summary>
+    /// <param name="args">Command and output/filter arguments for the fixed fixtures.</param>
+    public static void RunContacts(string[] args)
+    {
+        var options = DiagnosticOptions.Parse(args);
+        using var jsonl = options.OpenWriter();
+        var diagnostics = new LoggerCombatDiagnostics(new ConsoleDiagnosticLogger(), options.View, options.Filter, jsonl);
+        (string Name, AttackExecutionRules Rules, int Roll, AttackContactStatus Repeat,
+            AttackEndReason End, int Health)[] cases =
+        [
+            ("piercing", new(AttackRepeatPolicy.OncePerTarget, AttackStopCondition.EnvironmentContact),
+                15, AttackContactStatus.TargetAlreadyContacted, AttackEndReason.EnvironmentContact, 91),
+            ("first-contact", new(stopOn: AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact),
+                15, AttackContactStatus.AttackEnded, AttackEndReason.CombatantContact, 91),
+            ("repeat", new(maxLifetime: TimeSpan.FromSeconds(1)),
+                15, AttackContactStatus.Processed, AttackEndReason.LifetimeExpired, 82),
+            ("animation", new(AttackRepeatPolicy.OncePerTarget),
+                15, AttackContactStatus.TargetAlreadyContacted, AttackEndReason.AnimationFinished, 91),
+            ("evaded-once", new(AttackRepeatPolicy.OncePerTarget, maxLifetime: TimeSpan.FromSeconds(1)),
+                1, AttackContactStatus.TargetAlreadyContacted, AttackEndReason.LifetimeExpired, 100)
+        ];
+        foreach (var scenario in cases)
+        {
+            var now = TimeSpan.Zero;
+            var state = new DemoState();
+            var diceCount = 0;
+            var impacts = new CombatImpactService(state, new CombatSnapshotBuilder(), new DemoPipeline(), () =>
+            {
+                diceCount++;
+                return ScenarioDice.Scripted(scenario.Roll, 2, 5, 3);
+            }, diagnostics);
+            var starts = new AttackInitiationService(state, new ResourceCostResolver(new AdditiveResourceCostPolicy()),
+                new DemoReductions(), impacts, () => now, diagnostics);
+            var payload = new AttackPayload(new(1, 20), 0, NaturalOutcomeShiftRules.Standard,
+                [new(new(2, 6), 3, DamageType.Slashing), new(new(1, 4), 0, DamageType.Fire)], [], AttackTags.Projectile);
+            var definition = new AttackDefinition("contact-demo", payload, TimeSpan.FromSeconds(2),
+                [new(DemoState.Mana, 20)], scenario.Rules);
+            var attack = starts.Start(Guid.NewGuid(), state.Source.Id, definition).Attack!;
+            var first = attack.ResolveContact(state.Target.Id);
+            var repeated = attack.ResolveContact(state.Target.Id);
+            var obstacle = attack.ContactEnvironment();
+            if (scenario.Name == "animation") attack.End(AttackEndReason.AnimationFinished);
+            now = TimeSpan.FromSeconds(1);
+            attack.UpdateLifetime();
+            var ended = attack.ResolveContact(state.Target.Id);
+            var expectedDice = scenario.Repeat == AttackContactStatus.Processed ? 2 : 1;
+            if (first.Status != AttackContactStatus.Processed || repeated.Status != scenario.Repeat
+                || attack.EndReason != scenario.End || ended.Status != AttackContactStatus.AttackEnded
+                || diceCount != expectedDice || state.Target.Health != scenario.Health)
+                throw new InvalidOperationException($"Contact scenario failed: {scenario.Name}.");
+            System.Console.Error.WriteLine($"PASS contacts/{scenario.Name}: first={first.Status}; repeat={repeated.Status}; " +
+                $"obstacle={obstacle.Status}; end={attack.EndReason}; calculations={diceCount}; targetHP={state.Target.Health}");
+        }
+    }
+
     private sealed class DemoPipeline : ICombatPipelineFactory
     {
         /// <inheritdoc />

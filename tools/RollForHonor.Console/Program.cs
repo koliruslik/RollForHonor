@@ -29,12 +29,17 @@ try
         DiagnosticDemo.Run(args);
         return 0;
     }
+    if (args[0] == "contacts")
+    {
+        DiagnosticDemo.RunContacts(args);
+        return 0;
+    }
     if (args[0] == "battle")
     {
         TextCombatScenario.Run(args);
         return 0;
     }
-    if (args[0] != "benchmark") throw new ArgumentException("Expected smoke, diagnostics, battle or benchmark.");
+    if (args[0] != "benchmark") throw new ArgumentException("Expected smoke, diagnostics, contacts, battle or benchmark.");
     var options = new Dictionary<string, string>();
     for (var i = 1; i < args.Length; i += 2)
     {
@@ -83,6 +88,8 @@ catch (Exception exception)
 static void Help() => Console.WriteLine("""
     RollForHonor.Console smoke
     RollForHonor.Console diagnostics [--view summary|steps|full|jsonl] [--jsonl trace.jsonl]
+        [--attack GUID] [--source GUID] [--target GUID] [--errors-only]
+    RollForHonor.Console contacts [--view summary|steps|full|jsonl] [--jsonl contacts.jsonl]
         [--attack GUID] [--source GUID] [--target GUID] [--errors-only]
     RollForHonor.Console battle [--seed 42] [--rounds 30] [--view summary|steps|full|jsonl]
         [--jsonl battle.jsonl] [--attack GUID] [--source GUID] [--target GUID] [--errors-only]
