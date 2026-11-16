@@ -1,3 +1,7 @@
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using RollForHonor.Infrastructure.Diagnostics;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
@@ -350,6 +354,312 @@ public sealed class CombatImpactServiceTests(ITestOutputHelper output) : CombatD
         public BonusDefinition(int bonus) : base(new EffectDefinitionId(Guid.NewGuid())) => Bonus = bonus;
     }
 
+    /// <summary>Checks every view against the same committed damage, nested effects and complete concrete JSON data.</summary>
+    /// <param name="view">The diagnostic representation being checked.</param>
+    [Theory]
+    [InlineData(CombatDiagnosticView.Summary)]
+    [InlineData(CombatDiagnosticView.Steps)]
+    [InlineData(CombatDiagnosticView.Full)]
+    [InlineData(CombatDiagnosticView.Jsonl)]
+    public void Diagnostics_AllViewsKeepDiceAndCommitsAndExportConcreteChanges(CombatDiagnosticView view)
+    {
+        var source = Character(effects: [BonusStatus(5)]);
+        var target = Character(armor: 30);
+        var baseline = new Rig(source, target);
+        var sink = new RecordingDiagnostics();
+        var logged = new Rig(source, target) { Diagnostics = sink };
+        var expected = Resolution(Resolve(new AttackInstance(source.Id, Payload(), baseline.Service), target.Id));
+        var actual = Resolution(Resolve(new AttackInstance(source.Id, Payload(), logged.Service), target.Id));
+        Assert.Equal(expected.Result.Target.DamageResolution!.AfterDefenses.Sum(), actual.Result.Target.DamageResolution!.AfterDefenses.Sum());
+        Assert.Equal(baseline.State.Get(target.Id), logged.State.Get(target.Id));
+        Assert.Equal(expected.DiceTrace.Rolls.SelectMany(r => r.Results), actual.DiceTrace.Rolls.SelectMany(r => r.Results));
+        var report = Assert.Single(sink.Reports);
+        Assert.Contains(report.Steps, step => step.Depth == 1 && step.Name == nameof(BonusDamageEffect));
+        Assert.Contains(report.Steps, step => step.Name == "ProjectHealth" && step.Details is not null);
+        Assert.Contains(report.Steps, step => step.Before.BeforeDefenses?.Sum() == 6 && step.After?.BeforeDefenses?.Sum() == 11);
+        var text = CombatDiagnosticFormatter.Format(report, view);
+        Assert.Contains(report.AttackId.ToString(), text);
+        LogDiagnosticText(text);
+        using var json = JsonDocument.Parse(CombatDiagnosticFormatter.Format(report, CombatDiagnosticView.Jsonl));
+        var resolution = json.RootElement.GetProperty("result").GetProperty("outcome").GetProperty("resolution");
+        Assert.True(resolution.GetProperty("changes")[0].TryGetProperty("currentHealth", out _));
+        Assert.Equal("HealthChanged", resolution.GetProperty("changes")[0].GetProperty("$type").GetString());
+        Assert.Equal(new[] { 15, 3 }, json.RootElement.GetProperty("dice").GetProperty("rolls").EnumerateArray()
+            .SelectMany(r => r.GetProperty("results").EnumerateArray().Select(d => d.GetInt32())));
+        Assert.True(json.RootElement.GetProperty("result").GetProperty("isCommitted").GetBoolean());
+        if (view == CombatDiagnosticView.Steps) Assert.Contains("[15] = 15", text);
+        if (view == CombatDiagnosticView.Full) Assert.Contains("bonus: 5", text);
+    }
+
+    /// <summary>Checks that diagnostic configuration and output exceptions cannot change a committed hit.</summary>
+    /// <param name="failConfiguration">Whether diagnostic enablement throws instead of report output.</param>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Diagnostics_ConfigurationOrWriteFailureDoesNotChangeCommit(bool failConfiguration)
+    {
+        var source = Character();
+        var target = Character();
+        var rig = new Rig(source, target) { Diagnostics = new FailingDiagnostics(failConfiguration) };
+        var result = Resolve(new AttackInstance(source.Id, Payload(), rig.Service), target.Id);
+        Assert.True(result.IsCommitted);
+        Assert.Equal(44, rig.State.Get(target.Id).Health);
+        Assert.Equal(2, Resolution(result).DiceTrace.Rolls.Count);
+    }
+
+    /// <summary>Retains completed values and dice alongside the failed nested effect without committing state.</summary>
+    [Fact]
+    public void Diagnostics_PipelineFailureRetainsCompletedStepsDiceAndFailingNestedEffect()
+    {
+        var source = Character();
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink };
+        rig.Pipelines.FailAfterProposals = true;
+        var attack = new AttackInstance(source.Id, Payload(effects: [Burning()]), rig.Service);
+        Assert.Throws<InvalidOperationException>(() => attack.Resolve(target.Id));
+        var report = Assert.Single(sink.Reports);
+        Assert.Equal("Calculate", report.Phase);
+        Assert.Contains(report.Steps, step => step.Name == nameof(FailEffect) && step.Error is not null);
+        Assert.Contains(report.Steps, step => step.Name == nameof(RawDamageStep) && step.After?.BeforeDefenses?.Sum() == 6);
+        Assert.Equal(2, report.Dice!.Rolls.Count);
+        Assert.Equal(50, rig.State.Get(target.Id).Health);
+        Assert.Equal(0, rig.State.CommitAttempts);
+    }
+
+    /// <summary>Exports Domain rejection without a commit attempt, intermediate steps or consumed dice.</summary>
+    [Fact]
+    public void Diagnostics_RejectionDoesNotClaimCommitOrConsumeDice()
+    {
+        var source = Character(health: 0);
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink };
+        var result = new AttackInstance(source.Id, Payload(), rig.Service).Resolve(target.Id);
+        Assert.False(result.IsCommitted);
+        var report = Assert.Single(sink.Reports);
+        Assert.Empty(report.Steps);
+        Assert.Empty(report.Dice!.Rolls);
+        Assert.Contains("Rejected", CombatDiagnosticFormatter.Format(report, CombatDiagnosticView.Summary));
+        using var json = JsonDocument.Parse(CombatDiagnosticFormatter.Format(report, CombatDiagnosticView.Jsonl));
+        Assert.True(json.RootElement.GetProperty("result").GetProperty("outcome").TryGetProperty("rejection", out _));
+    }
+
+    /// <summary>Keeps a stale calculated proposal separate from unchanged target health.</summary>
+    [Fact]
+    public void Diagnostics_ConflictIsErrorAndProposalIsNotPresentedAsApplied()
+    {
+        var source = Character();
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink };
+        rig.State.BeforeCommit = _ => rig.State.ExternalUpdate(source);
+        var result = new AttackInstance(source.Id, Payload(), rig.Service).Resolve(target.Id);
+        Assert.Equal(CombatCommitStatus.VersionConflict, result.CommitStatus);
+        var report = Assert.Single(sink.Reports);
+        Assert.True(report.IsError);
+        Assert.Contains("VersionConflict", CombatDiagnosticFormatter.Format(report, CombatDiagnosticView.Summary));
+        Assert.Equal(50, rig.State.Get(target.Id).Health);
+    }
+
+    /// <summary>Checks independent JSONL delivery and combined identity and outcome filters.</summary>
+    [Fact]
+    public void Diagnostics_IndependentJsonlSurvivesLoggerFailureAndHonorsFilters()
+    {
+        var source = Character();
+        var target = Character();
+        using var jsonl = new StringWriter();
+        var logger = new ThrowingLogger();
+        var diagnostics = new LoggerCombatDiagnostics(logger, filter: new(SourceId: source.Id, TargetId: target.Id), jsonl: jsonl);
+        var rig = new Rig(source, target) { Diagnostics = diagnostics };
+        var attack = new AttackInstance(source.Id, Payload(), rig.Service);
+        Assert.False(diagnostics.IsEnabled(attack.Id, target.Id, source.Id));
+        Assert.True(attack.Resolve(target.Id).IsCommitted);
+        var line = Assert.Single(jsonl.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
+        using var parsed = JsonDocument.Parse(line);
+        Assert.Equal("impact", parsed.RootElement.GetProperty("kind").GetString());
+        Assert.False(new LoggerCombatDiagnostics(NullLogger.Instance).IsEnabled(attack.Id, source.Id, target.Id));
+        Assert.False(new LoggerCombatDiagnostics(NullLogger.Instance, filter: new(AttackId: Guid.NewGuid()), jsonl: jsonl)
+            .IsEnabled(attack.Id, source.Id, target.Id));
+        using var errors = new StringWriter();
+        var filtered = new LoggerCombatDiagnostics(NullLogger.Instance, filter: new(ErrorsOnly: true), jsonl: errors);
+        var healthyReport = new RecordingDiagnostics();
+        var healthy = new Rig(source, target) { Diagnostics = healthyReport };
+        new AttackInstance(source.Id, Payload(), healthy.Service).Resolve(target.Id);
+        filtered.Write(Assert.Single(healthyReport.Reports));
+        Assert.Equal("", errors.ToString());
+    }
+
+    /// <summary>Retains a completed calculation when staged commit throws without publishing health changes.</summary>
+    [Fact]
+    public void Diagnostics_CommitFailureExportsProposalWithoutClaimingAppliedState()
+    {
+        var source = Character();
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink };
+        rig.State.FailAfterStaging = true;
+        Assert.Throws<InvalidOperationException>(() => new AttackInstance(source.Id, Payload(), rig.Service).Resolve(target.Id));
+        var report = Assert.Single(sink.Reports);
+        Assert.Equal("Commit", report.Phase);
+        Assert.Null(report.Result);
+        Assert.IsType<ResolvedCombat>(report.Calculation);
+        Assert.Contains(report.Steps, step => step.Name == "BuildStateChanges" && step.Details is not null);
+        Assert.Equal(50, rig.State.Get(target.Id).Health);
+    }
+
+    /// <summary>Exports participant identities on failed reads without fabricating unavailable state or rolls.</summary>
+    [Fact]
+    public void Diagnostics_ReadFailureHasIdentitiesWithoutInventingSnapshotOrDice()
+    {
+        var source = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source) { Diagnostics = sink };
+        var target = new CombatantId(Guid.NewGuid());
+        Assert.Throws<KeyNotFoundException>(() => new AttackInstance(source.Id, Payload(), rig.Service).Resolve(target));
+        var report = Assert.Single(sink.Reports);
+        Assert.Equal("Read", report.Phase);
+        Assert.Equal(target, report.TargetId);
+        Assert.Null(report.Request);
+        Assert.Null(report.Dice);
+        Assert.Empty(rig.Dice);
+    }
+
+    /// <summary>Checks that a failed JSONL writer cannot undo a newly applied hit.</summary>
+    [Fact]
+    public void Diagnostics_FailedJsonlWriterDoesNotChangeAppliedState()
+    {
+        var source = Character();
+        var target = Character();
+        var rig = new Rig(source, target)
+        {
+            Diagnostics = new LoggerCombatDiagnostics(NullLogger.Instance, jsonl: new FailingWriter())
+        };
+        Assert.True(new AttackInstance(source.Id, Payload(), rig.Service).Resolve(target.Id).IsCommitted);
+        Assert.Equal(44, rig.State.Get(target.Id).Health);
+    }
+
+    /// <summary>Preserves every die, supplied flat bonus, attack modifier and damage-step dice range.</summary>
+    [Fact]
+    public void Diagnostics_MultiDiceComponentsRetainEveryDieFlatBonusAndRange()
+    {
+        var source = Character();
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink, DiceOverride = () => new ScriptedDice(15, 2, 5, 4) };
+        var payload = new AttackPayload(new(1, 20), 2, NaturalOutcomeShiftRules.Standard,
+            [new(new(2, 6), 3, DamageType.Slashing), new(new(1, 4), 0, DamageType.Fire)], [], AttackTags.Projectile);
+        var result = Resolve(new AttackInstance(source.Id, payload, rig.Service), target.Id);
+        Assert.Equal(36, rig.State.Get(target.Id).Health);
+        var report = Assert.Single(sink.Reports);
+        Assert.Equal(new[] { 15, 2, 5, 4 }, report.Dice!.Rolls.SelectMany(roll => roll.Results));
+        var damage = Assert.Single(report.Steps, step => step.Name == nameof(RawDamageStep));
+        Assert.Equal((1, 3), (damage.DiceStartIndex, damage.DiceEndIndex));
+        Assert.Equal(3, report.Request!.Damage[0].FlatDamage);
+        Assert.Equal(2, report.Request.Attack!.AttackModifier);
+        Assert.Contains(Resolution(result).Result.Target.DamageResolution!.BeforeDefenses.Breakdown.Steps,
+            step => step.Type == DamageStepType.AttackQuality && step.Multiplier == 1);
+    }
+
+    /// <summary>Checks that concurrent writes to a shared writer remain separate valid JSON objects.</summary>
+    [Fact]
+    public void Diagnostics_ConcurrentRecordsRemainSeparateValidJsonLines()
+    {
+        var source = Character();
+        var target = Character();
+        var sink = new RecordingDiagnostics();
+        var rig = new Rig(source, target) { Diagnostics = sink };
+        Resolve(new AttackInstance(source.Id, Payload(), rig.Service), target.Id);
+        var report = Assert.Single(sink.Reports);
+        using var writer = new StringWriter();
+        var diagnostics = new LoggerCombatDiagnostics(NullLogger.Instance, jsonl: writer);
+        Parallel.For(0, 30, _ => diagnostics.Write(report));
+        var lines = writer.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal(30, lines.Length);
+        Assert.All(lines, line =>
+        {
+            using var parsed = JsonDocument.Parse(line);
+            Assert.Equal(report.ResolutionId, parsed.RootElement.GetProperty("resolutionId").GetGuid());
+        });
+    }
+
+    /// <summary>Captures a direct root step while preserving the pre-existing Domain execution trace.</summary>
+    [Fact]
+    public void Diagnostics_DirectRootStepIsCapturedWithoutChangingDomainExecutionTrace()
+    {
+        var source = Character();
+        var target = Character();
+        var state = new TestCombatStateAdapter(source, target);
+        var sink = new RecordingDiagnostics();
+        var service = new CombatImpactService(state, new CombatSnapshotBuilder(), new DirectFactory(),
+            () => new ScriptedDice(), sink);
+        var result = Resolve(new AttackInstance(source.Id, Payload(), service), target.Id);
+        var report = Assert.Single(sink.Reports);
+        Assert.Contains(report.Steps, step => step.Name == "DirectHealth" && step.After!.HealthAdjustments.Single().Amount == -2);
+        Assert.Equal(48, state.Get(target.Id).Health);
+        Assert.Single(Resolution(result).StepTrace);
+    }
+
+    private sealed class DirectFactory : ICombatPipelineFactory
+    {
+        /// <inheritdoc />
+        public ICombatStep Create(AttackInstance attack, CombatStateSnapshot snapshot) => new DirectStep();
+    }
+
+    private sealed class DirectStep : ICombatStep
+    {
+        /// <inheritdoc />
+        public string Name => "DirectHealth";
+        /// <inheritdoc />
+        public CombatContext Execute(CombatContext context, IDiceRoller dice) => context with
+        {
+            HealthAdjustments = [new(context.Request.TargetId, -2)]
+        };
+    }
+
+    private sealed class FailingWriter : StringWriter
+    {
+        /// <inheritdoc />
+        public override void WriteLine(string? value) => throw new IOException("Disk failed");
+    }
+
+    private sealed class RecordingDiagnostics : ICombatDiagnostics
+    {
+        public List<CombatDiagnosticReport> Reports { get; } = [];
+        /// <inheritdoc />
+        public bool IsEnabled(Guid attackId, CombatantId sourceId, CombatantId targetId) => true;
+        /// <inheritdoc />
+        public bool IsStartEnabled(CombatantId sourceId) => true;
+        /// <inheritdoc />
+        public void Write(CombatDiagnosticReport report) => Reports.Add(report);
+        /// <inheritdoc />
+        public void Write(AttackStartDiagnosticReport report) { }
+    }
+
+    private sealed class FailingDiagnostics(bool failConfiguration) : ICombatDiagnostics
+    {
+        /// <inheritdoc />
+        public bool IsEnabled(Guid attackId, CombatantId sourceId, CombatantId targetId) =>
+            failConfiguration ? throw new IOException("Configuration failed") : true;
+        /// <inheritdoc />
+        public bool IsStartEnabled(CombatantId sourceId) => true;
+        /// <inheritdoc />
+        public void Write(CombatDiagnosticReport report) => throw new IOException("Output failed");
+        /// <inheritdoc />
+        public void Write(AttackStartDiagnosticReport report) => throw new IOException("Output failed");
+    }
+
+    private sealed class ThrowingLogger : ILogger
+    {
+        /// <inheritdoc />
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+        /// <inheritdoc />
+        public bool IsEnabled(LogLevel level) => true;
+        /// <inheritdoc />
+        public void Log<TState>(LogLevel level, EventId id, TState state, Exception? error,
+            Func<TState, Exception?, string> formatter) => throw new IOException("Logger failed");
+    }
+
     private sealed class Rig(params CombatantSnapshot[] characters)
     {
         public TestCombatStateAdapter State { get; } = new(characters);
@@ -357,6 +667,7 @@ public sealed class CombatImpactServiceTests(ITestOutputHelper output) : CombatD
         public TestPipelineFactory Pipelines { get; } = new();
         public List<ScriptedDice> Dice { get; } = [];
         public Func<IDiceRoller>? DiceOverride { get; set; }
+        public ICombatDiagnostics? Diagnostics { get; set; }
         private CombatImpactService? _service;
         public CombatImpactService Service => _service ??= new(State, Snapshots, Pipelines, () =>
         {
@@ -364,7 +675,7 @@ public sealed class CombatImpactServiceTests(ITestOutputHelper output) : CombatD
             var dice = new ScriptedDice(15, 3);
             Dice.Add(dice);
             return dice;
-        });
+        }, Diagnostics);
     }
 
     private sealed class RecordingSnapshotBuilder : ICombatSnapshotBuilder
@@ -410,7 +721,7 @@ public sealed class CombatImpactServiceTests(ITestOutputHelper output) : CombatD
             var packet = new DamagePacket(previous.Damage.Components
                 .Select(value => new DamageAmount(value.Type, checked(value.Amount + bonus))).ToArray());
             var breakdown = new DamageBreakdown(previous.Breakdown.Steps.Append(
-                new DamageStep(DamageStepType.AttackerModifier, previous.Damage, packet)).ToArray());
+                new DamageStep(DamageStepType.AttackerModifier, previous.Damage, packet, origin: nameof(BonusDamageEffect), flatBonus: bonus)).ToArray());
             return context with { BeforeDefenses = new DamageCalculationResult(breakdown, packet) };
         }
     }

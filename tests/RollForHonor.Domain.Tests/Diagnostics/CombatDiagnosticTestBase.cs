@@ -13,6 +13,12 @@ public abstract class CombatDiagnosticTestBase
         _output = output;
     }
 
+    protected void LogDiagnosticText(string text)
+    {
+        if (CombatDiagnosticOutput.IsEnabled(Environment.GetEnvironmentVariable("RFH_COMBAT_DIAGNOSTICS")))
+            _output.WriteLine(text);
+    }
+
     protected TOutcome LogOutcome<TOutcome>(TOutcome outcome)
         where TOutcome : ICombatResolutionOutcome
     {
