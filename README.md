@@ -80,8 +80,10 @@ Instance identities are derived deterministically through an injected factory.
 - typed defense resolution with a replaceable armor-formula contract,
   resistances, weaknesses, and ordered before/after breakdowns;
 - engine-independent Domain logic;
+- deterministic resource-cost calculation with an explicitly replaceable additive reduction policy;
 - an engine-independent Application impact use case with fresh per-impact state reads,
   separate snapshot construction, pipeline composition and version-checked commit ports;
+- attack initiation with atomic resource deduction, cooldown start and command replay protection;
 - automated Domain and Application tests;
 - a standalone console host for smoke scenarios and opt-in performance measurements;
 - headless Godot runtime tests;
@@ -333,13 +335,75 @@ sources, without a production logging dependency.
 dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~CombatImpactServiceTests
 ```
 
-`AttackInstance` is currently an impact context. Its constructor does not accept
-an attack action, spend resources or start cooldowns. Projectile lifetime,
-termination/contact policies, repeated hits on one target, runtime state storage,
-Godot adapters, UI publication and console integration remain separate work.
+`AttackInstance` is an impact context obtained from a newly accepted launch.
+Its constructor is now internal, preventing ordinary external callers from
+bypassing launch acceptance. Low-level impact tests have explicit friend-assembly
+access to construct isolated contexts. Projectile lifetime, termination/contact
+policies, repeated hits on one target, runtime state storage, Godot adapters,
+UI publication and console integration remain separate work.
 The existing ordinary-attack validator still requires a living source;
 post-launch source death is an open rule, not silently handled by a frozen
-launch snapshot. Resource-cost and cooldown orchestration remain C09.
+launch snapshot.
+
+### Attack initiation and resource costs
+
+`AttackInitiationService.Start(requestId, sourceId, definition)` accepts one
+launch without resolving damage. `AttackDefinition` supplies the base impact
+description, unique base resource costs and a source-local cooldown key/duration.
+The initiation adapter reads the current source, balances, cooldown and any
+receipt for the request at one consistent version. Current source cost effects
+are selected through `IResourceCostModifierProvider` and passed to Domain.
+
+`ResourceCostResolver` calculates each resource independently. The default
+`AdditiveResourceCostPolicy` implements the confirmed additive rule: reductions
+of 10% and 20% produce a 30% reduction. It is injected through
+`IResourceCostPolicy`, so changing reduction combination does not require
+rewriting initiation or impact orchestration. The initial policy floors costs
+at zero for total reductions of 100% or more. Costs use exact decimal quantities
+without implicit integer rounding: a cost of 11 reduced by 30% is 7.7. Individual
+reduction inputs are fractions from zero through one. Flat modifiers, cost
+increases, resource regeneration and integer rounding rules are not introduced.
+
+Resource identifiers are extensible, case-sensitive keys, allowing mana,
+stamina or ammunition without coupling the calculator to items or Godot.
+The resolution retains copied base costs, reductions and final costs.
+Duplicate base costs for the same resource are rejected rather than charged twice.
+No resource balances are mutated by Domain.
+
+After alive-source, cooldown and affordability checks, Application proposes
+all deductions, the cooldown deadline and the command receipt together through
+`IAttackInitiationAdapter`. Only a successful atomic commit returns a new
+`AttackInstance`. An unaffordable resource, cooldown rejection, version conflict
+or failed adapter commit publishes none of this attempt's resource/cooldown changes.
+Adapters must recheck receipt/version/affordability and provide that atomicity;
+the current in-memory implementation is test-only. It shares versions with the
+impact test adapter so intervening combat changes can invalidate a launch read.
+
+Use a new nonempty request ID for each intended launch; retries of the same
+command retain it. `AlreadyStarted` does not expose another spawnable instance
+or charge again. A receipt found on the initial read also reports the original
+attack ID. Version conflicts are returned without automatic retries.
+Cooldown deadlines use an injected monotonic game timeline; game pause and
+time scaling belong to the host. A new launch is allowed exactly at its deadline.
+Cooldowns are keyed by source plus attack-definition key.
+
+Once launched, zero, one or many later impacts use the existing impact path.
+Hits and misses neither charge the launch again nor refund it. The service does
+not create projectiles, execute animations or define attack lifetime/contact rules.
+Full runtime adapters, production cost-effect definitions and Godot/console wiring
+remain future work.
+
+Tests cover additive and resource-specific reductions, policy replacement,
+fractional/free costs, one charge across multiple impacts, miss behavior,
+cooldown boundaries, insufficient resources, request replay, intervening state
+changes, staged adapter failure and independent source/definition cooldowns.
+Initiation results and cost breakdowns use the same opt-in test diagnostic switch;
+impact calculations reuse the existing combat formatter.
+
+```powershell
+dotnet test tests/RollForHonor.Domain.Tests --filter FullyQualifiedName~ResourceCostResolverTests
+dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~AttackInitiationServiceTests
+```
 
 ### Godot
 
@@ -426,7 +490,7 @@ The pipeline:
 Near-term development remains combat-first and includes:
 
 - defense balance tuning;
-- combat effects and resource costs;
+- production effect content and runtime resource adapters;
 - persistent-effect scheduling and effect-specific gameplay policies;
 - projectile impact resolution;
 - runtime state adapters and committed-result presentation;
