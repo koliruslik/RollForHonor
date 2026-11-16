@@ -1,3 +1,6 @@
+using System.Text.Json;
+using Microsoft.Extensions.Logging.Abstractions;
+using RollForHonor.Infrastructure.Diagnostics;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
@@ -293,6 +296,116 @@ public sealed class AttackInitiationServiceTests : CombatDiagnosticTestBase
         Assert.Equal(0, rig.State.StartAttempts);
     }
 
+    /// <summary>Exports launch reductions, resource projections, cooldown and replay without charging twice.</summary>
+    [Fact]
+    public void LaunchDiagnostics_ExportResourceReductionsCooldownAndReplayWithoutSecondDebit()
+    {
+        using var jsonl = new StringWriter();
+        var diagnostics = new LoggerCombatDiagnostics(NullLogger.Instance, jsonl: jsonl);
+        var rig = new Rig(diagnostics);
+        rig.State.ExternalUpdate(WithEffects(rig.Source, Reduction(Mana, 0.1m), Reduction(Mana, 0.2m)));
+        var request = Guid.NewGuid();
+        var started = Start(rig, request, rig.Source.Id, Definition());
+        Start(rig, request, rig.Source.Id, Definition());
+        Start(rig, Guid.NewGuid(), rig.Source.Id, Definition());
+        Assert.Equal(AttackStartStatus.Started, started.Status);
+        Assert.Equal(86, rig.State.Balance(rig.Source.Id, Mana));
+        Assert.Equal(0, rig.DiceCreated);
+        var lines = jsonl.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal(3, lines.Length);
+        using var first = JsonDocument.Parse(lines[0]);
+        Assert.Equal("attackStart", first.RootElement.GetProperty("kind").GetString());
+        Assert.Equal(1, first.RootElement.GetProperty("schemaVersion").GetInt32());
+        var costs = first.RootElement.GetProperty("result").GetProperty("costs");
+        Assert.Equal(2, costs.GetProperty("reductions").GetArrayLength());
+        Assert.Equal(14m, costs.GetProperty("costs")[0].GetProperty("amount").GetDecimal());
+        Assert.Equal("00:00:02", first.RootElement.GetProperty("proposal").GetProperty("readyAt").GetString());
+        using var second = JsonDocument.Parse(lines[1]);
+        Assert.Equal("AlreadyStarted", second.RootElement.GetProperty("result").GetProperty("status").GetString());
+        Assert.Equal(JsonValueKind.Null, second.RootElement.GetProperty("proposal").ValueKind);
+        using var third = JsonDocument.Parse(lines[2]);
+        Assert.Equal("OnCooldown", third.RootElement.GetProperty("result").GetProperty("status").GetString());
+    }
+
+    /// <summary>Checks that failed diagnostic output cannot undo an accepted launch or its cooldown.</summary>
+    [Fact]
+    public void LaunchDiagnostics_OutputFailureCannotUndoAcceptedAttack()
+    {
+        var rig = new Rig(new BrokenDiagnostics());
+        Assert.Equal(AttackStartStatus.Started, Start(rig, Guid.NewGuid(), rig.Source.Id, Definition()).Status);
+        Assert.Equal(80, rig.State.Balance(rig.Source.Id, Mana));
+        Assert.Equal(TimeSpan.FromSeconds(2), rig.State.ReadyAt(rig.Source.Id, "shot"));
+    }
+
+    /// <summary>Retains prepared launch data and the original exception when report output also fails.</summary>
+    /// <param name="failOutput">Whether the diagnostic sink throws after receiving the failure report.</param>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void LaunchDiagnostics_FailedCommitRetainsInputsAndOriginalException(bool failOutput)
+    {
+        var diagnostics = new LaunchDiagnosticProbe { FailOutput = failOutput };
+        var rig = new Rig(diagnostics);
+        var expected = new InvalidOperationException("Original launch commit failure.");
+        rig.State.BeforeStart = _ => throw expected;
+
+        var actual = Assert.Throws<InvalidOperationException>(() =>
+            rig.Service.Start(Guid.NewGuid(), rig.Source.Id, Definition()));
+
+        Assert.Same(expected, actual);
+        Assert.Equal(100, rig.State.Balance(rig.Source.Id, Mana));
+        Assert.Empty(rig.State.Started);
+        var report = Assert.Single(diagnostics.Reports);
+        Assert.NotNull(report.State);
+        Assert.NotNull(report.Proposal);
+        Assert.Equal(TimeSpan.Zero, report.Now);
+        Assert.Null(report.Result);
+        Assert.Contains(expected.Message, report.Error);
+    }
+
+    /// <summary>A failing diagnostic configuration check leaves launch acceptance intact.</summary>
+    [Fact]
+    public void LaunchDiagnostics_ConfigurationFailureDoesNotPreventLaunch()
+    {
+        var diagnostics = new LaunchDiagnosticProbe { FailConfiguration = true };
+        var rig = new Rig(diagnostics);
+
+        var result = Start(rig, Guid.NewGuid(), rig.Source.Id, Definition());
+
+        Assert.Equal(AttackStartStatus.Started, result.Status);
+        Assert.Equal(80, rig.State.Balance(rig.Source.Id, Mana));
+        Assert.Empty(diagnostics.Reports);
+    }
+
+    private sealed class LaunchDiagnosticProbe : ICombatDiagnostics
+    {
+        internal bool FailConfiguration { get; init; }
+        internal bool FailOutput { get; init; }
+        internal List<AttackStartDiagnosticReport> Reports { get; } = [];
+
+        /// <inheritdoc />
+        public bool IsEnabled(Guid attackId, CombatantId sourceId, CombatantId targetId) => true;
+        /// <inheritdoc />
+        public bool IsStartEnabled(CombatantId sourceId) =>
+            FailConfiguration ? throw new IOException("Diagnostic configuration failure.") : true;
+        /// <inheritdoc />
+        public void Write(CombatDiagnosticReport report) { }
+        /// <inheritdoc />
+        public void Write(AttackStartDiagnosticReport report)
+        {
+            Reports.Add(report);
+            if (FailOutput) throw new IOException("Diagnostic output failure.");
+        }
+    }
+
+    private sealed class BrokenDiagnostics : ICombatDiagnostics
+    {
+        public bool IsEnabled(Guid attackId, CombatantId sourceId, CombatantId targetId) => true;
+        public bool IsStartEnabled(CombatantId sourceId) => true;
+        public void Write(CombatDiagnosticReport report) => throw new IOException("Output failed");
+        public void Write(AttackStartDiagnosticReport report) => throw new IOException("Output failed");
+    }
+
     private AttackStartResult Start(Rig rig, Guid requestId, CombatantId sourceId, AttackDefinition definition)
     {
         var result = rig.Service.Start(requestId, sourceId, definition);
@@ -347,7 +460,7 @@ public sealed class AttackInitiationServiceTests : CombatDiagnosticTestBase
         public int DiceCreated { get; private set; }
         public AttackInitiationService Service { get; }
 
-        public Rig()
+        public Rig(ICombatDiagnostics? diagnostics = null)
         {
             State = new TestCombatStateAdapter(Source, Target);
             State.SetResources(Source.Id, new ResourceAmount(Mana, 100), new ResourceAmount(Stamina, 50));
@@ -357,7 +470,7 @@ public sealed class AttackInitiationServiceTests : CombatDiagnosticTestBase
                 return new ScriptedDice(Roll, 3);
             });
             Service = new AttackInitiationService(State, new ResourceCostResolver(new AdditiveResourceCostPolicy()),
-                Modifiers, impacts, () => Now);
+                Modifiers, impacts, () => Now, diagnostics);
         }
     }
 

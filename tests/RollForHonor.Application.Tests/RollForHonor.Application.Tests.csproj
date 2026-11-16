@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\RollForHonor.Application\RollForHonor.Application.csproj" />
+    <ProjectReference Include="..\..\src\RollForHonor.Infrastructure\RollForHonor.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

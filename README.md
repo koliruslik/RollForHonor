@@ -86,6 +86,7 @@ Instance identities are derived deterministically through an injected factory.
 - attack initiation with atomic resource deduction, cooldown start and command replay protection;
 - automated Domain and Application tests;
 - a standalone console host for smoke scenarios and opt-in performance measurements;
+- optional intermediate-step capture and ILogger diagnostics with summary, steps, full and JSONL views;
 - headless Godot runtime tests;
 - continuous integration with GitHub Actions.
 
@@ -411,11 +412,181 @@ dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~Att
 presentation, input, runtime composition, and future integration of combat
 use cases.
 
+### Detailed combat diagnostics (I02)
+
+`RollForHonor.Infrastructure` implements Application's optional `ICombatDiagnostics`
+port through `Microsoft.Extensions.Logging.ILogger`. Pass a `LoggerCombatDiagnostics`
+instance to `CombatImpactService` and `AttackInitiationService` to observe both launch
+and impact attempts. With no diagnostics dependency, or `NullLogger` and no JSONL
+writer, intermediate capture is disabled. Domain has no logging dependency.
+
+Four views use the same structured reports:
+
+| View | Contents |
+| --- | --- |
+| `summary` (default) | One line per launch/impact, identities, attack outcome, final damage and actual commit status |
+| `steps` | Ordered nested steps, before/after values, damage breakdowns, every die and final health projections/proposals |
+| `full` | Complete labeled tree of inputs, snapshots, intermediate values, effects, modifier metadata, dice, proposals and results |
+| `jsonl` | One complete JSON object per attempt for scripts and further inspection |
+
+From the repository root:
+
+```powershell
+dotnet run --project tools/RollForHonor.Console -- diagnostics
+dotnet run --project tools/RollForHonor.Console -- diagnostics --view steps
+dotnet run --project tools/RollForHonor.Console -- diagnostics --view full
+dotnet run --project tools/RollForHonor.Console -- diagnostics --view jsonl
+dotnet run --project tools/RollForHonor.Console -- diagnostics --jsonl trace.jsonl
+dotnet run --project tools/RollForHonor.Console -- diagnostics --errors-only
+dotnet run --project tools/RollForHonor.Console -- diagnostics --target 00000000-0000-0000-0000-000000000002
+```
+
+The demo deliberately enables logging. It runs one accepted launch, four outcomes
+(evaded/glancing/hit/critical), an impact version conflict and a rejected cooldown
+attempt. Its fixture has `2d6 + 3` slashing and `1d4` fire damage, armor 30 and 50%
+fire resistance. Two explicitly named demo cost reductions, 10% and 20%, change a
+20-mana cost to 14 and project the balance from 100 to 86. These are demonstration
+values, not gameplay content or equipment aggregation rules.
+
+`--jsonl PATH` writes a full sidecar while retaining the chosen text view; the file
+is overwritten at the start of a run. Filters `--attack GUID`, `--source GUID`,
+`--target GUID` combine with AND. Target filters omit launch records, which have no
+target. `--errors-only` selects exceptions, rejections and non-applied outcomes,
+including version conflicts and replay receipts. A calculated damage value on a
+`VersionConflict` line is a proposal, not applied HP loss. Failed commit reports
+retain their calculated outcome separately from the absent successful result.
+
+JSONL includes `schemaVersion: 1`, `kind` (`attackStart` or `impact`), correlation
+identities and concrete `$type` labels for interface/abstract values. It is an
+export format for diagnostics, not a save-game, replay or durable audit contract.
+Step dice ranges are half-open `[start,end)` indexes into the report's dice list;
+nested ranges can overlap. The report lists each die once, while step text also
+shows the relevant rolls under their parent groups.
+
+Domain capture records immutable values before/after steps and retains completed
+steps plus the failing step when execution throws. Mandatory finalization records
+health adjustments, clamped projections, canonical changes and the final result.
+Attack-quality breakdowns report the actual configured multiplier. Modifier origins
+and optional flat bonuses are supplied by calculating content; missing origins stay
+null/unreported. Diagnostic output cannot infer an item/buff origin from a damage
+difference. Launch reports include base/final costs, reductions, cooldown inputs and
+resource-change projections; the enclosing status says whether they were applied.
+
+Application keeps reporting mechanics outside its use-case bodies. Internal
+`DiagnosticOperation<TResult>` wraps execution, safely checks diagnostic enablement,
+reports success/failure and preserves the original operation exception even if output
+also throws. `AttackStartDiagnostics` and `CombatImpactDiagnostics` retain the data
+specific to one attempt and construct their respective reports. Each service enters
+through one helper call; its core method contains business steps and explicit capture
+checkpoints, without local publication functions or diagnostic try/catch blocks. Helper
+instances are per attempt, so concurrent calls do not share mutable trace state.
+
+Logging configuration, formatting and writer failures are isolated from gameplay;
+no extra rolls, retries or state changes are introduced. An independent JSONL sink
+can still succeed if the logger fails. Writes sharing a JSONL writer are serialized.
+Hosts own and dispose their writers. The existing `RFH_COMBAT_DIAGNOSTICS=1`/`true`
+switch still controls xUnit helper output (off by default in CI); it does not
+configure production log providers or disable this explicit console demo.
+
+Verification covers view/JSON fidelity, nested effects and bonus metadata, individual
+dice, enabled/disabled equivalence, fresh state, rejection, version conflict, pipeline
+and commit failures, missing read data, broken sinks, filters, costs and replay.
+The solution builds without warnings; 281 Domain and 53 Application tests pass.
+Console smoke, all four diagnostic views, JSONL sidecars, filters, invalid arguments
+and a small opt-in benchmark run were checked locally. Godot runtime tests and remote
+CI were not rerun for this local branch. UI publication and runtime Godot wiring remain
+separate roadmap work (I03/I04); this change adds no combat feed.
+
+### IDE launch profiles and the text duel
+
+`tools/RollForHonor.Console/Properties/launchSettings.json` contains 15 shared
+`Project` profiles. They launch the console project, with no Godot runtime:
+
+| Profile | Purpose |
+| --- | --- |
+| `Smoke` | Assert six fixed Domain smoke scenarios; nonzero exit on failure |
+| `Attacks - Summary + JSONL` | Four attack outcomes, conflict/cooldown rejection; short output plus `artifacts/attacks.jsonl` |
+| `Attacks - Steps` | Fixed attacks with before/after step values and individual dice |
+| `Attacks - Full` | Complete fixed-attack reports |
+| `Attacks - JSONL` | Fixed-attack JSON objects on standard output |
+| `Attacks - Errors` | Only non-applied/rejected fixed attempts |
+| `Attacks - Target filter` | Fixed impacts against target `00000000-0000-0000-0000-000000000002`; omit launch records |
+| `Battle - Summary + JSONL` | Complete seed-42 duel, up to 30 rounds, plus `artifacts/battle.jsonl` |
+| `Battle - Steps` | First three battle rounds, with detailed step output |
+| `Battle - Full` | First three battle rounds, with complete reports |
+| `Battle - JSONL` | Complete seed-42 duel as JSONL on standard output |
+| `Benchmark - All` | Attack, effect-tick and sequence performance workloads |
+| `Benchmark - Attacks` | Attack workload only |
+| `Benchmark - Effects` | Effect-tick workload only |
+| `Benchmark - Sequence` | Four-impact sequence workload only |
+
+In Rider, open `Properties/launchSettings.json` under the console project,
+right-click it in Solution Explorer and choose **Generate Configurations** if
+profiles are not already present. Then select a profile in the top Run/Debug
+selector and run it. Gutter launch icons also work. Profile-based arguments are
+edited in `launchSettings.json`; **Run > Edit Configurations** exposes Rider-specific
+settings. These steps follow [JetBrains' launch-profile documentation](https://www.jetbrains.com/help/rider/Running_LaunchSettings.html).
+IDE import itself was not exercised automatically; every profile was executed via
+the .NET CLI. Existing personal Rider settings are preserved.
+
+Use Debug for stepping through Domain/Application calculations. For benchmarks,
+select the solution's **Release** build configuration and use **Run**, without the
+debugger. A launch profile selects arguments, not the build configuration; Debug
+benchmark runs show a warning. The equivalent explicit CLI commands are:
+
+```powershell
+dotnet run --project tools/RollForHonor.Console --launch-profile "Battle - Summary + JSONL"
+dotnet run --project tools/RollForHonor.Console --launch-profile "Battle - Steps"
+dotnet run --project tools/RollForHonor.Console -c Release --launch-profile "Benchmark - All"
+dotnet run --project tools/RollForHonor.Console --no-launch-profile -- battle --seed 7 --rounds 40 --view summary --jsonl artifacts/custom-battle.jsonl
+```
+
+To add a configuration, copy one JSON profile, change its name and
+`commandLineArgs`, save, then generate Rider configurations again. For example,
+copy `Battle - Steps` and change `--seed 42 --rounds 3` to `--seed 7 --rounds 10`.
+Visual Studio can also select the project's launch profiles. Automated xUnit tests
+still run from the IDE test runner or `dotnet test`; console runs are scenarios,
+not replacements for those tests.
+
+The duel entry point is `TextCombatScenario.Run`, selected by `battle` in
+`Program.cs`. It alternates Warrior/Mage turns, using real Application launch and
+impact services, seeded dice and a tool-local state adapter. The Warrior starts
+with 65 HP/24 stamina, the Mage with 55 HP/30 mana. Heavy slash and fire bolt cost
+8 stamina/10 mana, each with a two-second cooldown. A round advances a simulated
+clock by one second; cooldown/resource rejection falls back to a free basic strike.
+These turn rules, sample content and adapter are console fixtures, not production
+scheduling, balance or persistence. There is no interactive input or periodic-effect
+scheduler in this duel.
+
+Every applied hit updates current HP. Text narration shows attack choice, outcome,
+damage, current HP/resources and the final winner or explicit round-limit draw.
+Narration and the absolute sidecar path go to standard error, while technical reports
+go to standard output, so JSONL output from the executable remains parseable. For
+`dotnet run` JSONL redirection, use `--verbosity quiet` or consume the sidecar to
+avoid CLI build/launch messages. The same seed reproduces dice/gameplay for the same
+code/runtime; generated attack/resolution GUIDs differ between runs. Seed 42 ends
+with the Warrior winning in round 28 after 55 committed impacts, at 26 HP; the Mage
+has 0 HP and both starting resource pools are exhausted.
+
+Output paths are relative to the run configuration's **Working directory**; the
+absolute sidecar path is printed at startup. Parent folders are created automatically,
+and an existing requested report is overwritten. Generated `artifacts` under the
+repository/console project and all build folders are ignored by Git. Rider can use
+a different working directory than the CLI; choose one explicitly in its configuration
+if you want reports in a particular folder.
+
+Local checks exercised all 15 launch profiles, the normal/short duel, multiple seeds,
+view-equivalent gameplay, resource/cooldown rejection, valid JSONL, defeat and invalid
+CLI arguments. Console build passed without warnings. Unit-test results for I02 are
+281 Domain and 53 Application tests; this addition changes console tooling only.
+
 ### Console scenarios
 
-`tools/RollForHonor.Console` is a separate executable host referencing Domain,
-outside Infrastructure and Godot. It currently runs combat scenarios; full
-console gameplay and Application integration remain future work.
+`tools/RollForHonor.Console` is a separate executable host outside Infrastructure
+and Godot. Smoke/benchmark modes exercise Domain directly; diagnostics mode composes
+Application with the Infrastructure logging adapter and tool-local state fixtures.
+The automated text duel is a tool fixture; interactive console gameplay and
+production runtime state adapters remain future work.
 
 From the repository root:
 
@@ -465,11 +636,12 @@ Benchmark reports are machine-specific artifacts, not committed baselines.
 | `src/RollForHonor.Domain/Combat/*/Models` | Immutable combat data, results, snapshots, and value objects |
 | `src/RollForHonor.Domain/Combat/*/Services` | Combat contracts and deterministic rule implementations |
 | `src/RollForHonor.Domain/Combat/Damage/Configuration` | Tunable raw-damage coefficients |
+| `src/RollForHonor.Infrastructure` | ILogger diagnostic adapter and report views |
 | `src/RollForHonor.Application` | Application use cases and orchestration |
 | `godot` | Godot project and engine integration |
 | `tests/RollForHonor.Domain.Tests` | Domain unit tests |
 | `tests/RollForHonor.Application.Tests` | Application tests |
-| `tools/RollForHonor.Console` | Standalone smoke and benchmark scenarios |
+| `tools/RollForHonor.Console` | Standalone smoke, diagnostic demo and benchmark scenarios |
 | `.github/workflows` | Continuous integration configuration |
 
 ## Verification

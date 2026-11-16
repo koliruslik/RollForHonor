@@ -42,20 +42,50 @@ public sealed class CombatResolutionBuilder
     {
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(diceTrace);
-        var adjustments = CollectHealthAdjustments(context);
-        var projections = ProjectHealth(context.Request, adjustments);
-        var changes = BuildStateChanges(context, projections);
-        var result = BuildCombatResult(context, projections);
-        var diceCount = diceTrace.Rolls.Count;
-        var trace = new CombatStepTrace(nameof(CombatResolutionBuilder), diceCount, diceCount,
-        [
-            new(nameof(CollectHealthAdjustments), diceCount, diceCount, []),
-            new(nameof(ProjectHealth), diceCount, diceCount, []),
-            new(nameof(BuildStateChanges), diceCount, diceCount, []),
-            new(nameof(BuildCombatResult), diceCount, diceCount, [])
-        ]);
-        return new CombatResolution(context.Request.ResolutionId, context.Request.StateSnapshot.Version,
-            result, changes, diceTrace, context.StepTrace.Add(trace));
+        var capture = context.TraceCapture;
+        var outer = capture?.Begin(nameof(CombatResolutionBuilder), context, diceTrace.Rolls.Count);
+        int? child = null;
+        void Begin(string name) => child = capture?.Begin(name, context, diceTrace.Rolls.Count);
+        void Complete<T>(T value)
+        {
+            if (child is not int index) return;
+            capture!.SetDetails(index, value);
+            capture.Complete(index, context, diceTrace.Rolls.Count);
+            child = null;
+        }
+        try
+        {
+            Begin(nameof(CollectHealthAdjustments));
+            var adjustments = CollectHealthAdjustments(context);
+            Complete(adjustments);
+            Begin(nameof(ProjectHealth));
+            var projections = ProjectHealth(context.Request, adjustments);
+            Complete(projections);
+            Begin(nameof(BuildStateChanges));
+            var changes = BuildStateChanges(context, projections);
+            Complete(changes);
+            Begin(nameof(BuildCombatResult));
+            var result = BuildCombatResult(context, projections);
+            Complete(result);
+            var diceCount = diceTrace.Rolls.Count;
+            var trace = new CombatStepTrace(nameof(CombatResolutionBuilder), diceCount, diceCount,
+            [
+                new(nameof(CollectHealthAdjustments), diceCount, diceCount, []),
+                new(nameof(ProjectHealth), diceCount, diceCount, []),
+                new(nameof(BuildStateChanges), diceCount, diceCount, []),
+                new(nameof(BuildCombatResult), diceCount, diceCount, [])
+            ]);
+            var resolution = new CombatResolution(context.Request.ResolutionId, context.Request.StateSnapshot.Version,
+                result, changes, diceTrace, context.StepTrace.Add(trace));
+            if (outer is int completed) capture!.Complete(completed, context, diceTrace.Rolls.Count);
+            return resolution;
+        }
+        catch (Exception error)
+        {
+            if (child is int failedChild) capture!.Complete(failedChild, null, diceTrace.Rolls.Count, error);
+            if (outer is int failed) capture!.Complete(failed, null, diceTrace.Rolls.Count, error);
+            throw;
+        }
     }
 
     private static ImmutableArray<HealthAdjustment> CollectHealthAdjustments(CombatContext context)

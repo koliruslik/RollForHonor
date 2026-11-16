@@ -1,4 +1,5 @@
 using RollForHonor.Application.Combat.Models;
+using RollForHonor.Application.Combat.Diagnostics;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.Resolution.Services;
@@ -15,20 +16,23 @@ public sealed class CombatImpactService
     private readonly ICombatSnapshotBuilder _snapshots;
     private readonly ICombatPipelineFactory _pipelines;
     private readonly Func<IDiceRoller> _createDice;
+    private readonly ICombatDiagnostics? _diagnostics;
 
     /// <summary>Creates the engine-independent impact use case with explicit external boundaries.</summary>
     /// <param name="state">Consistent reads and atomic commits.</param>
     /// <param name="snapshots">The per-impact snapshot builder.</param>
     /// <param name="pipelines">Application-owned effect selection and pipeline composition.</param>
     /// <param name="createDice">Creates a fresh, empty-trace dice source for each impact.</param>
+    /// <param name="diagnostics">Optional isolated diagnostic output; absent means no detailed capture.</param>
     /// <exception cref="ArgumentNullException">A dependency is null.</exception>
     public CombatImpactService(ICombatStateAdapter state, ICombatSnapshotBuilder snapshots,
-        ICombatPipelineFactory pipelines, Func<IDiceRoller> createDice)
+        ICombatPipelineFactory pipelines, Func<IDiceRoller> createDice, ICombatDiagnostics? diagnostics = null)
     {
         _state = state ?? throw new ArgumentNullException(nameof(state));
         _snapshots = snapshots ?? throw new ArgumentNullException(nameof(snapshots));
         _pipelines = pipelines ?? throw new ArgumentNullException(nameof(pipelines));
         _createDice = createDice ?? throw new ArgumentNullException(nameof(createDice));
+        _diagnostics = diagnostics;
     }
 
     /// <summary>Executes one eligible contact using the current source and target state.</summary>
@@ -46,8 +50,16 @@ public sealed class CombatImpactService
     {
         ArgumentNullException.ThrowIfNull(attack);
         ArgumentNullException.ThrowIfNull(targetId);
+        return CombatImpactDiagnostics.Run(_diagnostics, attack, targetId,
+            diagnostics => ResolveCore(attack, targetId, diagnostics));
+    }
+
+    private CombatImpactResult ResolveCore(AttackInstance attack, CombatantId targetId,
+        CombatImpactDiagnostics diagnostics)
+    {
         var read = _state.Read(attack.SourceId, targetId)
             ?? throw new InvalidOperationException("The state adapter returned null.");
+        diagnostics.Phase = "Snapshot";
         var snapshot = _snapshots.Build(read)
             ?? throw new InvalidOperationException("The snapshot builder returned null.");
         if (read.Source.Id != attack.SourceId || read.Target.Id != targetId
@@ -55,17 +67,22 @@ public sealed class CombatImpactService
             || snapshot.Version != read.Version)
             throw new InvalidOperationException("The read and snapshot must retain participant identities and the expected version.");
 
-        var resolutionId = Guid.NewGuid();
-        var request = new CombatRequest(resolutionId, attack.SourceId, targetId, attack.Attack, snapshot);
+        var request = new CombatRequest(diagnostics.ResolutionId, attack.SourceId, targetId, attack.Attack, snapshot);
+        diagnostics.Request = request;
+        diagnostics.Phase = "Pipeline";
         var pipeline = _pipelines.Create(attack, snapshot)
             ?? throw new InvalidOperationException("The pipeline factory returned null.");
         var dice = _createDice() ?? throw new InvalidOperationException("The dice factory returned null.");
+        diagnostics.Dice = dice;
         if (dice.Trace.Rolls.Count != 0)
             throw new InvalidOperationException("Each impact requires a fresh dice trace.");
         var resolver = new CombatResolver(new CombatRequestValidator(), pipeline,
             new CombatResolutionBuilder(new HealthStateProjector()));
-        var outcome = resolver.Resolve(request, dice);
+        diagnostics.Phase = "Calculate";
+        var outcome = resolver.Resolve(request, dice, diagnostics.Capture);
+        diagnostics.Calculation = outcome;
+        diagnostics.Phase = "Commit";
         var commit = outcome is ResolvedCombat resolved ? _state.TryCommit(resolved.Resolution) : (CombatCommitStatus?)null;
-        return new CombatImpactResult(attack.Id, resolutionId, outcome, commit);
+        return new CombatImpactResult(attack.Id, diagnostics.ResolutionId, outcome, commit);
     }
 }

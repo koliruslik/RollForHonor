@@ -50,6 +50,18 @@ internal static class CombatResolutionDiagnosticFormatter
         builder.AppendLine("├─ HEALTH CHANGES");
         foreach (var change in resolution.Changes.OfType<HealthChanged>())
             builder.AppendLine($"│ {change.CombatantId}: {change.PreviousHealth} -> {change.CurrentHealth}");
+        builder.AppendLine("DICE");
+        for (var i = 0; i < resolution.DiceTrace.Rolls.Count; i++)
+        {
+            var roll = resolution.DiceTrace.Rolls[i];
+            builder.AppendLine($"[{i}] {roll.Formula}: [{string.Join(", ", roll.Results)}] = {roll.Total}");
+        }
+        if (target.DamageResolution is { } damage)
+        {
+            builder.AppendLine("DAMAGE BREAKDOWN");
+            foreach (var step in damage.AfterDefenses.Breakdown.Steps)
+                builder.AppendLine($"{step.Type}: {step.Input} -> {step.Output}; multiplier={step.Multiplier}; bonus={step.FlatBonus}; origin={step.Origin ?? "unreported"}");
+        }
         AppendSteps(builder, resolution.StepTrace, 0);
 
         builder.Append("└─ END");

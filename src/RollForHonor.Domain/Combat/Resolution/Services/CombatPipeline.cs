@@ -63,17 +63,28 @@ public sealed class CombatPipeline : ICombatStep
         {
             var previousTrace = current.StepTrace;
             var diceStart = dice.Trace.Rolls.Count;
-            var next = step.Execute(current, dice)
-                       ?? throw new InvalidOperationException("A combat step returned null.");
-            if (!ReferenceEquals(next.Request, context.Request))
-                throw new InvalidOperationException("A combat step replaced the original request.");
-            if (next.StepTrace.Length < previousTrace.Length
-                || !next.StepTrace.Take(previousTrace.Length).SequenceEqual(previousTrace))
-                throw new InvalidOperationException("A combat step changed the preceding execution trace.");
+            var capture = current.TraceCapture;
+            var captureIndex = capture?.Begin(step.Name, current, diceStart);
+            try
+            {
+                var next = step.Execute(current, dice)
+                           ?? throw new InvalidOperationException("A combat step returned null.");
+                if (!ReferenceEquals(next.Request, context.Request))
+                    throw new InvalidOperationException("A combat step replaced the original request.");
+                if (next.StepTrace.Length < previousTrace.Length
+                    || !next.StepTrace.Take(previousTrace.Length).SequenceEqual(previousTrace))
+                    throw new InvalidOperationException("A combat step changed the preceding execution trace.");
 
-            var children = next.StepTrace.Skip(previousTrace.Length);
-            var trace = new CombatStepTrace(step.Name, diceStart, dice.Trace.Rolls.Count, children);
-            current = next with { StepTrace = previousTrace.Add(trace) };
+                var children = next.StepTrace.Skip(previousTrace.Length);
+                var trace = new CombatStepTrace(step.Name, diceStart, dice.Trace.Rolls.Count, children);
+                current = next with { StepTrace = previousTrace.Add(trace), TraceCapture = capture };
+                if (captureIndex is int index) capture!.Complete(index, current, dice.Trace.Rolls.Count);
+            }
+            catch (Exception error)
+            {
+                if (captureIndex is int index) capture!.Complete(index, null, dice.Trace.Rolls.Count, error);
+                throw;
+            }
         }
 
         return current;

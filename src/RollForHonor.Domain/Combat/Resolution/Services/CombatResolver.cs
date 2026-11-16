@@ -26,6 +26,7 @@ public sealed class CombatResolver
     /// <summary>Calculates one action without mutating snapshots or committing live state.</summary>
     /// <param name="request">The action, participants and expected state version.</param>
     /// <param name="dice">The shared deterministic dice source and trace.</param>
+    /// <param name="traceCapture">Optional intermediate capture, without changing calculation or dice.</param>
     /// <returns>A rejection, or a complete versioned proposal with dice and step traces.</returns>
     /// <exception cref="ArgumentNullException">An argument is null.</exception>
     /// <exception cref="InvalidOperationException">The pipeline changes the request or returns invalid proposals.</exception>
@@ -33,7 +34,8 @@ public sealed class CombatResolver
     /// Finalization always runs once after successful calculation. Step and builder exceptions
     /// propagate; partial calculations never become successful proposals.
     /// </remarks>
-    public ICombatResolutionOutcome Resolve(CombatRequest request, IDiceRoller dice)
+    public ICombatResolutionOutcome Resolve(CombatRequest request, IDiceRoller dice,
+        CombatTraceCapture? traceCapture = null)
     {
         ArgumentNullException.ThrowIfNull(request);
         ArgumentNullException.ThrowIfNull(dice);
@@ -41,8 +43,22 @@ public sealed class CombatResolver
         if (rejection is not null)
             return new RejectedCombat(rejection);
 
-        var context = _pipeline.Execute(new CombatContext(request), dice)
-            ?? throw new InvalidOperationException("The combat pipeline returned null.");
+        var initial = new CombatContext(request) { TraceCapture = traceCapture };
+        var directStep = _pipeline is CombatPipeline ? null : traceCapture?.Begin(_pipeline.Name, initial, dice.Trace.Rolls.Count);
+        CombatContext context;
+        try
+        {
+            context = _pipeline.Execute(initial, dice)
+                ?? throw new InvalidOperationException("The combat pipeline returned null.");
+            if (directStep is int index) traceCapture!.Complete(index, context, dice.Trace.Rolls.Count);
+        }
+        catch (Exception error)
+        {
+            if (directStep is int index) traceCapture!.Complete(index, null, dice.Trace.Rolls.Count, error);
+            throw;
+        }
+        if (!ReferenceEquals(context.TraceCapture, traceCapture))
+            context = context with { TraceCapture = traceCapture };
         if (!ReferenceEquals(context.Request, request))
             throw new InvalidOperationException("The combat pipeline replaced the original request.");
         return new ResolvedCombat(_resolutionBuilder.Build(context, dice.Trace));

@@ -7,3 +7,6 @@
 **/obj/
 .vs/
 .idea/
+
+/artifacts/
+/tools/RollForHonor.Console/artifacts/
