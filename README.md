@@ -479,8 +479,8 @@ Twenty new Application cases check multi-target costs, per-target repeat blockin
 evaded contacts, first-contact termination, piercing/obstacle behavior, exact
 expiry, no-contact expiry, animation completion, independent instances, conflict
 and exception reservations, concurrent same-target callbacks, invalid rules and
-clock-free status/diagnostic reads. Current totals are 281 Domain and 73 Application
-tests, all passing locally.
+clock-free status/diagnostic reads. The full solution
+test totals are listed in the presentation-contract section below.
 
 The console `contacts` command checks five fixed fixtures: piercing, first-contact
 termination, repeatable damage, animation completion and an evaded once-only contact.
@@ -494,6 +494,81 @@ dotnet run --project tools/RollForHonor.Console -- contacts --view steps
 dotnet run --project tools/RollForHonor.Console -- contacts --view jsonl
 dotnet run --project tools/RollForHonor.Console --launch-profile "Contacts - Summary + JSONL"
 ```
+
+### Returned combat facts for presentation (I03)
+
+Godot consumes the existing return values and its own display context. No Application
+journal builder, UI model, localization/color/font policy or log parser is added.
+The ordinary contact boundary remains:
+
+```text
+AttackInstance.ResolveContact(targetId)
+  -> AttackContactResult
+       -> optional CombatImpactResult
+            -> ResolvedCombat.Resolution or RejectedCombat
+```
+
+Use `CombatImpactResult.IsCommitted` to distinguish a newly applied transition.
+An ignored contact has no impact. Domain rejection has no commit status. A version
+conflict retains a calculated proposal without applying it; an `AlreadyApplied`
+receipt does not describe a new publication. An evaded attack can still be a newly
+committed result with zero damage. Presentation owns how these facts are shown.
+
+For `resolution = ((ResolvedCombat)impact.Outcome).Resolution`, the verified fields are:
+
+| Consumer need | Existing return path |
+| --- | --- |
+| Separate natural d20 | `resolution.Result.Target.AttackRoll?.Roll.Results` (ordinary attacks use one die) |
+| Attack modifier and total for details | `AttackRoll.Modifier` and `AttackRoll.Total` on the target result |
+| Hit-quality styling | `resolution.Result.Target.Outcome` |
+| Damage-type colors and remaining damage | `resolution.Result.Target.DamageResolution?.AfterDefenses.Damage.Components` |
+| Original component formula, flat bonus and actual dice | `DamageResolution.BeforeDefenses.Breakdown.Steps`, then each step's `ComponentRolls` |
+| Transformations, reported bonuses/origins and scaling | Each `DamageStep` has `Type`, `Input`, `Output`, `FlatBonus`, `Origin` and `Multiplier` |
+| Effects and actual recipients | `resolution.Result.Target.Effects`; canonical applied/removed changes are in `resolution.Changes` |
+| Participants for Godot display-name lookup | `resolution.Result.SourceId` and `resolution.Result.Target.TargetId` |
+| Actual HP change and defeat | Typed `HealthChanged` / `CombatantDefeated` entries in `resolution.Changes`, plus `Target.IsDefeated` |
+| Complete optional dice inspection | `resolution.DiceTrace.Rolls` |
+
+I03 fills one demonstrated data gap: `DamageComponentRoll` retains the actual
+`DamageComponent`, its `DiceRoll` and the unscaled zero-clamped `Amount`.
+`RawDamageResolver` records these immutable facts on the `WeaponRoll` stage through
+`DamageStep.ComponentRolls`. Other rolling modifiers can explicitly report their own
+component facts on their calculation stage. Later quality/defense steps preserve the
+breakdown, without rerolling or copying a live participant into the output contract.
+
+An unrelated effect may roll a d20 before the attack, and modifiers may roll damage
+dice of their own. Do not take the first global d20 as the attack roll or zip the
+complete dice trace with weapon components. Use the explicit attack-roll field and
+reported component-roll links. Detailed views work with diagnostic capture disabled;
+step display names and technical logger text are not presentation contracts.
+
+The fixture demonstrates `2d6 [2,5] + 3 = 10` slashing, plus a reported rune modifier
+`1d8 [6] + 2 = 8`, and `1d4 [3] + 1 = 4` fire reduced to 2 by resistance: final typed
+damage is 18 slashing and 2 fire. These are retained calculation facts, not a UI template.
+`FlatBonus` and a component's flat value can describe the same supplied modifier;
+do not sum diagnostic metadata or recalculate damage from it. Use authoritative stage
+outputs. Final types can differ from the original formulas when effects transform them.
+
+Damage and actual HP loss are separate: 20 remaining damage against 3 HP produces a
+3-to-0 `HealthChanged`, preserving both facts. Identify health/effect recipients by ID,
+not by assuming all changes target the contacted actor. A periodic Domain resolution
+can contain damage facts with no attack roll or outcome; do not invent a d20 for it.
+Tick scheduling/committing remains separate runtime work.
+
+Godot owns names, entry assembly, the separate d20 widget, damage-type colors,
+hit-quality typography and hover/click details. Only reported modifier provenance is
+available; null `Origin` is unreported. The attack modifier is currently an aggregate,
+and a defense stage's input/output does not encode an unreported armor or resistance
+coefficient. Do not infer missing values from rounded damage differences. Full equipment
+aggregation and a named breakdown of every stat source remain separate work.
+
+Contract coverage includes independent d20 selection, component/bonus dice, all four
+hit qualities, logging enabled/disabled, effects/identities, overkill, historical result
+stability, rejection/conflict/replay/ignored contacts and periodic damage without d20.
+Seven Domain cases validate component facts, formula consistency, overflow and immutable
+collections; fifteen Application cases exercise the return boundary with real rules.
+All 288 Domain and 88 Application tests pass locally. Existing console modes and their
+17 launch profiles remain available; there is no new journal/GUI mode in this change.
 
 ### Godot
 
@@ -580,11 +655,11 @@ configure production log providers or disable this explicit console demo.
 Verification covers view/JSON fidelity, nested effects and bonus metadata, individual
 dice, enabled/disabled equivalence, fresh state, rejection, version conflict, pipeline
 and commit failures, missing read data, broken sinks, filters, costs and replay.
-The solution builds without warnings; 281 Domain and 73 Application tests pass.
+The solution builds without warnings; 288 Domain and 88 Application tests pass.
 Console smoke, all four diagnostic views, JSONL sidecars, filters, invalid arguments
 and a small opt-in benchmark run were checked locally. Godot runtime tests and remote
 CI were not rerun for this local branch. UI publication and runtime Godot wiring remain
-separate roadmap work (I03/I04); this change adds no combat feed.
+separate runtime/presentation work; I03 verifies the returned data contract and adds no combat feed.
 
 ### IDE launch profiles and the text duel
 
@@ -669,7 +744,7 @@ if you want reports in a particular folder.
 Local checks exercised all 17 launch profiles, the normal/short duel, multiple seeds,
 view-equivalent gameplay, resource/cooldown rejection, valid JSONL, defeat and invalid
 CLI arguments. Console build passed without warnings. Unit-test results for I02 are
-281 Domain and 73 Application tests; the contact/lifetime extension also adds Application admission rules.
+288 Domain and 88 Application tests; the contact/lifetime extension also adds Application admission rules.
 
 ### Console scenarios
 
