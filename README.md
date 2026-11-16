@@ -84,6 +84,7 @@ Instance identities are derived deterministically through an injected factory.
 - an engine-independent Application impact use case with fresh per-impact state reads,
   separate snapshot construction, pipeline composition and version-checked commit ports;
 - attack initiation with atomic resource deduction, cooldown start and command replay protection;
+- configurable contact admission, once-per-target hits, obstacle/target termination and observed attack lifetime;
 - automated Domain and Application tests;
 - a standalone console host for smoke scenarios and opt-in performance measurements;
 - optional intermediate-step capture and ILogger diagnostics with summary, steps, full and JSONL views;
@@ -339,9 +340,9 @@ dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~Com
 `AttackInstance` is an impact context obtained from a newly accepted launch.
 Its constructor is now internal, preventing ordinary external callers from
 bypassing launch acceptance. Low-level impact tests have explicit friend-assembly
-access to construct isolated contexts. Projectile lifetime, termination/contact
-policies, repeated hits on one target, runtime state storage, Godot adapters,
-UI publication and console integration remain separate work.
+access to construct isolated contexts. Contact admission and observed lifetime rules
+are implemented below; runtime state storage, Godot collision/animation wiring
+and UI publication remain separate work.
 The existing ordinary-attack validator still requires a living source;
 post-launch source death is an open rule, not silently handled by a frozen
 launch snapshot.
@@ -390,9 +391,10 @@ Cooldowns are keyed by source plus attack-definition key.
 
 Once launched, zero, one or many later impacts use the existing impact path.
 Hits and misses neither charge the launch again nor refund it. The service does
-not create projectiles, execute animations or define attack lifetime/contact rules.
-Full runtime adapters, production cost-effect definitions and Godot/console wiring
-remain future work.
+not create projectiles or execute animations. It passes the definition's execution
+rules and the same game clock into the accepted attack instance. Runtime adapters,
+production cost-effect definitions and Godot wiring remain future work; the console
+host already supplies tool-local examples.
 
 Tests cover additive and resource-specific reductions, policy replacement,
 fractional/free costs, one charge across multiple impacts, miss behavior,
@@ -404,6 +406,93 @@ impact calculations reuse the existing combat formatter.
 ```powershell
 dotnet test tests/RollForHonor.Domain.Tests --filter FullyQualifiedName~ResourceCostResolverTests
 dotnet test tests/RollForHonor.Application.Tests --filter FullyQualifiedName~AttackInitiationServiceTests
+```
+
+### Contact admission and observed lifetime (C10)
+
+`AttackDefinition.ExecutionRules` configures engine-independent execution behavior
+on each accepted `AttackInstance`. Omitting rules preserves the previous behavior:
+every forwarded contact may calculate another impact, contacts do not terminate the
+instance and there is no automatic expiry deadline.
+
+| Setting | Behavior |
+| --- | --- |
+| `AttackRepeatPolicy.EveryContact` | Each host-forwarded contact may calculate an independent impact |
+| `AttackRepeatPolicy.OncePerTarget` | First admitted contact consumes the target for this instance, including `Evaded` |
+| `AttackStopCondition.CombatantContact` | End on the first admitted combatant contact |
+| `AttackStopCondition.EnvironmentContact` | End on a non-combatant obstacle contact |
+| Both stop flags | End on the first admitted contact of either kind |
+| `MaxLifetime` | Optional positive duration measured from the original launch time |
+
+For example, a piercing arrow can use these rules:
+
+```csharp
+var rules = new AttackExecutionRules(
+    AttackRepeatPolicy.OncePerTarget,
+    AttackStopCondition.EnvironmentContact,
+    TimeSpan.FromSeconds(3));
+var definition = new AttackDefinition("piercing-arrow", payload, cooldown, costs, rules);
+var launch = starts.Start(requestId, sourceId, definition);
+```
+
+After an accepted launch, the host owns the returned instance and reports events:
+
+```csharp
+var contact = attack.ResolveContact(targetId);
+var obstacle = attack.ContactEnvironment();
+var stillActive = attack.UpdateLifetime();
+attack.End(AttackEndReason.AnimationFinished);
+```
+
+These are separate event examples, not an unconditional sequence for every hit.
+`ResolveContact` returns `AttackContactResult`: admission status, optional
+`CombatImpactResult` and the observed end reason. Ignored contacts return
+`AttackEnded` or `TargetAlreadyContacted`, create no resolution, perform no state
+read and consume no dice. Obstacle contacts never calculate combat damage.
+The existing `Resolve(targetId)` convenience method observes the same rules but
+throws when admission fails; hosts that expect ignored contacts should use
+`ResolveContact` to inspect the status instead.
+
+Once-per-target admission is reserved before calculation. It stays consumed even
+if Domain rejects, commit conflicts or calculation throws; no contact-triggered
+retry/reroll is hidden in this path. Ending blocks later admissions without
+cancelling impacts already admitted. The first end reason is retained. Admission
+is synchronized per instance; this does not establish production live-state
+adapter concurrency or a deterministic order for simultaneous different targets.
+
+No background timer runs. Contacts check expiry at the exact deadline; the host
+calls `UpdateLifetime` to expire an attack with no contacts and remove its visual
+object. `IsActive` and `EndReason` are pure reads of the last observed status, so
+logging/serialization cannot consult the game clock or advance lifetime. An
+animation event can call `End(AnimationFinished)`. Neither ending nor ignored
+contacts refund or charge launch resources or reset the cooldown.
+
+The host still owns collision detection, mapping physical objects to combatants
+or obstacles, selecting eligible contacts, animation events, movement and object
+removal. `EveryContact` treats each call as a separate contact; no physical-event
+identifier or callback deduplication is invented. Rate-limited repeated contacts,
+Godot runtime wiring and the post-launch source-death gameplay decision remain
+separate work. Existing Domain validation of a defeated ordinary-attack source
+is unchanged.
+
+Twenty new Application cases check multi-target costs, per-target repeat blocking,
+evaded contacts, first-contact termination, piercing/obstacle behavior, exact
+expiry, no-contact expiry, animation completion, independent instances, conflict
+and exception reservations, concurrent same-target callbacks, invalid rules and
+clock-free status/diagnostic reads. Current totals are 281 Domain and 73 Application
+tests, all passing locally.
+
+The console `contacts` command checks five fixed fixtures: piercing, first-contact
+termination, repeatable damage, animation completion and an evaded once-only contact.
+Each fixture validates its expected contact results, target HP and calculation count.
+Ignored-contact summaries go to standard error; admitted launch/impact diagnostics
+use the same views and JSONL sidecar as other modes.
+
+```powershell
+dotnet run --project tools/RollForHonor.Console -- contacts
+dotnet run --project tools/RollForHonor.Console -- contacts --view steps
+dotnet run --project tools/RollForHonor.Console -- contacts --view jsonl
+dotnet run --project tools/RollForHonor.Console --launch-profile "Contacts - Summary + JSONL"
 ```
 
 ### Godot
@@ -491,7 +580,7 @@ configure production log providers or disable this explicit console demo.
 Verification covers view/JSON fidelity, nested effects and bonus metadata, individual
 dice, enabled/disabled equivalence, fresh state, rejection, version conflict, pipeline
 and commit failures, missing read data, broken sinks, filters, costs and replay.
-The solution builds without warnings; 281 Domain and 53 Application tests pass.
+The solution builds without warnings; 281 Domain and 73 Application tests pass.
 Console smoke, all four diagnostic views, JSONL sidecars, filters, invalid arguments
 and a small opt-in benchmark run were checked locally. Godot runtime tests and remote
 CI were not rerun for this local branch. UI publication and runtime Godot wiring remain
@@ -499,12 +588,14 @@ separate roadmap work (I03/I04); this change adds no combat feed.
 
 ### IDE launch profiles and the text duel
 
-`tools/RollForHonor.Console/Properties/launchSettings.json` contains 15 shared
+`tools/RollForHonor.Console/Properties/launchSettings.json` contains 17 shared
 `Project` profiles. They launch the console project, with no Godot runtime:
 
 | Profile | Purpose |
 | --- | --- |
 | `Smoke` | Assert six fixed Domain smoke scenarios; nonzero exit on failure |
+| `Contacts - Summary + JSONL` | Five validated contact/lifetime fixtures plus `artifacts/contacts.jsonl` |
+| `Contacts - Steps` | Same contact fixtures with intermediate calculation output |
 | `Attacks - Summary + JSONL` | Four attack outcomes, conflict/cooldown rejection; short output plus `artifacts/attacks.jsonl` |
 | `Attacks - Steps` | Fixed attacks with before/after step values and individual dice |
 | `Attacks - Full` | Complete fixed-attack reports |
@@ -575,10 +666,10 @@ repository/console project and all build folders are ignored by Git. Rider can u
 a different working directory than the CLI; choose one explicitly in its configuration
 if you want reports in a particular folder.
 
-Local checks exercised all 15 launch profiles, the normal/short duel, multiple seeds,
+Local checks exercised all 17 launch profiles, the normal/short duel, multiple seeds,
 view-equivalent gameplay, resource/cooldown rejection, valid JSONL, defeat and invalid
 CLI arguments. Console build passed without warnings. Unit-test results for I02 are
-281 Domain and 53 Application tests; this addition changes console tooling only.
+281 Domain and 73 Application tests; the contact/lifetime extension also adds Application admission rules.
 
 ### Console scenarios
 
