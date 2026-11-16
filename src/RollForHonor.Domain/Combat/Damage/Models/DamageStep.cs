@@ -19,6 +19,8 @@ public sealed record DamageStep
     public string? Origin { get; }
     /// <summary>Gets a reported flat modifier, without inferring it from packet differences.</summary>
     public int? FlatBonus { get; }
+    /// <summary>Gets explicitly reported per-component rolls, copied independently of optional diagnostic capture.</summary>
+    public IReadOnlyList<DamageComponentRoll> ComponentRolls { get; }
 
     /// <summary>
     /// Creates a validated damage-calculation step.
@@ -29,12 +31,15 @@ public sealed record DamageStep
     /// <param name="multiplier">Actual configured scaling, if reported by the calculating stage.</param>
     /// <param name="origin">Optional modifier origin; null means unreported.</param>
     /// <param name="flatBonus">Actual supplied flat modifier, if reported.</param>
+    /// <param name="componentRolls">Optional actual component dice/results reported by this stage; null means none.</param>
+    /// <exception cref="ArgumentException">A reported component roll is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
     /// <exception cref="ArgumentNullException">The input or output packet is null.</exception>
     public DamageStep(
         DamageStepType type,
         DamagePacket input,
-        DamagePacket output, decimal? multiplier = null, string? origin = null, int? flatBonus = null)
+        DamagePacket output, decimal? multiplier = null, string? origin = null, int? flatBonus = null,
+        IReadOnlyList<DamageComponentRoll>? componentRolls = null)
     {
         if (!Enum.IsDefined(type))
         {
@@ -44,6 +49,10 @@ public sealed record DamageStep
         ArgumentNullException.ThrowIfNull(input);
         ArgumentNullException.ThrowIfNull(output);
 
+        var rolls = componentRolls?.ToArray() ?? [];
+        if (rolls.Any(roll => roll is null))
+            throw new ArgumentException("Component rolls cannot contain null.", nameof(componentRolls));
+        ComponentRolls = Array.AsReadOnly(rolls);
         Type = type;
         Input = input;
         Output = output;
