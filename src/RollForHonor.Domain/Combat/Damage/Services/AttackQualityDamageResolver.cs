@@ -30,7 +30,7 @@ public sealed class AttackQualityDamageResolver : IAttackQualityDamageResolver
         var scaled = new DamagePacket(damage.Damage.Components.Select(component =>
             new DamageAmount(component.Type, checked((int)Math.Ceiling(component.Amount * multiplier)))).ToArray());
         var breakdown = new DamageBreakdown(damage.Breakdown.Steps.Append(
-            new DamageStep(DamageStepType.AttackQuality, damage.Damage, scaled)).ToArray());
+            new DamageStep(DamageStepType.AttackQuality, damage.Damage, scaled, multiplier, nameof(DamageMultipliers))).ToArray());
         return new DamageCalculationResult(breakdown, scaled);
     }
 }

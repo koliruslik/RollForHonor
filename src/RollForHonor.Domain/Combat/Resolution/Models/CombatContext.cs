@@ -13,6 +13,8 @@ namespace RollForHonor.Domain.Combat.Resolution.Models;
 /// </summary>
 public sealed record CombatContext
 {
+    /// <summary>Gets optional intermediate capture for this calculation only.</summary>
+    public CombatTraceCapture? TraceCapture { get; init; }
     /// <summary>Gets the original request, shared by every step.</summary>
     public CombatRequest Request { get; }
     /// <summary>Gets the optional resolved attack roll.</summary>
