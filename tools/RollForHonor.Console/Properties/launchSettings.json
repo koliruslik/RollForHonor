@@ -1,0 +1,64 @@
+{
+  "profiles": {
+    "Smoke": {
+      "commandName": "Project",
+      "commandLineArgs": "smoke"
+    },
+    "Attacks - Summary + JSONL": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --jsonl artifacts/attacks.jsonl"
+    },
+    "Attacks - Steps": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --view steps"
+    },
+    "Attacks - Full": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --view full"
+    },
+    "Attacks - JSONL": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --view jsonl"
+    },
+    "Attacks - Errors": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --errors-only"
+    },
+    "Attacks - Target filter": {
+      "commandName": "Project",
+      "commandLineArgs": "diagnostics --target 00000000-0000-0000-0000-000000000002"
+    },
+    "Battle - Summary + JSONL": {
+      "commandName": "Project",
+      "commandLineArgs": "battle --seed 42 --rounds 30 --jsonl artifacts/battle.jsonl"
+    },
+    "Battle - Steps": {
+      "commandName": "Project",
+      "commandLineArgs": "battle --seed 42 --rounds 3 --view steps"
+    },
+    "Battle - Full": {
+      "commandName": "Project",
+      "commandLineArgs": "battle --seed 42 --rounds 3 --view full"
+    },
+    "Battle - JSONL": {
+      "commandName": "Project",
+      "commandLineArgs": "battle --seed 42 --rounds 30 --view jsonl"
+    },
+    "Benchmark - All": {
+      "commandName": "Project",
+      "commandLineArgs": "benchmark --scenario all --iterations 10000 --warmup 500 --samples 5 --seed 42 --json artifacts/benchmark-all.json"
+    },
+    "Benchmark - Attacks": {
+      "commandName": "Project",
+      "commandLineArgs": "benchmark --scenario attack --iterations 10000 --warmup 500 --samples 5 --seed 42 --json artifacts/benchmark-attacks.json"
+    },
+    "Benchmark - Effects": {
+      "commandName": "Project",
+      "commandLineArgs": "benchmark --scenario effect --iterations 10000 --warmup 500 --samples 5 --seed 42 --json artifacts/benchmark-effects.json"
+    },
+    "Benchmark - Sequence": {
+      "commandName": "Project",
+      "commandLineArgs": "benchmark --scenario sequence --iterations 10000 --warmup 500 --samples 5 --seed 42 --json artifacts/benchmark-sequence.json"
+    }
+  }
+}

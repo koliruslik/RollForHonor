@@ -24,7 +24,17 @@ if (args is ["--help"] or ["-h"])
 
 try
 {
-    if (args[0] != "benchmark") throw new ArgumentException("Expected smoke or benchmark.");
+    if (args[0] == "diagnostics")
+    {
+        DiagnosticDemo.Run(args);
+        return 0;
+    }
+    if (args[0] == "battle")
+    {
+        TextCombatScenario.Run(args);
+        return 0;
+    }
+    if (args[0] != "benchmark") throw new ArgumentException("Expected smoke, diagnostics, battle or benchmark.");
     var options = new Dictionary<string, string>();
     for (var i = 1; i < args.Length; i += 2)
     {
@@ -52,6 +62,7 @@ try
     var report = BenchmarkRunner.Run(scenario, iterations, warmup, samples, seed);
     if (options.TryGetValue("--json", out var path))
     {
+        Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
         File.WriteAllText(path, JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
         Console.WriteLine($"Report: {Path.GetFullPath(path)}");
     }
@@ -65,12 +76,16 @@ catch (ArgumentException exception)
 }
 catch (Exception exception)
 {
-    Console.Error.WriteLine($"Benchmark failed: {exception.Message}");
+    Console.Error.WriteLine($"Scenario failed: {exception.Message}");
     return 1;
 }
 
 static void Help() => Console.WriteLine("""
     RollForHonor.Console smoke
+    RollForHonor.Console diagnostics [--view summary|steps|full|jsonl] [--jsonl trace.jsonl]
+        [--attack GUID] [--source GUID] [--target GUID] [--errors-only]
+    RollForHonor.Console battle [--seed 42] [--rounds 30] [--view summary|steps|full|jsonl]
+        [--jsonl battle.jsonl] [--attack GUID] [--source GUID] [--target GUID] [--errors-only]
     RollForHonor.Console benchmark [--scenario all|attack|effect|sequence]
         [--iterations 10000] [--warmup 500] [--samples 5] [--seed 42] [--json report.json]
     Default: smoke. Exit codes: 0 success, 1 scenario/runtime failure, 2 invalid arguments.

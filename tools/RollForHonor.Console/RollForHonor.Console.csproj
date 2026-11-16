@@ -7,5 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/RollForHonor.Domain/RollForHonor.Domain.csproj" />
+    <ProjectReference Include="..\..\src\RollForHonor.Infrastructure\RollForHonor.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
