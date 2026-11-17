@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://CombatDemo/CombatDemoScene.cs" id="1"]
 [ext_resource type="Script" path="res://CombatDemo/DemoCombatant.cs" id="2"]
 
 [ext_resource type="Script" path="res://CombatDemo/DemoStatsPanel.cs" id="3"]
+
+[ext_resource type="Script" path="res://CombatDemo/DemoHurtbox.cs" id="4"]
 
 [sub_resource type="Theme" id="UITheme"]
 default_font_size = 18
@@ -84,12 +86,21 @@ mesh = SubResource("SourceMesh")
 [node name="Shape" type="CollisionShape3D" parent="Source"]
 shape = SubResource("ActorShape")
 
+[node name="Hurtbox" type="Area3D" parent="Source"]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("4")
+
+[node name="Shape" type="CollisionShape3D" parent="Source/Hurtbox"]
+shape = SubResource("ActorShape")
+
 [node name="Name" type="Label3D" parent="Source"]
 position = Vector3(0, 1.5, 0)
 billboard = 1
-pixel_size = 0.012
+pixel_size = 0.008
 text = "Archer"
-font_size = 42
+font_size = 32
 
 [node name="Target" type="StaticBody3D" parent="."]
 position = Vector3(4, 0.9, 0)
@@ -103,12 +114,21 @@ mesh = SubResource("TargetMesh")
 [node name="Shape" type="CollisionShape3D" parent="Target"]
 shape = SubResource("ActorShape")
 
+[node name="Hurtbox" type="Area3D" parent="Target"]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("4")
+
+[node name="Shape" type="CollisionShape3D" parent="Target/Hurtbox"]
+shape = SubResource("ActorShape")
+
 [node name="Name" type="Label3D" parent="Target"]
 position = Vector3(0, 1.5, 0)
 billboard = 1
-pixel_size = 0.012
+pixel_size = 0.008
 text = "Training target"
-font_size = 42
+font_size = 32
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -116,7 +136,7 @@ font_size = 42
 offset_left = 400.0
 offset_top = 20.0
 offset_right = 1360.0
-offset_bottom = 365.0
+offset_bottom = 400.0
 theme = SubResource("UITheme")
 
 [node name="Rows" type="VBoxContainer" parent="HUD/Panel"]
@@ -135,6 +155,17 @@ text = "Preparing combat session..."
 [node name="Result" type="Label" parent="HUD/Panel/Rows"]
 layout_mode = 2
 text = "Space: player attack | E: enemy attack"
+
+[node name="DeliveryControls" type="HBoxContainer" parent="HUD/Panel/Rows"]
+layout_mode = 2
+
+[node name="Delivery" type="OptionButton" parent="HUD/Panel/Rows/DeliveryControls"]
+layout_mode = 2
+
+[node name="NearTarget" type="CheckButton" parent="HUD/Panel/Rows/DeliveryControls"]
+layout_mode = 2
+text = "Bring enemy into melee range"
+focus_mode = 0
 
 [node name="Fire" type="Button" parent="HUD/Panel/Rows"]
 layout_mode = 2
@@ -181,7 +212,7 @@ offset_top = 45.0
 offset_right = 1510.0
 offset_bottom = 165.0
 theme_override_colors/font_color = Color(1, 0.78, 0.25, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "d20\n-"
 horizontal_alignment = 1
 
