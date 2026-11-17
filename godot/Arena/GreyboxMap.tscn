@@ -1,0 +1,641 @@
+[gd_scene load_steps=68 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Floor"]
+albedo_color = Color(0.15, 0.19, 0.23, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Court"]
+albedo_color = Color(0.22, 0.27, 0.29, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Low"]
+albedo_color = Color(0.23, 0.36, 0.29, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="High"]
+albedo_color = Color(0.25, 0.31, 0.43, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Ramp"]
+albedo_color = Color(0.48, 0.42, 0.29, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Wall"]
+albedo_color = Color(0.45, 0.48, 0.51, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Column"]
+albedo_color = Color(0.36, 0.39, 0.44, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BaseMesh"]
+material = SubResource("Floor")
+size = Vector3(120.000000, 1.000000, 120.000000)
+
+[sub_resource type="BoxShape3D" id="BaseShape"]
+size = Vector3(120.000000, 1.000000, 120.000000)
+
+[sub_resource type="BoxMesh" id="CourtyardMesh"]
+material = SubResource("Court")
+size = Vector3(38.000000, 0.010000, 32.000000)
+
+[sub_resource type="BoxShape3D" id="CourtyardShape"]
+size = Vector3(38.000000, 0.010000, 32.000000)
+
+[sub_resource type="BoxMesh" id="LowPlateauMesh"]
+material = SubResource("Low")
+size = Vector3(14.000000, 0.400000, 14.000000)
+
+[sub_resource type="BoxShape3D" id="LowPlateauShape"]
+size = Vector3(14.000000, 0.400000, 14.000000)
+
+[sub_resource type="BoxMesh" id="HighPlateauMesh"]
+material = SubResource("High")
+size = Vector3(20.000000, 4.000000, 20.000000)
+
+[sub_resource type="BoxShape3D" id="HighPlateauShape"]
+size = Vector3(20.000000, 4.000000, 20.000000)
+
+[sub_resource type="BoxMesh" id="LowRampMesh"]
+material = SubResource("Ramp")
+size = Vector3(8.000000, 0.400000, 7.011419)
+
+[sub_resource type="BoxShape3D" id="LowRampShape"]
+size = Vector3(8.000000, 0.400000, 7.011419)
+
+[sub_resource type="BoxMesh" id="HighRampMesh"]
+material = SubResource("Ramp")
+size = Vector3(8.000000, 0.400000, 10.770330)
+
+[sub_resource type="BoxShape3D" id="HighRampShape"]
+size = Vector3(8.000000, 0.400000, 10.770330)
+
+[sub_resource type="BoxMesh" id="NorthBoundaryMesh"]
+material = SubResource("Wall")
+size = Vector3(120.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="NorthBoundaryShape"]
+size = Vector3(120.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="SouthBoundaryMesh"]
+material = SubResource("Wall")
+size = Vector3(120.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="SouthBoundaryShape"]
+size = Vector3(120.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="WestBoundaryMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 120.000000)
+
+[sub_resource type="BoxShape3D" id="WestBoundaryShape"]
+size = Vector3(1.000000, 3.000000, 120.000000)
+
+[sub_resource type="BoxMesh" id="EastBoundaryMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 120.000000)
+
+[sub_resource type="BoxShape3D" id="EastBoundaryShape"]
+size = Vector3(1.000000, 3.000000, 120.000000)
+
+[sub_resource type="BoxMesh" id="CourtyardWallMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 10.000000)
+
+[sub_resource type="BoxShape3D" id="CourtyardWallShape"]
+size = Vector3(1.000000, 3.000000, 10.000000)
+
+[sub_resource type="BoxMesh" id="WestPassageMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 22.000000)
+
+[sub_resource type="BoxShape3D" id="WestPassageShape"]
+size = Vector3(1.000000, 3.000000, 22.000000)
+
+[sub_resource type="BoxMesh" id="WestMazeAMesh"]
+material = SubResource("Wall")
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="WestMazeAShape"]
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="WestMazeBMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 21.000000)
+
+[sub_resource type="BoxShape3D" id="WestMazeBShape"]
+size = Vector3(1.000000, 3.000000, 21.000000)
+
+[sub_resource type="BoxMesh" id="WestMazeCMesh"]
+material = SubResource("Wall")
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="WestMazeCShape"]
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="WestMazeDMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 11.000000)
+
+[sub_resource type="BoxShape3D" id="WestMazeDShape"]
+size = Vector3(1.000000, 3.000000, 11.000000)
+
+[sub_resource type="BoxMesh" id="NorthWallAMesh"]
+material = SubResource("Wall")
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="NorthWallAShape"]
+size = Vector3(18.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="NorthWallBMesh"]
+material = SubResource("Wall")
+size = Vector3(8.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="NorthWallBShape"]
+size = Vector3(8.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="EastPassageMesh"]
+material = SubResource("Wall")
+size = Vector3(1.000000, 3.000000, 30.000000)
+
+[sub_resource type="BoxShape3D" id="EastPassageShape"]
+size = Vector3(1.000000, 3.000000, 30.000000)
+
+[sub_resource type="BoxMesh" id="EastMazeMesh"]
+material = SubResource("Wall")
+size = Vector3(17.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="EastMazeShape"]
+size = Vector3(17.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="SouthBarrierMesh"]
+material = SubResource("Wall")
+size = Vector3(22.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="SouthBarrierShape"]
+size = Vector3(22.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="SouthGateMesh"]
+material = SubResource("Wall")
+size = Vector3(15.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxShape3D" id="SouthGateShape"]
+size = Vector3(15.000000, 3.000000, 1.000000)
+
+[sub_resource type="BoxMesh" id="Column1Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column1Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column2Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column2Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column3Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column3Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column4Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column4Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column5Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column5Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column6Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column6Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column7Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column7Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxMesh" id="Column8Mesh"]
+material = SubResource("Column")
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[sub_resource type="BoxShape3D" id="Column8Shape"]
+size = Vector3(2.000000, 2.500000, 2.000000)
+
+[node name="GreyboxMap" type="Node3D"]
+
+[node name="Base" type="StaticBody3D" parent="."]
+position = Vector3(0.000000, -0.500000, 0.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Base"]
+mesh = SubResource("BaseMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Base"]
+shape = SubResource("BaseShape")
+
+[node name="Courtyard" type="StaticBody3D" parent="."]
+position = Vector3(-12.000000, 0.010000, 20.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Courtyard"]
+mesh = SubResource("CourtyardMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Courtyard"]
+shape = SubResource("CourtyardShape")
+
+[node name="LowPlateau" type="StaticBody3D" parent="."]
+position = Vector3(-14.000000, 0.200000, -10.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="LowPlateau"]
+mesh = SubResource("LowPlateauMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="LowPlateau"]
+shape = SubResource("LowPlateauShape")
+
+[node name="HighPlateau" type="StaticBody3D" parent="."]
+position = Vector3(12.000000, 2.000000, 0.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="HighPlateau"]
+mesh = SubResource("HighPlateauMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="HighPlateau"]
+shape = SubResource("HighPlateauShape")
+
+[node name="LowRamp" type="StaticBody3D" parent="."]
+position = Vector3(-14.000000, 0.000326, 0.488590)
+rotation = Vector3(0.0570808, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="LowRamp"]
+mesh = SubResource("LowRampMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="LowRamp"]
+shape = SubResource("LowRampShape")
+
+[node name="HighRamp" type="StaticBody3D" parent="."]
+position = Vector3(12.000000, 1.814305, 14.925722)
+rotation = Vector3(0.3805064, 0, 0)
+collision_layer = 16
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="HighRamp"]
+mesh = SubResource("HighRampMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="HighRamp"]
+shape = SubResource("HighRampShape")
+
+[node name="NorthBoundary" type="StaticBody3D" parent="."]
+position = Vector3(0.000000, 1.500000, -60.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthBoundary"]
+mesh = SubResource("NorthBoundaryMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="NorthBoundary"]
+shape = SubResource("NorthBoundaryShape")
+
+[node name="SouthBoundary" type="StaticBody3D" parent="."]
+position = Vector3(0.000000, 1.500000, 60.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthBoundary"]
+mesh = SubResource("SouthBoundaryMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="SouthBoundary"]
+shape = SubResource("SouthBoundaryShape")
+
+[node name="WestBoundary" type="StaticBody3D" parent="."]
+position = Vector3(-60.000000, 1.500000, 0.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestBoundary"]
+mesh = SubResource("WestBoundaryMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestBoundary"]
+shape = SubResource("WestBoundaryShape")
+
+[node name="EastBoundary" type="StaticBody3D" parent="."]
+position = Vector3(60.000000, 1.500000, 0.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="EastBoundary"]
+mesh = SubResource("EastBoundaryMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="EastBoundary"]
+shape = SubResource("EastBoundaryShape")
+
+[node name="CourtyardWall" type="StaticBody3D" parent="."]
+position = Vector3(-2.000000, 1.500000, 18.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="CourtyardWall"]
+mesh = SubResource("CourtyardWallMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="CourtyardWall"]
+shape = SubResource("CourtyardWallShape")
+
+[node name="WestPassage" type="StaticBody3D" parent="."]
+position = Vector3(-23.000000, 1.500000, 16.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestPassage"]
+mesh = SubResource("WestPassageMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestPassage"]
+shape = SubResource("WestPassageShape")
+
+[node name="WestMazeA" type="StaticBody3D" parent="."]
+position = Vector3(-34.000000, 1.500000, -4.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestMazeA"]
+mesh = SubResource("WestMazeAMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestMazeA"]
+shape = SubResource("WestMazeAShape")
+
+[node name="WestMazeB" type="StaticBody3D" parent="."]
+position = Vector3(-43.000000, 1.500000, -14.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestMazeB"]
+mesh = SubResource("WestMazeBMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestMazeB"]
+shape = SubResource("WestMazeBShape")
+
+[node name="WestMazeC" type="StaticBody3D" parent="."]
+position = Vector3(-34.000000, 1.500000, -25.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestMazeC"]
+mesh = SubResource("WestMazeCMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestMazeC"]
+shape = SubResource("WestMazeCShape")
+
+[node name="WestMazeD" type="StaticBody3D" parent="."]
+position = Vector3(-25.000000, 1.500000, -17.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="WestMazeD"]
+mesh = SubResource("WestMazeDMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="WestMazeD"]
+shape = SubResource("WestMazeDShape")
+
+[node name="NorthWallA" type="StaticBody3D" parent="."]
+position = Vector3(-4.000000, 1.500000, -32.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWallA"]
+mesh = SubResource("NorthWallAMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="NorthWallA"]
+shape = SubResource("NorthWallAShape")
+
+[node name="NorthWallB" type="StaticBody3D" parent="."]
+position = Vector3(12.000000, 1.500000, -32.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="NorthWallB"]
+mesh = SubResource("NorthWallBMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="NorthWallB"]
+shape = SubResource("NorthWallBShape")
+
+[node name="EastPassage" type="StaticBody3D" parent="."]
+position = Vector3(36.000000, 1.500000, -12.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="EastPassage"]
+mesh = SubResource("EastPassageMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="EastPassage"]
+shape = SubResource("EastPassageShape")
+
+[node name="EastMaze" type="StaticBody3D" parent="."]
+position = Vector3(45.000000, 1.500000, 3.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="EastMaze"]
+mesh = SubResource("EastMazeMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="EastMaze"]
+shape = SubResource("EastMazeShape")
+
+[node name="SouthBarrier" type="StaticBody3D" parent="."]
+position = Vector3(14.000000, 1.500000, 38.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthBarrier"]
+mesh = SubResource("SouthBarrierMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="SouthBarrier"]
+shape = SubResource("SouthBarrierShape")
+
+[node name="SouthGate" type="StaticBody3D" parent="."]
+position = Vector3(-22.000000, 1.500000, 40.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="SouthGate"]
+mesh = SubResource("SouthGateMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="SouthGate"]
+shape = SubResource("SouthGateShape")
+
+[node name="Column1" type="StaticBody3D" parent="."]
+position = Vector3(-18.000000, 1.250000, 28.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column1"]
+mesh = SubResource("Column1Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column1"]
+shape = SubResource("Column1Shape")
+
+[node name="Column2" type="StaticBody3D" parent="."]
+position = Vector3(-18.000000, 1.250000, 4.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column2"]
+mesh = SubResource("Column2Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column2"]
+shape = SubResource("Column2Shape")
+
+[node name="Column3" type="StaticBody3D" parent="."]
+position = Vector3(-6.000000, 1.250000, -24.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column3"]
+mesh = SubResource("Column3Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column3"]
+shape = SubResource("Column3Shape")
+
+[node name="Column4" type="StaticBody3D" parent="."]
+position = Vector3(27.000000, 1.250000, 13.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column4"]
+mesh = SubResource("Column4Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column4"]
+shape = SubResource("Column4Shape")
+
+[node name="Column5" type="StaticBody3D" parent="."]
+position = Vector3(26.000000, 1.250000, -20.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column5"]
+mesh = SubResource("Column5Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column5"]
+shape = SubResource("Column5Shape")
+
+[node name="Column6" type="StaticBody3D" parent="."]
+position = Vector3(44.000000, 1.250000, 22.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column6"]
+mesh = SubResource("Column6Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column6"]
+shape = SubResource("Column6Shape")
+
+[node name="Column7" type="StaticBody3D" parent="."]
+position = Vector3(-37.000000, 1.250000, 28.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column7"]
+mesh = SubResource("Column7Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column7"]
+shape = SubResource("Column7Shape")
+
+[node name="Column8" type="StaticBody3D" parent="."]
+position = Vector3(4.000000, 1.250000, 31.000000)
+rotation = Vector3(0.0000000, 0, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Column8"]
+mesh = SubResource("Column8Mesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Column8"]
+shape = SubResource("Column8Shape")
+
+[node name="CourtyardLabel" type="Label3D" parent="."]
+position = Vector3(-10.000000, 0.150000, 30.000000)
+billboard = 1
+no_depth_test = true
+text = "COURTYARD"
+pixel_size = 0.02
+font_size = 44
+
+[node name="LowLabel" type="Label3D" parent="."]
+position = Vector3(-14.000000, 0.600000, -16.000000)
+billboard = 1
+no_depth_test = true
+text = "LOW TERRACE 0.4m"
+pixel_size = 0.02
+font_size = 44
+
+[node name="HighLabel" type="Label3D" parent="."]
+position = Vector3(12.000000, 4.200000, -7.000000)
+billboard = 1
+no_depth_test = true
+text = "HIGH TERRACE 4m"
+pixel_size = 0.02
+font_size = 44
+
+[node name="RampLabel" type="Label3D" parent="."]
+position = Vector3(12.000000, 0.200000, 23.000000)
+billboard = 1
+no_depth_test = true
+text = "RAMP"
+pixel_size = 0.02
+font_size = 44
+
+[node name="MazeLabel" type="Label3D" parent="."]
+position = Vector3(-34.000000, 0.200000, 10.000000)
+billboard = 1
+no_depth_test = true
+text = "WEST PASSAGES"
+pixel_size = 0.02
+font_size = 44

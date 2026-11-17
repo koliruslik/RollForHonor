@@ -822,12 +822,86 @@ and `DiagnosticView` before tree entry to send optional reports to Godot Output.
 Diagnostics default to off and are separate from the scene's result-based journal.
 
 Normal Play starts the runtime without automatically running tests or quitting.
-Bootstrap loads `Game.tscn` as a child so the session remains alive.
+Bootstrap loads `Arena.tscn` as a child so the session remains alive.
+`WorkbenchBootstrap.tscn` hosts the separate `Game.tscn` combat laboratory.
+
+### G01 greybox arena
+
+Press **F5** from `godot/project.godot` to enter the arena through
+`Bootstrap.tscn`. The editable `Arena.tscn` contains a 120×120 colored greybox
+map, obstacles, passages, 0.4 m and 4 m terraces, ramps, five stationary targets,
+an angled orthographic following camera and a directional arrow on the player.
+There are no textures or enemy AI in this slice.
+
+| Input | Action |
+| --- | --- |
+| W / A / S / D | Move relative to the camera, independently of facing |
+| Mouse position | Face the observed surface point, rotating only visual yaw |
+| Right click | Request a projectile attack; movement can continue |
+| Mouse wheel | Zoom the camera |
+| R / Restart arena | Start a fresh arena session |
+| F2 / Combat laboratory | Open the combat workbench in a fresh session |
+
+The camera follows position independently of facing. Physical WASD bindings are
+configured in Project Settings → Input Map (`arena_forward/back/left/right`).
+The player reads held movement actions each physics step and queues discrete
+shoot commands; `MovementMotor` handles acceleration, braking, gravity, collisions
+and Idle/Moving/Falling/Defeated transitions. `MouseFacing` handles the surface
+ray and horizontal arrow orientation. `ArenaPlayer` coordinates these components
+and calls the existing Application services. Release movement keys to brake.
+Left click does not move or attack; each right-button press requests one shot.
+
+`Arena/Player.tscn` and `Arena/GreyboxMap.tscn` remain editable scene assets.
+Movement uses native character collision against terrain, walls and targets.
+The earlier click-navigation component and its unused navigation mesh were
+removed after the user selected WASD. There is no automatic obstacle routing.
+
+Each accepted shot costs 10 of the initial 500 mana, starts a 0.25-second
+cooldown, travels at 16 units/second and lives for at most 4 game seconds.
+It uses the current source/target state at contact and the same Application
+commit and result-based journal path as the workbench. The separate d20 repeats
+the natural roll of the latest newly committed impact.
+
+`AirborneProjectile` fixes its three-dimensional direction at launch and flies
+straight without gravity, homing or per-frame ground-height correction. The
+launch point is 1 m above the actor's feet, without a forward spawn offset that
+could skip a nearby wall. Attack aiming raycasts actors, terrain and obstacles,
+excluding the source. A target uses its fixture body center (0.9 m above its
+feet); empty terrain uses the observed surface plus 1 m; an obstacle uses its
+actual surface point. The actor's visual still rotates only in yaw.
+The visible cursor marker uses that same closest-surface ray (excluding the
+player), sits slightly outside the surface and aligns its disc to the hit normal.
+It therefore appears on target bodies and vertical walls as well as the ground.
+
+Swept body collision stops the projectile at an actor, wall or the ground and
+reports that contact through the existing Application/journal path. A shot can
+pass above descending terrain, hit a higher/lower target when the line is clear,
+or strike a slope/cliff that obstructs it. Expiry still ends an unobstructed
+shot after its lifetime. Terrain uses physics layer 5 (mask 16), obstacles layer
+3 (mask 4), actors layer 2 (mask 2); the projectile collision mask is 22.
+
+The initial ground-following prototype was replaced after user review. Its
+terrain-height guard could silently terminate a shot from the ramp edge before
+any physical collision; a regression test failed before the change and passes
+with straight flight. Captures 11–14 preserve that earlier prototype; 15–17 show
+the revised airborne delivery.
+
+Nineteen G01 engine cases verify physical WASD actions, normalized motor
+intent/braking, left-click inactivity, walls, slopes,
+yaw-only elevated aiming, actor/free-terrain aim points, fixed flight direction,
+upward/downward target hits, physical ground/cliff/wall contacts, the ramp-edge
+regression, near-wall spawning, one-time launch costs and defeated actors.
+Additional cases verify marker placement/orientation on a target face and a wall,
+with wall aim-point agreement and yaw-only actor rotation.
+Local verification: 40 actual Godot tests and 425 .NET tests passed;
+the build has zero warnings.
 
 ### Two-object combat scene
 
 Build the solution, open `godot/project.godot` in Godot .NET and press **F5**
-to run the project through `Bootstrap.tscn`. Open `Game.tscn` to edit its
+to run the arena through `Bootstrap.tscn`, then press **F2** for the laboratory.
+Alternatively, open `WorkbenchBootstrap.tscn` and press **F6** to run it directly.
+Open `Game.tscn` to edit its
 objects visually; it depends on its parent bootstrap and cannot run standalone
 with F6.
 
@@ -955,7 +1029,7 @@ reentry without repeat damage, one-time resources/cooldown, empty-window ending,
 disabled hurtboxes and reuse of statuses/vampirism. New rendered screenshots
 show the melee window during the swing and after it has closed. Existing arrow
 and periodic scenarios remain covered. Mouse-facing locomotion and the large
-greybox map are future movement work, not features of this workbench slice.
+greybox map are available in the separate G01 arena described above.
 
 Rendered milestone screenshots and their source context are preserved in the
 [visual development history](docs/development-history/README.md).
