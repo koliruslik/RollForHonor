@@ -785,6 +785,55 @@ consumption. It excludes fixture setup, Godot, rendering, production commits and
 concurrency; throughput is not an estimate of the game's supported entity count.
 Benchmark reports are machine-specific artifacts, not committed baselines.
 
+## Godot runtime composition
+
+`GameBootstrap` creates one session in `_EnterTree`, before child nodes enter
+the tree. It exposes `CombatState` for explicit participant/resource registration
+and `Attacks` for launching an `AttackDefinition` with request/source identities.
+An accepted launch returns an `AttackInstance`; call its `ResolveContact` for
+each eligible physical contact and inspect the returned commit result. Resources
+and cooldown are committed at launch, not charged again on each impact.
+
+`InMemoryCombatState` implements both Application state ports. It stores immutable
+combatant views, resources, cooldowns and deduplication receipts. Reads and writes
+are synchronized; each successful transaction publishes one replacement state.
+A conservative session-wide version rejects stale proposals without partial
+changes or automatic retries. State is session-local and is not persisted; this
+is not a complete character/inventory model.
+
+The baseline `BasicAttackPipelineFactory` composes attack rolls, hit quality,
+typed damage, defense and new-status application. Runtime coefficients are
+`0 / 0.5 / 1 / 2` for evaded/glancing/hit/critical. `NoResourceCostModifiers`
+explicitly supplies no reductions. Existing-effect behavior selection,
+equipment/stat aggregation and periodic scheduling are not wired into this
+baseline. `RandomDiceRoller` uses `Random.Shared` with a fresh trace per impact;
+an explicit `Random` can be supplied for reproducible non-engine tests.
+
+Cooldowns and attack lifetime share accumulated Godot game time. `_Process`
+consumes the supplied delta once, already scaled by Godot; a paused tree does
+not advance the clock. Configure the bootstrap's `CombatDiagnosticsEnabled`
+and `DiagnosticView` before tree entry to send optional reports to Godot Output.
+Diagnostics default to off and are separate from the future player journal.
+
+Normal Play now starts the runtime without automatically running tests or
+quitting. There is no combat content scene yet. When `Game.tscn` is supplied,
+bootstrap loads it as a child so the session remains alive. Movement, physical
+contacts, display widgets and the two-object combat scene are later work.
+
+Run engine tests explicitly from the repository root with the Godot .NET
+executable on PATH (or substitute its absolute path):
+
+```powershell
+dotnet build RollForHonor.sln
+godot --headless --editor --path godot --quit
+godot --headless --path godot --run-tests --quit-on-finish
+```
+
+Local I04 verification used Godot 4.7.2 .NET: all 7 engine tests and 397 .NET
+tests passed. Runtime tests cover shared launch/impact state, once-only costs,
+expiry, pause and supplied-delta handling. Adapter tests also cover conflicts,
+concurrent launch attempts, duplicate receipts and rollback of invalid changes.
+
 ## Technology
 
 - Godot 4.7.2 with C#
@@ -802,7 +851,7 @@ Benchmark reports are machine-specific artifacts, not committed baselines.
 | `src/RollForHonor.Domain/Combat/*/Models` | Immutable combat data, results, snapshots, and value objects |
 | `src/RollForHonor.Domain/Combat/*/Services` | Combat contracts and deterministic rule implementations |
 | `src/RollForHonor.Domain/Combat/Damage/Configuration` | Tunable raw-damage coefficients |
-| `src/RollForHonor.Infrastructure` | ILogger diagnostic adapter and report views |
+| `src/RollForHonor.Infrastructure` | Diagnostic views, in-memory combat state and runtime dice |
 | `src/RollForHonor.Application` | Application use cases and orchestration |
 | `godot` | Godot project and engine integration |
 | `tests/RollForHonor.Domain.Tests` | Domain unit tests |
