@@ -840,6 +840,27 @@ launches create no projectile. Each arrow travels at 6 units per game second,
 ends at its first target/obstacle contact, or expires after 3 game seconds.
 **Restart session** reloads the bootstrap and resets both state and visuals.
 
+Select **Melee** in the delivery dropdown and enable **Bring enemy into melee
+range** to test a close-range strike with the same Space/E controls. Projectile
+and melee delivery implement the Godot-side Strategy contract `IAttackDelivery`;
+both request an ordinary Application launch and share its snapshot/calculation/
+commit path. Each mode has its own source-local cooldown key, while resource
+balances are shared. Changing selection affects future launches only.
+
+`DemoHurtbox` is a separate actor-owned contact area on collision layer 4.
+`DemoMeleeHitbox` monitors that layer during a 0.45-game-second demo swing;
+it follows its parent actor and reports `AnimationFinished` when that timed
+window ends. The blade/range visuals are greybox indicators, not a final rig or
+animation graph. A fresh hitbox is spawned per accepted strike, so targets
+already in range are detected by real physics entry events. The source is
+ignored. Application owns once-per-target admission: several targets may be
+processed within one window, including reentry rejection for a previously
+contacted target. No second health store or damage formula lives in a delivery
+strategy. Melee does not stop on the first target, and a missed strike is not
+refunded. Current melee contact geometry is a forward-offset sphere, not a
+weapon-accurate sweep, obstruction/line-of-sight solver or terrain-following
+delivery. Those behaviors are outside this bounded slice.
+
 `DemoCombatant` maps scene bodies to session identities. `DemoProjectile`
 forwards real `Area3D.BodyEntered` callbacks to the accepted attack; moving the
 visual alone does not calculate damage. Actors use collision layer 2 and
@@ -911,7 +932,7 @@ godot --headless --editor --path godot --quit
 godot --headless --path godot --run-tests --quit-on-finish
 ```
 
-Local I06 verification used Godot 4.7.2 .NET: all 17 engine tests and 425 .NET
+Local C10 melee-slice verification used Godot 4.7.2 .NET: all 21 engine tests and 425 .NET
 tests passed. Runtime tests cover shared launch/impact state, once-only costs,
 expiry, pause and supplied-delta handling. Adapter tests also cover conflicts,
 concurrent launch attempts, duplicate receipts and rollback of invalid changes.
@@ -929,6 +950,12 @@ sources, fresh defenses, invalid instances, conflicts and used-dice rejection.
 Three new engine cases exercise real-impact vampirism, manual ticks after source
 death, automatic rounds, pause and interval/mode changes. New rendered captures
 show healing and both tick modes in the visual history.
+Four additional real-engine melee cases cover two initial overlapping targets,
+reentry without repeat damage, one-time resources/cooldown, empty-window ending,
+disabled hurtboxes and reuse of statuses/vampirism. New rendered screenshots
+show the melee window during the swing and after it has closed. Existing arrow
+and periodic scenarios remain covered. Mouse-facing locomotion and the large
+greybox map are future movement work, not features of this workbench slice.
 
 Rendered milestone screenshots and their source context are preserved in the
 [visual development history](docs/development-history/README.md).
