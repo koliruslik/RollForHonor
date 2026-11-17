@@ -1,0 +1,151 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://CombatDemo/CombatDemoScene.cs" id="1"]
+[ext_resource type="Script" path="res://CombatDemo/DemoCombatant.cs" id="2"]
+
+[sub_resource type="StandardMaterial3D" id="Blue"]
+albedo_color = Color(0.12, 0.5, 0.95, 1)
+
+[sub_resource type="StandardMaterial3D" id="Red"]
+albedo_color = Color(0.9, 0.22, 0.15, 1)
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.13, 0.18, 0.24, 1)
+
+[sub_resource type="CapsuleMesh" id="SourceMesh"]
+material = SubResource("Blue")
+radius = 0.45
+height = 1.8
+
+[sub_resource type="BoxMesh" id="TargetMesh"]
+material = SubResource("Red")
+size = Vector3(1, 1.8, 1)
+
+[sub_resource type="BoxShape3D" id="ActorShape"]
+size = Vector3(1, 1.8, 1)
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(18, 0.2, 9)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(18, 0.2, 9)
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 1
+background_color = Color(0.035, 0.055, 0.09, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.7, 0.8, 1, 1)
+ambient_light_energy = 0.6
+
+[node name="CombatDemo" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -25, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="Camera" type="Camera3D" parent="."]
+position = Vector3(0, 8, 11)
+rotation_degrees = Vector3(-32, 0, 0)
+projection = 1
+size = 13.0
+current = true
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.15, 0)
+collision_layer = 4
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="Source" type="StaticBody3D" parent="."]
+position = Vector3(-4, 0.9, 0)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2")
+
+[node name="Mesh" type="MeshInstance3D" parent="Source"]
+mesh = SubResource("SourceMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Source"]
+shape = SubResource("ActorShape")
+
+[node name="Name" type="Label3D" parent="Source"]
+position = Vector3(0, 1.5, 0)
+billboard = 1
+pixel_size = 0.012
+text = "Archer"
+font_size = 42
+
+[node name="Target" type="StaticBody3D" parent="."]
+position = Vector3(4, 0.9, 0)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2")
+
+[node name="Mesh" type="MeshInstance3D" parent="Target"]
+mesh = SubResource("TargetMesh")
+
+[node name="Shape" type="CollisionShape3D" parent="Target"]
+shape = SubResource("ActorShape")
+
+[node name="Name" type="Label3D" parent="Target"]
+position = Vector3(0, 1.5, 0)
+billboard = 1
+pixel_size = 0.012
+text = "Training target"
+font_size = 42
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="PanelContainer" parent="HUD"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 545.0
+offset_bottom = 254.0
+
+[node name="Rows" type="VBoxContainer" parent="HUD/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="HUD/Panel/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Roll For Honor | Combat test"
+
+[node name="State" type="Label" parent="HUD/Panel/Rows"]
+layout_mode = 2
+text = "Preparing combat session..."
+
+[node name="Result" type="Label" parent="HUD/Panel/Rows"]
+layout_mode = 2
+text = "Space or Fire: launch an arrow at the target"
+
+[node name="Fire" type="Button" parent="HUD/Panel/Rows"]
+layout_mode = 2
+text = "Fire [Space] | 10 mana"
+focus_mode = 0
+
+[node name="Restart" type="Button" parent="HUD/Panel/Rows"]
+layout_mode = 2
+text = "Restart session"
+focus_mode = 0
+
+[node name="Die" type="Label" parent="HUD"]
+offset_left = 600.0
+offset_top = 24.0
+offset_right = 730.0
+offset_bottom = 125.0
+theme_override_colors/font_color = Color(1, 0.78, 0.25, 1)
+theme_override_font_sizes/font_size = 32
+text = "d20\n-"
+horizontal_alignment = 1
