@@ -44,6 +44,26 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
         }
     }
 
+    /// <summary>Replaces a registered combat view for explicit host-driven edits, retaining resources and launch receipts.</summary>
+    /// <param name="combatant">The complete replacement view, including the effects the host intends to retain.</param>
+    /// <exception cref="ArgumentNullException">The replacement is null.</exception>
+    /// <exception cref="KeyNotFoundException">The participant is not registered.</exception>
+    /// <exception cref="OverflowException">The session version cannot be advanced.</exception>
+    /// <remarks>This is an explicit state edit, not the path for applying calculated combat damage.</remarks>
+    public void UpdateCombatant(CombatantSnapshot combatant)
+    {
+        ArgumentNullException.ThrowIfNull(combatant);
+        lock (_gate)
+        {
+            if (!_data.Actors.ContainsKey(combatant.Id)) throw new KeyNotFoundException("The participant is not registered.");
+            _data = _data with
+            {
+                Version = checked(_data.Version + 1),
+                Actors = _data.Actors.SetItem(combatant.Id, combatant)
+            };
+        }
+    }
+
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">A participant identity is null.</exception>
     /// <exception cref="KeyNotFoundException">A participant is not registered.</exception>

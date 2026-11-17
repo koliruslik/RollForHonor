@@ -291,6 +291,45 @@ public sealed class RuntimeCombatTests : CombatDiagnosticTestBase
         Assert.Single(dice.Trace.Rolls);
     }
 
+    /// <summary>Explicit host edits refresh impact views without resetting resources, statuses, cooldowns or receipts.</summary>
+    [Fact]
+    public void HostStatEditsPreserveSessionBookkeepingAndInvalidateOldProposals()
+    {
+        var rig = new Rig(withEffect: true);
+        var request = Guid.NewGuid();
+        var start = rig.Starts.Start(request, rig.Source.Id, rig.Definition);
+        Resolve(start.Attack!, rig.Target.Id);
+        var before = rig.Read();
+        var stale = Resolution(rig, Guid.NewGuid(), before.Version, []);
+        rig.State.UpdateCombatant(new(rig.Target.Id, 40, 120, 12, 15,
+            [new(DamageType.Fire, 0.25m)], before.Target.Effects));
+        var after = rig.Read();
+        Assert.Equal(before.Version + 1, after.Version);
+        Assert.Equal(40, after.Target.Health);
+        Assert.Equal(120, after.Target.MaxHealth);
+        Assert.Equal(12, after.Target.Armor);
+        Assert.Equal(15, after.Target.Evasion);
+        Assert.Equal(0.25m, Assert.Single(after.Target.Resistances).Value);
+        Assert.Same(Assert.Single(before.Target.Effects), Assert.Single(after.Target.Effects));
+        Assert.NotEqual(40, before.Target.Health);
+        Assert.Equal(80, rig.ReadStart().Resources.Single(value => value.Resource == Rig.Mana).Amount);
+        Assert.Equal(TimeSpan.FromSeconds(2), rig.ReadStart().ReadyAt);
+        Assert.Equal(AttackStartStatus.AlreadyStarted, rig.Starts.Start(request, rig.Source.Id, rig.Definition).Status);
+        Assert.Equal(CombatCommitStatus.VersionConflict, rig.State.TryCommit(stale));
+    }
+
+    /// <summary>Unknown and null host edits cannot insert actors or advance the session version.</summary>
+    [Fact]
+    public void InvalidHostEditsLeaveStateUnchanged()
+    {
+        var rig = new Rig();
+        var before = rig.Read();
+        Assert.Throws<ArgumentNullException>(() => rig.State.UpdateCombatant(null!));
+        Assert.Throws<KeyNotFoundException>(() => rig.State.UpdateCombatant(Character()));
+        Assert.Equal(before.Version, rig.Read().Version);
+        Assert.Same(before.Target, rig.Read().Target);
+    }
+
     private CombatImpactResult Resolve(AttackInstance attack, CombatantId target)
     {
         var result = attack.Resolve(target);
