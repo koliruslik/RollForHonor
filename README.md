@@ -813,7 +813,7 @@ Cooldowns and attack lifetime share accumulated Godot game time. `_Process`
 consumes the supplied delta once, already scaled by Godot; a paused tree does
 not advance the clock. Configure the bootstrap's `CombatDiagnosticsEnabled`
 and `DiagnosticView` before tree entry to send optional reports to Godot Output.
-Diagnostics default to off and are separate from the future player journal.
+Diagnostics default to off and are separate from the scene's result-based journal.
 
 Normal Play starts the runtime without automatically running tests or quitting.
 Bootstrap loads `Game.tscn` as a child so the session remains alive.
@@ -825,8 +825,10 @@ to run the project through `Bootstrap.tscn`. Open `Game.tscn` to edit its
 objects visually; it depends on its parent bootstrap and cannot run standalone
 with F6.
 
-The scene includes an archer, training target, floor, camera, lighting and a
-small test HUD. Press **Space** or **Fire** to launch a projectile: a successful
+The scene includes a player, enemy, floor, camera, lighting and an editable
+combat workbench. Press **Space** or **Player attacks** to launch a projectile;
+press **E** or **Enemy attacks** to attack the player. Each side owns its mana
+and cooldown. A successful
 launch costs 10 of the initial 100 mana and starts a 0.8-second cooldown. Failed
 launches create no projectile. Each arrow travels at 6 units per game second,
 ends at its first target/obstacle contact, or expires after 3 game seconds.
@@ -839,12 +841,35 @@ environment bodies layer 3; the projectile monitors both and ignores its source.
 The sample speed/shape relies on discrete overlap detection; this is not a
 high-speed projectile or swept-collision implementation.
 
-The HUD shows actual session HP/mana/cooldown and the most recent committed
-outcome, with the natural d20 in a separate field. An evaded contact can commit
-zero damage. This is a bounded test display, not the planned full action journal
-or modifier-tooltip interface. Combat rules and state mutation stay in existing
-Application/Domain services and the runtime adapter. Demo balance values are
-fixtures, not a finalized weapon or character model.
+The scene uses a 1920×1080 design viewport, opening in a 1280×720 window with
+canvas scaling. Both stat panels expose current/maximum HP, armor, evasion,
+attack modifier, damage dice/count/flat bonus/type and every supported typed
+resistance. Resistance inputs are percentages; negative values are weaknesses.
+**Apply draft stats** explicitly applies HP/defense edits, including any draft
+current HP, while preserving live statuses, mana, cooldowns and receipts. Invalid
+HP bounds leave state unchanged and produce a journal entry. Weapon/effect
+selections affect the next launch; defense edits affect subsequent contacts,
+including projectiles already in flight. No equipment/stat aggregation is implied.
+
+The journal uses returned calculation data, independently of optional diagnostic
+output. It shows source/target names, admission and commit status, attack roll
+and modifier, input defenses, ordered typed damage stages and coefficients,
+component dice/flat bonuses, complete dice trace, effect changes and actual
+clamped HP changes. Damage types have distinct colors; proposed changes are
+marked separately from applied changes. The separate d20 repeats only the
+natural die value. Text can be selected and copied; Clear removes the journal
+and the view retains at most 100 entries. Modifier tooltips are not implemented.
+
+`DemoEffectCatalog` is a small fixture catalog outside Domain. Burning and
+Bleeding selections attach existing `PeriodicDamageEffectDefinition` values to
+the next attack payload (test formulas: 1d4 Fire and 1d4 Slashing). Active statuses
+and their application/replacement appear in the live panel and journal, with a
+captured source. The existing baseline applies selected statuses on processed
+contact, including evaded contacts; this work does not introduce a new successful-
+hit condition. Automatic ticks/duration and production bleeding rules remain
+unimplemented. Vampirism is visibly disabled until its behavior and healing rule
+are implemented in a separate effect slice. No new Domain effect rules or
+weapon-property pipeline stage are introduced here.
 
 Run engine tests explicitly from the repository root with the Godot .NET
 executable on PATH (or substitute its absolute path):
@@ -855,14 +880,20 @@ godot --headless --editor --path godot --quit
 godot --headless --path godot --run-tests --quit-on-finish
 ```
 
-Local I05 verification used Godot 4.7.2 .NET: all 10 engine tests and 397 .NET
+Local expanded I05 verification used Godot 4.7.2 .NET: all 14 engine tests and 399 .NET
 tests passed. Runtime tests cover shared launch/impact state, once-only costs,
 expiry, pause and supplied-delta handling. Adapter tests also cover conflicts,
 concurrent launch attempts, duplicate receipts and rollback of invalid changes.
-Three scene integration cases additionally exercise actual projectile/target
-and obstacle contacts, cooldown refusal and missed-projectile expiry, without
-directly invoking collision callbacks. Rendered startup, flight and impact
-frames were inspected locally with the Compatibility renderer.
+Seven scene integration cases additionally exercise actual projectile/target
+and obstacle contacts, cooldown refusal, missed-projectile expiry, editing
+defenses during flight, enemy attacks, status selections, journal facts and draft
+validation, without directly invoking collision callbacks. Two adapter cases
+verify explicit host edits, preserved bookkeeping and stale-proposal rejection.
+Rendered Full HD workbench and exchanged-attack frames were inspected locally
+with the Compatibility renderer.
+
+Rendered milestone screenshots and their source context are preserved in the
+[visual development history](docs/development-history/README.md).
 
 ## Technology
 
