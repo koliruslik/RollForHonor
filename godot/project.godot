@@ -29,6 +29,25 @@ window/stretch/aspect="expand"
 
 project/assembly_name="RollForHonor.Godot"
 
+[input]
+
+arena_forward={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":87)]
+}
+arena_back={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":83)]
+}
+arena_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":65)]
+}
+arena_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":68)]
+}
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

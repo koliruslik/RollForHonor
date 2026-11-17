@@ -42,6 +42,9 @@ public partial class GameBootstrap : Node3D
     /// <summary>Gets or sets the runtime diagnostic representation selected before tree entry.</summary>
     [Export]
     public CombatDiagnosticView DiagnosticView { get; set; } = CombatDiagnosticView.Summary;
+    /// <summary>Gets or sets which scene this fresh session hosts; the workbench has a separate bootstrap preset.</summary>
+    [Export(PropertyHint.File, "*.tscn")]
+    public string StartupScenePath { get; set; } = "res://Arena.tscn";
 
     /// <inheritdoc />
     public override void _EnterTree()
@@ -79,8 +82,8 @@ public partial class GameBootstrap : Node3D
             return;
         }
 #endif
-        if (ResourceLoader.Exists("res://Game.tscn"))
-            AddChild(GD.Load<PackedScene>("res://Game.tscn").Instantiate());
+        if (ResourceLoader.Exists(StartupScenePath))
+            AddChild(GD.Load<PackedScene>(StartupScenePath).Instantiate());
     }
 
 #if DEBUG
