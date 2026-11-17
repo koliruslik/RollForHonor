@@ -853,8 +853,7 @@ Left click does not move or attack; each right-button press requests one shot.
 
 `Arena/Player.tscn` and `Arena/GreyboxMap.tscn` remain editable scene assets.
 Movement uses native character collision against terrain, walls and targets.
-The earlier click-navigation component and its unused navigation mesh were
-removed after the user selected WASD. There is no automatic obstacle routing.
+There is no automatic obstacle routing.
 
 Each accepted shot costs 10 of the initial 500 mana, starts a 0.25-second
 cooldown, travels at 16 units/second and lives for at most 4 game seconds.
@@ -879,12 +878,6 @@ pass above descending terrain, hit a higher/lower target when the line is clear,
 or strike a slope/cliff that obstructs it. Expiry still ends an unobstructed
 shot after its lifetime. Terrain uses physics layer 5 (mask 16), obstacles layer
 3 (mask 4), actors layer 2 (mask 2); the projectile collision mask is 22.
-
-The initial ground-following prototype was replaced after user review. Its
-terrain-height guard could silently terminate a shot from the ramp edge before
-any physical collision; a regression test failed before the change and passes
-with straight flight. Captures 11–14 preserve that earlier prototype; 15–17 show
-the revised airborne delivery.
 
 Nineteen G01 engine cases verify physical WASD actions, normalized motor
 intent/braking, left-click inactivity, walls, slopes,
@@ -1015,24 +1008,17 @@ and obstacle contacts, cooldown refusal, missed-projectile expiry, editing
 defenses during flight, enemy attacks, status selections, journal facts and draft
 validation, without directly invoking collision callbacks. Two adapter cases
 verify explicit host edits, preserved bookkeeping and stale-proposal rejection.
-Rendered Full HD workbench and exchanged-attack frames were inspected locally
-with the Compatibility renderer.
 I06 adds 14 Domain cases for healing basis, overkill, rounding, defenses, target
 adjustments, self-damage and immutable content; 12 Application cases verify
 atomic lifesteal composition and independent periodic attempts, captured/dead
 sources, fresh defenses, invalid instances, conflicts and used-dice rejection.
 Three new engine cases exercise real-impact vampirism, manual ticks after source
-death, automatic rounds, pause and interval/mode changes. New rendered captures
-show healing and both tick modes in the visual history.
+death, automatic rounds, pause and interval/mode changes.
 Four additional real-engine melee cases cover two initial overlapping targets,
 reentry without repeat damage, one-time resources/cooldown, empty-window ending,
-disabled hurtboxes and reuse of statuses/vampirism. New rendered screenshots
-show the melee window during the swing and after it has closed. Existing arrow
+disabled hurtboxes and reuse of statuses/vampirism. Existing arrow
 and periodic scenarios remain covered. Mouse-facing locomotion and the large
 greybox map are available in the separate G01 arena described above.
-
-Rendered milestone screenshots and their source context are preserved in the
-[visual development history](docs/development-history/README.md).
 
 ## Technology
 
