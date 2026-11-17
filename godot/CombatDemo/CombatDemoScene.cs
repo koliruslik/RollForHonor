@@ -15,7 +15,6 @@ namespace RollForHonor.Godot.CombatDemo;
 public partial class CombatDemoScene : Node3D
 {
     private static readonly ResourceId Mana = new("mana");
-    private static readonly PackedScene ProjectileScene = GD.Load<PackedScene>("res://CombatDemo/Projectile.tscn");
     private readonly Queue<string> _journalEntries = new();
     private GameBootstrap _runtime = null!;
     private Label _state = null!;
@@ -28,6 +27,8 @@ public partial class CombatDemoScene : Node3D
     private SpinBox _tickInterval = null!;
     private Button _nextTick = null!;
     private TimeSpan _nextTickAt;
+    private OptionButton _deliveryChoice = null!;
+    private IAttackDelivery[] _deliveries = null!;
 
     /// <summary>Gets how many scene-wide tick rounds the host has requested.</summary>
     public int TickRounds { get; private set; }
@@ -51,6 +52,7 @@ public partial class CombatDemoScene : Node3D
         Node? ancestor = GetParent();
         while (ancestor is not null && ancestor is not GameBootstrap) ancestor = ancestor.GetParent();
         _runtime = ancestor as GameBootstrap ?? throw new InvalidOperationException("Run this scene through Bootstrap.tscn.");
+        _deliveries = [new ProjectileDelivery(), new MeleeDelivery(() => _runtime.GameTime)];
         Source = GetNode<DemoCombatant>("Source");
         Target = GetNode<DemoCombatant>("Target");
         SourceEditor = GetNode<DemoStatsPanel>("HUD/PlayerPanel/Rows/Scroll/Stats");
@@ -61,6 +63,11 @@ public partial class CombatDemoScene : Node3D
         _journal = GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal");
         _fire = GetNode<Button>("HUD/Panel/Rows/Fire");
         _enemyFire = GetNode<Button>("HUD/Panel/Rows/EnemyFire");
+        _deliveryChoice = GetNode<OptionButton>("HUD/Panel/Rows/DeliveryControls/Delivery");
+        _deliveryChoice.AddItem("Projectile", 0);
+        _deliveryChoice.AddItem("Melee", 1);
+        GetNode<CheckButton>("HUD/Panel/Rows/DeliveryControls/NearTarget").Toggled += near =>
+            Target.GlobalPosition = near ? Source.GlobalPosition + Vector3.Right * 1.5f : new Vector3(4, 0.9f, 0);
         _autoTicks = GetNode<CheckButton>("HUD/Panel/Rows/TickControls/Auto");
         _tickInterval = GetNode<SpinBox>("HUD/Panel/Rows/TickControls/Interval");
         _nextTick = GetNode<Button>("HUD/Panel/Rows/NextTick");
@@ -113,23 +120,20 @@ public partial class CombatDemoScene : Node3D
         var source = enemy ? Target : Source;
         var target = enemy ? Source : Target;
         var editor = enemy ? TargetEditor : SourceEditor;
-        var definition = new AttackDefinition("demo-arrow", editor.BuildAttack(), TimeSpan.FromSeconds(0.8), [new(Mana, 10)],
-            new(AttackRepeatPolicy.OncePerTarget, AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact, TimeSpan.FromSeconds(3)));
+        var delivery = _deliveries[_deliveryChoice.GetSelectedId()];
+        var definition = new AttackDefinition(delivery.Key, editor.BuildAttack(delivery.Tags),
+            TimeSpan.FromSeconds(0.8), [new(Mana, 10)], delivery.Rules);
         var start = _runtime.Attacks.Start(Guid.NewGuid(), source.CombatantId, definition);
         AppendJournal($"[b]{(enemy ? "Enemy" : "Player")} launch[/b]: {start.Status}" +
-            (start.Attack is not null ? $" | cost 10 mana | damage {definition.Attack.Damage.Single().Dice} + {definition.Attack.Damage.Single().FlatDamage}" : " | no new cost or projectile") + "\n");
+            (start.Attack is not null ? $" | cost 10 mana | damage {definition.Attack.Damage.Single().Dice} + {definition.Attack.Damage.Single().FlatDamage}" : " | no new cost or attack visual") + "\n");
         if (start.Attack is { } attack)
         {
-            var projectile = ProjectileScene.Instantiate<DemoProjectile>();
             var direction = (target.GlobalPosition - source.GlobalPosition).Normalized();
-            var origin = source.GlobalPosition + direction * 0.9f;
             var input = _runtime.CombatState.Read(source.CombatantId, target.CombatantId);
-            projectile.Initialize(attack, direction * 6,
+            delivery.Spawn(source, direction, attack,
                 contact => ShowContact(contact, input, enemy, attack),
                 contacted => input = _runtime.CombatState.Read(source.CombatantId, contacted.CombatantId));
-            AddChild(projectile);
-            projectile.GlobalPosition = origin;
-            _result.Text = enemy ? "Enemy arrow launched" : "Player arrow launched";
+            _result.Text = $"{(enemy ? "Enemy" : "Player")}: {(_deliveryChoice.GetSelectedId() == 0 ? "arrow" : "melee window")}";
         }
         else _result.Text = $"Launch: {start.Status}";
         RefreshState();
@@ -196,8 +200,9 @@ public partial class CombatDemoScene : Node3D
     private void RefreshState()
     {
         var read = _runtime.CombatState.Read(Source.CombatantId, Target.CombatantId);
-        var player = _runtime.CombatState.ReadForStart(Source.CombatantId, "demo-arrow", Guid.NewGuid());
-        var enemy = _runtime.CombatState.ReadForStart(Target.CombatantId, "demo-arrow", Guid.NewGuid());
+        var key = _deliveries[_deliveryChoice.GetSelectedId()].Key;
+        var player = _runtime.CombatState.ReadForStart(Source.CombatantId, key, Guid.NewGuid());
+        var enemy = _runtime.CombatState.ReadForStart(Target.CombatantId, key, Guid.NewGuid());
         var playerMana = player.Resources.Single(value => value.Resource == Mana).Amount;
         var enemyMana = enemy.Resources.Single(value => value.Resource == Mana).Amount;
         var playerCooldown = Math.Max(0, (player.ReadyAt - _runtime.GameTime).TotalSeconds);

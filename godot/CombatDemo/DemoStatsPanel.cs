@@ -66,10 +66,11 @@ public partial class DemoStatsPanel : VBoxContainer
             .Select(type => new ResistanceValue(type, (decimal)_numbers[type.ToString()].Value / 100)).ToArray(), current.Effects);
 
     /// <summary>Builds the next attack's immutable fixture payload from the current weapon/effect selections.</summary>
+    /// <param name="tags">Delivery tags supplied by the selected physical strategy.</param>
     /// <returns>A d20 attack with one configured typed damage component and selected existing statuses.</returns>
-    public AttackPayload BuildAttack() => new(new(1, 20), Value("Modifier"), NaturalOutcomeShiftRules.Standard,
+    public AttackPayload BuildAttack(AttackTags tags = AttackTags.Projectile) => new(new(1, 20), Value("Modifier"), NaturalOutcomeShiftRules.Standard,
         [new(new(Value("DiceCount"), Value("DiceSides")), Value("FlatDamage"), (DamageType)_damageType.GetSelectedId())],
-        DemoEffectCatalog.Select(_burning.ButtonPressed, _bleeding.ButtonPressed), AttackTags.Projectile,
+        DemoEffectCatalog.Select(_burning.ButtonPressed, _bleeding.ButtonPressed), tags,
         DemoEffectCatalog.Behaviors(_lifesteal.ButtonPressed, (decimal)_numbers["LifestealPercent"].Value / 100));
 
     private int Value(string key) => checked((int)_numbers[key].Value);

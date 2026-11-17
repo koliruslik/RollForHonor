@@ -46,3 +46,21 @@ captures. Effects retain captured sources; the demo has no duration/expiry polic
 Dice totals and resulting HP vary between captures and runs.
 
 ![Vampirism and actual HP changes](2026-11-17/06-lifesteal-impact.png)
+
+## 2026-11-17 — C10 melee hitbox/hurtbox slice
+
+Captured with Godot 4.7.2 .NET and the Compatibility renderer at 1920×1080,
+from local uncommitted `feature/c10-melee-hitbox-and-hurtbox` work based on I06
+merge `b27e2b3`. Earlier screenshots remain unchanged.
+
+| Capture | Observed state |
+| --- | --- |
+| [Melee window](2026-11-17/09-melee-hitbox-window.png) | Melee delivery selected, enemy moved into range, visible swing/range indicator and committed damage/healing/status facts |
+| [Window finished](2026-11-17/10-melee-window-finished.png) | The timed swing has closed and its visual is removed; committed state remains |
+
+The swing is a greybox timed test visual, not a final animation rig. These
+images demonstrate the close-range fixture; additional engine tests verify
+multi-target contacts and reentry admission. The future greybox map, mouse-facing
+movement and terrain-following projectile behavior are not implemented here.
+
+![Melee contact window](2026-11-17/09-melee-hitbox-window.png)
