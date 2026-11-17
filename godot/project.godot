@@ -24,10 +24,6 @@ window/stretch/aspect="expand"
 
 project/assembly_name="RollForHonor.Godot"
 
-[editor]
-
-run/main_run_args="--run-tests --quit-on-finish"
-
 [physics]
 
 3d/physics_engine="Jolt Physics"

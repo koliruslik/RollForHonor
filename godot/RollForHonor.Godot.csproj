@@ -1,6 +1,7 @@
 <Project Sdk="Godot.NET.Sdk/4.7.2">
   <ItemGroup>
     <ProjectReference Include="..\src\RollForHonor.Application\RollForHonor.Application.csproj" />
+    <ProjectReference Include="..\src\RollForHonor.Infrastructure\RollForHonor.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Chickensoft.GoDotTest" Version="2.0.47" />
