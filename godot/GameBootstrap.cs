@@ -4,6 +4,9 @@ using Chickensoft.GoDotTest;
 using Godot;
 using RollForHonor.Application.Combat.Services;
 using RollForHonor.Domain.Combat.Damage.Configuration;
+using RollForHonor.Domain.Combat.Damage.Services;
+using RollForHonor.Domain.Combat.Resolution.Services;
+using RollForHonor.Domain.Combat.Resolution.Services.Steps;
 using RollForHonor.Domain.Resources.Services;
 using RollForHonor.Godot.Diagnostics;
 using RollForHonor.Infrastructure.Combat;
@@ -17,6 +20,7 @@ namespace RollForHonor.Godot;
 public partial class GameBootstrap : Node3D
 {
     private AttackInitiationService _attacks;
+    private PeriodicEffectService _ticks;
     private TimeSpan _gameTime;
 #if DEBUG
     private TestEnvironment _testEnvironment;
@@ -27,6 +31,9 @@ public partial class GameBootstrap : Node3D
     /// <summary>Gets the shared launch service after this bootstrap enters the tree.</summary>
     /// <exception cref="InvalidOperationException">The bootstrap has not entered the tree.</exception>
     public AttackInitiationService Attacks => _attacks ?? throw new InvalidOperationException("Combat runtime is not initialized.");
+    /// <summary>Gets the periodic use case after bootstrap enters the tree; scheduling remains with the caller.</summary>
+    /// <exception cref="InvalidOperationException">The bootstrap has not entered the tree.</exception>
+    public PeriodicEffectService Ticks => _ticks ?? throw new InvalidOperationException("Combat runtime is not initialized.");
     /// <summary>Gets accumulated game time; engine delta already accounts for time scale and paused trees do not advance it.</summary>
     public TimeSpan GameTime => _gameTime;
     /// <summary>Gets or sets whether runtime combat reports are enabled when the session is composed.</summary>
@@ -48,6 +55,9 @@ public partial class GameBootstrap : Node3D
         _attacks = new AttackInitiationService(CombatState,
             new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
             impacts, () => _gameTime, diagnostics);
+        _ticks = new PeriodicEffectService(CombatState,
+            new CombatPipeline([new RawDamageStep(new RawDamageResolver()),
+                new DefenseStep(new DefenseResolver(new HitMagnitudeArmorFormula()))]), () => new RandomDiceRoller());
     }
 
     /// <inheritdoc />

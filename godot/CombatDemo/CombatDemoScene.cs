@@ -5,6 +5,7 @@ using System.Linq;
 using Godot;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
+using RollForHonor.Domain.Combat.Effects.Models;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Resources.Models;
 
@@ -23,6 +24,13 @@ public partial class CombatDemoScene : Node3D
     private RichTextLabel _journal = null!;
     private Button _fire = null!;
     private Button _enemyFire = null!;
+    private CheckButton _autoTicks = null!;
+    private SpinBox _tickInterval = null!;
+    private Button _nextTick = null!;
+    private TimeSpan _nextTickAt;
+
+    /// <summary>Gets how many scene-wide tick rounds the host has requested.</summary>
+    public int TickRounds { get; private set; }
 
     /// <summary>Gets the player body after scene initialization.</summary>
     public DemoCombatant Source { get; private set; } = null!;
@@ -53,6 +61,12 @@ public partial class CombatDemoScene : Node3D
         _journal = GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal");
         _fire = GetNode<Button>("HUD/Panel/Rows/Fire");
         _enemyFire = GetNode<Button>("HUD/Panel/Rows/EnemyFire");
+        _autoTicks = GetNode<CheckButton>("HUD/Panel/Rows/TickControls/Auto");
+        _tickInterval = GetNode<SpinBox>("HUD/Panel/Rows/TickControls/Interval");
+        _nextTick = GetNode<Button>("HUD/Panel/Rows/NextTick");
+        _nextTick.Pressed += () => NextTick();
+        _autoTicks.Toggled += enabled => { _nextTick.Disabled = enabled; ResetTickDeadline(); };
+        _tickInterval.ValueChanged += _ => ResetTickDeadline();
         var player = new CombatantSnapshot(Source.CombatantId, 100, 100, 0, 10, [], []);
         var enemy = new CombatantSnapshot(Target.CombatantId, 50, 50, 5, 12, [], []);
         _runtime.CombatState.AddCombatant(player, [new(Mana, 100)]);
@@ -65,7 +79,7 @@ public partial class CombatDemoScene : Node3D
         _enemyFire.Pressed += () => FireFromInput(true);
         GetNode<Button>("HUD/Panel/Rows/Restart").Pressed += () => GetTree().ReloadCurrentScene();
         GetNode<Button>("HUD/JournalPanel/Rows/Clear").Pressed += () => { _journalEntries.Clear(); _journal.Text = ""; };
-        AppendJournal("Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nBurning/Bleeding are application-only test statuses; vampirism and scheduled ticks are deferred.\n");
+        AppendJournal("Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nVampirism heals from actual opponent HP loss, rounded up. Next tick advances all living recipients; Auto uses game time.\n");
         RefreshState();
     }
 
@@ -111,7 +125,7 @@ public partial class CombatDemoScene : Node3D
             var origin = source.GlobalPosition + direction * 0.9f;
             var input = _runtime.CombatState.Read(source.CombatantId, target.CombatantId);
             projectile.Initialize(attack, direction * 6,
-                contact => ShowContact(contact, input, enemy),
+                contact => ShowContact(contact, input, enemy, attack),
                 contacted => input = _runtime.CombatState.Read(source.CombatantId, contacted.CombatantId));
             AddChild(projectile);
             projectile.GlobalPosition = origin;
@@ -133,7 +147,47 @@ public partial class CombatDemoScene : Node3D
     }
 
     /// <inheritdoc />
-    public override void _Process(double delta) => RefreshState();
+    public override void _Process(double delta)
+    {
+        if (GetTree().Paused) return;
+        if (_autoTicks.ButtonPressed)
+        {
+            var now = _runtime.GameTime;
+            var interval = TimeSpan.FromSeconds(_tickInterval.Value);
+            while (now >= _nextTickAt)
+            {
+                _nextTickAt += interval;
+                NextTick();
+            }
+        }
+        RefreshState();
+    }
+
+    /// <summary>Ticks each periodic instance present on living scene participants at round start, one transaction per effect.</summary>
+    /// <returns>The independent results; an empty list means no eligible statuses existed.</returns>
+    /// <remarks>Replacement/removal or defeat before an individual tick is rechecked by Application. No launch cost or d20 runs.</remarks>
+    public IReadOnlyList<PeriodicTickResult> NextTick()
+    {
+        TickRounds++;
+        var pending = new[] { Source, Target }.Select(actor =>
+            _runtime.CombatState.Read(actor.CombatantId, actor.CombatantId).Target)
+            .Where(actor => !actor.IsDefeated)
+            .SelectMany(actor => actor.Effects.Where(effect => effect.Definition is PeriodicDamageEffectDefinition)
+                .Select(effect => (actor.Id, effect.Id))).ToArray();
+        var results = new List<PeriodicTickResult>();
+        AppendJournal($"\n[b]Tick round {TickRounds}[/b] | {pending.Length} periodic instances\n");
+        foreach (var (targetId, effectId) in pending)
+        {
+            var result = _runtime.Ticks.Tick(targetId, effectId);
+            results.Add(result);
+            var sourceName = result.Request?.SourceId == Source.CombatantId ? "Player (captured)" : "Enemy (captured)";
+            AppendJournal(DemoCombatJournal.FormatTick(result, sourceName, targetId == Source.CombatantId ? "Player" : "Enemy"));
+        }
+        RefreshState();
+        return results;
+    }
+
+    private void ResetTickDeadline() => _nextTickAt = _runtime.GameTime + TimeSpan.FromSeconds(_tickInterval.Value);
 
     private void FireFromInput(bool enemy)
     {
@@ -158,10 +212,10 @@ public partial class CombatDemoScene : Node3D
     }
     private static string Live(CombatantSnapshot actor) => $"Live HP {actor.Health}/{actor.MaxHealth} | Statuses: " +
         (actor.Effects.Count == 0 ? "none" : string.Join(", ", actor.Effects.Select(effect => DemoEffectCatalog.Name(effect.Definition.Id))));
-    private void ShowContact(AttackContactResult contact, CombatStateRead input, bool enemy)
+    private void ShowContact(AttackContactResult contact, CombatStateRead input, bool enemy, AttackInstance attack)
     {
         LastContact = contact;
-        AppendJournal(DemoCombatJournal.Format(contact, input, enemy ? "Enemy" : "Player", enemy ? "Player" : "Enemy"));
+        AppendJournal(DemoCombatJournal.Format(contact, input, enemy ? "Enemy" : "Player", enemy ? "Player" : "Enemy", attack.Attack));
         if (contact.Impact is { IsCommitted: true, Outcome: ResolvedCombat resolved })
         {
             CommittedImpacts++;

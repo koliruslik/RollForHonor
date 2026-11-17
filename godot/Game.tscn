@@ -116,7 +116,7 @@ font_size = 42
 offset_left = 400.0
 offset_top = 20.0
 offset_right = 1360.0
-offset_bottom = 270.0
+offset_bottom = 365.0
 theme = SubResource("UITheme")
 
 [node name="Rows" type="VBoxContainer" parent="HUD/Panel"]
@@ -145,6 +145,30 @@ focus_mode = 0
 layout_mode = 2
 text = "Enemy attacks [E] | 10 mana"
 focus_mode = 0
+
+[node name="NextTick" type="Button" parent="HUD/Panel/Rows"]
+layout_mode = 2
+text = "Next tick | all active periodic effects"
+focus_mode = 0
+
+[node name="TickControls" type="HBoxContainer" parent="HUD/Panel/Rows"]
+layout_mode = 2
+
+[node name="Auto" type="CheckButton" parent="HUD/Panel/Rows/TickControls"]
+layout_mode = 2
+text = "Automatic ticks"
+focus_mode = 0
+
+[node name="Label" type="Label" parent="HUD/Panel/Rows/TickControls"]
+layout_mode = 2
+text = "Interval (game seconds)"
+
+[node name="Interval" type="SpinBox" parent="HUD/Panel/Rows/TickControls"]
+layout_mode = 2
+min_value = 0.1
+max_value = 10.0
+step = 0.1
+value = 1.0
 
 [node name="Restart" type="Button" parent="HUD/Panel/Rows"]
 layout_mode = 2
