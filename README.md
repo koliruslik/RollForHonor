@@ -815,10 +815,36 @@ not advance the clock. Configure the bootstrap's `CombatDiagnosticsEnabled`
 and `DiagnosticView` before tree entry to send optional reports to Godot Output.
 Diagnostics default to off and are separate from the future player journal.
 
-Normal Play now starts the runtime without automatically running tests or
-quitting. There is no combat content scene yet. When `Game.tscn` is supplied,
-bootstrap loads it as a child so the session remains alive. Movement, physical
-contacts, display widgets and the two-object combat scene are later work.
+Normal Play starts the runtime without automatically running tests or quitting.
+Bootstrap loads `Game.tscn` as a child so the session remains alive.
+
+### Two-object combat scene
+
+Build the solution, open `godot/project.godot` in Godot .NET and press **F5**
+to run the project through `Bootstrap.tscn`. Open `Game.tscn` to edit its
+objects visually; it depends on its parent bootstrap and cannot run standalone
+with F6.
+
+The scene includes an archer, training target, floor, camera, lighting and a
+small test HUD. Press **Space** or **Fire** to launch a projectile: a successful
+launch costs 10 of the initial 100 mana and starts a 0.8-second cooldown. Failed
+launches create no projectile. Each arrow travels at 6 units per game second,
+ends at its first target/obstacle contact, or expires after 3 game seconds.
+**Restart session** reloads the bootstrap and resets both state and visuals.
+
+`DemoCombatant` maps scene bodies to session identities. `DemoProjectile`
+forwards real `Area3D.BodyEntered` callbacks to the accepted attack; moving the
+visual alone does not calculate damage. Actors use collision layer 2 and
+environment bodies layer 3; the projectile monitors both and ignores its source.
+The sample speed/shape relies on discrete overlap detection; this is not a
+high-speed projectile or swept-collision implementation.
+
+The HUD shows actual session HP/mana/cooldown and the most recent committed
+outcome, with the natural d20 in a separate field. An evaded contact can commit
+zero damage. This is a bounded test display, not the planned full action journal
+or modifier-tooltip interface. Combat rules and state mutation stay in existing
+Application/Domain services and the runtime adapter. Demo balance values are
+fixtures, not a finalized weapon or character model.
 
 Run engine tests explicitly from the repository root with the Godot .NET
 executable on PATH (or substitute its absolute path):
@@ -829,10 +855,14 @@ godot --headless --editor --path godot --quit
 godot --headless --path godot --run-tests --quit-on-finish
 ```
 
-Local I04 verification used Godot 4.7.2 .NET: all 7 engine tests and 397 .NET
+Local I05 verification used Godot 4.7.2 .NET: all 10 engine tests and 397 .NET
 tests passed. Runtime tests cover shared launch/impact state, once-only costs,
 expiry, pause and supplied-delta handling. Adapter tests also cover conflicts,
 concurrent launch attempts, duplicate receipts and rollback of invalid changes.
+Three scene integration cases additionally exercise actual projectile/target
+and obstacle contacts, cooldown refusal and missed-projectile expiry, without
+directly invoking collision callbacks. Rendered startup, flight and impact
+frames were inspected locally with the Compatibility renderer.
 
 ## Technology
 
