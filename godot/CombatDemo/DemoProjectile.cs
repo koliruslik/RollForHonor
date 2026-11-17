@@ -11,14 +11,17 @@ public partial class DemoProjectile : Area3D
     private AttackInstance? _attack;
     private Vector3 _velocity;
     private Action<AttackContactResult>? _contact;
+    private Action<DemoCombatant>? _beforeImpact;
 
     /// <summary>Configures the accepted attack before adding this projectile to the scene tree.</summary>
     /// <param name="attack">The already accepted attack; launching costs have already been committed.</param>
     /// <param name="velocity">World-space velocity in units per game second.</param>
     /// <param name="contact">Receives contact results, including ignored and environment contacts.</param>
+    /// <param name="beforeImpact">Optional observer invoked immediately before a target calculation, for journal input capture.</param>
     /// <exception cref="ArgumentNullException">The attack or callback is null.</exception>
     /// <exception cref="InvalidOperationException">The projectile is already configured or in the tree.</exception>
-    public void Initialize(AttackInstance attack, Vector3 velocity, Action<AttackContactResult> contact)
+    public void Initialize(AttackInstance attack, Vector3 velocity, Action<AttackContactResult> contact,
+        Action<DemoCombatant>? beforeImpact = null)
     {
         ArgumentNullException.ThrowIfNull(attack);
         ArgumentNullException.ThrowIfNull(contact);
@@ -26,6 +29,7 @@ public partial class DemoProjectile : Area3D
         _attack = attack;
         _velocity = velocity;
         _contact = contact;
+        _beforeImpact = beforeImpact;
     }
 
     /// <inheritdoc />
@@ -53,6 +57,7 @@ public partial class DemoProjectile : Area3D
     {
         if (IsQueuedForDeletion() || !_attack!.IsActive) return;
         if (body is DemoCombatant actor && actor.CombatantId == _attack.SourceId) return;
+        if (body is DemoCombatant combatant) _beforeImpact?.Invoke(combatant);
         var result = body is DemoCombatant target
             ? _attack.ResolveContact(target.CombatantId) : _attack.ContactEnvironment();
         _contact!(result);
