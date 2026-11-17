@@ -158,8 +158,10 @@ steps, and mandatory finalization. No universal periodic-defense rule, duration,
 scheduler, production stat aggregation, or new reapplication policy is introduced.
 Application owns active-effect selection and pipeline assembly. Its impact use
 case now invokes a supplied pipeline factory against current participant data
-and attempts commit through an adapter. Tick scheduling, runtime adapters and
-full production effect aggregation remain future work. The existing
+and attempts commit through an adapter. `PeriodicEffectService` now reads a live
+recipient, calculates one tick with its captured source and attempts atomic commit.
+The workbench supplies manual/global-interval scheduling; full production effect
+aggregation and per-effect lifetime policies remain future work. The existing
 replacement-by-definition behavior remains.
 
 Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
@@ -553,7 +555,7 @@ Damage and actual HP loss are separate: 20 remaining damage against 3 HP produce
 3-to-0 `HealthChanged`, preserving both facts. Identify health/effect recipients by ID,
 not by assuming all changes target the contacted actor. A periodic Domain resolution
 can contain damage facts with no attack roll or outcome; do not invent a d20 for it.
-Tick scheduling/committing remains separate runtime work.
+Runtime ticks use the separate `PeriodicEffectService`; no fictitious attack is created.
 
 Godot owns names, entry assembly, the separate d20 widget, damage-type colors,
 hit-quality typography and hover/click details. Only reported modifier provenance is
@@ -804,9 +806,13 @@ is not a complete character/inventory model.
 The baseline `BasicAttackPipelineFactory` composes attack rolls, hit quality,
 typed damage, defense and new-status application. Runtime coefficients are
 `0 / 0.5 / 1 / 2` for evaded/glancing/hit/critical. `NoResourceCostModifiers`
-explicitly supplies no reductions. Existing-effect behavior selection,
-equipment/stat aggregation and periodic scheduling are not wired into this
-baseline. `RandomDiceRoller` uses `Random.Shared` with a fresh trace per impact;
+explicitly supplies no reductions. The factory also selects a single supported
+`LifestealDefinition` from the payload's copied `Behaviors` collection, after
+target damage/health effects. Behavior definitions are separate from `Effects`,
+which still contains statuses to apply. Unknown behaviors and repeated lifesteal
+definitions are rejected rather than silently stacked. Equipment/stat aggregation
+and selection of arbitrary existing-status behaviors remain separate work.
+`RandomDiceRoller` uses `Random.Shared` with a fresh trace per impact or tick;
 an explicit `Random` can be supplied for reproducible non-engine tests.
 
 Cooldowns and attack lifetime share accumulated Godot game time. `_Process`
@@ -866,10 +872,35 @@ the next attack payload (test formulas: 1d4 Fire and 1d4 Slashing). Active statu
 and their application/replacement appear in the live panel and journal, with a
 captured source. The existing baseline applies selected statuses on processed
 contact, including evaded contacts; this work does not introduce a new successful-
-hit condition. Automatic ticks/duration and production bleeding rules remain
-unimplemented. Vampirism is visibly disabled until its behavior and healing rule
-are implemented in a separate effect slice. No new Domain effect rules or
-weapon-property pipeline stage are introduced here.
+hit condition. Production bleeding-specific defense rules and status durations
+remain unspecified; the fixture tick pipeline uses current armor/resistance rules.
+
+Enable **Vampirism on attack** and set its percentage (0–100) on either side.
+`LifestealEffect` heals from actual opponent HP lost after defenses and any prior
+target health adjustments, excluding overkill. Healing rounds upward to whole
+HP and finalization clamps the source to maximum HP. Target damage and source
+healing publish atomically in the same resolution. Self-damage, ticks and zero
+actual HP loss do not trigger vampirism. The behavior must be scheduled last
+among damage/target-health effects; subsequent steps must not alter that basis.
+
+**Next tick** advances one global workbench round: each periodic instance on
+living participants is attempted once, as a separate transaction with fresh
+recipient state, dice and resolution identity. Source state remains captured
+at application, even after source death. Removed/replaced/uncaptured instances
+and defeated recipients are rejected before dice. Ticks do not reroll d20,
+charge mana, restart cooldowns or trigger vampirism. Conflicts return without
+hidden retries; a later round is a new attempt, not a replay of the failed one.
+
+Enable **Automatic ticks** to run those same rounds at the selected interval
+(default 1 game second). Manual ticking is disabled while automatic mode is on.
+Mode/interval changes restart the deadline; game-time pause holds it, and elapsed
+intervals are processed in order. This is a scene-wide test clock, not individual
+effect application-time scheduling. Statuses have no automatic expiry in this
+slice and remain until replacement/reset; defeated recipients stop ticking and
+can resume if explicitly restored through the editor. The journal identifies
+each tick and its captured inputs while keeping the last attack's d20 display.
+`PeriodicTickResult` returns these facts directly; it does not masquerade as an
+attack diagnostic report. No weapon-property pipeline stage is introduced.
 
 Run engine tests explicitly from the repository root with the Godot .NET
 executable on PATH (or substitute its absolute path):
@@ -880,7 +911,7 @@ godot --headless --editor --path godot --quit
 godot --headless --path godot --run-tests --quit-on-finish
 ```
 
-Local expanded I05 verification used Godot 4.7.2 .NET: all 14 engine tests and 399 .NET
+Local I06 verification used Godot 4.7.2 .NET: all 17 engine tests and 425 .NET
 tests passed. Runtime tests cover shared launch/impact state, once-only costs,
 expiry, pause and supplied-delta handling. Adapter tests also cover conflicts,
 concurrent launch attempts, duplicate receipts and rollback of invalid changes.
@@ -891,6 +922,13 @@ validation, without directly invoking collision callbacks. Two adapter cases
 verify explicit host edits, preserved bookkeeping and stale-proposal rejection.
 Rendered Full HD workbench and exchanged-attack frames were inspected locally
 with the Compatibility renderer.
+I06 adds 14 Domain cases for healing basis, overkill, rounding, defenses, target
+adjustments, self-damage and immutable content; 12 Application cases verify
+atomic lifesteal composition and independent periodic attempts, captured/dead
+sources, fresh defenses, invalid instances, conflicts and used-dice rejection.
+Three new engine cases exercise real-impact vampirism, manual ticks after source
+death, automatic rounds, pause and interval/mode changes. New rendered captures
+show healing and both tick modes in the visual history.
 
 Rendered milestone screenshots and their source context are preserved in the
 [visual development history](docs/development-history/README.md).
