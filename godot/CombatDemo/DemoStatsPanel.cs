@@ -16,6 +16,7 @@ public partial class DemoStatsPanel : VBoxContainer
     private OptionButton _damageType = null!;
     private CheckBox _burning = null!;
     private CheckBox _bleeding = null!;
+    private CheckBox _lifesteal = null!;
 
     /// <summary>Raised when the user explicitly applies all draft state values, including current HP.</summary>
     public event Action? ApplyRequested;
@@ -35,7 +36,7 @@ public partial class DemoStatsPanel : VBoxContainer
         AddNumber("Evasion", "Evasion", -10000, 10000, initial.Evasion);
         AddNumber("Modifier", "Attack modifier", -1000, 1000, modifier);
         AddNumber("DiceCount", "Damage dice count", 1, 20, 1);
-        AddNumber("DiceSides", "Damage die sides", 1, 1000, 6);
+        AddNumber("DiceSides", "Damage die sides", 2, 1000, 6);
         AddNumber("FlatDamage", "Flat damage", -10000, 10000, flatDamage);
         _damageType = new OptionButton { Name = "DamageType" };
         foreach (var type in Enum.GetValues<DamageType>()) _damageType.AddItem(type.ToString(), (int)type);
@@ -43,13 +44,14 @@ public partial class DemoStatsPanel : VBoxContainer
         AddChild(new Label { Text = "Resistance % | negative = weakness" });
         foreach (var type in Enum.GetValues<DamageType>())
             AddNumber(type.ToString(), type.ToString(), -1000, 100, (double)(initial.Resistances.SingleOrDefault(value => value.Type == type)?.Value ?? 0) * 100);
-        _burning = new CheckBox { Name = "Burning", Text = "Burning on contact (apply only)" };
-        _bleeding = new CheckBox { Name = "Bleeding", Text = "Bleeding on contact (apply only)" };
+        _burning = new CheckBox { Name = "Burning", Text = "Burning on contact" };
+        _bleeding = new CheckBox { Name = "Bleeding", Text = "Bleeding on contact" };
         AddChild(_burning);
         AddChild(_bleeding);
-        AddChild(new CheckBox { Text = "Vampirism - next effect branch", Disabled = true,
-            TooltipText = "Requires production effect behavior and a selected healing rule." });
-        AddChild(new Label { Text = "Test statuses: 1d4 Fire / Slashing.\nNo automatic ticks yet. Contact includes evasion.",
+        _lifesteal = new CheckBox { Name = "Lifesteal", Text = "Vampirism on attack" };
+        AddChild(_lifesteal);
+        AddNumber("LifestealPercent", "Vampirism %", 0, 100, 25);
+        AddChild(new Label { Text = "Ticks: 1d4 Fire / Slashing.\nNext tick / Auto: living targets only.\nStatus contact includes evasion.",
             AutowrapMode = TextServer.AutowrapMode.WordSmart });
         var apply = new Button { Text = "Apply draft stats (including HP)", Name = "Apply" };
         apply.Pressed += () => ApplyRequested?.Invoke();
@@ -67,7 +69,8 @@ public partial class DemoStatsPanel : VBoxContainer
     /// <returns>A d20 attack with one configured typed damage component and selected existing statuses.</returns>
     public AttackPayload BuildAttack() => new(new(1, 20), Value("Modifier"), NaturalOutcomeShiftRules.Standard,
         [new(new(Value("DiceCount"), Value("DiceSides")), Value("FlatDamage"), (DamageType)_damageType.GetSelectedId())],
-        DemoEffectCatalog.Select(_burning.ButtonPressed, _bleeding.ButtonPressed), AttackTags.Projectile);
+        DemoEffectCatalog.Select(_burning.ButtonPressed, _bleeding.ButtonPressed), AttackTags.Projectile,
+        DemoEffectCatalog.Behaviors(_lifesteal.ButtonPressed, (decimal)_numbers["LifestealPercent"].Value / 100));
 
     private int Value(string key) => checked((int)_numbers[key].Value);
     private void AddNumber(string key, string label, double minimum, double maximum, double value)

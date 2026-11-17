@@ -24,6 +24,9 @@ public sealed record AttackPayload
     /// <summary>Gets the effects carried by the attack.</summary>
     public IReadOnlyList<CombatEffectDefinition> Effects { get; }
 
+    /// <summary>Gets immutable behavior definitions; these are not applied as persistent recipient statuses.</summary>
+    public IReadOnlyList<AttackBehaviorDefinition> Behaviors { get; }
+
     /// <summary>Gets the classifications used by combat rules.</summary>
     public AttackTags Tags { get; }
 
@@ -36,8 +39,9 @@ public sealed record AttackPayload
     /// <param name="damage">Typed dice and flat damage components.</param>
     /// <param name="effects">Effect definitions carried by the attack.</param>
     /// <param name="tags">Known classifications used by conditional rules.</param>
+    /// <param name="behaviors">Optional behavior definitions selected and scheduled by composition.</param>
     /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
-    /// <exception cref="ArgumentException">A damage or effect collection contains a null item.</exception>
+    /// <exception cref="ArgumentException">A damage, status or behavior collection contains a null item.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="tags"/> contains an unknown flag.</exception>
     public AttackPayload(
         DiceFormula attackRoll,
@@ -45,12 +49,15 @@ public sealed record AttackPayload
         NaturalOutcomeShiftRules outcomeShiftRules,
         IReadOnlyList<DamageComponent> damage,
         IReadOnlyList<CombatEffectDefinition> effects,
-        AttackTags tags)
+        AttackTags tags, IReadOnlyList<AttackBehaviorDefinition>? behaviors = null)
     {
         ArgumentNullException.ThrowIfNull(attackRoll);
         ArgumentNullException.ThrowIfNull(damage);
         ArgumentNullException.ThrowIfNull(effects);
         ArgumentNullException.ThrowIfNull(outcomeShiftRules);
+        var behaviorValues = behaviors?.ToArray() ?? [];
+        if (behaviorValues.Any(behavior => behavior is null))
+            throw new ArgumentException("Attack behaviors cannot contain null.", nameof(behaviors));
 
         if (damage.Any(component => component is null))
         {
@@ -83,6 +90,7 @@ public sealed record AttackPayload
         OutcomeShiftRules = outcomeShiftRules;
         Damage = Array.AsReadOnly(damage.ToArray());
         Effects = Array.AsReadOnly(effects.ToArray());
+        Behaviors = Array.AsReadOnly(behaviorValues);
         Tags = tags;
     }
 }

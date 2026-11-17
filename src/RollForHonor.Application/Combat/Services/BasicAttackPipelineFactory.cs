@@ -4,13 +4,15 @@ using RollForHonor.Domain.Combat.Attacks.Services;
 using RollForHonor.Domain.Combat.Damage.Configuration;
 using RollForHonor.Domain.Combat.Damage.Services;
 using RollForHonor.Domain.Combat.Effects.Services;
+using RollForHonor.Domain.Combat.Effects.Models;
 using RollForHonor.Domain.Combat.Resolution.Services;
 using RollForHonor.Domain.Combat.Resolution.Services.Steps;
 using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Combat.State.Services;
 
 namespace RollForHonor.Application.Combat.Services;
 
-/// <summary>Composes the existing basic attack rules and new-status application without selecting extra effect behaviors.</summary>
+/// <summary>Composes basic attack rules, new-status application and explicitly selected supported attack behaviors.</summary>
 /// <remarks>Supports ordinary attack payloads; periodic tick scheduling and stat/equipment aggregation are separate consumers.</remarks>
 public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
 {
@@ -32,10 +34,16 @@ public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
 
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException">Attack or snapshot is null.</exception>
+    /// <exception cref="InvalidOperationException">A behavior is unsupported or lifesteal is specified more than once.</exception>
     public ICombatStep Create(AttackInstance attack, CombatStateSnapshot snapshot)
     {
         ArgumentNullException.ThrowIfNull(attack);
         ArgumentNullException.ThrowIfNull(snapshot);
-        return _pipeline;
+        var behaviors = attack.Attack.Behaviors;
+        if (behaviors.Count == 0) return _pipeline;
+        if (behaviors.Count != 1 || behaviors[0] is not LifestealDefinition lifesteal)
+            throw new InvalidOperationException("The basic factory supports one lifesteal behavior; stacking/unknown behaviors require explicit composition.");
+        return new CombatPipeline([_pipeline,
+            new ApplyEffectsStep([new LifestealEffect(lifesteal, new HealthStateProjector())], "AfterTargetHealthEffects")]);
     }
 }

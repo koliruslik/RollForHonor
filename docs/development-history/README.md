@@ -28,3 +28,21 @@ demonstrate automatic periodic ticks or vampirism. Dice results vary per launch.
 ### Expanded workbench after exchanged attacks
 
 ![Editable workbench combat](2026-11-17/05-workbench-combat-journal.png)
+
+## 2026-11-17 — I06 vampirism and periodic rounds
+
+Scene/engine/renderer are unchanged. These 1920×1080 viewport captures were made
+from local, uncommitted I06 work in `feature/i06-lifesteal-and-periodic-ticks`,
+based on I05 merge `09c58f2`. Older I05 captures remain unchanged.
+
+| Capture | Observed state |
+| --- | --- |
+| [Vampirism](2026-11-17/06-lifesteal-impact.png) | An injured player attacks with 50% vampirism and gains HP from actual enemy HP loss; the journal shows the calculation |
+| [Manual round](2026-11-17/07-manual-periodic-tick.png) | Next tick independently applies Burning and Bleeding damage without another d20 or mana charge |
+| [Automatic rounds](2026-11-17/08-automatic-periodic-ticks.png) | Automatic mode advances those same effects at a 0.5-game-second interval |
+
+These frames demonstrate actual tick damage, unlike the application-only I05
+captures. Effects retain captured sources; the demo has no duration/expiry policy.
+Dice totals and resulting HP vary between captures and runs.
+
+![Vampirism and actual HP changes](2026-11-17/06-lifesteal-impact.png)
