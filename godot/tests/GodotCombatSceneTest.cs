@@ -93,6 +93,122 @@ public sealed class GodotCombatSceneTest : TestClass
         finally { scene.Free(); }
     }
 
+    /// <summary>Configured vampirism heals only the actual three HP lost by an overkilled enemy.</summary>
+    /// <returns>Completes after the actual projectile contacts the enemy and the returned health changes are checked.</returns>
+    [Test]
+    public async Task VampirismHealsFromActualDamageAndIsExplainedInJournal()
+    {
+        var scene = CreateScene();
+        try
+        {
+            scene.SourceEditor.GetNode<SpinBox>("HealthRow/Health").Value = 50;
+            scene.ApplyDraft().ShouldBeTrue();
+            scene.TargetEditor.GetNode<SpinBox>("HealthRow/Health").Value = 3;
+            scene.ApplyDraft(true).ShouldBeTrue();
+            scene.SourceEditor.GetNode<SpinBox>("ModifierRow/Modifier").Value = 30;
+            scene.SourceEditor.GetNode<SpinBox>("FlatDamageRow/FlatDamage").Value = 30;
+            scene.SourceEditor.GetNode<CheckBox>("Lifesteal").ButtonPressed = true;
+            scene.SourceEditor.GetNode<SpinBox>("LifestealPercentRow/LifestealPercent").Value = 50;
+            scene.Fire();
+            await WaitForContact(scene);
+            var read = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId);
+            read.Source.Health.ShouldBe(52);
+            read.Target.Health.ShouldBe(0);
+            Balance(scene).ShouldBe(90m);
+            var journal = scene.GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal").GetParsedText();
+            journal.ShouldContain("actual opponent HP lost 3");
+            journal.ShouldContain("50 → 52");
+        }
+        finally { scene.Free(); }
+    }
+
+    /// <summary>A manual round ticks both statuses without another d20 or resource payment, even after the source dies.</summary>
+    /// <returns>Completes after physical status application and a manually requested periodic round.</returns>
+    [Test]
+    public async Task ManualRoundTicksCapturedEffectsAfterSourceDeath()
+    {
+        var scene = CreateScene();
+        try
+        {
+            PreparePeriodicTarget(scene);
+            scene.Fire();
+            await WaitForContact(scene);
+            scene.SourceEditor.GetNode<SpinBox>("HealthRow/Health").Value = 0;
+            scene.ApplyDraft().ShouldBeTrue();
+            var die = scene.GetNode<Label>("HUD/Die").Text;
+            var version = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId).Version;
+            var ticks = scene.NextTick();
+            ticks.Count.ShouldBe(2);
+            foreach (var tick in ticks)
+            {
+                tick.IsCommitted.ShouldBeTrue();
+                var resolution = ((ResolvedCombat)tick.Outcome).Resolution;
+                resolution.DiceTrace.Rolls.Count.ShouldBe(1);
+                resolution.Result.Target.AttackRoll.ShouldBeNull();
+                tick.Request.StateSnapshot.Source.Health.ShouldBe(100);
+            }
+            var after = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId);
+            after.Version.ShouldBe(version + 2);
+            after.Source.Health.ShouldBe(0);
+            scene.GetNode<Label>("HUD/Die").Text.ShouldBe(die);
+            Balance(scene).ShouldBe(90m);
+        }
+        finally { scene.Free(); }
+    }
+
+    /// <summary>Automatic rounds use game time, pause safely, reset their deadline on interval/mode changes and share manual execution.</summary>
+    /// <returns>Completes after periodic statuses are applied and both scheduling modes are verified.</returns>
+    [Test]
+    public async Task AutomaticRoundsRespectPauseIntervalAndModeChanges()
+    {
+        var scene = CreateScene();
+        try
+        {
+            PreparePeriodicTarget(scene);
+            scene.Fire();
+            await WaitForContact(scene);
+            var automatic = scene.GetNode<CheckButton>("HUD/Panel/Rows/TickControls/Auto");
+            var interval = scene.GetNode<SpinBox>("HUD/Panel/Rows/TickControls/Interval");
+            automatic.ButtonPressed = true;
+            scene.GetNode<Button>("HUD/Panel/Rows/NextTick").Disabled.ShouldBeTrue();
+            Runtime._Process(2.5);
+            scene._Process(0);
+            scene.TickRounds.ShouldBe(2);
+            var tree = TestScene.GetTree();
+            var wasPaused = tree.Paused;
+            try
+            {
+                tree.Paused = true;
+                Runtime._Process(10);
+                scene._Process(10);
+                scene.TickRounds.ShouldBe(2);
+            }
+            finally { tree.Paused = wasPaused; }
+            interval.Value = 0.5;
+            Runtime._Process(0.5);
+            scene._Process(0);
+            scene.TickRounds.ShouldBe(3);
+            automatic.ButtonPressed = false;
+            Runtime._Process(2);
+            scene._Process(0);
+            scene.TickRounds.ShouldBe(3);
+            scene.GetNode<Button>("HUD/Panel/Rows/NextTick").Disabled.ShouldBeFalse();
+            scene.NextTick();
+            scene.TickRounds.ShouldBe(4);
+        }
+        finally { scene.Free(); }
+    }
+
+    private static void PreparePeriodicTarget(CombatDemoScene scene)
+    {
+        scene.TargetEditor.GetNode<SpinBox>("MaxHealthRow/MaxHealth").Value = 500;
+        scene.TargetEditor.GetNode<SpinBox>("HealthRow/Health").Value = 500;
+        scene.ApplyDraft(true).ShouldBeTrue();
+        scene.SourceEditor.GetNode<SpinBox>("ModifierRow/Modifier").Value = 30;
+        scene.SourceEditor.GetNode<CheckBox>("Burning").ButtonPressed = true;
+        scene.SourceEditor.GetNode<CheckBox>("Bleeding").ButtonPressed = true;
+    }
+
     private GameBootstrap Runtime => TestScene.GetTree().Root.GetChildren().OfType<GameBootstrap>().Single();
     /// <summary>Edits while an arrow is in flight are used by its eventual impact, without charging again.</summary>
     [Test]

@@ -330,6 +330,46 @@ public sealed class RuntimeCombatTests : CombatDiagnosticTestBase
         Assert.Same(before.Target, rig.Read().Target);
     }
 
+    /// <summary>Factory-selected lifesteal and victim damage publish together using actual loss instead of overkill.</summary>
+    [Fact]
+    public void SelectedLifestealCommitsBothHealthTransitionsAtomically()
+    {
+        var rig = new Rig();
+        rig.State.UpdateCombatant(new(rig.Source.Id, 50, 100, 0, 0, [], []));
+        rig.State.UpdateCombatant(new(rig.Target.Id, 3, 100, 0, 0, [], []));
+        var payload = rig.Definition.Attack;
+        var definition = new AttackDefinition("vamp", new(payload.AttackRoll, 30, payload.OutcomeShiftRules,
+            [new(new(1, 2), 30, DamageType.Fire)], [], payload.Tags, [new LifestealDefinition(0.5m)]),
+            rig.Definition.Cooldown, rig.Definition.BaseCosts);
+        var attack = rig.Starts.Start(Guid.NewGuid(), rig.Source.Id, definition).Attack!;
+        var version = rig.Read().Version;
+        var impact = Resolve(attack, rig.Target.Id);
+        Assert.True(impact.IsCommitted);
+        Assert.Equal(52, rig.Read().Source.Health);
+        Assert.Equal(0, rig.Read().Target.Health);
+        Assert.Equal(version + 1, rig.Read().Version);
+        Assert.Equal(2, Assert.IsType<ResolvedCombat>(impact.Outcome).Resolution.Changes.OfType<HealthChanged>().Count());
+    }
+
+    /// <summary>Unsupported behavior composition and unspecified stacking cannot be silently ignored.</summary>
+    [Fact]
+    public void BasicFactoryRejectsUnknownOrRepeatedBehaviorDefinitions()
+    {
+        var rig = new Rig();
+        var payload = rig.Definition.Attack;
+        var factory = new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2));
+        var impacts = new CombatImpactService(rig.State, new CombatSnapshotBuilder(), factory, () => new RandomDiceRoller());
+        foreach (var behaviors in new AttackBehaviorDefinition[][]
+                 { [new UnknownBehavior()], [new LifestealDefinition(0.25m), new LifestealDefinition(0.5m)] })
+        {
+            var attack = new AttackInstance(rig.Source.Id, new(payload.AttackRoll, payload.AttackModifier,
+                payload.OutcomeShiftRules, payload.Damage, payload.Effects, payload.Tags, behaviors), impacts);
+            Assert.Throws<InvalidOperationException>(() => factory.Create(attack, new(rig.Read().Version, rig.Source, rig.Target)));
+        }
+    }
+
+    private sealed record UnknownBehavior : AttackBehaviorDefinition;
+
     private CombatImpactResult Resolve(AttackInstance attack, CombatantId target)
     {
         var result = attack.Resolve(target);
