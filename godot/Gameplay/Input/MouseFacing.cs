@@ -1,18 +1,25 @@
 using Godot;
-using RollForHonor.Godot.CombatDemo;
+using RollForHonor.Godot.Gameplay.Actors;
+using RollForHonor.Godot.Gameplay.Combat;
 
-namespace RollForHonor.Godot.Arena;
+namespace RollForHonor.Godot.Gameplay.Input;
 
 /// <summary>Projects the cursor onto visible collision surfaces and rotates only the actor's visual yaw.</summary>
-public partial class MouseFacing : Node
+public partial class MouseFacing : EntityComponent
 {
-    private const uint TerrainMask = 16;
-    private Node3D _actor;
-    private Node3D _visual;
-    private Node3D _marker;
-    private Camera3D _camera;
+    /// <inheritdoc />
+    public override ActorPhysicsStage PhysicsStage => ActorPhysicsStage.Presentation;
+
     /// <summary>Gets the last valid cursor surface position on terrain, an actor or an obstacle.</summary>
     public Vector3 Point { get; private set; }
+
+    private const uint TerrainMask = 16;
+
+    private Node3D _actor;
+    private Node3D _visual;
+
+    private Node3D _marker;
+    private Camera3D _camera;
 
     /// <summary>Connects scene-owned components after the complete scene is ready.</summary>
     /// <param name="actor">The moving actor root.</param>
@@ -35,8 +42,13 @@ public partial class MouseFacing : Node
     {
         var hit = CastCursor(screen);
         _marker.Visible = hit.Count != 0;
-        if (hit.Count == 0) return false;
+        if (hit.Count == 0)
+        {
+            return false;
+        }
+
         AimAt(hit["position"].AsVector3(), hit["normal"].AsVector3());
+
         return true;
     }
 
@@ -48,15 +60,24 @@ public partial class MouseFacing : Node
     {
         var hit = CastCursor(screen);
         point = default;
-        if (hit.Count == 0) return false;
-        if (hit["collider"].AsGodotObject() is DemoCombatant target)
-            point = target.GlobalPosition + Vector3.Up * 0.9f;
+        if (hit.Count == 0)
+        {
+            return false;
+        }
+
+        if (hit["collider"].AsGodotObject() is ICombatBody target)
+        {
+            point = target.AimPoint;
+        }
         else
         {
             point = hit["position"].AsVector3();
             if (hit["collider"].AsGodotObject() is CollisionObject3D body && (body.CollisionLayer & TerrainMask) != 0)
-                point += Vector3.Up * ArenaPlayer.ShotHeight;
+            {
+                point += Vector3.Up * ProjectileAttack.ShotHeight;
+            }
         }
+
         return true;
     }
 
@@ -72,14 +93,21 @@ public partial class MouseFacing : Node
         _marker.GlobalBasis = new(tangent, normal, tangent.Cross(normal));
         var direction = point - _actor.GlobalPosition;
         direction.Y = 0;
-        if (!direction.IsZeroApprox()) _visual.Rotation = new(0, Mathf.Atan2(-direction.X, -direction.Z), 0);
+        if (!direction.IsZeroApprox())
+        {
+            _visual.Rotation = new(0, Mathf.Atan2(-direction.X, -direction.Z), 0);
+        }
     }
 
     private global::Godot.Collections.Dictionary CastCursor(Vector2 screen)
     {
         var origin = _camera.ProjectRayOrigin(screen);
         var query = PhysicsRayQueryParameters3D.Create(origin, origin + _camera.ProjectRayNormal(screen) * 500, 22);
-        if (_actor is PhysicsBody3D source) query.Exclude = [source.GetRid()];
+        if (_actor is PhysicsBody3D source)
+        {
+            query.Exclude = [source.GetRid()];
+        }
+
         return _actor.GetWorld3D().DirectSpaceState.IntersectRay(query);
     }
 }

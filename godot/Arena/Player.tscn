@@ -1,8 +1,13 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=16 format=3]
 
-[ext_resource type="Script" path="res://Arena/ArenaPlayer.cs" id="1"]
-[ext_resource type="Script" path="res://Arena/MovementMotor.cs" id="2"]
-[ext_resource type="Script" path="res://Arena/MouseFacing.cs" id="3"]
+[ext_resource type="Script" path="res://Gameplay/Actors/Player.cs" id="1"]
+[ext_resource type="Script" path="res://Gameplay/Movement/MovementMotor.cs" id="2"]
+[ext_resource type="Script" path="res://Gameplay/Input/MouseFacing.cs" id="3"]
+
+[ext_resource type="Script" path="res://Gameplay/Actors/ActorState.cs" id="4"]
+[ext_resource type="Script" path="res://Gameplay/Input/PlayerInput.cs" id="5"]
+[ext_resource type="Script" path="res://Gameplay/Commands/CommandProcessor.cs" id="6"]
+[ext_resource type="Script" path="res://Gameplay/Combat/ProjectileAttack.cs" id="7"]
 
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.4
@@ -76,3 +81,15 @@ script = ExtResource("2")
 
 [node name="Facing" type="Node" parent="."]
 script = ExtResource("3")
+
+[node name="State" type="Node" parent="."]
+script = ExtResource("4")
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("5")
+
+[node name="Commands" type="Node" parent="."]
+script = ExtResource("6")
+
+[node name="Combat" type="Node" parent="."]
+script = ExtResource("7")
