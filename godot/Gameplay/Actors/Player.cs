@@ -32,7 +32,4 @@ public partial class Player : DynamicEntity
         Controls.ShootAtCursor(mouse.Position);
         GetViewport().SetInputAsHandled();
     }
-
-    /// <summary>Enables ordered physics after the scene has configured all actor dependencies.</summary>
-    public void CompleteConfiguration() => IsConfigured = true;
 }
