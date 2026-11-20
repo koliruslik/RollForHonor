@@ -40,6 +40,64 @@ Normal Play starts the runtime without automatically running tests or quitting.
 Bootstrap loads `Arena.tscn` as a child so the session remains alive.
 `WorkbenchBootstrap.tscn` hosts the separate `Game.tscn` combat laboratory.
 
+## Actor foundation
+
+Reusable actor behavior lives under `godot/Gameplay`, grouped by responsibility.
+`DynamicEntity : CharacterBody3D` owns combat identity and its direct child
+`EntityComponent` nodes. It assigns every component's host before calling any
+`OnComponentsInitialized` hook. Required-component lookup rejects missing or
+ambiguous matches. Scene hosts provide dependencies and enable the actor only
+after configuration; components must not use their host in their own `_Ready`.
+
+The player physics step runs these operations in order:
+
+1. `ActorState` reads authoritative defeat state and updates a small FSM.
+2. `PlayerInput` checks the actor's movement permission and converts held controls into horizontal world intent; a disallowed mode explicitly requests a horizontal stop.
+3. `CommandProcessor` consumes queued commands once in FIFO order.
+4. `MovementMotor` advances the native character body, including gravity.
+5. After the shared sequence, `Player` asks `PlayerInput` to read the cursor and update facing.
+
+Components do not independently run these steps in `_PhysicsProcess`.
+`Player` handles unhandled right clicks through its controller; a different
+controller can supply world intent and `AttackAt` commands to the same actor
+capabilities. The arena scene host supplies attack content, services and the
+projectile scene. `ProjectileAttack` depends on the launch service and combat
+state port, rather than the bootstrap or laboratory actor class. `ICombatBody`
+maps physical bodies to combat identities and aiming points.
+
+`ProjectileAttack` is a temporary implementation for the current single
+projectile attack. When attack variety is introduced, extract a convenient
+attack selection and delivery format instead of accumulating attack-specific
+branches here. That future format is not decided or implemented.
+
+`PlayerInput` owns reading movement, clicks and the continuous cursor position.
+`MouseFacing` performs the ray query, aim-point calculation, marker update and
+visual yaw rotation; it does not move the character body. The host calls
+`PlayerInput.UpdateCursorFacing` after movement so the ray uses the actor's
+updated position. No separate cursor-input component is required.
+
+`StateMachine` coordinates registered `IState` lifecycle callbacks. Changing to
+the current state does nothing; missing states, duplicate registrations and
+transitions requested recursively from lifecycle callbacks fail explicitly.
+Callback exceptions propagate without rollback. `ActorState` uses Active and
+Defeated modes to expose movement permission; it observes fresh combat state
+and can return to Active after health is restored. The controller applies that
+permission. `MovementMotor` does not read the FSM, combat state or a host movement
+flag: it executes final world-space intent once, applies gravity and collision,
+and exposes actual velocity, horizontal speed and floor contact. There is no
+separate locomotion-state enum. Zero intent brakes; `StopHorizontalMotion`
+immediately clears horizontal velocity and intent while preserving vertical
+velocity. The controller uses that explicit stop when defeated, so gravity
+continues and held movement cannot restart motion until recovery.
+Application remains authoritative for launch refusal, resources and cooldowns.
+
+`CommandProcessor.CommandLifetime` is a read-only placeholder, currently null.
+Age-based queue expiry is not implemented; its duration, clock and retry policy
+must be defined before enabling retention. Commands have no automatic retry or
+input buffer window. A refused shot is consumed once, so it cannot fire later
+when a cooldown expires. Movement can continue during shooting. There is no layered state machine or global event
+bus; launch/contact events feed the existing scene-owned journal directly.
+
 ## Greybox arena
 
 Press **F5** from `godot/project.godot` to enter the arena through
@@ -60,10 +118,11 @@ There are no textures or enemy AI in this slice.
 The camera follows position independently of facing. Physical WASD bindings are
 configured in Project Settings → Input Map (`arena_forward/back/left/right`).
 The player reads held movement actions each physics step and queues discrete
-shoot commands; `MovementMotor` handles acceleration, braking, gravity, collisions
-and Idle/Moving/Falling/Defeated transitions. `MouseFacing` handles the surface
-ray and horizontal arrow orientation. `ArenaPlayer` coordinates these components
-and calls the existing Application services. Release movement keys to brake.
+shoot commands. `PlayerInput` converts camera-relative axes into world-space
+intent; `MovementMotor` handles acceleration, braking, gravity, collisions and
+physical observations without depending on a camera or actor mode.
+`MouseFacing` handles the surface ray and horizontal arrow orientation.
+`ProjectileAttack` calls the existing Application services. Release movement keys to brake.
 Left click does not move or attack; each right-button press requests one shot.
 
 `Arena/Player.tscn` and `Arena/GreyboxMap.tscn` remain editable scene assets.
