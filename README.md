@@ -9,13 +9,16 @@ d20 attacks, typed damage, defenses and effects.
 ## Current state
 
 - WASD movement, mouse-facing, a following top-down camera and aimed projectiles.
+- One ranged enemy that detects visible players, pursues directly and fires through
+  the shared combat pipeline.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
-This is an early prototype. Arena targets are stationary; enemy AI, procedural
-maps, save/load and full equipment/stat aggregation are not implemented.
+This is an early prototype. Training targets are stationary; the enemy uses
+direct pursuit without pathfinding. Procedural maps, save/load and full
+equipment/stat aggregation are not implemented.
 
 ## Run the prototype
 
