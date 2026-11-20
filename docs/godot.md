@@ -104,7 +104,8 @@ Press **F5** from `godot/project.godot` to enter the arena through
 `Bootstrap.tscn`. The editable `Arena.tscn` contains a 120×120 colored greybox
 map, obstacles, passages, 0.4 m and 4 m terraces, ramps, five stationary targets,
 an angled orthographic following camera and a directional arrow on the player.
-There are no textures or enemy AI in this slice.
+A red Sentinel is an active ranged opponent; the five training targets remain
+stationary. The arena uses untextured greybox materials.
 
 | Input | Action |
 | --- | --- |
@@ -152,6 +153,40 @@ pass above descending terrain, hit a higher/lower target when the line is clear,
 or strike a slope/cliff that obstructs it. Expiry still ends an unobstructed
 shot after its lifetime. Terrain uses physics layer 5 (mask 16), obstacles layer
 3 (mask 4), actors layer 2 (mask 2); the projectile collision mask is 22.
+
+## Ranged enemy
+
+`Arena/Enemy.tscn` hosts an `Enemy : DynamicEntity` with the same actor-mode FSM,
+command processor, movement motor and temporary `ProjectileAttack` component
+as the player. `EnemyController` runs in the Input stage, supplies world-space
+intent and queues `AttackAt` commands. It owns no HP mutation, attack arithmetic
+or collision integration. Player and enemy use independent combat identities
+in the existing session; changing scenes resets both.
+
+The controller detects the configured living player within 18 world units using
+a three-dimensional distance and an unobstructed ray between body aiming points.
+It pursues directly at 3 units/second while beyond 7 units, turns its visual yaw
+toward the player, then stops horizontal motion and fires at the current body
+position when the Application cooldown is ready. Losing visibility, leaving
+detection range, losing the target or observing either actor's defeat stops
+movement and new attacks. Gravity continues. There is no navigation, last-known
+position memory, prediction, strafing or retreat behavior; walls can prevent
+engagement and the controller does not route around them. Obstacle routing
+and extended aggro/threat behavior are deferred.
+
+The fixture has 40 HP, armor 2 and evasion 10. Its free basic shot has attack
+modifier +5, `1d6 + 2` piercing damage, a 1.5-second source-local cooldown and a
+4-second lifetime. Red projectiles travel at 12 units/second along a fixed 3D
+launch direction and use the same swept collision and impact pipeline as player
+shots. The configured cooldown reader uses the shared session clock rather
+than an AI timer. `ThinkingEnabled` can disable decisions for isolated scene
+tests; it is enabled for ordinary play.
+
+The enemy label shows current HP and Idle/Engaged/Defeated observations. These
+labels describe controller activity and authoritative defeat, not another
+locomotion FSM. The shared journal identifies the actual attack source and
+recipient; its separate d20 shows the most recent committed impact from either
+side. A defeated actor remains as a physical body; press R to restart.
 
 ## Combat laboratory
 

@@ -1,10 +1,12 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://Arena/GreyboxArena.cs" id="1"]
 [ext_resource type="PackedScene" path="res://Arena/GreyboxMap.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://Arena/Player.tscn" id="3"]
 [ext_resource type="Script" path="res://Arena/ArenaCamera.cs" id="4"]
 [ext_resource type="PackedScene" path="res://Arena/TrainingTarget.tscn" id="5"]
+
+[ext_resource type="PackedScene" path="res://Arena/Enemy.tscn" id="6"]
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 1
@@ -48,6 +50,9 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("3")]
 position = Vector3(-10, 0.05, 24)
+
+[node name="Sentinel" parent="." instance=ExtResource("6")]
+position = Vector3(-18, 0.05, 32)
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("4")

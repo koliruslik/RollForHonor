@@ -54,6 +54,9 @@ public abstract partial class DynamicEntity : CharacterBody3D, ICombatBody
         }
     }
 
+    /// <summary>Enables ordered physics after the scene has supplied all capability dependencies.</summary>
+    public void CompleteConfiguration() => IsConfigured = true;
+
     /// <summary>Finds one required capability among this actor's direct components.</summary>
     /// <typeparam name="T">The component type required by the caller.</typeparam>
     /// <returns>The single matching component.</returns>

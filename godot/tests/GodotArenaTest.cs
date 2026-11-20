@@ -674,6 +674,7 @@ public sealed class GodotArenaTest : TestClass
         var scene = GD.Load<PackedScene>("res://Arena.tscn").Instantiate<GreyboxArena>();
         Runtime.AddChild(scene);
         scene.Player.Controls.HardwareInput = false;
+        scene.Opponent.Controls.ThinkingEnabled = false;
 
         return scene;
     }
