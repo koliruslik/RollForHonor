@@ -11,6 +11,7 @@ using RollForHonor.Godot.CombatDemo;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Input;
+using RollForHonor.Godot.Gameplay.Stats;
 
 namespace RollForHonor.Godot.Arena;
 
@@ -42,7 +43,7 @@ public partial class GreyboxArena : Node3D
         Opponent = GetNode<Enemy>("Sentinel");
         CameraRig = GetNode<ArenaCamera>("CameraRig");
 
-        _runtime.CombatState.AddCombatant(new(Player.CombatantId, 100, 100, 2, 12, [], []), [new(new("mana"), 500)]);
+        RegisterActorStats(Player);
         foreach (var target in GetTargets())
         {
             _runtime.CombatState.AddCombatant(new(target.CombatantId, 40, 40, 5, 10, [], []));
@@ -118,13 +119,20 @@ public partial class GreyboxArena : Node3D
         GetViewport().SetInputAsHandled();
     }
 
+    private void RegisterActorStats(DynamicEntity actor)
+    {
+        var stats = actor.GetRequiredComponent<ActorStats>();
+        _runtime.CombatState.AddStatCombatant(actor.CombatantId, stats.Definition.CreateProfile());
+        stats.Configure(() => _runtime.CombatState.GetStats(actor.CombatantId));
+    }
+
     private IEnumerable<DemoCombatant> GetTargets() => GetNode<Node3D>("Targets")
         .GetChildren()
         .OfType<DemoCombatant>();
 
     private void ConfigureOpponent()
     {
-        _runtime.CombatState.AddCombatant(new(Opponent.CombatantId, 40, 40, 2, 10, [], []));
+        RegisterActorStats(Opponent);
         Opponent.GetRequiredComponent<ActorState>().Configure(() =>
             _runtime.CombatState.Read(Opponent.CombatantId, Opponent.CombatantId).Source.IsDefeated);
 

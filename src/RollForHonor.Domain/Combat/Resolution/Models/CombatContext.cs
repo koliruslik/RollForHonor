@@ -23,6 +23,9 @@ public sealed record CombatContext
     public AttackOutcome? AttackOutcome { get; init; }
     /// <summary>Gets damage before defenses, if this action calculates damage.</summary>
     public DamageCalculationResult? BeforeDefenses { get; init; }
+    /// <summary>Gets whether resolved source coefficients have already been consumed by this impact.</summary>
+    public bool SourceDamageResolved { get; init; }
+
     /// <summary>Gets damage after defenses, if a defense step was included.</summary>
     public DamageCalculationResult? AfterDefenses { get; init; }
     /// <summary>Gets effect selections reported by this action, including source recipients.</summary>

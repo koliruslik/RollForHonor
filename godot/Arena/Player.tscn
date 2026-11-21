@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://Gameplay/Actors/Player.cs" id="1"]
 [ext_resource type="Script" path="res://Gameplay/Movement/MovementMotor.cs" id="2"]
@@ -8,6 +8,9 @@
 [ext_resource type="Script" path="res://Gameplay/Input/PlayerInput.cs" id="5"]
 [ext_resource type="Script" path="res://Gameplay/Commands/CommandProcessor.cs" id="6"]
 [ext_resource type="Script" path="res://Gameplay/Combat/ProjectileAttack.cs" id="7"]
+
+[ext_resource type="Script" path="res://Gameplay/Stats/ActorStats.cs" id="stats_script"]
+[ext_resource type="Resource" path="res://Arena/PlayerStats.tres" id="stats_definition"]
 
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.4
@@ -93,3 +96,7 @@ script = ExtResource("6")
 
 [node name="Combat" type="Node" parent="."]
 script = ExtResource("7")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("stats_script")
+Definition = ExtResource("stats_definition")

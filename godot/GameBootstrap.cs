@@ -59,7 +59,7 @@ public partial class GameBootstrap : Node3D
             new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
             impacts, () => _gameTime, diagnostics);
         _ticks = new PeriodicEffectService(CombatState,
-            new CombatPipeline([new RawDamageStep(new RawDamageResolver()),
+            new CombatPipeline([new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(),
                 new DefenseStep(new DefenseResolver(new HitMagnitudeArmorFormula()))]), () => new RandomDiceRoller());
     }
 

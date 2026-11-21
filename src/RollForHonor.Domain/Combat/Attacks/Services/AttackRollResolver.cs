@@ -22,8 +22,9 @@ public sealed class AttackRollResolver : IAttackRollResolver
         ArgumentNullException.ThrowIfNull(dice);
 
         var roll = dice.Roll(attack.AttackRoll);
-        var total = checked(roll.Total + attack.AttackModifier);
+        var modifier = checked(attack.AttackModifier + source.Offense.AttackModifier);
+        var total = checked(roll.Total + modifier);
 
-        return new AttackRollResult(roll, attack.AttackModifier, total);
+        return new AttackRollResult(roll, modifier, total);
     }
 }

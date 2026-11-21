@@ -6,6 +6,7 @@ using Chickensoft.GoDotTest;
 using Godot;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Godot.Arena;
+using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Movement;
@@ -70,7 +71,7 @@ public sealed class GodotEnemyTest : TestClass
             launches.Add(Runtime.GameTime);
         };
         combat.ContactCompleted += (contact, _, _) => committed += contact.Impact?.IsCommitted == true ? 1 : 0;
-        Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 100, 100, 0, 0, [], []));
+        RemoveDefenses(arena.Player);
 
         try
         {
@@ -120,6 +121,7 @@ public sealed class GodotEnemyTest : TestClass
     {
         var arena = Create(new(-10, 0.05f, 32), new(-16, 0.05f, 32));
         arena.Opponent.Controls.ThinkingEnabled = false;
+        RemoveDefenses(arena.Opponent);
         Runtime.CombatState.UpdateCombatant(new(arena.Opponent.CombatantId, 1, 40, 0, 0, [], []));
 
         try
@@ -180,6 +182,15 @@ public sealed class GodotEnemyTest : TestClass
         arena.Opponent.Position = enemyPosition;
 
         return arena;
+    }
+
+    private void RemoveDefenses(DynamicEntity actor)
+    {
+        var profile = Runtime.CombatState.GetStatProfile(actor.CombatantId);
+        var bases = profile.BaseValues
+            .With(new(StatType.Armor), 0)
+            .With(new(StatType.Evasion), 0);
+        Runtime.CombatState.UpdateStats(actor.CombatantId, new StatProfile(bases, profile.Modifiers));
     }
 
     private async Task Frames(int count)

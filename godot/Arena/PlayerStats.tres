@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActorStatDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Gameplay/Stats/ActorStatDefinition.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+MaxHealth = 100
+MaxMana = 500
+Armor = 2
+Evasion = 12
+MovementSpeed = 6.0

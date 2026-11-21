@@ -1,10 +1,12 @@
 using System.Collections.Immutable;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Application.Combat.Ports;
+using RollForHonor.Application.Combat.Services;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Changes;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Resources.Models;
+using RollForHonor.Domain.Stats;
 
 namespace RollForHonor.Infrastructure.Combat;
 
@@ -44,18 +46,120 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
         }
     }
 
+    /// <summary>Registers an actor from an immutable stat profile, initializing current HP and mana at their resolved maxima.</summary>
+    /// <param name="id">The unique participant identity.</param>
+    /// <param name="profile">Base values and external modifier entries.</param>
+    /// <exception cref="ArgumentNullException">An input is null.</exception>
+    /// <exception cref="ArgumentException">The identity is already registered.</exception>
+    /// <exception cref="OverflowException">A derived combat value or session version cannot be represented.</exception>
+    public void AddStatCombatant(CombatantId id, StatProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+        ArgumentNullException.ThrowIfNull(profile);
+        var stats = new StatCalculator().Calculate(profile);
+        var projected = new CombatStatProjector().Project(new(id, 0, 1, 0, 0, [], []), stats);
+        var actor = Copy(projected, projected.MaxHealth, projected.Effects);
+        var mana = stats.Get(new(StatType.MaxMana));
+
+        lock (_gate)
+        {
+            _data = _data with
+            {
+                Version = checked(_data.Version + 1),
+                Actors = _data.Actors.Add(id, actor),
+                Resources = _data.Resources.Add(id, ImmutableDictionary<ResourceId, decimal>.Empty.Add(new("mana"), mana)),
+                Profiles = _data.Profiles.Add(id, profile),
+                Stats = _data.Stats.Add(id, stats)
+            };
+        }
+    }
+
+    /// <summary>Reads immutable resolved attributes from the current session.</summary>
+    /// <param name="id">A stat-managed participant identity.</param>
+    /// <returns>The current resolved attribute set; current HP/mana are not part of it.</returns>
+    /// <exception cref="KeyNotFoundException">The participant is not stat-managed.</exception>
+    public StatBlock GetStats(CombatantId id)
+    {
+        lock (_gate)
+        {
+            return _data.Stats[id];
+        }
+    }
+
+    /// <summary>Reads the immutable base definition and modifier inputs for a stat-managed actor.</summary>
+    /// <param name="id">The participant identity.</param>
+    /// <returns>The current input profile, independent of current health and resources.</returns>
+    /// <exception cref="KeyNotFoundException">The participant is not stat-managed.</exception>
+    public StatProfile GetStatProfile(CombatantId id)
+    {
+        lock (_gate)
+        {
+            return _data.Profiles[id];
+        }
+    }
+
+    /// <summary>Atomically replaces stat inputs and their combat projection while retaining cooldowns, effects and receipts.</summary>
+    /// <param name="id">A registered stat-managed participant.</param>
+    /// <param name="profile">The complete new base definition and modifier list.</param>
+    /// <remarks>Increasing maxima does not heal/refill; reducing them clamps current HP/mana downward. Existing snapshots remain unchanged.</remarks>
+    /// <exception cref="ArgumentNullException">The profile is null.</exception>
+    /// <exception cref="KeyNotFoundException">The participant is not stat-managed.</exception>
+    /// <exception cref="OverflowException">Derived values or session version cannot be represented.</exception>
+    public void UpdateStats(CombatantId id, StatProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+        var stats = new StatCalculator().Calculate(profile);
+
+        lock (_gate)
+        {
+            if (!_data.Profiles.ContainsKey(id))
+            {
+                throw new KeyNotFoundException("The participant is not stat-managed.");
+            }
+
+            var actor = new CombatStatProjector().Project(_data.Actors[id], stats);
+            var mana = new ResourceId("mana");
+            var resources = _data.Resources[id].SetItem(mana,
+                Math.Min(_data.Resources[id].GetValueOrDefault(mana), stats.Get(new(StatType.MaxMana))));
+            _data = _data with
+            {
+                Version = checked(_data.Version + 1),
+                Actors = _data.Actors.SetItem(id, actor),
+                Resources = _data.Resources.SetItem(id, resources),
+                Profiles = _data.Profiles.SetItem(id, profile),
+                Stats = _data.Stats.SetItem(id, stats)
+            };
+        }
+    }
+
     /// <summary>Replaces a registered combat view for explicit host-driven edits, retaining resources and launch receipts.</summary>
     /// <param name="combatant">The complete replacement view, including the effects the host intends to retain.</param>
     /// <exception cref="ArgumentNullException">The replacement is null.</exception>
     /// <exception cref="KeyNotFoundException">The participant is not registered.</exception>
     /// <exception cref="OverflowException">The session version cannot be advanced.</exception>
-    /// <remarks>This is an explicit state edit, not the path for applying calculated combat damage.</remarks>
+    /// <exception cref="InvalidOperationException">A direct edit conflicts with a stat-managed actor's derived defenses or maximum HP.</exception>
+    /// <remarks>This is an explicit state edit, not the path for applying calculated combat damage. Stat-managed actors permit current-health/effect edits only; derived attributes must use UpdateStats, and their offensive projection is retained.</remarks>
     public void UpdateCombatant(CombatantSnapshot combatant)
     {
         ArgumentNullException.ThrowIfNull(combatant);
         lock (_gate)
         {
-            if (!_data.Actors.ContainsKey(combatant.Id)) throw new KeyNotFoundException("The participant is not registered.");
+            if (!_data.Actors.TryGetValue(combatant.Id, out var current))
+            {
+                throw new KeyNotFoundException("The participant is not registered.");
+            }
+
+            if (_data.Profiles.ContainsKey(combatant.Id))
+            {
+                if (combatant.MaxHealth != current.MaxHealth || combatant.Armor != current.Armor
+                    || combatant.Evasion != current.Evasion || !combatant.Resistances.SequenceEqual(current.Resistances))
+                {
+                    throw new InvalidOperationException("Use UpdateStats to edit derived attributes of a stat-managed actor.");
+                }
+
+                combatant = Copy(current, combatant.Health, combatant.Effects);
+            }
+
             _data = _data with
             {
                 Version = checked(_data.Version + 1),
@@ -188,13 +292,15 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
 
     private static CombatantSnapshot Copy(CombatantSnapshot actor, int health,
         IReadOnlyList<Domain.Combat.Effects.Models.CombatEffectSnapshot> effects) =>
-        new(actor.Id, health, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, effects);
+        new(actor.Id, health, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, effects, actor.Offense);
 
     private sealed record StartReceipt(CombatantId SourceId, string Key, Guid AttackId);
 
     private sealed record SessionData
     {
         internal long Version { get; init; }
+        internal ImmutableDictionary<CombatantId, StatProfile> Profiles { get; init; } = ImmutableDictionary<CombatantId, StatProfile>.Empty;
+        internal ImmutableDictionary<CombatantId, StatBlock> Stats { get; init; } = ImmutableDictionary<CombatantId, StatBlock>.Empty;
         internal ImmutableDictionary<CombatantId, CombatantSnapshot> Actors { get; init; } = ImmutableDictionary<CombatantId, CombatantSnapshot>.Empty;
         internal ImmutableDictionary<CombatantId, ImmutableDictionary<ResourceId, decimal>> Resources { get; init; } = ImmutableDictionary<CombatantId, ImmutableDictionary<ResourceId, decimal>>.Empty;
         internal ImmutableDictionary<(CombatantId, string), TimeSpan> Cooldowns { get; init; } = ImmutableDictionary<(CombatantId, string), TimeSpan>.Empty;
