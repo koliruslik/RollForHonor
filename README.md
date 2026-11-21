@@ -13,12 +13,13 @@ d20 attacks, typed damage, defenses and effects.
   the shared combat pipeline.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
+- Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
 This is an early prototype. Training targets are stationary; the enemy uses
-direct pursuit without pathfinding. Procedural maps, save/load and full
-equipment/stat aggregation are not implemented.
+direct pursuit without pathfinding. Procedural maps, save/load, inventory and
+automatic item-modifier collection are not implemented.
 
 ## Run the prototype
 
