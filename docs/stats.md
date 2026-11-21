@@ -72,8 +72,9 @@ rewrite a captured source or reroll historical results.
 CriticalChance and CriticalMultiplier are stored/calculated only. Current
 critical outcomes still follow d20 quality and existing quality coefficients;
 no second random critical roll is enabled. A future crit policy needs a separate
-gameplay decision. Item instances, slots, automatic equipment/effect modifier
-collection, affixes, save/load and inventory UI are not implemented yet.
+gameplay decision. [Item/affix models](items.md) can produce sourced modifier
+inputs. Equipment slots, automatic equipment/effect modifier collection,
+save/load and inventory UI are not implemented yet.
 
 ## Editable content
 
