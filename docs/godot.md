@@ -25,7 +25,7 @@ explicitly supplies no reductions. The factory also selects a single supported
 `LifestealDefinition` from the payload's copied `Behaviors` collection, after
 target damage/health effects. Behavior definitions are separate from `Effects`,
 which still contains statuses to apply. Unknown behaviors and repeated lifesteal
-definitions are rejected rather than silently stacked. Equipment/stat aggregation
+definitions are rejected rather than silently stacked. Automatic equipment-modifier collection
 and selection of arbitrary existing-status behaviors remain separate work.
 `RandomDiceRoller` uses `Random.Shared` with a fresh trace per impact or tick;
 an explicit `Random` can be supplied for reproducible non-engine tests.
@@ -242,7 +242,7 @@ resistance. Resistance inputs are percentages; negative values are weaknesses.
 current HP, while preserving live statuses, mana, cooldowns and receipts. Invalid
 HP bounds leave state unchanged and produce a journal entry. Weapon/effect
 selections affect the next launch; defense edits affect subsequent contacts,
-including projectiles already in flight. No equipment/stat aggregation is implied.
+including projectiles already in flight. Laboratory edits remain explicit combat-view edits; arena actors use the [shared character stat model](stats.md).
 
 The journal uses returned calculation data, independently of optional diagnostic
 output. It shows source/target names, admission and commit status, attack roll

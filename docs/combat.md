@@ -47,7 +47,9 @@ natural `20` for upgrades.
 
 Every typed weapon-damage component rolls through the supplied deterministic
 dice source and adds its flat bonus. A component cannot fall below zero. The
-configured multiplier for the resolved attack outcome is then applied to each
+basic pipeline then applies resolved source damage coefficients from the
+[character stat model](stats.md), followed by the
+configured multiplier for the resolved attack outcome applied to each
 component independently, with fractional results rounded upward before target
 defenses are evaluated. The result preserves damage types and an ordered
 calculation breakdown.
@@ -87,6 +89,7 @@ pipeline can be assembled as:
 AttackRollStep
 AttackOutcomeStep
 RawDamageStep
+SourceDamageStep (resolved character damage coefficients)
 AttackQualityStep
 ApplyEffectsStep (explicit pre-defense behaviors)
 DefenseStep
@@ -95,7 +98,9 @@ ApplyNewEffectsStep
 ```
 
 `RawDamageStep` rolls typed damage components and adds their flat bonuses without
-requiring an attack roll or outcome. `AttackQualityStep` separately applies the
+requiring an attack roll or outcome. The basic attack factory includes
+`SourceDamageStep` to consume resolved source coefficients once, without extra
+dice; neutral coefficients preserve the existing packets. `AttackQualityStep` separately applies the
 configured outcome multiplier before defenses, rounding each component upward.
 Omitting the quality step leaves damage unscaled (effectively a multiplier of
 one), even when an outcome is present. A direct-damage calculation can therefore
@@ -121,7 +126,7 @@ current recipient health still takes precedence over the captured health.
 
 Ticks reuse `CombatResolver`, `RawDamageStep`, optional explicitly chosen defense
 steps, and mandatory finalization. No universal periodic-defense rule, duration,
-scheduler, production stat aggregation, or new reapplication policy is introduced.
+scheduler, automatic equipment-modifier collection, or new reapplication policy is introduced.
 Application owns active-effect selection and pipeline assembly. Its impact use
 case now invokes a supplied pipeline factory against current participant data
 and attempts commit through an adapter. `PeriodicEffectService` now reads a live
@@ -200,7 +205,7 @@ The use case:
 `CombatStateRead` reuses existing immutable `CombatantSnapshot` views as adapter
 read data; it does not prescribe a live entity model or database. The default
 `CombatSnapshotBuilder` assembles those views and their version into
-`CombatStateSnapshot`. Full equipment/stat aggregation is not implemented.
+`CombatStateSnapshot`. Stat-managed actors are projected atomically from the [character stat model](stats.md); automatic equipment-modifier collection is not implemented.
 Pipeline composition is explicitly supplied and invoked anew per impact.
 
 `CombatImpactResult` separates the Domain outcome from `Applied`,
@@ -264,7 +269,7 @@ Hits and misses neither charge the launch again nor refund it. The service does
 not create projectiles or execute animations. It passes the definition's execution
 rules and the same game clock into the accepted attack instance. Godot supplies
 runtime delivery and state through its bootstrap; the console uses tool-local
-fixtures. Production cost-effect selection and full stat aggregation remain separate work.
+fixtures. Production cost-effect selection and automatic equipment-modifier collection remain separate work.
 
 ## Contact admission and observed lifetime
 

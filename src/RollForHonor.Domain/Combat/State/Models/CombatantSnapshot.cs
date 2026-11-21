@@ -25,6 +25,9 @@ public sealed record CombatantSnapshot
     /// <summary>Gets typed resistance values.</summary>
     public IReadOnlyList<ResistanceValue> Resistances { get; }
 
+    /// <summary>Gets immutable resolved offensive inputs; neutral for existing fixtures.</summary>
+    public CombatOffense Offense { get; }
+
     /// <summary>Gets active effect instances.</summary>
     public IReadOnlyList<CombatEffectSnapshot> Effects { get; }
 
@@ -41,6 +44,7 @@ public sealed record CombatantSnapshot
     /// <param name="evasion">Evasion available to attack rules.</param>
     /// <param name="resistances">Unique typed resistance fractions no greater than one; negatives represent weaknesses.</param>
     /// <param name="effects">Active effect instances.</param>
+    /// <param name="offense">Optional resolved offensive view; null uses neutral inputs.</param>
     /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Health bounds are invalid.</exception>
     /// <exception cref="ArgumentException">
@@ -53,7 +57,8 @@ public sealed record CombatantSnapshot
         int armor,
         int evasion,
         IReadOnlyList<ResistanceValue> resistances,
-        IReadOnlyList<CombatEffectSnapshot> effects)
+        IReadOnlyList<CombatEffectSnapshot> effects,
+        CombatOffense? offense = null)
     {
         ArgumentNullException.ThrowIfNull(id);
         ArgumentOutOfRangeException.ThrowIfLessThan(maxHealth, 1);
@@ -94,6 +99,7 @@ public sealed record CombatantSnapshot
                 nameof(effects));
         }
 
+        Offense = offense ?? CombatOffense.Neutral;
         Id = id;
         Health = health;
         MaxHealth = maxHealth;

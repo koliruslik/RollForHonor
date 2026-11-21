@@ -26,7 +26,7 @@ public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
         ArgumentNullException.ThrowIfNull(multipliers);
         _pipeline = new([
             new AttackRollStep(new AttackRollResolver()), new AttackOutcomeStep(new D20AttackOutcomePolicy()),
-            new RawDamageStep(new RawDamageResolver()), new AttackQualityStep(new AttackQualityDamageResolver(multipliers)),
+            new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(), new AttackQualityStep(new AttackQualityDamageResolver(multipliers)),
             new DefenseStep(new DefenseResolver(new HitMagnitudeArmorFormula())),
             new ApplyNewEffectsStep(new CombatEffectResolver(new ResolutionEffectInstanceIdFactory()))
         ]);

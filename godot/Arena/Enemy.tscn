@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://Gameplay/Actors/Enemy.cs" id="1"]
 [ext_resource type="Script" path="res://Gameplay/Movement/MovementMotor.cs" id="2"]
@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://Gameplay/AI/EnemyController.cs" id="5"]
 [ext_resource type="Script" path="res://Gameplay/Commands/CommandProcessor.cs" id="6"]
 [ext_resource type="Script" path="res://Gameplay/Combat/ProjectileAttack.cs" id="7"]
+
+[ext_resource type="Script" path="res://Gameplay/Stats/ActorStats.cs" id="stats_script"]
+[ext_resource type="Resource" path="res://Arena/SentinelStats.tres" id="stats_definition"]
 
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.4
@@ -97,3 +100,7 @@ billboard = 1
 font_size = 48
 pixel_size = 0.007
 text = "Sentinel"
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("stats_script")
+Definition = ExtResource("stats_definition")

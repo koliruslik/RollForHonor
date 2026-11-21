@@ -5,7 +5,7 @@ using RollForHonor.Domain.Combat.State.Models;
 namespace RollForHonor.Application.Combat.Services;
 
 /// <summary>Assembles a versioned snapshot from immutable combatant views supplied by an adapter.</summary>
-/// <remarks>Does not introduce equipment, modifier-stacking or derived-stat gameplay rules.</remarks>
+/// <remarks>The owning adapter publishes stat projections with current state at one version; this builder does not reread equipment or recalculate modifiers.</remarks>
 public sealed class CombatSnapshotBuilder : ICombatSnapshotBuilder
 {
     /// <inheritdoc />
