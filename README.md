@@ -14,6 +14,7 @@ d20 attacks, typed damage, defenses and effects.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
+- Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
