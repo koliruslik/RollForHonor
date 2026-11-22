@@ -15,12 +15,13 @@ d20 attacks, typed damage, defenses and effects.
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
+- Seven-slot equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
 This is an early prototype. Training targets are stationary; the enemy uses
-direct pursuit without pathfinding. Procedural maps, save/load, inventory and
-automatic item-modifier collection are not implemented.
+direct pursuit without pathfinding. Procedural maps, save/load, item acquisition
+and inventory/equipment UI are not implemented.
 
 ## Run the prototype
 

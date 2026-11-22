@@ -145,5 +145,6 @@ and which transitions are available belong to a future Application use case.
 `StatModifier` entries. Length-prefixed item/affix identities distinguish their
 sources even when IDs contain separators. Projected entries can be composed
 into a complete `StatProfile`; projection does not append entries to live state,
-equip an item, heal the actor or modify a historical snapshot. Equipment ownership,
-atomic loadout updates, inventory, acquisition and save/load are not implemented.
+heal the actor or modify a historical snapshot. The [equipment core](equipment.md)
+owns slot validation, canonical item ownership and atomic loadout/stat updates.
+Inventory UI, acquisition, crafting owned/equipped items and save/load remain future work.
