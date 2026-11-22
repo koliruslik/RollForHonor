@@ -2,22 +2,25 @@ using System.Collections.Immutable;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
+using RollForHonor.Application.Equipment.Ports;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Changes;
 using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Items.Equipment.Models;
+using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Resources.Models;
 using RollForHonor.Domain.Stats;
 
 namespace RollForHonor.Infrastructure.Combat;
 
-/// <summary>Owns versioned combat views, resources, cooldowns and receipts for one in-memory session.</summary>
+/// <summary>Owns versioned combat views, equipment, resources, cooldowns and receipts for one in-memory session.</summary>
 /// <remarks>
-/// Both ports share one conservative session version. Reads and publication are synchronized;
+/// Combat, initiation and equipment ports share one conservative session version. Reads and publication are synchronized;
 /// changes are prepared in immutable collections and published with one state replacement.
-/// This adapter stores the currently supported combat views, not a full character/inventory model.
+/// Item ownership supports equipment, without inventory capacity, transfers or persistence.
 /// Nothing is persisted, and a new adapter starts a separate session.
 /// </remarks>
-public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter
+public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IEquipmentStateAdapter
 {
     private readonly object _gate = new();
     private SessionData _data = new();
@@ -69,7 +72,9 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
                 Actors = _data.Actors.Add(id, actor),
                 Resources = _data.Resources.Add(id, ImmutableDictionary<ResourceId, decimal>.Empty.Add(new("mana"), mana)),
                 Profiles = _data.Profiles.Add(id, profile),
-                Stats = _data.Stats.Add(id, stats)
+                Stats = _data.Stats.Add(id, stats),
+                Equipment = _data.Equipment.Add(id, new EquipmentInventory(profile, EquipmentLoadout.Empty,
+                    ImmutableDictionary<string, ItemInstance>.Empty))
             };
         }
     }
@@ -89,6 +94,7 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
     /// <summary>Reads the immutable base definition and modifier inputs for a stat-managed actor.</summary>
     /// <param name="id">The participant identity.</param>
     /// <returns>The current input profile, independent of current health and resources.</returns>
+    /// <remarks>Includes equipment contributions. Use ReadEquipment.NonEquipmentProfile when changing only non-equipment inputs.</remarks>
     /// <exception cref="KeyNotFoundException">The participant is not stat-managed.</exception>
     public StatProfile GetStatProfile(CombatantId id)
     {
@@ -101,34 +107,26 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
     /// <summary>Atomically replaces stat inputs and their combat projection while retaining cooldowns, effects and receipts.</summary>
     /// <param name="id">A registered stat-managed participant.</param>
     /// <param name="profile">The complete new base definition and modifier list.</param>
-    /// <remarks>Increasing maxima does not heal/refill; reducing them clamps current HP/mana downward. Existing snapshots remain unchanged.</remarks>
-    /// <exception cref="ArgumentNullException">The profile is null.</exception>
+    /// <remarks>Only allowed with an empty loadout. With equipment present, use UpdateNonEquipmentStats to preserve authoritative item contributions. Increasing maxima does not heal/refill; reducing them clamps current HP/mana downward.</remarks>
+    /// <exception cref="ArgumentNullException">An input is null.</exception>
     /// <exception cref="KeyNotFoundException">The participant is not stat-managed.</exception>
+    /// <exception cref="InvalidOperationException">The actor has equipped items; use UpdateNonEquipmentStats.</exception>
     /// <exception cref="OverflowException">Derived values or session version cannot be represented.</exception>
     public void UpdateStats(CombatantId id, StatProfile profile)
     {
+        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(profile);
-        var stats = new StatCalculator().Calculate(profile);
 
         lock (_gate)
         {
-            if (!_data.Profiles.ContainsKey(id))
+            var equipment = _data.Equipment[id];
+
+            if (equipment.Loadout.Slots.Count != 0)
             {
-                throw new KeyNotFoundException("The participant is not stat-managed.");
+                throw new InvalidOperationException("Use UpdateNonEquipmentStats while items are equipped.");
             }
 
-            var actor = new CombatStatProjector().Project(_data.Actors[id], stats);
-            var mana = new ResourceId("mana");
-            var resources = _data.Resources[id].SetItem(mana,
-                Math.Min(_data.Resources[id].GetValueOrDefault(mana), stats.Get(new(StatType.MaxMana))));
-            _data = _data with
-            {
-                Version = checked(_data.Version + 1),
-                Actors = _data.Actors.SetItem(id, actor),
-                Resources = _data.Resources.SetItem(id, resources),
-                Profiles = _data.Profiles.SetItem(id, profile),
-                Stats = _data.Stats.SetItem(id, stats)
-            };
+            _data = ApplyEquipmentStats(_data, id, profile, equipment.Loadout);
         }
     }
 
@@ -138,7 +136,7 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
     /// <exception cref="KeyNotFoundException">The participant is not registered.</exception>
     /// <exception cref="OverflowException">The session version cannot be advanced.</exception>
     /// <exception cref="InvalidOperationException">A direct edit conflicts with a stat-managed actor's derived defenses or maximum HP.</exception>
-    /// <remarks>This is an explicit state edit, not the path for applying calculated combat damage. Stat-managed actors permit current-health/effect edits only; derived attributes must use UpdateStats, and their offensive projection is retained.</remarks>
+    /// <remarks>This is an explicit state edit, not the path for applying calculated combat damage. Stat-managed actors permit current-health/effect edits only; derived attributes must use UpdateStats or UpdateNonEquipmentStats, and their offensive projection is retained.</remarks>
     public void UpdateCombatant(CombatantSnapshot combatant)
     {
         ArgumentNullException.ThrowIfNull(combatant);
@@ -154,7 +152,7 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
                 if (combatant.MaxHealth != current.MaxHealth || combatant.Armor != current.Armor
                     || combatant.Evasion != current.Evasion || !combatant.Resistances.SequenceEqual(current.Resistances))
                 {
-                    throw new InvalidOperationException("Use UpdateStats to edit derived attributes of a stat-managed actor.");
+                    throw new InvalidOperationException("Use a stat-profile update to edit derived attributes of a stat-managed actor.");
                 }
 
                 combatant = Copy(current, combatant.Health, combatant.Effects);
@@ -300,6 +298,7 @@ public sealed class InMemoryCombatState : ICombatStateAdapter, IAttackInitiation
     {
         internal long Version { get; init; }
         internal ImmutableDictionary<CombatantId, StatProfile> Profiles { get; init; } = ImmutableDictionary<CombatantId, StatProfile>.Empty;
+        internal ImmutableDictionary<CombatantId, EquipmentInventory> Equipment { get; init; } = ImmutableDictionary<CombatantId, EquipmentInventory>.Empty;
         internal ImmutableDictionary<CombatantId, StatBlock> Stats { get; init; } = ImmutableDictionary<CombatantId, StatBlock>.Empty;
         internal ImmutableDictionary<CombatantId, CombatantSnapshot> Actors { get; init; } = ImmutableDictionary<CombatantId, CombatantSnapshot>.Empty;
         internal ImmutableDictionary<CombatantId, ImmutableDictionary<ResourceId, decimal>> Resources { get; init; } = ImmutableDictionary<CombatantId, ImmutableDictionary<ResourceId, decimal>>.Empty;
