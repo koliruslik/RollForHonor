@@ -27,7 +27,8 @@ it does not reread Godot nodes or independently recalculate equipment.
 
 Legacy `AddCombatant`/`UpdateCombatant` views remain available for the laboratory
 and existing diagnostic fixtures. A stat-managed actor rejects direct edits to
-derived HP maxima/defenses; change its profile through `UpdateStats`. Explicit
+derived HP maxima/defenses; change its profile through `UpdateStats` when no gear
+is equipped, or `UpdateNonEquipmentStats` to preserve equipped contributions. Explicit
 current-health/effect updates retain its resolved offensive inputs.
 
 ## Calculation
@@ -73,8 +74,9 @@ CriticalChance and CriticalMultiplier are stored/calculated only. Current
 critical outcomes still follow d20 quality and existing quality coefficients;
 no second random critical roll is enabled. A future crit policy needs a separate
 gameplay decision. [Item/affix models](items.md) can produce sourced modifier
-inputs. Equipment slots, automatic equipment/effect modifier collection,
-save/load and inventory UI are not implemented yet.
+inputs. The [equipment core](equipment.md) recomposes occupied slots atomically.
+Automatic active-effect modifier collection, save/load and inventory/equipment UI
+are not implemented yet.
 
 ## Editable content
 

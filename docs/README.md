@@ -6,6 +6,7 @@
 | --- | --- |
 | [Character stats](stats.md) | Base definitions, modifier stacking, runtime ownership and combat projection |
 | [Items and affixes](items.md) | Rarity rules, immutable items, weighted procedural generation and stat inputs |
+| [Equipment](equipment.md) | Slot rules, ownership, atomic equip/unequip and non-equipment stat inputs |
 | [Combat](combat.md) | Layer responsibilities, calculation order, damage/defense rules, launch/contact contracts and returned facts |
 | [Godot](godot.md) | Runtime composition, arena controls, physical delivery, editable laboratory, vampirism and periodic rounds |
 | [Console](console.md) | Smoke scenarios, diagnostic views/JSONL, IDE launch profiles, text duel and benchmark interpretation |

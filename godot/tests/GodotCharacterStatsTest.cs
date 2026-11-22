@@ -2,6 +2,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chickensoft.GoDotTest;
 using Godot;
+using RollForHonor.Application.Equipment.Models;
+using RollForHonor.Application.Equipment.Services;
+using RollForHonor.Domain.Items.Configuration;
+using RollForHonor.Domain.Items.Equipment.Models;
+using RollForHonor.Domain.Items.Models;
+using RollForHonor.Domain.Items.Services;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Arena;
 using RollForHonor.Godot.Gameplay.Movement;
@@ -75,6 +81,43 @@ public sealed class GodotCharacterStatsTest : TestClass
             state.Armor.ShouldBe(12);
             state.MaxHealth.ShouldBe(150);
             state.Health.ShouldBe(100);
+            arena.Player.GetRequiredComponent<ActorStats>().Definition.MovementSpeed.ShouldBe(6);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>Application equip/unequip changes the actual actor motor and combat projection without a second engine calculation.</summary>
+    /// <returns>Completes after the motor consumes both published equipment states.</returns>
+    [Test]
+    public async Task EquipmentChangesReachTheActorMotorAndCombatState()
+    {
+        var arena = Create();
+
+        try
+        {
+            var id = arena.Player.CombatantId;
+            var item = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default).Create("test-boots",
+                new ItemDefinition("boots", "Boots", ["boots"],
+                [
+                    new ItemModifier(new StatKey(StatType.MovementSpeed), StatOperation.Increased, 0.5m),
+                    new ItemModifier(new StatKey(StatType.Armor), StatOperation.Flat, 10)
+                ]), ItemRarity.Common);
+            Runtime.CombatState.RegisterOwnedItem(id, item);
+            var equipment = new EquipmentService(Runtime.CombatState);
+
+            equipment.EquipItem(id, item.Id, EquipmentSlot.Boots).ShouldBe(EquipmentChangeStatus.Applied);
+            await Frames(3);
+
+            arena.Player.GetRequiredComponent<MovementMotor>().Speed.ShouldBe(9);
+            Runtime.CombatState.Read(id, id).Source.Armor.ShouldBe(12);
+            equipment.UnequipItem(id, EquipmentSlot.Boots).ShouldBe(EquipmentChangeStatus.Applied);
+            await Frames(3);
+
+            arena.Player.GetRequiredComponent<MovementMotor>().Speed.ShouldBe(6);
+            Runtime.CombatState.Read(id, id).Source.Armor.ShouldBe(2);
             arena.Player.GetRequiredComponent<ActorStats>().Definition.MovementSpeed.ShouldBe(6);
         }
         finally
