@@ -11,7 +11,9 @@ using RollForHonor.Domain.Items.Affixes.Services;
 using RollForHonor.Domain.Items.Services;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Arena;
+using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.Gameplay.Movement;
+using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Hud;
 using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Godot.Gameplay.Targeting;
@@ -415,45 +417,49 @@ public sealed class GodotInterfaceTest : TestClass
     }
 
     /// <summary>Pinned cards grow with affixes and Alt details, shrink again and omit unused comparison action space.</summary>
-    /// <returns>Completes after native text layout settles between content changes.</returns>
+    /// <returns>Completes after isolated native card geometry stabilizes between content changes.</returns>
     [Test]
     public async Task ItemCardHeightFollowsItsVisibleContent()
     {
-        var arena = CreateArena();
+        var host = new Control { Size = new Vector2(1920, 1080), Theme = HonorTheme.Create() };
+        TestScene.AddChild(host);
+        var card = new ItemDetailsPanel();
+        host.AddChild(card);
 
         try
         {
-            var hud = arena.GetNode<ArenaHud>("Presentation");
-            hud.ToggleInventory();
-            var card = (ItemDetailsPanel)hud.FindChild("ItemDetails", true, false);
-            var owned = Runtime.CombatState.ReadEquipment(arena.Player.CombatantId).OwnedItems.Values;
+            var owned = StarterItemCatalog.Create(new(Guid.NewGuid()));
             var simple = owned.Single(item => item.Base.Id == "pilgrim-coat");
             var complex = owned.Single(item => item.Base.Id == "ashen-longbow");
             card.ShowItem(simple, EquipmentSlot.BodyArmor, false, null);
-            await Frames(2);
+            await WaitForCardLayout(card);
             var simpleHeight = card.Size.Y;
             card.SetStatus("Equipped. Stats updated.");
             card.ShowItem(complex, EquipmentSlot.Weapon, false, null);
             card.GetNode<Label>("Card/Status").Text.ShouldNotContain("Equipped");
-            await Frames(2);
+            await WaitForCardLayout(card);
             var ordinaryHeight = card.Size.Y;
             ordinaryHeight.ShouldBeGreaterThan(simpleHeight);
-            card.SetDetailed(true);
-            card._Process(0);
-            var expandedHeight = card.Size.Y;
-            expandedHeight.ShouldBeGreaterThan(ordinaryHeight);
-            card.SetDetailed(false);
-            card._Process(0);
-            card.Size.Y.ShouldBe(ordinaryHeight);
+
+            for (var cycle = 0; cycle < 2; cycle++)
+            {
+                card.SetDetailed(true);
+                await WaitForCardLayout(card);
+                card.Size.Y.ShouldBeGreaterThan(ordinaryHeight);
+                card.SetDetailed(false);
+                await WaitForCardLayout(card);
+                card.Size.Y.ShouldBe(ordinaryHeight);
+            }
+
             card.ShowComparison(complex, EquipmentSlot.Weapon);
-            await Frames(2);
+            await WaitForCardLayout(card);
             card.Size.Y.ShouldBeLessThan(ordinaryHeight);
             card.GetNode<RichTextLabel>("Card/Properties").Size.Y.ShouldBeGreaterThanOrEqualTo(
                 card.GetNode<RichTextLabel>("Card/Properties").GetContentHeight());
         }
         finally
         {
-            arena.Free();
+            host.Free();
         }
     }
 
@@ -686,5 +692,28 @@ public sealed class GodotInterfaceTest : TestClass
         {
             await TestScene.ToSignal(TestScene.GetTree(), SceneTree.SignalName.PhysicsFrame);
         }
+    }
+
+    private async Task WaitForCardLayout(ItemDetailsPanel card)
+    {
+        var properties = card.GetNode<RichTextLabel>("Card/Properties");
+        var previous = (card.Size, properties.Size, properties.GetContentHeight(), properties.GetVScrollBar().Visible);
+        var stableFrames = 0;
+
+        for (var frame = 0; frame < 60; frame++)
+        {
+            await TestScene.ToSignal(TestScene.GetTree(), SceneTree.SignalName.ProcessFrame);
+            var current = (card.Size, properties.Size, properties.GetContentHeight(), properties.GetVScrollBar().Visible);
+            stableFrames = current == previous ? stableFrames + 1 : 0;
+
+            if (stableFrames >= 3)
+            {
+                return;
+            }
+
+            previous = current;
+        }
+
+        throw new InvalidOperationException("Item card text and geometry did not stabilize within 60 process frames.");
     }
 }
