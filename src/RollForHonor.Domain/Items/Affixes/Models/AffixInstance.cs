@@ -26,6 +26,12 @@ public sealed class AffixInstance
     /// <summary>Gets the actual rolled modifier values; changing content does not change these entries.</summary>
     public IReadOnlyList<ItemModifier> Modifiers { get; }
 
+    /// <summary>Gets the captured tier intervals aligned with the rolled modifiers.</summary>
+    public IReadOnlyList<AffixModifierRange> Ranges { get; }
+
+    /// <summary>Gets the captured tier identifiers defined for this affix, independently of the selected roll.</summary>
+    public IReadOnlyList<string> AvailableTierIds { get; }
+
     internal AffixInstance(string id, AffixDefinition definition, string tierId, int qualityRoll,
         IEnumerable<ItemModifier> modifiers)
     {
@@ -36,5 +42,9 @@ public sealed class AffixInstance
         TierId = tierId;
         QualityRoll = qualityRoll;
         Modifiers = Array.AsReadOnly(modifiers.ToArray());
+        Ranges = definition.Tiers.Single(tier => tier.Id == tierId).Modifiers;
+        AvailableTierIds = Array.AsReadOnly(definition.Tiers
+            .Select(tier => tier.Id)
+            .ToArray());
     }
 }

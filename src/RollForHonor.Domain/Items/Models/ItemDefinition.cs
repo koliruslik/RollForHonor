@@ -17,13 +17,22 @@ public sealed class ItemDefinition
     /// <summary>Gets immutable implicit modifiers which do not consume affix slots.</summary>
     public IReadOnlyList<ItemModifier> Modifiers { get; }
 
+    /// <summary>Gets intrinsic weapon properties, or null for a nonweapon base.</summary>
+    public WeaponProperties? Weapon { get; }
+
+    /// <summary>Gets the inventory rectangle shared by all instances of this base.</summary>
+    public ItemFootprint Footprint { get; }
+
     /// <summary>Copies the identity, compatibility tags and implicit values of a base.</summary>
     /// <param name="id">A nonblank stable content identifier.</param>
     /// <param name="name">A nonblank display name.</param>
     /// <param name="tags">Optional nonblank compatibility tags.</param>
     /// <param name="modifiers">Optional implicit modifiers, copied in supplied order.</param>
+    /// <param name="weapon">Optional intrinsic weapon timing, cost and damage.</param>
+    /// <param name="footprint">Optional inventory dimensions; absent uses one cell.</param>
     /// <exception cref="ArgumentException">An identifier/tag is blank or a modifier is null.</exception>
-    public ItemDefinition(string id, string name, IEnumerable<string>? tags = null, IEnumerable<ItemModifier>? modifiers = null)
+    public ItemDefinition(string id, string name, IEnumerable<string>? tags = null, IEnumerable<ItemModifier>? modifiers = null,
+        WeaponProperties? weapon = null, ItemFootprint? footprint = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
@@ -40,5 +49,7 @@ public sealed class ItemDefinition
         Name = name;
         Tags = copiedTags;
         Modifiers = Array.AsReadOnly(copiedModifiers);
+        Weapon = weapon;
+        Footprint = footprint ?? ItemFootprint.SingleCell;
     }
 }

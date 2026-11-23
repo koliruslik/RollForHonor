@@ -4,3 +4,4 @@
 
 [node name="GameBoostrap" type="Node3D" unique_id=1524788538]
 script = ExtResource("1_e3r5u")
+StartupScenePath = "res://UI/Menu/MainMenu.tscn"

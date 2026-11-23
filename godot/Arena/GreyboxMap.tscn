@@ -1,31 +1,31 @@
 [gd_scene load_steps=68 format=3]
 
 [sub_resource type="StandardMaterial3D" id="Floor"]
-albedo_color = Color(0.15, 0.19, 0.23, 1)
+albedo_color = Color(0.12, 0.14, 0.15, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Court"]
-albedo_color = Color(0.22, 0.27, 0.29, 1)
+albedo_color = Color(0.19, 0.21, 0.20, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Low"]
-albedo_color = Color(0.23, 0.36, 0.29, 1)
+albedo_color = Color(0.23, 0.27, 0.22, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="High"]
-albedo_color = Color(0.25, 0.31, 0.43, 1)
+albedo_color = Color(0.24, 0.27, 0.29, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Ramp"]
-albedo_color = Color(0.48, 0.42, 0.29, 1)
+albedo_color = Color(0.32, 0.29, 0.22, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Wall"]
-albedo_color = Color(0.45, 0.48, 0.51, 1)
+albedo_color = Color(0.36, 0.37, 0.34, 1)
 roughness = 1.0
 
 [sub_resource type="StandardMaterial3D" id="Column"]
-albedo_color = Color(0.36, 0.39, 0.44, 1)
+albedo_color = Color(0.28, 0.30, 0.29, 1)
 roughness = 1.0
 
 [sub_resource type="BoxMesh" id="BaseMesh"]
@@ -603,39 +603,49 @@ shape = SubResource("Column8Shape")
 [node name="CourtyardLabel" type="Label3D" parent="."]
 position = Vector3(-10.000000, 0.150000, 30.000000)
 billboard = 1
-no_depth_test = true
+no_depth_test = false
+modulate = Color(0.7, 0.68, 0.6, 0.7)
 text = "COURTYARD"
-pixel_size = 0.02
-font_size = 44
+pixel_size = 0.015
+font_size = 24
+outline_size = 2
 
 [node name="LowLabel" type="Label3D" parent="."]
 position = Vector3(-14.000000, 0.600000, -16.000000)
 billboard = 1
-no_depth_test = true
+no_depth_test = false
+modulate = Color(0.7, 0.68, 0.6, 0.7)
 text = "LOW TERRACE 0.4m"
-pixel_size = 0.02
-font_size = 44
+pixel_size = 0.015
+font_size = 24
+outline_size = 2
 
 [node name="HighLabel" type="Label3D" parent="."]
 position = Vector3(12.000000, 4.200000, -7.000000)
 billboard = 1
-no_depth_test = true
+no_depth_test = false
+modulate = Color(0.7, 0.68, 0.6, 0.7)
 text = "HIGH TERRACE 4m"
-pixel_size = 0.02
-font_size = 44
+pixel_size = 0.015
+font_size = 24
+outline_size = 2
 
 [node name="RampLabel" type="Label3D" parent="."]
 position = Vector3(12.000000, 0.200000, 23.000000)
 billboard = 1
-no_depth_test = true
+no_depth_test = false
+modulate = Color(0.7, 0.68, 0.6, 0.7)
 text = "RAMP"
-pixel_size = 0.02
-font_size = 44
+pixel_size = 0.015
+font_size = 24
+outline_size = 2
 
 [node name="MazeLabel" type="Label3D" parent="."]
 position = Vector3(-34.000000, 0.200000, 10.000000)
 billboard = 1
-no_depth_test = true
+no_depth_test = false
+modulate = Color(0.7, 0.68, 0.6, 0.7)
 text = "WEST PASSAGES"
-pixel_size = 0.02
-font_size = 44
+pixel_size = 0.015
+font_size = 24
+outline_size = 2

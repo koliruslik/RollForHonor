@@ -20,7 +20,7 @@ immutable and existing optimistic version checks reject stale proposals.
 `CombatStatProjector` maps resolved values to concrete combat inputs. HP maxima,
 armor, evasion and d20 bonuses are floored to integers with checked conversion.
 `CombatantSnapshot` retains typed defenses and carries a small `CombatOffense`
-view for extra attack modifier and typed outgoing coefficients. It contains no
+view for extra attack modifier, typed flat attack damage and outgoing coefficients. It contains no
 universal stat dictionary, character definition or equipment references.
 `CombatSnapshotBuilder` assembles already-projected views from one adapter read;
 it does not reread Godot nodes or independently recalculate equipment.
@@ -35,7 +35,7 @@ current-health/effect updates retain its resolved offensive inputs.
 
 The supported attributes are MaxHealth, MaxMana, Armor, Evasion, MovementSpeed,
 AttackModifier, CriticalChance, CriticalMultiplier, typed Resistance and global
-or typed DamageMultiplier. Fractions use 0.2 for 20%; an outgoing coefficient
+or typed DamageMultiplier, plus typed AddedDamage. Fractions use 0.2 for 20%; an outgoing coefficient
 of 1 is neutral. Missing maxima HP and damage/critical coefficients default to
 1; other values default to 0.
 
@@ -60,14 +60,15 @@ With neutral bases, +20% global Increased, +30% Fire Increased and 20% global
 More produce a Fire coefficient of `(1 + .2 + .3) × 1.2 = 1.8`.
 
 The basic attack pipeline adds the resolved source d20 modifier to the payload's
-attack-specific modifier. After raw dice, `SourceDamageStep` applies each typed
-source coefficient once, rounding component damage upward, then hit quality and
+attack-specific modifier. After raw dice, `SourceDamageStep` adds projected typed AddedDamage to attacks
+once, then applies each typed source coefficient, rounding component damage upward, then hit quality and
 defenses run normally. Breakdown entries report the actual combined coefficient
 with a `CharacterStats:<type>` origin; they do not invent item-level attribution.
 Neutral coefficients leave existing damage and dice counts unchanged.
 
 Godot's periodic pipeline uses the same source scaling step against the effect's
-captured source snapshot; target defenses remain fresh. Stats updates do not
+captured source snapshot; AddedDamage is not added to periodic ticks. Target
+defenses remain fresh. Stats updates do not
 rewrite a captured source or reroll historical results.
 
 CriticalChance and CriticalMultiplier are stored/calculated only. Current
@@ -75,8 +76,8 @@ critical outcomes still follow d20 quality and existing quality coefficients;
 no second random critical roll is enabled. A future crit policy needs a separate
 gameplay decision. [Item/affix models](items.md) can produce sourced modifier
 inputs. The [equipment core](equipment.md) recomposes occupied slots atomically.
-Automatic active-effect modifier collection, save/load and inventory/equipment UI
-are not implemented yet.
+The [game interface](interface.md) displays live stats and equipment changes.
+Automatic active-effect modifier collection and game save/load are not implemented yet.
 
 ## Editable content
 
@@ -93,5 +94,6 @@ movement speed to the existing motor before input/movement run; it does not own
 HP or modifier arithmetic. Initial values preserve the previous game balance:
 player 100 HP, 500 mana, armor 2, evasion 12, speed 6; Sentinel 40 HP, armor 2,
 evasion 10, speed 3. Attack definitions retain their own dice, flat damage, costs
-and cooldowns. Their existing +8/+5 d20 modifiers remain attack-specific; both
+and cooldowns. The player's equipped weapon overrides intrinsic dice, costs and
+attack frequency through a launch-time provider. Their existing +8/+5 d20 modifiers remain attack-specific; both
 base source bonuses start at 0.

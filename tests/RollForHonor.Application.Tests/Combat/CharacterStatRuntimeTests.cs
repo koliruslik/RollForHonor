@@ -131,6 +131,19 @@ public sealed class CharacterStatRuntimeTests
         Assert.Equal(2, firstResult.DiceTrace.Rolls.Count);
     }
 
+    /// <summary>Typed flat damage is projected into combat and survives ordinary state publication.</summary>
+    [Fact]
+    public void ProjectionIncludesTypedAddedDamage()
+    {
+        var state = new InMemoryCombatState();
+        var id = new CombatantId(Guid.NewGuid());
+        var profile = Profile();
+        state.AddStatCombatant(id, new StatProfile(profile.BaseValues,
+            [new(new(StatType.AddedDamage, DamageType.Piercing), StatOperation.Flat, 3, "weapon-affix")]));
+        Assert.Equal(3, Assert.Single(state.Read(id, id).Source.Offense.AddedDamage).Amount);
+        Assert.Equal(3, state.GetStats(id).Get(new(StatType.AddedDamage, DamageType.Piercing)));
+    }
+
     private static StatProfile Profile() => new(new StatBlock(
     [
         new(new(StatType.MaxHealth), 100),

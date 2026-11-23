@@ -31,5 +31,8 @@ public enum StatType
     Resistance,
 
     /// <summary>Outgoing damage coefficient; global and typed increases share one additive pool.</summary>
-    DamageMultiplier
+    DamageMultiplier,
+
+    /// <summary>Typed flat damage added to attacks before source scaling, hit quality and defenses; not added to periodic ticks.</summary>
+    AddedDamage
 }

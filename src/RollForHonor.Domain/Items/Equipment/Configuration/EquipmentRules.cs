@@ -16,25 +16,34 @@ public sealed class EquipmentRules
         new(EquipmentSlot.Boots, "boots"),
         new(EquipmentSlot.Amulet, "amulet"),
         new(EquipmentSlot.RingLeft, "ring"),
-        new(EquipmentSlot.RingRight, "ring")
-    ]);
+        new(EquipmentSlot.RingRight, "ring"),
+        new(EquipmentSlot.OffHand, "offhand")
+    ], [new("quiver", "bow"), new("shield", "one-handed", true)]);
 
     private readonly ImmutableDictionary<EquipmentSlot, string> _requiredTags;
+    private readonly ImmutableArray<EquipmentPairRule> _handPairs;
 
     /// <summary>Copies one required tag for every defined slot.</summary>
     /// <param name="requiredTags">Unique defined slots and nonblank ordinal tags; all slots must be included.</param>
+    /// <param name="handPairs">Optional offhand/main-hand pairs; absent allows any tag-compatible offhand.</param>
     /// <exception cref="ArgumentNullException">The mapping is null.</exception>
-    /// <exception cref="ArgumentException">The mapping is incomplete, duplicated or contains invalid slots/tags.</exception>
-    public EquipmentRules(IEnumerable<KeyValuePair<EquipmentSlot, string>> requiredTags)
+    /// <exception cref="ArgumentException">The mapping is incomplete, duplicated or contains invalid slots/tags, or a hand pair is null.</exception>
+    public EquipmentRules(IEnumerable<KeyValuePair<EquipmentSlot, string>> requiredTags, IEnumerable<EquipmentPairRule>? handPairs = null)
     {
         ArgumentNullException.ThrowIfNull(requiredTags);
 
         _requiredTags = requiredTags.ToImmutableDictionary();
+        _handPairs = handPairs?.ToImmutableArray() ?? [];
 
         if (_requiredTags.Count != Enum.GetValues<EquipmentSlot>().Length
             || _requiredTags.Any(pair => !Enum.IsDefined(pair.Key) || string.IsNullOrWhiteSpace(pair.Value)))
         {
             throw new ArgumentException("Define a nonblank tag for every equipment slot.", nameof(requiredTags));
+        }
+
+        if (_handPairs.Any(pair => pair is null))
+        {
+            throw new ArgumentException("Hand pairing rules cannot contain null.", nameof(handPairs));
         }
     }
 
@@ -54,5 +63,32 @@ public sealed class EquipmentRules
         }
 
         return item.Base.Tags.Contains(_requiredTags[slot]);
+    }
+
+    /// <summary>Checks slot tags and the offhand's compatibility with the current main-hand weapon.</summary>
+    /// <param name="loadout">The current immutable equipment.</param>
+    /// <param name="item">The item to place.</param>
+    /// <param name="slot">The defined destination slot.</param>
+    /// <returns>True when the slot and any applicable hand pairing permit the item.</returns>
+    /// <exception cref="ArgumentNullException">The loadout or item is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The slot is undefined.</exception>
+    public bool CanEquip(EquipmentLoadout loadout, ItemInstance item, EquipmentSlot slot)
+    {
+        ArgumentNullException.ThrowIfNull(loadout);
+
+        if (!CanEquip(item, slot))
+        {
+            return false;
+        }
+
+        if (slot != EquipmentSlot.OffHand || _handPairs.IsEmpty)
+        {
+            return true;
+        }
+
+        var mainHand = loadout.GetItem(EquipmentSlot.Weapon);
+
+        return _handPairs.Any(pair => item.Base.Tags.Contains(pair.OffHandTag)
+            && (mainHand is null ? pair.AllowsEmptyMainHand : mainHand.Base.Tags.Contains(pair.MainHandTag)));
     }
 }

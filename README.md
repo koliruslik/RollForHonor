@@ -15,13 +15,16 @@ d20 attacks, typed damage, defenses and effects.
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
-- Seven-slot equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
+- Main-hand/offhand equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
+- Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
+- Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
+- A searchable game reference sharing those explanations, with owned-item, affix and recent-combat snapshots.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
 This is an early prototype. Training targets are stationary; the enemy uses
-direct pursuit without pathfinding. Procedural maps, save/load, item acquisition
-and inventory/equipment UI are not implemented.
+direct pursuit without pathfinding. Twelve authored starter items support the current
+equipment flow. Procedural maps, game save/load and enemy item drops are not implemented.
 
 ## Run the prototype
 
@@ -33,7 +36,7 @@ dotnet restore RollForHonor.sln
 dotnet build RollForHonor.sln --no-restore
 ```
 
-Open `godot/project.godot` in Godot .NET and press **F5** to enter the arena.
+Open `godot/project.godot` in Godot .NET and press **F5** for the main menu, then choose **Start Game**.
 Press **F2** to switch between the arena and combat laboratory. Switching scenes
 or restarting creates a fresh session and resets its state.
 
@@ -43,8 +46,13 @@ or restarting creates a fresh session and resets its state.
 | --- | --- |
 | WASD | Move relative to the camera |
 | Mouse | Face the cursor surface |
-| Right click | Shoot; movement can continue |
+| Right click | Shoot in the world; equip/remove items inside inventory |
+| Left click | Select/clear a world target; pin an item for comparison |
+| Alt | Show affix ranges, quality and tiers while inspecting items |
 | Mouse wheel | Zoom |
+| I / C | Toggle inventory / character stats independently; gameplay continues |
+| H / Reference | Open the searchable game reference; gameplay pauses |
+| Escape | Close an overlay or open pause/settings/navigation |
 | R | Restart the arena |
 | F2 | Open the combat laboratory |
 
@@ -75,6 +83,7 @@ requests and pushes to `main`.
 - [Documentation index and verification](docs/README.md)
 - [Combat architecture, rules and result contracts](docs/combat.md)
 - [Godot runtime, arena and combat laboratory](docs/godot.md)
+- [Game interface, equipment windows and settings](docs/interface.md)
 - [Console scenarios, IDE profiles, diagnostics and benchmarks](docs/console.md)
 
 ## Copyright and Usage

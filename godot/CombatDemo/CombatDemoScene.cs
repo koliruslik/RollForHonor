@@ -84,7 +84,7 @@ public partial class CombatDemoScene : Node3D
         TargetEditor.ApplyRequested += () => ApplyDraft(true);
         _fire.Pressed += () => FireFromInput(false);
         _enemyFire.Pressed += () => FireFromInput(true);
-        GetNode<Button>("HUD/Arena").Pressed += () => GetTree().ChangeSceneToFile("res://Bootstrap.tscn");
+        GetNode<Button>("HUD/Arena").Pressed += () => GetTree().ChangeSceneToFile("res://ArenaBootstrap.tscn");
         GetNode<Button>("HUD/Panel/Rows/Restart").Pressed += () => GetTree().ReloadCurrentScene();
         GetNode<Button>("HUD/JournalPanel/Rows/Clear").Pressed += () => { _journalEntries.Clear(); _journal.Text = ""; };
         AppendJournal("Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nVampirism heals from actual opponent HP loss, rounded up. Next tick advances all living recipients; Auto uses game time.\n");
@@ -146,7 +146,7 @@ public partial class CombatDemoScene : Node3D
     {
         if (@event is InputEventKey { Pressed: true, Echo: false, PhysicalKeycode: Key.F2 })
         {
-            GetTree().ChangeSceneToFile("res://Bootstrap.tscn");
+            GetTree().ChangeSceneToFile("res://ArenaBootstrap.tscn");
             GetViewport().SetInputAsHandled();
             return;
         }

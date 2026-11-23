@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://Gameplay/Actors/Enemy.cs" id="1"]
 [ext_resource type="Script" path="res://Gameplay/Movement/MovementMotor.cs" id="2"]
@@ -11,15 +11,17 @@
 [ext_resource type="Script" path="res://Gameplay/Stats/ActorStats.cs" id="stats_script"]
 [ext_resource type="Resource" path="res://Arena/SentinelStats.tres" id="stats_definition"]
 
+[ext_resource type="Script" path="res://Gameplay/Targeting/CombatAwareness.cs" id="awareness"]
+
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.4
 height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="Red"]
-albedo_color = Color(0.85, 0.18, 0.22, 1)
+albedo_color = Color(0.58, 0.19, 0.18, 1)
 
 [sub_resource type="StandardMaterial3D" id="Gold"]
-albedo_color = Color(1, 0.8, 0.15, 1)
+albedo_color = Color(0.69, 0.6, 0.4, 1)
 shading_mode = 0
 
 [sub_resource type="CapsuleMesh" id="BodyMesh"]
@@ -104,3 +106,6 @@ text = "Sentinel"
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("stats_script")
 Definition = ExtResource("stats_definition")
+
+[node name="CombatAwareness" type="Node" parent="."]
+script = ExtResource("awareness")

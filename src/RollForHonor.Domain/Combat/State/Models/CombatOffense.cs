@@ -12,13 +12,18 @@ public sealed class CombatOffense
     /// <summary>Gets the additive d20 modifier, separate from attack-specific modifiers.</summary>
     public int AttackModifier { get; }
 
+    /// <summary>Gets copied, nonzero typed flat attack bonuses.</summary>
+    public IReadOnlyList<DamageAmount> AddedDamage { get; }
+
     private readonly ImmutableDictionary<DamageType, decimal> _multipliers;
 
     /// <summary>Captures resolved, nonnegative outgoing damage coefficients.</summary>
     /// <param name="attackModifier">The source's additional d20 modifier.</param>
     /// <param name="multipliers">Optional unique typed coefficients; omitted types use 1.</param>
-    /// <exception cref="ArgumentException">Damage types are undefined/duplicated or coefficients are negative.</exception>
-    public CombatOffense(int attackModifier = 0, IEnumerable<KeyValuePair<DamageType, decimal>>? multipliers = null)
+    /// <param name="addedDamage">Optional nonnull typed flat attack bonuses; zero values are omitted.</param>
+    /// <exception cref="ArgumentException">Damage types are undefined/duplicated, coefficients are negative, or a flat bonus is null.</exception>
+    public CombatOffense(int attackModifier = 0, IEnumerable<KeyValuePair<DamageType, decimal>>? multipliers = null,
+        IEnumerable<DamageAmount>? addedDamage = null)
     {
         var values = multipliers?.ToImmutableDictionary() ?? ImmutableDictionary<DamageType, decimal>.Empty;
 
@@ -27,6 +32,16 @@ public sealed class CombatOffense
             throw new ArgumentException("Outgoing coefficients must be nonnegative and damage types defined.", nameof(multipliers));
         }
 
+        var flat = addedDamage?.ToArray() ?? [];
+
+        if (flat.Any(value => value is null))
+        {
+            throw new ArgumentException("Flat damage cannot contain null.", nameof(addedDamage));
+        }
+
+        AddedDamage = Array.AsReadOnly(flat
+            .Where(value => value.Amount > 0)
+            .ToArray());
         AttackModifier = attackModifier;
         _multipliers = values;
     }

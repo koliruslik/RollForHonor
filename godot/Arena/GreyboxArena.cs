@@ -8,10 +8,14 @@ using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Godot.CombatDemo;
+using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Godot.Gameplay.Stats;
+using RollForHonor.Godot.UI.Hud;
+using RollForHonor.Godot.Gameplay.Targeting;
+using RollForHonor.Domain.Items.Equipment.Models;
 
 namespace RollForHonor.Godot.Arena;
 
@@ -26,6 +30,9 @@ public partial class GreyboxArena : Node3D
 
     /// <summary>Gets the active projectile opponent after scene initialization.</summary>
     public Enemy Opponent { get; private set; }
+
+    /// <summary>Raised for observed attack contacts so presentation can retain actual results.</summary>
+    public event Action<string, AttackContactResult, CombatStateRead, string> ContactObserved;
 
     private GameBootstrap _runtime;
 
@@ -71,6 +78,7 @@ public partial class GreyboxArena : Node3D
                 TimeSpan.FromSeconds(4)));
 
         Player.GetRequiredComponent<ProjectileAttack>().Configure(_runtime.Attacks, _runtime.CombatState, attack, GD.Load<PackedScene>("res://Gameplay/Projectiles/AirborneProjectile.tscn"));
+        Player.GetRequiredComponent<ProjectileAttack>().AttackProvider = CreatePlayerAttack;
         Player.CompleteConfiguration();
 
         Player.GetRequiredComponent<ProjectileAttack>().LaunchCompleted += result => Append($"Launch: {result.Status}\n");
@@ -78,6 +86,7 @@ public partial class GreyboxArena : Node3D
 
         GetNode<Button>("HUD/Info/Rows/Workbench").Pressed += OpenWorkbench;
         GetNode<Button>("HUD/Info/Rows/Restart").Pressed += Restart;
+        ConfigurePresentation();
     }
 
     /// <inheritdoc />
@@ -124,6 +133,7 @@ public partial class GreyboxArena : Node3D
         var stats = actor.GetRequiredComponent<ActorStats>();
         _runtime.CombatState.AddStatCombatant(actor.CombatantId, stats.Definition.CreateProfile());
         stats.Configure(() => _runtime.CombatState.GetStats(actor.CombatantId));
+        actor.GetRequiredComponent<CombatAwareness>().Configure(_runtime.CombatState, () => _runtime.GameTime);
     }
 
     private IEnumerable<DemoCombatant> GetTargets() => GetNode<Node3D>("Targets")
@@ -170,9 +180,19 @@ public partial class GreyboxArena : Node3D
     private void OnContact(string sourceName, AttackContactResult contact, CombatStateRead input, string targetName)
     {
         Append(DemoCombatJournal.Format(contact, input, sourceName, targetName));
+        ContactObserved?.Invoke(sourceName, contact, input, targetName);
         if (contact.Impact is not { IsCommitted: true, Outcome: ResolvedCombat result })
         {
             return;
+        }
+
+        foreach (var actor in new DynamicEntity[] { Player, Opponent })
+        {
+            if (actor.CombatantId == input.Source.Id || actor.CombatantId == input.Target.Id)
+            {
+                var other = actor.CombatantId == input.Source.Id ? input.Target.Id : input.Source.Id;
+                actor.GetRequiredComponent<CombatAwareness>().Selection.Record(other, _runtime.GameTime, TimeSpan.FromSeconds(5));
+            }
         }
 
         _die.Text = $"d20\n{result.Resolution.Result.Target.AttackRoll?.Roll.Results.Single()}";
@@ -183,7 +203,30 @@ public partial class GreyboxArena : Node3D
         }
     }
 
+    private AttackDefinition CreatePlayerAttack()
+    {
+        var weapon = _runtime.CombatState.ReadEquipment(Player.CombatantId).Loadout.GetItem(EquipmentSlot.Weapon)?.Base.Weapon;
+
+        return new AttackDefinition("arena-shot",
+            new(new(1, 20), 8, NaturalOutcomeShiftRules.Standard, weapon?.Damage ?? [new(new(1, 6), 3, DamageType.Piercing)], [], AttackTags.Projectile),
+            weapon is null ? TimeSpan.FromSeconds(0.25) : TimeSpan.FromSeconds((double)(1 / weapon.AttacksPerSecond)),
+            [new(new("mana"), weapon?.ManaCost ?? 10)],
+            new(AttackRepeatPolicy.OncePerTarget, AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact, TimeSpan.FromSeconds(4)));
+    }
+
     private void OpenWorkbench() => GetTree().ChangeSceneToFile("res://WorkbenchBootstrap.tscn");
     private void Restart() => GetTree().ReloadCurrentScene();
 
+    private void ConfigurePresentation()
+    {
+        foreach (var item in StarterItemCatalog.Create(Player.CombatantId))
+        {
+            _runtime.CombatState.RegisterOwnedItem(Player.CombatantId, item);
+        }
+
+        GetNode<CanvasLayer>("HUD").Visible = false;
+        var presentation = new ArenaHud { Name = "Presentation" };
+        AddChild(presentation);
+        presentation.Configure(_runtime, this);
+    }
 }

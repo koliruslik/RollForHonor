@@ -1,9 +1,9 @@
 namespace RollForHonor.Domain.Items.Equipment.Models;
 
-/// <summary>Identifies the seven independently occupied equipment slots in the minimal loadout.</summary>
+/// <summary>Identifies equipment slots, including a main weapon and a compatible offhand.</summary>
 public enum EquipmentSlot
 {
-    /// <summary>The single weapon slot; handedness is not modelled yet.</summary>
+    /// <summary>The main-hand weapon slot.</summary>
     Weapon,
 
     /// <summary>The torso armor slot.</summary>
@@ -22,5 +22,8 @@ public enum EquipmentSlot
     RingLeft,
 
     /// <summary>The second ring slot, requiring a different owned instance.</summary>
-    RingRight
+    RingRight,
+
+    /// <summary>The secondary hand, used for a compatible quiver or shield.</summary>
+    OffHand
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://Gameplay/Actors/Player.cs" id="1"]
 [ext_resource type="Script" path="res://Gameplay/Movement/MovementMotor.cs" id="2"]
@@ -12,15 +12,17 @@
 [ext_resource type="Script" path="res://Gameplay/Stats/ActorStats.cs" id="stats_script"]
 [ext_resource type="Resource" path="res://Arena/PlayerStats.tres" id="stats_definition"]
 
+[ext_resource type="Script" path="res://Gameplay/Targeting/CombatAwareness.cs" id="awareness"]
+
 [sub_resource type="CapsuleShape3D" id="Shape"]
 radius = 0.4
 height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="Blue"]
-albedo_color = Color(0.1, 0.65, 0.95, 1)
+albedo_color = Color(0.2, 0.46, 0.54, 1)
 
 [sub_resource type="StandardMaterial3D" id="Gold"]
-albedo_color = Color(1, 0.8, 0.15, 1)
+albedo_color = Color(0.69, 0.6, 0.4, 1)
 shading_mode = 0
 
 [sub_resource type="CapsuleMesh" id="BodyMesh"]
@@ -100,3 +102,6 @@ script = ExtResource("7")
 [node name="Stats" type="Node" parent="."]
 script = ExtResource("stats_script")
 Definition = ExtResource("stats_definition")
+
+[node name="CombatAwareness" type="Node" parent="."]
+script = ExtResource("awareness")

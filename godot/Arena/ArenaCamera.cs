@@ -29,9 +29,15 @@ public partial class ArenaCamera : Node3D
     /// <inheritdoc />
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (@event is not InputEventMouseButton { Pressed: true } mouse) return;
-        if (mouse.ButtonIndex is not (MouseButton.WheelUp or MouseButton.WheelDown)) return;
-        Camera.Size = Mathf.Clamp(Camera.Size + (mouse.ButtonIndex == MouseButton.WheelUp ? -2 : 2), 14, 36);
+        var closer = @event.IsActionPressed("rfh_zoom_in");
+        var farther = @event.IsActionPressed("rfh_zoom_out");
+
+        if (!closer && !farther)
+        {
+            return;
+        }
+
+        Camera.Size = Mathf.Clamp(Camera.Size + (closer ? -2 : 2), 14, 36);
         GetViewport().SetInputAsHandled();
     }
 }

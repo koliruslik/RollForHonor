@@ -26,6 +26,9 @@ public partial class ProjectileAttack : EntityComponent
     /// <summary>Raised for physical contact results and their observed input views.</summary>
     public event Action<AttackContactResult, CombatStateRead, string>? ContactCompleted;
 
+    /// <summary>Gets or sets an optional launch-time content provider, such as the currently equipped weapon.</summary>
+    public Func<AttackDefinition>? AttackProvider { get; set; }
+
     private AttackInitiationService? _attacks;
 
     private ICombatStateAdapter _state = null!;
@@ -65,7 +68,7 @@ public partial class ProjectileAttack : EntityComponent
             throw new ArgumentException("Aim must define a finite nonzero flight direction.", nameof(point));
         }
 
-        var started = _attacks.Start(Guid.NewGuid(), Host.CombatantId, _attack);
+        var started = _attacks.Start(Guid.NewGuid(), Host.CombatantId, AttackProvider?.Invoke() ?? _attack);
         LaunchCompleted?.Invoke(started);
         if (started.Attack is not { } attack)
         {

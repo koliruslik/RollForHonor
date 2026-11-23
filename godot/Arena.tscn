@@ -12,11 +12,11 @@
 background_mode = 1
 background_color = Color(0.045, 0.065, 0.09, 1)
 ambient_light_source = 3
-ambient_light_color = Color(0.78, 0.83, 0.95, 1)
+ambient_light_color = Color(0.84, 0.83, 0.76, 1)
 ambient_light_energy = 0.65
 
 [sub_resource type="StandardMaterial3D" id="Gold"]
-albedo_color = Color(1, 0.8, 0.15, 1)
+albedo_color = Color(0.69, 0.6, 0.4, 1)
 shading_mode = 0
 
 [sub_resource type="CylinderMesh" id="Marker"]
@@ -120,7 +120,7 @@ offset_left = 1770.0
 offset_top = 25.0
 offset_right = 1890.0
 offset_bottom = 125.0
-theme_override_colors/font_color = Color(1, 0.8, 0.15, 1)
+theme_override_colors/font_color = Color(0.69, 0.6, 0.4, 1)
 theme_override_font_sizes/font_size = 34
 text = "d20\n-"
 horizontal_alignment = 1
