@@ -10,7 +10,13 @@ Definitions and owned values are immutable; constructor collections are copied.
 There is no dependency on Godot, storage or the live combat adapter.
 
 `ItemDefinition` holds a stable content ID, display name, compatibility tags and
-implicit modifiers. `ItemInstance` captures that immutable base, an externally
+implicit modifiers. `ItemFootprint` captures positive width/height in inventory
+cells, defaulting to 1×1 for existing or non-equipment bases. Pure
+`InventoryGridService` checks immutable rectangular placements, bounds and
+overlap; the game uses a fixed 12×5 grid without automatic expansion.
+Optional `WeaponProperties` captures attack frequency, mana
+cost and typed dice/flat damage. The authored weapon catalog supplies it, and
+the arena uses it when creating launch content. `ItemInstance` captures that immutable base, an externally
 allocated instance ID, explicit rarity and actual rolled affixes. Implicit
 modifiers do not occupy affix slots.
 
@@ -20,8 +26,16 @@ one or more `AffixModifierRange` entries. All required tags must be present on
 the base. At most one affix from each family may occupy an item; prefix/suffix
 categories are not required.
 
+Numbered content tiers use T1 for the strongest tier; each affix defines its own
+pool, for example T1–T16, T1–T15 or T1–T4. This is independent of item rarity.
+Author higher required power for stronger tiers: the generator selects by power
+threshold, not by parsing the tier ID. Custom IDs remain supported. The current
+starter-kit fixtures contain only their selected T2; complete numeric tier
+progression tables are not authored yet.
+
 `AffixInstance` retains its owned ID, definition/family/tier IDs, compatibility,
-d100 quality and concrete modifier values. Reusing an item does not reroll it or
+d100 quality, concrete modifier values, captured selected-tier intervals and the
+definition's available tier IDs. Reusing an item does not reroll it or
 look up newer numeric ranges. Its captured base also keeps original implicit
 values. A future save format must serialize these actual values, not only a seed
 and content IDs; serialization and catalog migration are not implemented here.
@@ -45,7 +59,9 @@ removing an affix cannot downgrade it.
 Godot's `Items/ItemRarityRules.tres` uses `ItemRarityRulesDefinition`. Edit this
 Resource and pass `CreateRules()` to an `ItemFactory` when composing an item
 consumer. Capturing it copies the table; later Resource edits do not mutate
-existing rules. No gameplay item consumer is registered in the arena yet.
+existing rules. The arena starter-kit loader uses this shared table. It takes an uncached, explicitly
+disposed engine Resource and retains only the immutable Domain copy, avoiding
+stale cached C# wrappers across repeated scene lifetimes.
 Engine-independent callers can supply a different table directly.
 
 `ItemStatRules` separately defines which operations may appear in item content:
@@ -55,7 +71,7 @@ Engine-independent callers can supply a different table directly.
 | AttackModifier | Flat |
 | MovementSpeed, CriticalChance, CriticalMultiplier | Increased, More |
 | Global or typed DamageMultiplier | Increased, More |
-| MaxHealth, MaxMana, Armor, Evasion, typed Resistance | Flat, Increased, More |
+| MaxHealth, MaxMana, Armor, Evasion, typed Resistance, typed AddedDamage | Flat, Increased, More |
 
 Increased and More use fractions: 0.1 means 10%. Flat resistance also uses a
 fraction, adding percentage points: base 0.2 plus Flat 0.1 gives 0.3, whereas
@@ -71,9 +87,10 @@ Power requirements, selection weights and value intervals are independent
 content fields. Global damage, all-resistance and broad dice bonuses are intended
 to cost more and grant smaller values; no final numeric balance table ships in
 this slice. Only the existing attack-roll stat is currently representable as a
-dice bonus. Primary-attribute derivations, general dice-bonus targeting, added
-flat damage, attack speed and functional independent crit rules remain future
-stat work. Current critical stats are reserved, as described in [stats](stats.md).
+dice bonus. Typed AddedDamage is consumed before attack scaling and quality. Intrinsic
+weapon attack speed is active; character attack-speed modifiers, primary-attribute
+derivations, general dice-bonus targeting and functional independent crit rules
+remain future stat work. Current critical stats are reserved, as described in [stats](stats.md).
 
 ## Generation
 
@@ -147,4 +164,5 @@ sources even when IDs contain separators. Projected entries can be composed
 into a complete `StatProfile`; projection does not append entries to live state,
 heal the actor or modify a historical snapshot. The [equipment core](equipment.md)
 owns slot validation, canonical item ownership and atomic loadout/stat updates.
-Inventory UI, acquisition, crafting owned/equipped items and save/load remain future work.
+The [game interface](interface.md) supports the authored starter kit and real equip/unequip.
+Enemy item acquisition, crafting owned/equipped items and game save/load remain future work.

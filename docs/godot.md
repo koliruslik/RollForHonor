@@ -11,7 +11,7 @@ An accepted launch returns an `AttackInstance`; call its `ResolveContact` for
 each eligible physical contact and inspect the returned commit result. Resources
 and cooldown are committed at launch, not charged again on each impact.
 
-`InMemoryCombatState` implements both Application state ports. It stores immutable
+`InMemoryCombatState` implements the combat, initiation and equipment state ports. It stores immutable
 combatant views, resources, cooldowns and deduplication receipts. Reads and writes
 are synchronized; each successful transaction publishes one replacement state.
 A conservative session-wide version rejects stale proposals without partial
@@ -25,7 +25,8 @@ explicitly supplies no reductions. The factory also selects a single supported
 `LifestealDefinition` from the payload's copied `Behaviors` collection, after
 target damage/health effects. Behavior definitions are separate from `Effects`,
 which still contains statuses to apply. Unknown behaviors and repeated lifesteal
-definitions are rejected rather than silently stacked. Automatic equipment-modifier collection
+definitions are rejected rather than silently stacked. Equipment inputs are recomposed
+through the [equipment core](equipment.md); automatic active-status modifier collection
 and selection of arbitrary existing-status behaviors remain separate work.
 `RandomDiceRoller` uses `Random.Shared` with a fresh trace per impact or tick;
 an explicit `Random` can be supplied for reproducible non-engine tests.
@@ -37,7 +38,8 @@ and `DiagnosticView` before tree entry to send optional reports to Godot Output.
 Diagnostics default to off and are separate from the scene's result-based journal.
 
 Normal Play starts the runtime without automatically running tests or quitting.
-Bootstrap loads `Arena.tscn` as a child so the session remains alive.
+`Bootstrap.tscn` hosts the [main menu](interface.md). Start Game loads
+`ArenaBootstrap.tscn`, which hosts `Arena.tscn` in a fresh session.
 `WorkbenchBootstrap.tscn` hosts the separate `Game.tscn` combat laboratory.
 
 ## Actor foundation
@@ -113,6 +115,7 @@ stationary. The arena uses untextured greybox materials.
 | Mouse position | Face the observed surface point, rotating only visual yaw |
 | Right click | Request a projectile attack; movement can continue |
 | Mouse wheel | Zoom the camera |
+| H / Reference | Open searchable rule and session explanations; gameplay pauses |
 | R / Restart arena | Start a fresh arena session |
 | F2 / Combat laboratory | Open the combat workbench in a fresh session |
 

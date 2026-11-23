@@ -89,7 +89,7 @@ pipeline can be assembled as:
 AttackRollStep
 AttackOutcomeStep
 RawDamageStep
-SourceDamageStep (resolved character damage coefficients)
+SourceDamageStep (typed flat attack bonuses, then resolved damage coefficients)
 AttackQualityStep
 ApplyEffectsStep (explicit pre-defense behaviors)
 DefenseStep
@@ -99,8 +99,9 @@ ApplyNewEffectsStep
 
 `RawDamageStep` rolls typed damage components and adds their flat bonuses without
 requiring an attack roll or outcome. The basic attack factory includes
-`SourceDamageStep` to consume resolved source coefficients once, without extra
-dice; neutral coefficients preserve the existing packets. `AttackQualityStep` separately applies the
+`SourceDamageStep` to add typed flat attack bonuses and then consume resolved
+source coefficients once, without extra dice. Flat bonuses are omitted for
+periodic ticks; neutral offense preserves the existing packets. `AttackQualityStep` separately applies the
 configured outcome multiplier before defenses, rounding each component upward.
 Omitting the quality step leaves damage unscaled (effectively a multiplier of
 one), even when an outcome is present. A direct-damage calculation can therefore

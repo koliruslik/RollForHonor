@@ -24,15 +24,16 @@ composition/calculation and `CombatStatProjector` prepare the replacement state.
 No state is assigned until equipment, profile, resolved stats, combat view and
 clamped resource values are ready.
 
-Godot's existing `ActorStats` reads resolved speed for the motor. Engine tests
-exercise equip/unequip against that bridge; this slice adds no player-facing
-equipment screen, item pickups or scene-specific default equipment.
+Godot's existing `ActorStats` reads resolved speed for the motor. The
+[game interface](interface.md) connects item cards and equipped slots to the same
+Application operations, using an authored starter kit without item drops.
 
 ## Minimal slot rules
 
 | Slot | Required base tag |
 | --- | --- |
-| Weapon | `weapon` |
+| Weapon (main hand) | `weapon` |
+| OffHand | `offhand` |
 | BodyArmor | `body-armor` |
 | Helmet | `helmet` |
 | Boots | `boots` |
@@ -40,12 +41,25 @@ equipment screen, item pickups or scene-specific default equipment.
 | RingLeft | `ring` |
 | RingRight | `ring` |
 
-Every item occupies one slot. Handedness, offhand slots and multi-slot items are
-deferred. Both rings require distinct instance IDs; matching base definitions
-are allowed. A base can retain general affix tags such as `armor` alongside its
-specific equipment tag. The generic `armor` tag alone does not match BodyArmor.
-The mapping is replaceable through an injected immutable `EquipmentRules` table.
-Item rarity determines affix capacity, not slot compatibility.
+Every instance occupies one slot. A two-handed bow can be paired with a quiver;
+it is not duplicated across the two slots. `EquipmentPairRule` defines compatible
+offhand/main-hand category tags independently of specific bases. Defaults pair
+`quiver` with `bow` and `shield` with `one-handed`; a shield also permits an empty
+main hand. An absent main weapon does not permit a quiver. Unknown offhand
+categories are rejected by these default rules. Inject different pairing rules
+to introduce other combinations; providing no pairing table preserves tag-only
+compatibility for custom equipment configurations.
+
+Equipping a new main weapon removes a now-incompatible offhand from the proposed
+loadout. Removing a bow also removes its dependent quiver. Both remain owned;
+bonuses are recomposed from the resulting loadout in one atomic commit. Direct
+adapter proposals are checked against both slot tags and the complete hand pair.
+The game UI also checks bag space for all returned items before the operation.
+
+Both rings require distinct instance IDs; matching bases are allowed. A base can
+retain general affix tags such as `armor` alongside its specific equipment tag.
+The generic `armor` tag alone does not match BodyArmor. Item rarity determines
+affix capacity, not slot or hand compatibility.
 
 ## Operations and ownership
 
@@ -111,13 +125,14 @@ snapshot captured when applied.
 
 ## Verification and remaining work
 
-Tests cover all seven slots, replacement/removal, distinct rings, other-source
-preservation, canonical ownership, duplicate registration, idempotence, version
+Tests cover all eight slots, hand compatibility, dependent offhand returns,
+replacement/removal, distinct rings, other-source preservation, canonical ownership, duplicate registration, idempotence, version
 conflicts including stale no-ops, overflow rollback, resource clamping, effects,
 launch receipts/cooldowns and in-flight impacts. An actual Godot test verifies
 boots change motor speed and armor and unequipping restores previous values.
 
-This is an in-memory equipment core. Inventory capacity/UI, transfers, pickups,
-crafting owned/equipped instances, item persistence and an equipment screen remain
-future work. Those operations must share a consistent publication boundary with
-affected loadouts and stat profiles when introduced.
+This is an in-memory equipment core with a fixed-grid game inventory interface.
+The UI checks spatial capacity for its equipment actions. Ownership grants do not
+yet enforce bag placement; future pickup/transfer use cases, owned-item crafting
+and persistence must share a consistent publication boundary with affected
+loadouts and stat profiles.
