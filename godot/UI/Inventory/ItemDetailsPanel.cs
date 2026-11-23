@@ -5,6 +5,7 @@ using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.Gameplay.Input;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -43,11 +44,20 @@ public partial class ItemDetailsPanel : Control
     /// <inheritdoc />
     public override void _Ready()
     {
+        L.OnChanged(this, () =>
+        {
+            if (_item is not null)
+            {
+                BuildProperties();
+                RefreshLayout();
+            }
+        });
+
         MouseFilter = MouseFilterEnum.Stop;
         _panel = UiLayout.Panel(this, "Card", new Rect2(0, 0, 320, 680));
         Size = _panel.Size;
         _header = UiLayout.Panel(_panel, "Header", new Rect2(2, 2, 316, 160));
-        _caption = UiLayout.Place(_header, UiLayout.Text("SELECTED ITEM", 12, HonorTheme.Muted), new Rect2(16, 8, 240, 28));
+        _caption = UiLayout.Place(_header, UiLayout.Text(L.Text("SELECTED ITEM"), 12, HonorTheme.Muted), new Rect2(16, 8, 240, 28));
         _close = UiLayout.Place(_header, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(262, 8, 40, 40));
         _icon = UiLayout.Place(_header, UiLayout.Icon("bag"), new Rect2(16, 44, 48, 48));
         _rarity = UiLayout.Place(_header, UiLayout.Text("", 14), new Rect2(80, 44, 220, 48));
@@ -66,9 +76,9 @@ public partial class ItemDetailsPanel : Control
                 InspectionRequested?.Invoke(topic);
             }
         };
-        _action = UiLayout.Place(_panel, UiLayout.Button("Equip", () => _activate?.Invoke(), true), new Rect2(20, 536, 280, 48));
+        _action = UiLayout.Place(_panel, UiLayout.Button(L.Text("Equip"), () => _activate?.Invoke(), true), new Rect2(20, 536, 280, 48));
         _action.Name = "Action";
-        _status = UiLayout.Place(_panel, UiLayout.Text("Hold Alt for ranges and available tiers", 12, new Color(HonorTheme.Muted, 0.55f)), new Rect2(20, 604, 280, 52));
+        _status = UiLayout.Place(_panel, UiLayout.Text(L.Text("Hold Alt for ranges and available tiers"), 12, new Color(HonorTheme.Muted, 0.55f)), new Rect2(20, 604, 280, 52));
         _status.Name = "Status";
         _status.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         _status.VerticalAlignment = VerticalAlignment.Top;
@@ -109,16 +119,16 @@ public partial class ItemDetailsPanel : Control
         var color = ItemPresentation.RarityColor(item.Rarity);
         _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), color, 0));
         _header.AddThemeStyleboxOverride("panel", HonorTheme.Panel(HonorTheme.Ink.Lerp(color.Darkened(0.55f), 0.4f), color, 0));
-        _caption.Text = _hover ? "ITEM" : "SELECTED ITEM";
-        _name.Text = item.Base.Name;
+        L.SetText(_caption, _hover ? L.Text("ITEM") : L.Text("SELECTED ITEM"));
+        L.SetText(_name, L.Text(item.Base.Name));
         _name.AddThemeColorOverride("font_color", color.Lightened(0.15f));
-        var slotName = slot is { } target ? ItemPresentation.SlotName(target) : "Item";
-        _rarity.Text = $"{item.Rarity}\n{slotName}";
+        var slotName = slot is { } target ? ItemPresentation.SlotName(target) : L.Text("Item");
+        L.SetText(_rarity, L.Format($"{item.Rarity}\n{slotName}"));
         _rarity.AddThemeColorOverride("font_color", color);
         _icon.Texture = GD.Load<Texture2D>($"res://UI/Assets/{ItemPresentation.Icon(item, slot)}.svg");
         _action.Visible = !_hover;
         _action.Disabled = slot is null;
-        _action.Text = slot is null ? "Cannot equip" : equipped ? $"Unequip · {slotName}" : $"Equip · {slotName}";
+        L.SetText(_action, slot is null ? L.Text("Cannot equip") : equipped ? L.Format($"Unequip · {slotName}") : L.Format($"Equip · {slotName}"));
         _activate = activate;
         BuildProperties();
         Show();
@@ -131,7 +141,7 @@ public partial class ItemDetailsPanel : Control
     public void ShowComparison(ItemInstance item, EquipmentSlot slot)
     {
         ShowItem(item, slot, true, null);
-        _caption.Text = "CURRENTLY EQUIPPED";
+        L.SetText(_caption, L.Text("CURRENTLY EQUIPPED"));
         _action.Hide();
         RefreshLayout();
     }
@@ -170,7 +180,7 @@ public partial class ItemDetailsPanel : Control
     /// <param name="message">The short result text.</param>
     public void SetStatus(string message)
     {
-        _status.Text = message;
+        L.SetText(_status, message);
         _status.AddThemeFontSizeOverride("font_size", 14);
         _status.AddThemeColorOverride("font_color", HonorTheme.Secondary);
         RefreshLayout();
@@ -211,7 +221,7 @@ public partial class ItemDetailsPanel : Control
 
     private void ResetStatus()
     {
-        _status.Text = $"{GameInputBindings.Name("rfh_details")}  Ranges / inspect\nUnderlined: details · Italic: affix";
+        L.SetText(_status, L.Format($"{GameInputBindings.Name("rfh_details")}  Ranges / inspect\nUnderlined: details · Italic: affix"));
         _status.AddThemeFontSizeOverride("font_size", 12);
         _status.AddThemeColorOverride("font_color", new Color(HonorTheme.Muted, 0.55f));
     }

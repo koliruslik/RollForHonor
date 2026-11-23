@@ -1,12 +1,13 @@
 using Godot;
 using System.Text.RegularExpressions;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
 
 /// <summary>Writes safe rich text with consistent color, link and affix conventions.</summary>
 public static class InspectionText
 {
-    private static readonly Regex DamageWord = new(@"\bdamage\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    private static readonly Regex DamageWord = new(@"(?<![\p{L}\p{N}_])(?:damage|шкода|шкоди|шкоді|шкоду|шкодою)(?![\p{L}\p{N}_])", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
     /// <summary>Writes an underlined, colored link, optionally marked as an affix contribution.</summary>
     /// <param name="target">The native text control.</param>
@@ -16,6 +17,7 @@ public static class InspectionText
     /// <param name="affix">Whether to use italic styling.</param>
     public static void Link(RichTextLabel target, string text, string id, Color color, bool affix = false)
     {
+        text = L.Refresh(text);
         var position = 0;
 
         foreach (Match match in DamageWord.Matches(text))
@@ -35,6 +37,7 @@ public static class InspectionText
     /// <param name="italic">Whether the text represents affix contributions.</param>
     public static void Write(RichTextLabel target, string text, Color color, bool italic = false)
     {
+        text = L.Refresh(text);
         var position = 0;
 
         foreach (Match match in DamageWord.Matches(text))

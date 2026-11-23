@@ -1,0 +1,1229 @@
+msgid ""
+msgstr ""
+"Language: uk\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Start game"
+msgstr "Почати гру"
+
+msgid "Reference"
+msgstr "Довідник"
+
+msgid "Exit"
+msgstr "Вийти"
+
+msgid "THE ASHEN COURT"
+msgstr "ПОПЕЛЯСТИЙ ДВІР"
+
+msgid "Window mode"
+msgstr "Режим вікна"
+
+msgid "Windowed"
+msgstr "Віконний"
+
+msgid "Fullscreen"
+msgstr "Повноекранний"
+
+msgid "Vertical synchronization"
+msgstr "Вертикальна синхронізація"
+
+msgid "Enabled"
+msgstr "Увімкнено"
+
+msgid "Master volume"
+msgstr "Загальна гучність"
+
+msgid "Enemy health bars"
+msgstr "Здоров’я ворогів"
+
+msgid "Player health bar"
+msgstr "Здоров’я гравця"
+
+msgid "Player mana bar"
+msgstr "Мана гравця"
+
+msgid "Show"
+msgstr "Показувати"
+
+msgid "Reset defaults"
+msgstr "Скинути"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Apply settings"
+msgstr "Застосувати"
+
+msgid "Settings saved."
+msgstr "Налаштування збережено."
+
+msgid "Settings could not be saved. Please try again."
+msgstr "Не вдалося зберегти. Спробуйте ще раз."
+
+msgid "SESSION"
+msgstr "СЕАНС"
+
+msgid "Resume"
+msgstr "Продовжити"
+
+msgid "Restart"
+msgstr "Почати заново"
+
+msgid "Main menu"
+msgstr "Головне меню"
+
+msgid "COURTYARD GUARD"
+msgstr "ВАРТОВИЙ ДВОРУ"
+
+msgid "THE PROVING GROUNDS"
+msgstr "ПОЛІГОН"
+
+msgid "Defeat the Sentinel"
+msgstr "Здолайте Вартового"
+
+msgid "Inventory"
+msgstr "Інвентар"
+
+msgid "Character"
+msgstr "Персонаж"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "Basic attack"
+msgstr "Базова атака"
+
+msgid "Locked skill slot"
+msgstr "Заблокована комірка вміння"
+
+msgid "HEALTH"
+msgstr "ЗДОРОВ’Я"
+
+msgid "MANA"
+msgstr "МАНА"
+
+msgid "You have fallen. Open the menu to begin again."
+msgstr "Ви загинули. Відкрийте меню, щоб почати заново."
+
+msgid "The courtyard is yours."
+msgstr "Двір тепер ваш."
+
+msgid "Recovering"
+msgstr "Відновлення"
+
+msgid "Returned to inventory."
+msgstr "Повернуто до інвентарю."
+
+msgid "Equipped. Stats updated."
+msgstr "Споряджено. Характеристики оновлено."
+
+msgid "Already equipped."
+msgstr "Уже споряджено."
+
+msgid "Your equipment changed. Select the item again."
+msgstr "Спорядження змінилося. Виберіть предмет знову."
+
+msgid "This item cannot be equipped in that slot."
+msgstr "Цей предмет не підходить до цієї комірки."
+
+msgid "Requires a compatible main hand or equipment slot."
+msgstr "Потрібна сумісна основна зброя або комірка."
+
+msgid "Incompatible hand or slot."
+msgstr "Несумісна зброя або комірка."
+
+msgid "Remove the item from its current slot first."
+msgstr "Спершу зніміть предмет із поточної комірки."
+
+msgid "Inventory full. Make room before changing equipment."
+msgstr "Інвентар заповнено. Звільніть місце для зміни спорядження."
+
+msgid "IN COMBAT"
+msgstr "У БОЮ"
+
+msgid "SELECTED"
+msgstr "ВИБРАНО"
+
+msgid "{0} {1} {2} {3}  Move"
+msgstr "{0} {1} {2} {3}  Рух"
+
+msgid "{0} / {1}  Zoom"
+msgstr "{0} / {1}  Масштаб"
+
+msgid "{0}  Inventory"
+msgstr "{0}  Інвентар"
+
+msgid "{0}  Character"
+msgstr "{0}  Персонаж"
+
+msgid "{0}  Menu"
+msgstr "{0}  Меню"
+
+msgid "{0}  Reference"
+msgstr "{0}  Довідник"
+
+msgid "{0}  Attack"
+msgstr "{0}  Атака"
+
+msgid "{0}  Select / clear target"
+msgstr "{0}  Вибрати / скинути ціль"
+
+msgid "COMBAT"
+msgstr "БІЙ"
+
+msgid "Details"
+msgstr "Деталі"
+
+msgid "Compact"
+msgstr "Стисло"
+
+msgid "{0}\nDamage {1} → {2} (blocked {3})"
+msgstr "{0}\nШкода {1} → {2} (заблоковано {3})"
+
+msgid "Dice and bonuses"
+msgstr "Кубики та бонуси"
+
+msgid "Damage breakdown"
+msgstr "Розрахунок шкоди"
+
+msgid "Recent rolls"
+msgstr "Останні кидки"
+
+msgid "No rolls yet."
+msgstr "Кидків ще немає."
+
+msgid "Select a recorded attack to inspect its dice and bonuses."
+msgstr "Виберіть записану атаку, щоб переглянути її кубики та бонуси."
+
+msgid "Recent combat"
+msgstr "Останні бої"
+
+msgid "No attacks yet."
+msgstr "Атак ще немає."
+
+msgid "Select a recorded attack to inspect its outcome, dice and damage stages."
+msgstr "Виберіть записану атаку, щоб переглянути її результат, кубики та етапи шкоди."
+
+msgid "\nDamage "
+msgstr "\nШкода "
+
+msgid "  (blocked {0})"
+msgstr "  (заблоковано {0})"
+
+msgid "Critical hit"
+msgstr "Критичне влучання"
+
+msgid "Glancing hit"
+msgstr "Ковзне влучання"
+
+msgid "Evaded"
+msgstr "Ухилення"
+
+msgid "Hit"
+msgstr "Влучання"
+
+msgid "Impact"
+msgstr "Удар"
+
+msgid "This action did not include an attack roll."
+msgstr "Ця дія не містила кидка атаки."
+
+msgid "Damage"
+msgstr "Шкода"
+
+msgid "This action did not include a damage stage."
+msgstr "Ця дія не містила етапу шкоди."
+
+msgid "Recorded values before and after target defenses."
+msgstr "Записані значення до та після застосування захисту цілі."
+
+msgid "Weapon dice"
+msgstr "Кубики зброї"
+
+msgid "Source modifiers"
+msgstr "Модифікатори джерела"
+
+msgid "Attack quality"
+msgstr "Якість атаки"
+
+msgid "Armor reduction"
+msgstr "Зменшення бронею"
+
+msgid "Resistance reduction"
+msgstr "Зменшення опором"
+
+msgid "Minimum physical damage"
+msgstr "Мінімальна фізична шкода"
+
+msgid "Input → output for this recorded stage."
+msgstr "Вхід → вихід для цього записаного етапу."
+
+msgid "[center][url=roll]LAST ROLL[/url][/center]"
+msgstr "[center][url=roll]ОСТАННІЙ КИДОК[/url][/center]"
+
+msgid "Scroll  Browse stats\n{0}  Close character"
+msgstr "Коліщатко  Перегляд\n{0}  Закрити персонажа"
+
+msgid "VITALITY"
+msgstr "ЖИТТЄВІ СИЛИ"
+
+msgid "Health"
+msgstr "Здоров’я"
+
+msgid "Mana"
+msgstr "Мана"
+
+msgid "Movement speed"
+msgstr "Швидкість руху"
+
+msgid "OFFENSE"
+msgstr "НАСТУП"
+
+msgid "Attack roll bonus"
+msgstr "Бонус кидка атаки"
+
+msgid "{0} damage"
+msgstr "{0} шкода"
+
+msgid "{0} flat damage"
+msgstr "Додана шкода: {0}"
+
+msgid "DEFENSE"
+msgstr "ЗАХИСТ"
+
+msgid "Armor"
+msgstr "Броня"
+
+msgid "Evasion"
+msgstr "Ухилення"
+
+msgid "RESISTANCES"
+msgstr "ОПІР"
+
+msgid "ITEMS   {0}"
+msgstr "ПРЕДМЕТІВ   {0}"
+
+msgid "EQUIPMENT"
+msgstr "СПОРЯДЖЕННЯ"
+
+msgid "ITEMS"
+msgstr "ПРЕДМЕТИ"
+
+msgid "Hover  Inspect item"
+msgstr "Наведення  Огляд предмета"
+
+msgid "RMB  Equip / remove"
+msgstr "ПКМ  Спорядити / зняти"
+
+msgid "LMB  Compare"
+msgstr "ЛКМ  Порівняти"
+
+msgid "Drag  Move / equip / remove"
+msgstr "Перетягування  Перемістити / спорядити / зняти"
+
+msgid "{0}  Ranges / inspect tooltip"
+msgstr "{0}  Діапазони / огляд підказки"
+
+msgid "Underlined text  Details"
+msgstr "Підкреслений текст  Деталі"
+
+msgid "{0}  Close inventory"
+msgstr "{0}  Закрити інвентар"
+
+msgid "SELECTED ITEM"
+msgstr "ВИБРАНИЙ ПРЕДМЕТ"
+
+msgid "Hold Alt for ranges and available tiers"
+msgstr "Утримуйте Alt: діапазони й доступні ранги"
+
+msgid "Equip"
+msgstr "Спорядити"
+
+msgid "ITEM"
+msgstr "ПРЕДМЕТ"
+
+msgid "Item"
+msgstr "Предмет"
+
+msgid "Cannot equip"
+msgstr "Не можна спорядити"
+
+msgid "Unequip · {0}"
+msgstr "Зняти · {0}"
+
+msgid "Equip · {0}"
+msgstr "Спорядити · {0}"
+
+msgid "CURRENTLY EQUIPPED"
+msgstr "ЗАРАЗ СПОРЯДЖЕНО"
+
+msgid "{0}  Ranges / inspect\nUnderlined: details · Italic: affix"
+msgstr "{0}  Діапазони / огляд\nПідкреслення: деталі · Курсив: афікс"
+
+msgid "BASE PROPERTIES"
+msgstr "БАЗОВІ ВЛАСТИВОСТІ"
+
+msgid "AFFIXES"
+msgstr "АФІКСИ"
+
+msgid "Attack speed  {0:0.##}/s\n"
+msgstr "Швидкість атаки  {0:0.##}/с\n"
+
+msgid "Mana cost  {0:0.##}\n"
+msgstr "Витрати мани  {0:0.##}\n"
+
+msgid "\nAvailable tiers: "
+msgstr "\nДоступні ранги: "
+
+msgid "Available tiers: "
+msgstr "Доступні ранги: "
+
+msgid "Attack speed {0:0.##}/s · Mana cost {1:0.##}"
+msgstr "Швидкість атаки {0:0.##}/с · Мана {1:0.##}"
+
+msgid "{0} · {1}×{2} cells\n\nCaptured base properties are listed above. Related affixes show their additional rolled values, ranges and tiers."
+msgstr "{0} · {1}×{2} клітинок\n\nВище наведено базові властивості. Пов’язані афікси показують додаткові значення, діапазони та ранги."
+
+msgid " (T1 strongest)"
+msgstr " (T1 — найсильніший)"
+
+msgid "Body armor"
+msgstr "Обладунок"
+
+msgid "Ring I"
+msgstr "Перстень I"
+
+msgid "Ring II"
+msgstr "Перстень II"
+
+msgid "Main hand"
+msgstr "Зброя"
+
+msgid "Off hand"
+msgstr "Друга рука"
+
+msgid "Helmet"
+msgstr "Шолом"
+
+msgid "Boots"
+msgstr "Чоботи"
+
+msgid "Amulet"
+msgstr "Амулет"
+
+msgid " increased"
+msgstr " збільшення"
+
+msgid " more"
+msgstr " множення"
+
+msgid "maximum health"
+msgstr "максимальне здоров’я"
+
+msgid "maximum mana"
+msgstr "максимальна мана"
+
+msgid "movement speed"
+msgstr "швидкість руху"
+
+msgid "attack roll"
+msgstr "кидок атаки"
+
+msgid "{0} resistance"
+msgstr "Опір шкоді: {0}"
+
+msgid "added {0} damage"
+msgstr "додана {0} шкода"
+
+msgid "all damage"
+msgstr "уся шкода"
+
+msgid "Added {0} damage"
+msgstr "Додана {0} шкода"
+
+msgid "Adds a flat amount to attack damage before outgoing multipliers, attack quality and defenses. It is not added again to periodic effect ticks."
+msgstr "Додає фіксовану величину до шкоди атаки перед вихідними множниками, якістю атаки та захистом. Не додається повторно до періодичних спрацьовувань ефектів."
+
+msgid "All damage"
+msgstr "Уся шкода"
+
+msgid "Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately."
+msgstr "Збільшує вихідну шкоду всіх типів. Бонуси Increased додаються між собою; бонуси More множаться окремо."
+
+msgid "Physical damage"
+msgstr "Фізична шкода"
+
+msgid "Added to the attack's d20 roll. It affects attack quality and is not a flat damage bonus."
+msgstr "Додається до кидка d20 атаки. Впливає на якість атаки, а не додає фіксовану шкоду."
+
+msgid "Maximum health"
+msgstr "Максимальне здоров’я"
+
+msgid "The character's health limit. Raising the limit does not heal the character; lowering it clamps current health."
+msgstr "Межа здоров’я персонажа. Підвищення межі не лікує; зниження обмежує поточне здоров’я."
+
+msgid "Maximum mana"
+msgstr "Максимальна мана"
+
+msgid "The character's mana limit. Raising the limit does not refill mana; lowering it clamps the current balance."
+msgstr "Межа мани персонажа. Підвищення не відновлює ману; зниження обмежує її поточний запас."
+
+msgid "Character movement speed. The character sheet shows its percentage change from the unmodified starting speed."
+msgstr "Швидкість руху персонажа. Вікно характеристик показує її відсоткову зміну від початкової швидкості без модифікаторів."
+
+msgid "Critical chance"
+msgstr "Шанс критичного влучання"
+
+msgid "Reserved stat. The current attack rules use d20 quality; this independent chance is not rolled by combat yet."
+msgstr "Зарезервована характеристика. Поточні атаки використовують якість кидка d20; окремий шанс ще не перевіряється в бою."
+
+msgid "Critical multiplier"
+msgstr "Критичний множник"
+
+msgid "Reserved stat. Current critical damage uses the attack-quality coefficients rather than this independent multiplier."
+msgstr "Зарезервована характеристика. Поточна критична шкода використовує коефіцієнти якості атаки замість цього окремого множника."
+
+msgid "A defensive stat used when resolving attack quality against the attack roll."
+msgstr "Захисна характеристика, з якою порівнюється кидок для визначення якості атаки."
+
+msgid "This property contributes to the character's resolved statistics."
+msgstr "Ця властивість впливає на підсумкові характеристики персонажа."
+
+msgid "Physical damage. Armor reduces the combined physical hit first, then the matching resistance applies."
+msgstr "Фізична шкода. Спочатку броня зменшує сумарну фізичну шкоду удару, потім застосовується відповідний опір."
+
+msgid "Nonphysical damage. Armor does not reduce it; {0} resistance applies instead."
+msgstr "Нефізична шкода. Броня її не зменшує; натомість діє відповідний опір ({0})."
+
+msgid "\n\nA damage type alone does not apply a status effect."
+msgstr "\n\nСам тип шкоди не накладає ефект стану."
+
+msgid "Applies after armor. A positive physical hit retains at least one point of total physical damage."
+msgstr "Застосовується після броні. Додатна фізична шкода удару зберігає щонайменше одну одиницю сумарної фізичної шкоди."
+
+msgid "Armor does not reduce this damage type."
+msgstr "Броня не зменшує шкоду цього типу."
+
+msgid "Reduces incoming {0} damage. 25% resistance leaves 75% of that damage before rounding. Negative resistance increases it. Resistance is capped at 100%.\n\n{1}"
+msgstr "Зменшує вхідну шкоду відповідного типу ({0}). Опір 25% залишає 75% шкоди до округлення. Від’ємний опір збільшує її. Максимальний опір — 100%.\n\n{1}"
+
+msgid "Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."
+msgstr "Зменшує лише фізичну шкоду ударів. Частка зменшення: броня / (броня + 5 × фізична шкода удару). Що сильніший удар, то менша частка захисту.\n\nПісля цього діють опори за типами. Броня не зменшує вогняну, холодову, блискавичну чи отруйну шкоду."
+
+msgid "Piercing, bludgeoning and slashing are physical damage. Armor is applied to their combined hit, followed by each type's resistance."
+msgstr "Колюча, дробильна та рубальна шкода є фізичною. Броня діє на їхню суму в ударі, після чого застосовується опір кожному типу."
+
+msgid "Piercing damage"
+msgstr "Колюча шкода"
+
+msgid "Bludgeoning damage"
+msgstr "Дробильна шкода"
+
+msgid "Slashing damage"
+msgstr "Рубальна шкода"
+
+msgid "\n\nRELATED\n"
+msgstr "\n\nПОВ’ЯЗАНЕ\n"
+
+msgid "Pin"
+msgstr "Закріпити"
+
+msgid "Unpin"
+msgstr "Відкріпити"
+
+msgid "Current session"
+msgstr "Поточний сеанс"
+
+msgid "Character stats"
+msgstr "Характеристики"
+
+msgid "Resistances"
+msgstr "Опір"
+
+msgid "Items"
+msgstr "Предмети"
+
+msgid "Combat"
+msgstr "Бій"
+
+msgid "Interface"
+msgstr "Інтерфейс"
+
+msgid "Session"
+msgstr "Сеанс"
+
+msgid "Configured affix limit: {0}.\n\nRarity is explicit. Adding or removing affixes does not change it automatically."
+msgstr "Налаштована межа афіксів: {0}.\n\nРідкість задається явно. Додавання чи вилучення афіксів не змінює її автоматично."
+
+msgid "Owned items"
+msgstr "Власні предмети"
+
+msgid "Rolled affixes"
+msgstr "Афікси предметів"
+
+msgid "All sections"
+msgstr "Усі розділи"
+
+msgid "Search rules, stats, items…"
+msgstr "Правила, характеристики, предмети…"
+
+msgid "Open as card"
+msgstr "Відкрити картку"
+
+msgid "Search · Select a topic · Underlined text opens related cards · Pin to retain"
+msgstr "Пошук · Виберіть тему · Підкреслений текст відкриває картки · Закріпіть, щоб зберегти"
+
+msgid "{0} / {1} TOPICS"
+msgstr "ТЕМ: {0} / {1}"
+
+msgid "SEARCH"
+msgstr "ПОШУК"
+
+msgid "No matching topics"
+msgstr "Тем не знайдено"
+
+msgid "Try another search or choose All sections."
+msgstr "Змініть запит або виберіть «Усі розділи»."
+
+msgid "Piercing"
+msgstr "Колюча"
+
+msgid "Bludgeoning"
+msgstr "Дробильна"
+
+msgid "Slashing"
+msgstr "Рубальна"
+
+msgid "Fire"
+msgstr "Вогняна"
+
+msgid "Cold"
+msgstr "Холодова"
+
+msgid "Lightning"
+msgstr "Блискавична"
+
+msgid "Poison"
+msgstr "Отруйна"
+
+msgid "piercing"
+msgstr "колюча"
+
+msgid "bludgeoning"
+msgstr "дробильна"
+
+msgid "slashing"
+msgstr "рубальна"
+
+msgid "fire"
+msgstr "вогняна"
+
+msgid "cold"
+msgstr "холодова"
+
+msgid "lightning"
+msgstr "блискавична"
+
+msgid "poison"
+msgstr "отруйна"
+
+msgid "Common"
+msgstr "Звичайний"
+
+msgid "Uncommon"
+msgstr "Незвичайний"
+
+msgid "Rare"
+msgstr "Рідкісний"
+
+msgid "Epic"
+msgstr "Епічний"
+
+msgid "Legendary"
+msgstr "Легендарний"
+
+msgid "Sentinel"
+msgstr "Вартовий"
+
+msgid "Player"
+msgstr "Гравець"
+
+msgid "Enemy"
+msgstr "Ворог"
+
+msgid "TargetA"
+msgstr "Мішень А"
+
+msgid "TargetB"
+msgstr "Мішень Б"
+
+msgid "TargetC"
+msgstr "Мішень В"
+
+msgid "RMB"
+msgstr "ПКМ"
+
+msgid "LMB"
+msgstr "ЛКМ"
+
+msgid "Wheel up"
+msgstr "Коліщатко ↑"
+
+msgid "Wheel down"
+msgstr "Коліщатко ↓"
+
+msgid "Ashen Longbow"
+msgstr "Попелястий довгий лук"
+
+msgid "Embercoat Vest"
+msgstr "Жарова жилетка"
+
+msgid "Wayfarer Boots"
+msgstr "Чоботи мандрівника"
+
+msgid "Warden Helm"
+msgstr "Шолом охоронця"
+
+msgid "Moonstone Pendant"
+msgstr "Підвіска місячного каменю"
+
+msgid "Cinder Band"
+msgstr "Перстень жарин"
+
+msgid "Oathkeeper Ring"
+msgstr "Перстень вірності присязі"
+
+msgid "Pilgrim Coat"
+msgstr "Куртка прочанина"
+
+msgid "Ironwood Bow"
+msgstr "Лук із залізного дерева"
+
+msgid "Winter Loop"
+msgstr "Зимовий перстень"
+
+msgid "Ranger Quiver"
+msgstr "Сагайдак слідопита"
+
+msgid "Iron Shield"
+msgstr "Залізний щит"
+
+msgid "Attack rolls and d20"
+msgstr "Кидки атаки та d20"
+
+msgid "Attack quality compares the d20 total, including bonuses, against target evasion. A margin of -10 or less is evaded; below 0 is a glancing hit; 0 to 9 is a hit; 10 or more is a critical hit. The attack definition can upgrade or downgrade the result for natural rolls. Recent rolls retain the actual dice and bonus."
+msgstr "Якість атаки визначається порівнянням суми d20 з бонусами та ухилення цілі. Різниця −10 або менше означає ухилення; нижче 0 — ковзне влучання; від 0 до 9 — влучання; 10 і більше — критичне влучання. Визначення атаки може підвищити чи знизити результат за натуральним кидком. Останні кидки зберігають фактичні кубики й бонус."
+
+msgid "Damage resolution"
+msgstr "Розрахунок шкоди"
+
+msgid "An attack rolls its raw damage, adds flat source damage, applies outgoing bonuses and attack quality, then applies target defenses. Armor reduces the combined physical hit. Matching resistances apply afterward. The combat journal links to the stages and typed values actually recorded for that attack."
+msgstr "Атака кидає кубики базової шкоди, додає фіксовану шкоду джерела, застосовує вихідні бонуси та якість атаки, а потім захист цілі. Броня зменшує сумарну фізичну шкоду удару. Після неї застосовуються відповідні опори. Журнал бою містить посилання на етапи й значення за типами, записані для цієї атаки."
+
+msgid "Effects and periodic damage"
+msgstr "Ефекти та періодична шкода"
+
+msgid "Effects belong to the combat result and are not automatically applied by a damage type. Periodic damage retains the source snapshot captured when the effect was applied; current target defenses are read when resolving a tick. Flat attack damage is not added again to each periodic tick."
+msgstr "Ефекти є частиною результату бою й не накладаються автоматично через тип шкоди. Періодична шкода зберігає знімок джерела на момент накладання ефекту; поточний захист цілі читається під час спрацьовування. Фіксована шкода атаки не додається повторно до кожного спрацьовування."
+
+msgid "Targets and combat state"
+msgstr "Цілі та бойовий стан"
+
+msgid "Left-click a living target to select it. Click the same target or the ground to clear selection. The top bar shows the selected target and its health. Minimap markers distinguish living and defeated bodies. Overhead bars can be changed in Settings."
+msgstr "Клацніть лівою кнопкою живу ціль, щоб вибрати її. Повторне клацання цілі або землі скидає вибір. Верхня панель показує вибрану ціль і її здоров’я. Позначки мінімапи розрізняють живих і переможених. Смуги над персонажами змінюються в налаштуваннях."
+
+msgid "Attacks, skills and cooldowns"
+msgstr "Атаки, вміння та відновлення"
+
+msgid "The current playable attack is a projectile. Accepted attacks pay their cost once and respect cooldowns. The remaining three skill slots are locked placeholders. A broad skill set, melee delivery and skill assignment are not implemented yet."
+msgstr "Поточна ігрова атака — снаряд. Прийняті атаки сплачують вартість один раз і дотримуються часу відновлення. Решта три комірки вмінь є заблокованими заготовками. Розширений набір умінь, доставка ближніх атак та призначення вмінь ще не реалізовані."
+
+msgid "Spatial inventory"
+msgstr "Просторовий інвентар"
+
+msgid "The bag has 12 columns and 5 rows without scrolling or automatic growth. Each item occupies its base rectangle. Dragging retains the cell you grabbed. Bounds, overlap and room for returning equipment are checked before a UI equipment change. Grid positions last for the current session; saving and item rotation are not implemented."
+msgstr "Сумка має 12 стовпців і 5 рядків без прокручування чи автоматичного розширення. Кожен предмет займає свій базовий прямокутник. Перетягування зберігає схоплену клітинку. Перед зміною спорядження інтерфейс перевіряє межі, перетини й місце для повернених предметів. Позиції діють у межах поточного сеансу; збереження й обертання ще не реалізовані."
+
+msgid "Main hand and offhand"
+msgstr "Основна та друга рука"
+
+msgid "The main-hand weapon and compatible offhand flank body armor. A bow permits a quiver; a one-handed weapon permits a shield. A shield can remain without a main weapon; a quiver cannot. Changing the main weapon returns incompatible offhand equipment and removes its bonuses in the same change. Both rings need different owned item instances."
+msgstr "Основна зброя та сумісний предмет другої руки розташовані обабіч обладунку. Лук дозволяє сагайдак; одноручна зброя — щит. Щит може залишатися без основної зброї, а сагайдак — ні. Зміна основної зброї повертає несумісний предмет другої руки та прибирає його бонуси в межах однієї операції. Для двох перснів потрібні різні власні екземпляри."
+
+msgid "Affixes and implicit properties"
+msgstr "Афікси та базові властивості"
+
+msgid "Every base has implicit properties, separate from rolled affixes. Implicit properties do not use affix capacity. Each affix retains its selected tier, d100 quality, actual values and available tier pool. Item cards show affixes normally; Alt adds captured ranges and quality details."
+msgstr "Кожна основа має базові властивості, відокремлені від випадкових афіксів. Базові властивості не займають місця для афіксів. Кожен афікс зберігає вибраний ранг, якість d100, фактичні значення й доступні ранги. Картки завжди показують афікси; Alt додає збережені діапазони та якість."
+
+msgid "Affix tiers"
+msgstr "Ранги афіксів"
+
+msgid "T1 is the strongest numbered tier. Each affix has its own authored pool: it may end at T16, T15, T4 or another tier. Available tiers are shown from the actual captured pool. Current starter affixes only define T2; complete progression tables are not authored yet. Tier and item rarity are separate."
+msgstr "T1 — найсильніший нумерований ранг. Кожен афікс має власний заданий набір: він може закінчуватися на T16, T15, T4 чи іншому ранзі. Доступні ранги показуються за фактично збереженим набором. Стартові афікси наразі визначають лише T2; повних таблиць розвитку ще немає. Ранг і рідкість предмета — окремі поняття."
+
+msgid "Affix quality and ranges"
+msgstr "Якість і діапазони афіксів"
+
+msgid "One d100 quality roll is shared by all values of a rolled affix. 1 maps to the selected tier minimum; 100 maps to its maximum, with intermediate values rounded at the authored precision. Advanced details show value [minimum/maximum] quality% tier. Inspecting an item never rerolls it."
+msgstr "Один кидок якості d100 спільний для всіх значень афікса. 1 відповідає мінімуму вибраного рангу; 100 — максимуму. Проміжні значення округлюються із заданою точністю. Розширені деталі показують: значення [мінімум/максимум] якість% ранг. Огляд предмета ніколи не перекидає його значення."
+
+msgid "Flat, Increased and More"
+msgstr "Flat, Increased і More"
+
+msgid "Flat modifiers add amounts before percentage scaling. Increased modifiers add within their pool; More modifiers multiply separately. Global and typed damage increases share one additive pool. Percentage resistance points differ from a relative increase to resistance. Typed flat damage is added to attacks, not repeatedly to periodic ticks."
+msgstr "Flat додає фіксовану величину перед відсотковим масштабуванням. Increased додається в межах спільного набору; More множиться окремо. Загальне збільшення шкоди та збільшення за типами входять в один адитивний набір. Відсоткові пункти опору відрізняються від його відносного збільшення. Фіксована шкода за типами додається до атак, а не повторно до періодичних спрацьовувань."
+
+msgid "Item rarity and affix limits"
+msgstr "Рідкість і межі афіксів"
+
+msgid "Rarity sets the maximum number of affixes. Fewer affixes do not lower rarity automatically; adding affixes does not automatically upgrade it. Raising rarity is a separate operation whose gameplay recipes and costs remain future work. Each rarity entry shows the current configured capacity."
+msgstr "Рідкість визначає максимальну кількість афіксів. Менша кількість не знижує рідкість автоматично; додавання афіксів також не підвищує її автоматично. Підвищення рідкості є окремою операцією, для якої ігрові рецепти й витрати ще не реалізовані. Стаття кожної рідкості показує поточну налаштовану місткість."
+
+msgid "Linked explanations and pins"
+msgstr "Пов’язані пояснення та закріплення"
+
+msgid "Underlined text opens a related explanation. Pin keeps a card after closing its source window. Drag a card header to move it. Escape closes the latest unpinned card; use its close button to remove a pin. Item rarity colors remain separate from the muted colors of damage types."
+msgstr "Підкреслений текст відкриває пов’язане пояснення. Закріплення зберігає картку після закриття її вихідного вікна. Перетягніть заголовок, щоб перемістити картку. Escape закриває останню незакріплену картку; закріплену закривайте її кнопкою. Кольори рідкості предметів відокремлені від приглушених кольорів типів шкоди."
+
+msgid "Controls and windows"
+msgstr "Керування та вікна"
+
+msgid "Current gameplay bindings appear above Menu. Inventory and Character can stay open independently while the world continues. The reference, pause and settings stop the game while you read or edit. Search captures text input so typing does not toggle other windows."
+msgstr "Поточні клавіші керування показані над меню. Інвентар і персонаж можуть залишатися відкритими незалежно, поки світ продовжує діяти. Довідник, пауза й налаштування зупиняють гру на час читання чи редагування. Пошук перехоплює текстове введення, щоб набір не перемикав інші вікна."
+
+msgid "Display, sound and overhead bars"
+msgstr "Екран, звук і смуги ресурсів"
+
+msgid "Settings supports windowed/fullscreen mode, vertical synchronization, master volume and optional overhead bars for enemies and the player. Apply saves presentation preferences independently of a game run. Closing without applying discards edits. Language changes apply immediately and are saved with presentation preferences."
+msgstr "Налаштування підтримують віконний і повноекранний режими, вертикальну синхронізацію, загальну гучність і додаткові смуги над ворогами та гравцем. Застосування зберігає параметри інтерфейсу незалежно від ігрового сеансу. Закриття без застосування скидає правки. Зміна мови діє одразу й зберігається разом із налаштуваннями інтерфейсу."
+
+msgid "Restart and session persistence"
+msgstr "Перезапуск і збереження сеансу"
+
+msgid "Restart or starting a new game creates a fresh session. Equipped items, grid positions, combat history and pinned cards are not saved between runs. Presentation settings are stored separately."
+msgstr "Перезапуск або початок нової гри створює новий сеанс. Споряджені предмети, позиції в сітці, бойова історія та закріплені картки не зберігаються між сеансами. Налаштування інтерфейсу зберігаються окремо."
+
+msgid "Primary attributes and Luck"
+msgstr "Основні атрибути та удача"
+
+msgid "Primary-attribute progression, attribute-to-dice bonuses and Luck-driven item drops are planned and are not active in this playable prototype. The current sheet displays the resolved stats used by combat and movement. The reference does not invent numeric attribute bonuses or a finished progression table."
+msgstr "Розвиток основних атрибутів, їхні бонуси до кубиків і випадіння предметів залежно від удачі заплановані й ще не діють у цьому прототипі. Поточне вікно показує підсумкові характеристики для бою та руху. Довідник не вигадує числових бонусів атрибутів або завершеної таблиці розвитку."
+
+msgid "barbed shaft"
+msgstr "Зазубрене древко"
+
+msgid "cold ward"
+msgstr "Захист від холоду"
+
+msgid "deep well"
+msgstr "Глибока криниця"
+
+msgid "ember ward"
+msgstr "Захист від жару"
+
+msgid "fire ward"
+msgstr "Захист від вогню"
+
+msgid "fleet footed"
+msgstr "Прудкі ноги"
+
+msgid "steady hand"
+msgstr "Тверда рука"
+
+msgid "unbroken oath"
+msgstr "Непорушна присяга"
+
+msgid "vitality"
+msgstr "Життєва сила"
+
+msgid "watchful"
+msgstr "Пильність"
+
+msgid "armor"
+msgstr "броня"
+
+msgid "PLAYER"
+msgstr "ГРАВЕЦЬ"
+
+msgid "ENEMY"
+msgstr "ВОРОГ"
+
+msgid "Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nVampirism heals from actual opponent HP loss, rounded up. Next tick advances all living recipients; Auto uses game time.\n"
+msgstr "Бойова лабораторія готова. Застосуйте чернетку кнопкою; вибір зброї та ефектів діє на наступний запуск.\nВампіризм лікує від фактичної втрати здоров’я ворога з округленням угору. Наступне спрацьовування охоплює всіх живих отримувачів; автоматика використовує ігровий час.\n"
+
+msgid "[b]Edit {0}[/b]: HP {1}/{2} → {3}/{4}; armor {5}; evasion {6}. Resources, statuses and cooldown retained.\n"
+msgstr "[b]Зміна: {0}[/b]: ОЗ {1}/{2} → {3}/{4}; броня {5}; ухилення {6}. Ресурси, стани й відновлення збережено.\n"
+
+msgid "[color=#ff7777]Draft rejected: {0}[/color]\n"
+msgstr "[color=#ff7777]Чернетку відхилено: {0}[/color]\n"
+
+msgid "[b]{0} launch[/b]: {1}"
+msgstr "[b]Запуск: {0}[/b]: {1}"
+
+msgid " | cost 10 mana | damage {0} + {1}"
+msgstr " | витрати: 10 мани | шкода {0} + {1}"
+
+msgid " | no new cost or attack visual"
+msgstr " | без нових витрат чи візуалізації атаки"
+
+msgid "melee window"
+msgstr "вікно ближньої атаки"
+
+msgid "arrow"
+msgstr "стріла"
+
+msgid "Launch: {0}"
+msgstr "Запуск: {0}"
+
+msgid "\n[b]Tick round {0}[/b] | {1} periodic instances\n"
+msgstr "\n[b]Раунд спрацьовувань {0}[/b] | періодичних ефектів: {1}\n"
+
+msgid "Player (captured)"
+msgstr "Гравець (знімок)"
+
+msgid "Enemy (captured)"
+msgstr "Ворог (знімок)"
+
+msgid "Player: {0}/{1} HP | Mana {2} | CD {3:0.0}s\nEnemy: {4}/{5} HP | Mana {6} | CD {7:0.0}s"
+msgstr "Гравець: {0}/{1} ОЗ | Мана {2} | Відновлення {3:0.0}с\nВорог: {4}/{5} ОЗ | Мана {6} | Відновлення {7:0.0}с"
+
+msgid "Player\n{0}/{1} HP"
+msgstr "Гравець\n{0}/{1} ОЗ"
+
+msgid "Enemy\n{0}/{1} HP"
+msgstr "Ворог\n{0}/{1} ОЗ"
+
+msgid "Live HP {0}/{1} | Statuses: "
+msgstr "Поточні ОЗ {0}/{1} | Стани: "
+
+msgid "none"
+msgstr "немає"
+
+msgid "{0} ({1}) - see calculation below"
+msgstr "{0} ({1}) — розрахунок нижче"
+
+msgid "Contact: {0} | Commit: {1}"
+msgstr "Контакт: {0} | Застосування: {1}"
+
+msgid "No calculation. End: {0}"
+msgstr "Без розрахунку. Завершення: {0}"
+
+msgid "Publication: {0}"
+msgstr "Застосування: {0}"
+
+msgid "not attempted"
+msgstr "не виконувалося"
+
+msgid "Domain: {0}"
+msgstr "Домен: {0}"
+
+msgid "[b]{0} tick → {1}[/b]"
+msgstr "[b]Спрацьовування {0} → {1}[/b]"
+
+msgid "Publication: {0} | no d20, launch cost or cooldown"
+msgstr "Застосування: {0} | без d20, витрат запуску та відновлення"
+
+msgid "Source captured at application: HP {0}/{1}"
+msgstr "Знімок джерела на момент накладання: ОЗ {0}/{1}"
+
+msgid "Periodic damage"
+msgstr "Періодична шкода"
+
+msgid "Calculation proposal only: these changes were not newly applied."
+msgstr "Лише пропозиція розрахунку: ці зміни не застосовано повторно."
+
+msgid "Attack: {0} [{1}] + {2} = {3}; evasion {4}; margin {5} (before natural shift)"
+msgstr "Атака: {0} [{1}] + {2} = {3}; ухилення {4}; різниця {5} (до натурального зсуву)"
+
+msgid "Target input: HP {0}/{1}; armor {2}; "
+msgstr "Вхідні дані цілі: ОЗ {0}/{1}; броня {2}; "
+
+msgid "resistances {0}"
+msgstr "опори {0}"
+
+msgid " | flat {0}"
+msgstr " | фіксовано {0}"
+
+msgid " | origin {0}"
+msgstr " | джерело {0}"
+
+msgid "    {0}: {1} [{2}] + flat {3} = {4}"
+msgstr "    {0}: {1} [{2}] + фіксовано {3} = {4}"
+
+msgid "  Vampirism skipped for self-damage."
+msgstr "  Вампіризм пропущено для шкоди собі."
+
+msgid "  Vampirism: actual opponent HP lost {0} × {1:P0} = {2} proposed healing (rounded up, capped by max HP)"
+msgstr "  Вампіризм: фактична втрата ОЗ ворога {0} × {1:P0} = {2} запропонованого лікування (округлено вгору, обмежено максимумом ОЗ)"
+
+msgid "Complete dice trace:"
+msgstr "Повний журнал кубиків:"
+
+msgid "Applied changes:"
+msgstr "Застосовані зміни:"
+
+msgid "Proposed changes:"
+msgstr "Запропоновані зміни:"
+
+msgid "  {0} HP: {1} → {2} (actual clamped change)"
+msgstr "  {0} ОЗ: {1} → {2} (фактична обмежена зміна)"
+
+msgid "  Apply {0} to {1}; source captured at application"
+msgstr "  Накласти {0} на {1}; джерело збережено на момент накладання"
+
+msgid "  Remove status {0} from {1}"
+msgstr "  Прибрати стан {0} з {1}"
+
+msgid "  Combatant defeated"
+msgstr "  Учасника переможено"
+
+msgid "  No state changes."
+msgstr "  Змін стану немає."
+
+msgid "Draft stats | Apply includes current HP"
+msgstr "Чернетка | Застосування включає поточні ОЗ"
+
+msgid "Current HP"
+msgstr "Поточні ОЗ"
+
+msgid "Maximum HP"
+msgstr "Максимальні ОЗ"
+
+msgid "Attack modifier"
+msgstr "Модифікатор атаки"
+
+msgid "Damage dice count"
+msgstr "Кількість кубиків шкоди"
+
+msgid "Damage die sides"
+msgstr "Грані кубика шкоди"
+
+msgid "Flat damage"
+msgstr "Фіксована шкода"
+
+msgid "Resistance % | negative = weakness"
+msgstr "Опір % | від’ємний = вразливість"
+
+msgid "Burning on contact"
+msgstr "Горіння при контакті"
+
+msgid "Bleeding on contact"
+msgstr "Кровотеча при контакті"
+
+msgid "Vampirism on attack"
+msgstr "Вампіризм при атаці"
+
+msgid "Vampirism %"
+msgstr "Вампіризм %"
+
+msgid "Ticks: 1d4 Fire / Slashing.\nNext tick / Auto: living targets only.\nStatus contact includes evasion."
+msgstr "Спрацьовування: 1d4 вогню / рубальної шкоди.\nРучний / автоматичний режим: лише живі цілі.\nКонтакт ефекту враховує ухилення."
+
+msgid "Apply draft stats (including HP)"
+msgstr "Застосувати чернетку (включно з ОЗ)"
+
+msgid "Projectile"
+msgstr "Снаряд"
+
+msgid "Melee"
+msgstr "Ближня атака"
+
+msgid "Burning"
+msgstr "Горіння"
+
+msgid "Bleeding"
+msgstr "Кровотеча"
+
+msgid "Periodic"
+msgstr "Періодичний ефект"
+
+msgid "Archer"
+msgstr "Стрілець"
+
+msgid "Training target"
+msgstr "Тренувальна мішень"
+
+msgid "Arena [F2]"
+msgstr "Арена [F2]"
+
+msgid "Roll For Honor | Combat workbench"
+msgstr "Roll For Honor | Бойова лабораторія"
+
+msgid "Preparing combat session..."
+msgstr "Підготовка бойового сеансу…"
+
+msgid "Space: player attack | E: enemy attack"
+msgstr "Пробіл: атака гравця | E: атака ворога"
+
+msgid "Bring enemy into melee range"
+msgstr "Наблизити ворога для ближньої атаки"
+
+msgid "Player attacks [Space] | 10 mana"
+msgstr "Атака гравця [Пробіл] | 10 мани"
+
+msgid "Enemy attacks [E] | 10 mana"
+msgstr "Атака ворога [E] | 10 мани"
+
+msgid "Next tick | all active periodic effects"
+msgstr "Наступне спрацьовування | усі активні періодичні ефекти"
+
+msgid "Automatic ticks"
+msgstr "Автоматичні спрацьовування"
+
+msgid "Interval (game seconds)"
+msgstr "Інтервал (ігрові секунди)"
+
+msgid "Restart entire session"
+msgstr "Перезапустити весь сеанс"
+
+msgid "COMBAT JOURNAL | all dice, typed damage stages, statuses and applied HP"
+msgstr "ЖУРНАЛ БОЮ | усі кубики, етапи шкоди за типами, стани та зміни ОЗ"
+
+msgid "Clear journal"
+msgstr "Очистити журнал"
+
+msgid "Live stats"
+msgstr "Поточні характеристики"
+
+msgid "COURTYARD"
+msgstr "ДВІР"
+
+msgid "LOW TERRACE 0.4m"
+msgstr "НИЖНЯ ТЕРАСА 0,4м"
+
+msgid "HIGH TERRACE 4m"
+msgstr "ВЕРХНЯ ТЕРАСА 4м"
+
+msgid "RAMP"
+msgstr "СХИЛ"
+
+msgid "WEST PASSAGES"
+msgstr "ЗАХІДНІ ПРОХОДИ"
+
+msgid "CourtyardTarget"
+msgstr "Мішень у дворі"
+
+msgid "LowTarget"
+msgstr "Нижня мішень"
+
+msgid "HighTarget"
+msgstr "Верхня мішень"
+
+msgid "RampTarget"
+msgstr "Мішень на схилі"
+
+msgid "PassageTarget"
+msgstr "Мішень у проході"
+
+msgid "CriticalHit"
+msgstr "Критичне влучання"
+
+msgid "GlancingHit"
+msgstr "Ковзне влучання"
+
+msgid "Started"
+msgstr "Розпочато"
+
+msgid "SourceDefeated"
+msgstr "Джерело переможено"
+
+msgid "OnCooldown"
+msgstr "Відновлюється"
+
+msgid "InsufficientResources"
+msgstr "Бракує ресурсів"
+
+msgid "VersionConflict"
+msgstr "Конфлікт версій"
+
+msgid "AlreadyStarted"
+msgstr "Уже розпочато"
+
+msgid "Processed"
+msgstr "Опрацьовано"
+
+msgid "AttackEnded"
+msgstr "Атаку завершено"
+
+msgid "TargetAlreadyContacted"
+msgstr "Контакт із ціллю вже відбувся"
+
+msgid "Explicit"
+msgstr "Явне завершення"
+
+msgid "AnimationFinished"
+msgstr "Анімацію завершено"
+
+msgid "LifetimeExpired"
+msgstr "Час існування вичерпано"
+
+msgid "CombatantContact"
+msgstr "Контакт з учасником"
+
+msgid "EnvironmentContact"
+msgstr "Контакт з оточенням"
+
+msgid "Applied"
+msgstr "Застосовано"
+
+msgid "AlreadyApplied"
+msgstr "Уже застосовано"
+
+msgid "WeaponRoll"
+msgstr "Кидок зброї"
+
+msgid "FlatBonus"
+msgstr "Фіксований бонус"
+
+msgid "AttackQuality"
+msgstr "Якість атаки"
+
+msgid "AttackerModifier"
+msgstr "Модифікатор нападника"
+
+msgid "DamageConversion"
+msgstr "Перетворення шкоди"
+
+msgid "AuraAbsorption"
+msgstr "Поглинання аурою"
+
+msgid "ShieldAbsorption"
+msgstr "Поглинання щитом"
+
+msgid "ArmorMitigation"
+msgstr "Зменшення бронею"
+
+msgid "ResistanceMitigation"
+msgstr "Зменшення опором"
+
+msgid "Finalization"
+msgstr "Завершення"
+
+msgid "{0}{1}{2} {3}"
+msgstr "{3}: {0}{1}{2}"
+
+msgid "{0}\n40 HP"
+msgstr "{0}\n40 ОЗ"
+
+msgid "{0}\n{1}/{2} HP"
+msgstr "{0}\n{1}/{2} ОЗ"
+
+msgid "N"
+msgstr "Пн"
+
+msgid "evasion"
+msgstr "ухилення"
+
+msgid "criticalchance"
+msgstr "шанс критичного влучання"
+
+msgid "criticalmultiplier"
+msgstr "критичний множник"
+
+msgid "Language"
+msgstr "Мова"

@@ -5,6 +5,7 @@ using RollForHonor.Domain.Items.Equipment.Configuration;
 using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Stats;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -67,12 +68,12 @@ public static class ItemPresentation
     /// <returns>A short interface label.</returns>
     public static string SlotName(EquipmentSlot slot) => slot switch
     {
-        EquipmentSlot.BodyArmor => "Body armor",
-        EquipmentSlot.RingLeft => "Ring I",
-        EquipmentSlot.RingRight => "Ring II",
-        EquipmentSlot.Weapon => "Main hand",
-        EquipmentSlot.OffHand => "Off hand",
-        _ => slot.ToString()
+        EquipmentSlot.BodyArmor => L.Text("Body armor"),
+        EquipmentSlot.RingLeft => L.Text("Ring I"),
+        EquipmentSlot.RingRight => L.Text("Ring II"),
+        EquipmentSlot.Weapon => L.Text("Main hand"),
+        EquipmentSlot.OffHand => L.Text("Off hand"),
+        _ => L.Text(slot.ToString())
     };
 
     /// <summary>Formats a stored modifier with its actual units and stacking operation.</summary>
@@ -86,12 +87,12 @@ public static class ItemPresentation
         var unit = fractional ? "%" : "";
         var operation = modifier.Operation switch
         {
-            StatOperation.Increased => " increased",
-            StatOperation.More => " more",
+            StatOperation.Increased => L.Text(" increased"),
+            StatOperation.More => L.Text(" more"),
             _ => ""
         };
 
-        return $"{number}{unit}{operation} {StatName(modifier.Key)}";
+        return L.Format($"{number}{unit}{operation} {StatName(modifier.Key)}");
     }
 
     private static string StatName(StatKey key)
@@ -100,14 +101,14 @@ public static class ItemPresentation
 
         return key.Type switch
         {
-            StatType.MaxHealth => "maximum health",
-            StatType.MaxMana => "maximum mana",
-            StatType.MovementSpeed => "movement speed",
-            StatType.AttackModifier => "attack roll",
-            StatType.Resistance => $"{qualifier} resistance",
-            StatType.AddedDamage => $"added {qualifier} damage",
-            StatType.DamageMultiplier => qualifier is null ? "all damage" : $"{qualifier} damage",
-            _ => key.Type.ToString().ToLowerInvariant()
+            StatType.MaxHealth => L.Text("maximum health"),
+            StatType.MaxMana => L.Text("maximum mana"),
+            StatType.MovementSpeed => L.Text("movement speed"),
+            StatType.AttackModifier => L.Text("attack roll"),
+            StatType.Resistance => L.Format($"{qualifier} resistance"),
+            StatType.AddedDamage => L.Format($"added {qualifier} damage"),
+            StatType.DamageMultiplier => qualifier is null ? L.Text("all damage") : L.Format($"{qualifier} damage"),
+            _ => L.Text(key.Type.ToString().ToLowerInvariant())
         };
     }
 }

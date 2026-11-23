@@ -2,6 +2,7 @@ using Godot;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Godot.UI.Settings;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -50,14 +51,14 @@ public partial class ArenaHud
     {
         _pauseShade = UiLayout.Place(_design, new ColorRect { Color = new Color(0.01f, 0.02f, 0.025f, 0.8f), Visible = false }, new Rect2(0, 0, 1920, 1080));
         _pause = UiLayout.Panel(_design, "Pause", new Rect2(650, 238, 620, 604));
-        var title = UiLayout.Place(_pause, UiLayout.Text("SESSION", 22, HonorTheme.Brass, true), new Rect2(54, 32, 512, 48));
+        var title = UiLayout.Place(_pause, UiLayout.Text(L.Text("SESSION"), 22, HonorTheme.Brass, true), new Rect2(54, 32, 512, 48));
         title.HorizontalAlignment = HorizontalAlignment.Center;
         UiLayout.Divider(_pause, new Rect2(54, 112, 512, 2));
-        UiLayout.Place(_pause, UiLayout.Button("Resume", Resume, true), new Rect2(54, 160, 512, 60));
-        UiLayout.Place(_pause, UiLayout.Button("Restart", () => Navigate("res://ArenaBootstrap.tscn")), new Rect2(54, 244, 512, 60));
-        UiLayout.Place(_pause, UiLayout.Button("Reference", ToggleReference), new Rect2(54, 328, 512, 60));
-        UiLayout.Place(_pause, UiLayout.Button("Settings", OpenSettings), new Rect2(54, 412, 512, 60));
-        UiLayout.Place(_pause, UiLayout.Button("Main menu", () => Navigate("res://Bootstrap.tscn")), new Rect2(54, 496, 512, 60));
+        UiLayout.Place(_pause, UiLayout.Button(L.Text("Resume"), Resume, true), new Rect2(54, 160, 512, 60));
+        UiLayout.Place(_pause, UiLayout.Button(L.Text("Restart"), () => Navigate("res://ArenaBootstrap.tscn")), new Rect2(54, 244, 512, 60));
+        UiLayout.Place(_pause, UiLayout.Button(L.Text("Reference"), ToggleReference), new Rect2(54, 328, 512, 60));
+        UiLayout.Place(_pause, UiLayout.Button(L.Text("Settings"), OpenSettings), new Rect2(54, 412, 512, 60));
+        UiLayout.Place(_pause, UiLayout.Button(L.Text("Main menu"), () => Navigate("res://Bootstrap.tscn")), new Rect2(54, 496, 512, 60));
         _pause.Hide();
     }
 
@@ -72,7 +73,7 @@ public partial class ArenaHud
     {
         var panel = UiLayout.Panel(_design, "Enemy", new Rect2(670, 25, 580, 91));
         _enemyName = UiLayout.Place(panel, UiLayout.Text("", 24, heading: true), new Rect2(23, 10, 350, 38));
-        _enemyState = UiLayout.Place(panel, UiLayout.Text("COURTYARD GUARD", 13, HonorTheme.Muted), new Rect2(355, 12, 210, 34));
+        _enemyState = UiLayout.Place(panel, UiLayout.Text(L.Text("COURTYARD GUARD"), 13, HonorTheme.Muted), new Rect2(355, 12, 210, 34));
         _enemyAmount = UiLayout.Place(panel, UiLayout.Text("", 16), new Rect2(23, 39, 300, 20));
         _enemyHealth = UiLayout.Place(panel, new ProgressBar { ShowPercentage = false }, new Rect2(23, 60, 534, 8));
         _enemyHealth.AddThemeStyleboxOverride("background", HonorTheme.Panel(new Color("29322e"), HonorTheme.Border, 0));
@@ -87,8 +88,8 @@ public partial class ArenaHud
         var objective = UiLayout.Panel(_design, "Objective", new Rect2(1550, 248, 333, 110));
         objective.MouseFilter = Control.MouseFilterEnum.Ignore;
         objective.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.65f), new Color(HonorTheme.Border, 0.65f)));
-        UiLayout.Place(objective, UiLayout.Text("THE PROVING GROUNDS", 15, HonorTheme.Brass), new Rect2(18, 14, 300, 29));
-        _objective = UiLayout.Place(objective, UiLayout.Text("Defeat the Sentinel", 18), new Rect2(18, 49, 296, 50));
+        UiLayout.Place(objective, UiLayout.Text(L.Text("THE PROVING GROUNDS"), 15, HonorTheme.Brass), new Rect2(18, 14, 300, 29));
+        _objective = UiLayout.Place(objective, UiLayout.Text(L.Text("Defeat the Sentinel"), 18), new Rect2(18, 49, 296, 50));
         _objective.AutowrapMode = TextServer.AutowrapMode.WordSmart;
     }
 
@@ -101,12 +102,12 @@ public partial class ArenaHud
         _roll.Name = "RollValue";
         _roll.Requested += () => OpenInspection(_history.CreateDiceHistoryTopic());
         _attack = UiLayout.Place(bar, UiLayout.Text("", 12, HonorTheme.Muted), new Rect2(280, 82, 286, 18));
-        UiLayout.Place(_design, UiLayout.Button("Inventory", ToggleInventory), new Rect2(16, 974, 193, 51));
-        var reference = UiLayout.Place(_design, UiLayout.Button("Reference", ToggleReference), new Rect2(225, 974, 193, 51));
+        UiLayout.Place(_design, UiLayout.Button(L.Text("Inventory"), ToggleInventory), new Rect2(16, 974, 193, 51));
+        var reference = UiLayout.Place(_design, UiLayout.Button(L.Text("Reference"), ToggleReference), new Rect2(225, 974, 193, 51));
         reference.Name = "ReferenceButton";
         BuildAbilities(bar);
-        UiLayout.Place(_design, UiLayout.Button("Character", ToggleCharacter), new Rect2(16, 914, 193, 51));
-        var menu = UiLayout.Place(_design, UiLayout.Button("Menu", Escape), new Rect2(1693, 974, 190, 51));
+        UiLayout.Place(_design, UiLayout.Button(L.Text("Character"), ToggleCharacter), new Rect2(16, 914, 193, 51));
+        var menu = UiLayout.Place(_design, UiLayout.Button(L.Text("Menu"), Escape), new Rect2(1693, 974, 190, 51));
         menu.Name = "MenuButton";
         var hints = UiLayout.Panel(_design, "Hints", new Rect2(1637, 766, 250, 184));
         hints.MouseFilter = Control.MouseFilterEnum.Ignore;
@@ -127,7 +128,9 @@ public partial class ArenaHud
                     LaunchPrimary();
                 }
             });
-            button.TooltipText = index == 0 ? "Basic attack" : "Locked skill slot";
+            var tooltip = index == 0 ? "Basic attack" : "Locked skill slot";
+            button.TooltipText = L.Text(tooltip);
+            L.OnChanged(button, () => button.TooltipText = L.Text(tooltip));
             button.Disabled = index > 0;
             UiLayout.Place(bar, button, new Rect2(280 + index * 72, 16, 64, 64));
             UiLayout.Place(button, UiLayout.Icon(index == 0 ? "weapon" : "lock"), new Rect2(12, 12, 40, 40));

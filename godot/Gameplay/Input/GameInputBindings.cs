@@ -1,5 +1,6 @@
 using System.Linq;
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.Gameplay.Input;
 
@@ -44,10 +45,10 @@ public static class GameInputBindings
             .OfType<InputEventMouseButton>()
             .FirstOrDefault()?.ButtonIndex switch
         {
-            MouseButton.Right => "RMB",
-            MouseButton.Left => "LMB",
-            MouseButton.WheelUp => "Wheel up",
-            MouseButton.WheelDown => "Wheel down",
+            MouseButton.Right => L.Text("RMB"),
+            MouseButton.Left => L.Text("LMB"),
+            MouseButton.WheelUp => L.Text("Wheel up"),
+            MouseButton.WheelDown => L.Text("Wheel down"),
             _ => "—"
         };
     }

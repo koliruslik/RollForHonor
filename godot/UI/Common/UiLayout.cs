@@ -1,5 +1,7 @@
 using System;
 using Godot;
+using System.Linq;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
 
@@ -52,6 +54,12 @@ public static class UiLayout
             ThemeTypeVariation = heading ? "Heading" : "",
             VerticalAlignment = VerticalAlignment.Center
         };
+
+        if (text.Any(char.IsLetter))
+        {
+            L.SetText(label, text);
+        }
+
         label.AddThemeFontSizeOverride("font_size", size);
         label.AddThemeColorOverride("font_color", color ?? HonorTheme.Parchment);
 
@@ -71,6 +79,12 @@ public static class UiLayout
             ThemeTypeVariation = primary ? "GoldButton" : "",
             MouseDefaultCursorShape = Control.CursorShape.PointingHand
         };
+
+        if (text.Any(char.IsLetter))
+        {
+            L.SetText(button, text);
+        }
+
         button.Pressed += pressed;
 
         return button;

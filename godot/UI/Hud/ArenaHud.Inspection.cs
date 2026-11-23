@@ -6,6 +6,7 @@ using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Godot.Gameplay.Targeting;
 using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Domain.Items.Models;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -24,11 +25,11 @@ public partial class ArenaHud
         }
 
         var target = _runtime.CombatState.Read(_arena.Player.CombatantId, id).Target;
-        _enemyName.Text = _bodies[id].Name;
+        L.SetText(_enemyName, L.Text(_bodies[id].Name));
         _enemyHealth.MaxValue = target.MaxHealth;
         _enemyHealth.Value = target.Health;
         _enemyAmount.Text = $"{target.Health} / {target.MaxHealth}";
-        _enemyState.Text = selection.IsInCombat ? "IN COMBAT" : "SELECTED";
+        L.SetText(_enemyState, selection.IsInCombat ? L.Text("IN COMBAT") : L.Text("SELECTED"));
     }
 
     private void RefreshHover()
@@ -68,14 +69,14 @@ public partial class ArenaHud
         _hints.GetParent<Control>().Visible = !_inventory.Visible && !_character.Visible && !_pause.Visible && !_settings.Visible && !_reference.Visible;
         _hints.Text = string.Join("\n",
         [
-            $"{Binding("arena_forward")} {Binding("arena_left")} {Binding("arena_back")} {Binding("arena_right")}  Move",
-            $"{Binding("rfh_zoom_in")} / {Binding("rfh_zoom_out")}  Zoom",
-            $"{Binding("rfh_inventory")}  Inventory",
-            $"{Binding("rfh_character")}  Character",
-            $"{Binding("rfh_menu")}  Menu",
-            $"{Binding("rfh_reference")}  Reference",
-            $"{Binding("rfh_primary")}  Attack",
-            $"{Binding("rfh_target")}  Select / clear target"
+            L.Format($"{Binding("arena_forward")} {Binding("arena_left")} {Binding("arena_back")} {Binding("arena_right")}  Move"),
+            L.Format($"{Binding("rfh_zoom_in")} / {Binding("rfh_zoom_out")}  Zoom"),
+            L.Format($"{Binding("rfh_inventory")}  Inventory"),
+            L.Format($"{Binding("rfh_character")}  Character"),
+            L.Format($"{Binding("rfh_menu")}  Menu"),
+            L.Format($"{Binding("rfh_reference")}  Reference"),
+            L.Format($"{Binding("rfh_primary")}  Attack"),
+            L.Format($"{Binding("rfh_target")}  Select / clear target")
         ]);
     }
 

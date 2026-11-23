@@ -48,6 +48,11 @@ arena_right={
 "events": [Object(InputEventKey,"physical_keycode":68)]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://Content/Localization/uk.po")
+locale/test="uk"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

@@ -50,6 +50,7 @@ public partial class GameBootstrap : Node3D
     /// <inheritdoc />
     public override void _EnterTree()
     {
+        UI.Settings.PreferencesStore.InitializeLanguage();
         GameInputBindings.EnsureDefaults();
 
         if (_attacks is not null)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Domain.Combat.Attacks.Models;
 using RollForHonor.Domain.Combat.Damage.Models;
@@ -54,7 +55,7 @@ public partial class GreyboxArena : Node3D
         foreach (var target in GetTargets())
         {
             _runtime.CombatState.AddCombatant(new(target.CombatantId, 40, 40, 5, 10, [], []));
-            target.GetNode<Label3D>("Name").Text = $"{target.Name}\n40 HP";
+            target.GetNode<Label3D>("Name").Text = L.Format($"{target.Name}\n40 HP");
         }
 
         ConfigureOpponent();
@@ -199,7 +200,7 @@ public partial class GreyboxArena : Node3D
         foreach (var target in GetTargets())
         {
             var state = _runtime.CombatState.Read(Player.CombatantId, target.CombatantId).Target;
-            target.GetNode<Label3D>("Name").Text = $"{target.Name}\n{state.Health}/{state.MaxHealth} HP";
+            target.GetNode<Label3D>("Name").Text = L.Format($"{target.Name}\n{state.Health}/{state.MaxHealth} HP");
         }
     }
 

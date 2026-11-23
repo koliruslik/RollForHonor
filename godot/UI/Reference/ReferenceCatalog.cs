@@ -9,6 +9,7 @@ using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Reference;
 
@@ -32,12 +33,12 @@ public static class ReferenceCatalog
 
         if (rolls is not null)
         {
-            entries.Add("session.rolls", new("session.rolls", "Current session", rolls));
+            entries.Add("session.rolls", new("session.rolls", L.Text("Current session"), rolls));
         }
 
         if (combat is not null)
         {
-            entries.Add("session.combat", new("session.combat", "Current session", combat));
+            entries.Add("session.combat", new("session.combat", L.Text("Current session"), combat));
         }
 
         return entries.Values
@@ -54,24 +55,24 @@ public static class ReferenceCatalog
         foreach (var type in scalarStats)
         {
             var id = $"stat.{type}";
-            entries.Add(id, new(id, "Character stats", CombatGlossary.Stat(new(type))));
+            entries.Add(id, new(id, L.Text("Character stats"), CombatGlossary.Stat(new(type))));
         }
 
-        entries.Add("damage.physical", new("damage.physical", "Damage", CombatGlossary.Physical()));
+        entries.Add("damage.physical", new("damage.physical", L.Text("Damage"), CombatGlossary.Physical()));
 
         foreach (var type in Enum.GetValues<DamageType>())
         {
-            entries.Add($"damage.{type}", new($"damage.{type}", "Damage", CombatGlossary.Damage(type)));
-            entries.Add($"resistance.{type}", new($"resistance.{type}", "Resistances", CombatGlossary.Resistance(type)));
-            entries.Add($"added.{type}", new($"added.{type}", "Damage", CombatGlossary.Stat(new(StatType.AddedDamage, type))));
+            entries.Add($"damage.{type}", new($"damage.{type}", L.Text("Damage"), CombatGlossary.Damage(type)));
+            entries.Add($"resistance.{type}", new($"resistance.{type}", L.Text("Resistances"), CombatGlossary.Resistance(type)));
+            entries.Add($"added.{type}", new($"added.{type}", L.Text("Damage"), CombatGlossary.Stat(new(StatType.AddedDamage, type))));
         }
 
         var rarities = ItemRuleContent.LoadRarityRules();
 
         foreach (var rarity in Enum.GetValues<ItemRarity>())
         {
-            var topic = new InspectionTopic(rarity.ToString(), $"Configured affix limit: {rarities.GetCapacity(rarity)}.\n\nRarity is explicit. Adding or removing affixes does not change it automatically.", ItemPresentation.RarityColor(rarity));
-            entries.Add($"rarity.{rarity}", new($"rarity.{rarity}", "Items", topic));
+            var topic = new InspectionTopic(L.Text(rarity.ToString()), L.Format($"Configured affix limit: {rarities.GetCapacity(rarity)}.\n\nRarity is explicit. Adding or removing affixes does not change it automatically."), ItemPresentation.RarityColor(rarity));
+            entries.Add($"rarity.{rarity}", new($"rarity.{rarity}", L.Text("Items"), topic));
         }
     }
 
@@ -79,8 +80,8 @@ public static class ReferenceCatalog
     {
         using var json = JsonDocument.Parse(FileAccess.GetFileAsString("res://Content/Reference/topics.json"));
         var authored = json.RootElement.EnumerateArray()
-            .Select(entry => new AuthoredTopic(entry.GetProperty("id").GetString(), entry.GetProperty("category").GetString(),
-                entry.GetProperty("title").GetString(), entry.GetProperty("description").GetString(), entry.GetProperty("related").EnumerateArray()
+            .Select(entry => new AuthoredTopic(entry.GetProperty("id").GetString(), L.Text(entry.GetProperty("category").GetString()),
+                L.Text(entry.GetProperty("title").GetString()), L.Text(entry.GetProperty("description").GetString()), entry.GetProperty("related").EnumerateArray()
                     .Select(link => link.GetString())
                     .ToArray()))
             .ToArray();
@@ -109,14 +110,14 @@ public static class ReferenceCatalog
     {
         foreach (var item in items)
         {
-            entries.Add($"item.{item.Id}", new($"item.{item.Id}", "Owned items", ItemInspectionTopics.Item(item)));
+            entries.Add($"item.{item.Id}", new($"item.{item.Id}", L.Text("Owned items"), ItemInspectionTopics.Item(item)));
 
             foreach (var affix in item.Affixes)
             {
                 var topic = ItemInspectionTopics.Affix(item.Rarity, affix, true);
-                var title = item.Base.Name + " · " + topic.Title;
+                var title = L.Format($"{L.Text(item.Base.Name)} · {topic.Title}");
                 var id = $"affix.{item.Id.Length}:{item.Id}.{affix.Id}";
-                entries.Add(id, new(id, "Rolled affixes", new(title, topic.Description, topic.Accent, topic.Links, topic.Facts)));
+                entries.Add(id, new(id, L.Text("Rolled affixes"), new(title, topic.Description, topic.Accent, topic.Links, topic.Facts)));
             }
         }
     }

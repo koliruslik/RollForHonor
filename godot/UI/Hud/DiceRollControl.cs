@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -28,12 +29,13 @@ public partial class DiceRollControl : Control
             BbcodeEnabled = true,
             MetaUnderlined = true,
             ScrollActive = false,
-            Text = "[center][url=roll]LAST ROLL[/url][/center]",
+            Text = L.Text("[center][url=roll]LAST ROLL[/url][/center]"),
             MouseFilter = MouseFilterEnum.Stop
         }, new Rect2(0, 82, 96, 20));
         caption.AddThemeFontSizeOverride("normal_font_size", 10);
         caption.AddThemeColorOverride("default_color", HonorTheme.Muted);
         caption.MetaClicked += _ => Requested?.Invoke();
+        L.OnChanged(caption, () => caption.Text = L.Text("[center][url=roll]LAST ROLL[/url][/center]"));
         MouseEntered += () => SetHovered(true);
         MouseExited += () => SetHovered(false);
     }

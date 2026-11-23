@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
 
@@ -44,7 +45,7 @@ public partial class InspectionPane : Control
         _pin.Name = "Pin";
         _pin.Text = "";
         _pin.ToggleMode = true;
-        _pin.TooltipText = "Pin";
+        _pin.TooltipText = L.Text("Pin");
         UiLayout.Place(_pin, UiLayout.Icon("pin"), new Rect2(10, 10, 20, 20));
         UiLayout.Place(_panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(304, 12, 40, 40));
         UiLayout.Divider(_panel, new Rect2(16, 68, 328, 1));
@@ -52,6 +53,15 @@ public partial class InspectionPane : Control
         _body.AddThemeFontSizeOverride("normal_font_size", 16);
         _body.AddThemeConstantOverride("line_separation", 3);
         _body.MetaClicked += FollowLink;
+        L.OnChanged(this, () =>
+        {
+            if (_topic is not null)
+            {
+                ShowTopic(_topic);
+            }
+
+            _pin.TooltipText = IsPinned ? L.Text("Unpin") : L.Text("Pin");
+        });
     }
 
     /// <inheritdoc />
@@ -69,7 +79,7 @@ public partial class InspectionPane : Control
     public void ShowTopic(InspectionTopic topic)
     {
         _topic = topic;
-        _title.Text = topic.Title;
+        L.SetText(_title, topic.Title);
         _title.AddThemeColorOverride("font_color", HonorTheme.Parchment);
         _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color("141a1d"), topic.Accent.Darkened(0.4f), 0));
         InspectionContent.Write(_body, topic);
@@ -103,7 +113,7 @@ public partial class InspectionPane : Control
         IsPinned = !IsPinned;
         HasCustomPosition = true;
         _pin.ButtonPressed = IsPinned;
-        _pin.TooltipText = IsPinned ? "Unpin" : "Pin";
+        _pin.TooltipText = IsPinned ? L.Text("Unpin") : L.Text("Pin");
         PinnedChanged?.Invoke();
     }
 

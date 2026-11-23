@@ -7,6 +7,7 @@ using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.Attacks.Models;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -33,8 +34,8 @@ public partial class CombatHistoryPanel : Control
         MouseFilter = MouseFilterEnum.Ignore;
         _panel = UiLayout.Panel(this, "Journal", new Rect2(0, 0, 400, 230));
         _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.8f), new Color(HonorTheme.Border, 0.5f)));
-        UiLayout.Place(_panel, UiLayout.Text("COMBAT", 13, HonorTheme.Muted), new Rect2(16, 8, 200, 28));
-        _toggle = UiLayout.Place(_panel, UiLayout.Button("Details", ToggleDetails), new Rect2(280, 8, 104, 40));
+        UiLayout.Place(_panel, UiLayout.Text(L.Text("COMBAT"), 13, HonorTheme.Muted), new Rect2(16, 8, 200, 28));
+        _toggle = UiLayout.Place(_panel, UiLayout.Button(L.Text("Details"), ToggleDetails), new Rect2(280, 8, 104, 40));
         _toggle.AddThemeFontSizeOverride("font_size", 13);
         _text = UiLayout.Place(_panel, new RichTextLabel { Name = "Entries", MetaUnderlined = true, MouseFilter = MouseFilterEnum.Stop }, new Rect2(16, 56, 368, 156));
         _text.AddThemeFontSizeOverride("normal_font_size", 14);
@@ -46,6 +47,7 @@ public partial class CombatHistoryPanel : Control
             }
         };
         Refresh();
+        L.OnChanged(this, Refresh);
     }
 
     /// <summary>Retains only actually committed calculation facts.</summary>
@@ -61,13 +63,15 @@ public partial class CombatHistoryPanel : Control
         }
 
         var result = resolved.Resolution.Result.Target;
+        source = L.Text(source);
+        target = L.Text(target);
         var before = result.DamageResolution?.BeforeDefenses.Sum() ?? 0;
         var after = result.DamageResolution?.AfterDefenses.Sum() ?? 0;
         var outcome = OutcomeName(result.Outcome);
         var dice = CombatInspectionTopics.Dice(source, target, resolved);
         var damage = CombatInspectionTopics.Damage(result);
-        var topic = new InspectionTopic($"{source} → {target}", $"{outcome}\nDamage {before} → {after} (blocked {before - after})", HonorTheme.Secondary,
-            [new("Dice and bonuses", HonorTheme.Secondary, () => dice), new("Damage breakdown", HonorTheme.Secondary, () => damage)]);
+        var topic = new InspectionTopic(L.Format($"{source} → {target}"), L.Format($"{outcome}\nDamage {before} → {after} (blocked {before - after})"), HonorTheme.Secondary,
+            [new(L.Text("Dice and bonuses"), HonorTheme.Secondary, () => dice), new(L.Text("Damage breakdown"), HonorTheme.Secondary, () => damage)]);
         Enqueue(_entries, new Entry(source, target, outcome, before, after, topic, dice, damage), 12);
 
         if (result.AttackRoll is { } roll)
@@ -81,15 +85,15 @@ public partial class CombatHistoryPanel : Control
 
     /// <summary>Captures the currently retained rolls for independent, pinnable inspection.</summary>
     /// <returns>A snapshot with links to each original roll and its bonuses.</returns>
-    public InspectionTopic CreateDiceHistoryTopic() => new("Recent rolls",
-        _rolls.Count == 0 ? "No rolls yet." : "Select a recorded attack to inspect its dice and bonuses.", HonorTheme.Secondary,
+    public InspectionTopic CreateDiceHistoryTopic() => new(L.Text("Recent rolls"),
+        _rolls.Count == 0 ? L.Text("No rolls yet.") : L.Text("Select a recorded attack to inspect its dice and bonuses."), HonorTheme.Secondary,
         _rolls.Reverse()
             .Select(topic => new InspectionLink(topic.Title, HonorTheme.Secondary, () => topic)));
 
     /// <summary>Captures retained journal entries with the original damage stages and dice links.</summary>
     /// <returns>An independent history explanation; reading it does not repeat combat calculations.</returns>
-    public InspectionTopic CreateCombatHistoryTopic() => new("Recent combat",
-        _entries.Count == 0 ? "No attacks yet." : "Select a recorded attack to inspect its outcome, dice and damage stages.", HonorTheme.Secondary,
+    public InspectionTopic CreateCombatHistoryTopic() => new(L.Text("Recent combat"),
+        _entries.Count == 0 ? L.Text("No attacks yet.") : L.Text("Select a recorded attack to inspect its outcome, dice and damage stages."), HonorTheme.Secondary,
         _entries.Reverse()
             .Select(entry => new InspectionLink(entry.Topic.Title, HonorTheme.Secondary, () => entry.Topic)));
 
@@ -100,7 +104,7 @@ public partial class CombatHistoryPanel : Control
 
         if (_entries.Count == 0)
         {
-            _text.AddText("No attacks yet.");
+            _text.AddText(L.Text("No attacks yet."));
             return;
         }
 
@@ -110,16 +114,16 @@ public partial class CombatHistoryPanel : Control
 
         foreach (var entry in visible)
         {
-            _text.AddText($"{entry.Source} → {entry.Target}: ");
+            _text.AddText(L.Format($"{entry.Source} → {entry.Target}: "));
             WriteLink(entry.Outcome, entry.Topic);
-            _text.AddText("\nDamage ");
+            _text.AddText(L.Text("\nDamage "));
             WriteLink($"{entry.Before} → {entry.After}", entry.Damage);
-            _text.AddText($"  (blocked {entry.Before - entry.After})");
+            _text.AddText(L.Format($"  (blocked {entry.Before - entry.After})"));
 
             if (_expanded)
             {
                 _text.AddText("\n");
-                WriteLink("Dice and bonuses", entry.Dice);
+                WriteLink(L.Text("Dice and bonuses"), entry.Dice);
             }
 
             _text.AddText("\n\n");
@@ -135,11 +139,11 @@ public partial class CombatHistoryPanel : Control
 
     private static string OutcomeName(AttackOutcome? outcome) => outcome switch
     {
-        AttackOutcome.CriticalHit => "Critical hit",
-        AttackOutcome.GlancingHit => "Glancing hit",
-        AttackOutcome.Evaded => "Evaded",
-        AttackOutcome.Hit => "Hit",
-        _ => "Impact"
+        AttackOutcome.CriticalHit => L.Text("Critical hit"),
+        AttackOutcome.GlancingHit => L.Text("Glancing hit"),
+        AttackOutcome.Evaded => L.Text("Evaded"),
+        AttackOutcome.Hit => L.Text("Hit"),
+        _ => L.Text("Impact")
     };
 
     private static void Enqueue<T>(Queue<T> entries, T value, int limit)
@@ -156,7 +160,7 @@ public partial class CombatHistoryPanel : Control
     {
         _expanded = !_expanded;
         Size = _panel.Size = new Vector2(400, _expanded ? 500 : 230);
-        _toggle.Text = _expanded ? "Compact" : "Details";
+        L.SetText(_toggle, _expanded ? L.Text("Compact") : L.Text("Details"));
         _text.Size = new Vector2(368, _expanded ? 426 : 156);
         Position = new Vector2(Position.X, _expanded ? 410 : 680);
         Refresh();
