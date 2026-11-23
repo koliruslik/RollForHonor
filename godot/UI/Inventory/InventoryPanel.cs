@@ -5,6 +5,7 @@ using Godot;
 using RollForHonor.Application.Equipment.Models;
 using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Domain.Items.Models;
+using RollForHonor.Domain.Items.Inventory.Models;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Godot.UI.Localization;
@@ -14,6 +15,9 @@ namespace RollForHonor.Godot.UI.Inventory;
 /// <summary>Shows a compact equipment paper doll and a fixed twelve-by-five bag of owned items.</summary>
 public partial class InventoryPanel : Control
 {
+    /// <summary>Gets the current immutable bag layout used by capacity-checked pickup.</summary>
+    public InventoryGridLayout CurrentLayout => _bag.Layout;
+
     /// <summary>Raised when an owned item is selected for inspection.</summary>
     public event Action<ItemInstance> ItemSelected;
 

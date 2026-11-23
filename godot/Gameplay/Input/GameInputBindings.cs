@@ -15,6 +15,7 @@ public static class GameInputBindings
         Add("rfh_reference", Key.H);
         Add("rfh_menu", Key.Escape);
         Add("rfh_details", Key.Alt);
+        Add("rfh_pickup", Key.G);
         Add("rfh_skill2", Key.Q);
         Add("rfh_skill3", Key.E);
         Add("rfh_skill4", Key.F);

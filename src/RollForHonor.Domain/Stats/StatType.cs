@@ -34,5 +34,20 @@ public enum StatType
     DamageMultiplier,
 
     /// <summary>Typed flat damage added to attacks before source scaling, hit quality and defenses; not added to periodic ticks.</summary>
-    AddedDamage
+    AddedDamage,
+
+    /// <summary>Allocated Strength points; derived damage rules are not configured.</summary>
+    Strength,
+
+    /// <summary>Allocated Dexterity points; derived speed rules are not configured.</summary>
+    Dexterity,
+
+    /// <summary>Allocated Constitution points; derived resource rules are not configured.</summary>
+    Constitution,
+
+    /// <summary>Allocated Intelligence points; derived magic rules are not configured.</summary>
+    Intelligence,
+
+    /// <summary>Allocated Luck points; loot and dice scaling are not configured.</summary>
+    Luck
 }

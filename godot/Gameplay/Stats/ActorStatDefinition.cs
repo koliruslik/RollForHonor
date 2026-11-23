@@ -10,6 +10,26 @@ namespace RollForHonor.Godot.Gameplay.Stats;
 [GlobalClass]
 public partial class ActorStatDefinition : Resource
 {
+    /// <summary>Gets or sets allocated Strength points, without a derived combat formula.</summary>
+    [Export]
+    public int Strength { get; set; }
+
+    /// <summary>Gets or sets allocated Dexterity points, without a derived combat formula.</summary>
+    [Export]
+    public int Dexterity { get; set; }
+
+    /// <summary>Gets or sets allocated Constitution points, without a derived combat formula.</summary>
+    [Export]
+    public int Constitution { get; set; }
+
+    /// <summary>Gets or sets allocated Intelligence points, without a derived combat formula.</summary>
+    [Export]
+    public int Intelligence { get; set; }
+
+    /// <summary>Gets or sets allocated Luck points; no loot or dice bonus is inferred.</summary>
+    [Export]
+    public int Luck { get; set; }
+
     /// <summary>Gets or sets base maximum HP; current HP belongs to runtime state.</summary>
     [Export]
     public int MaxHealth { get; set; } = 1;
@@ -56,6 +76,11 @@ public partial class ActorStatDefinition : Resource
     {
         var values = new List<KeyValuePair<StatKey, decimal>>
         {
+            new(new(StatType.Strength), Strength),
+            new(new(StatType.Dexterity), Dexterity),
+            new(new(StatType.Constitution), Constitution),
+            new(new(StatType.Intelligence), Intelligence),
+            new(new(StatType.Luck), Luck),
             new(new(StatType.MaxHealth), MaxHealth),
             new(new(StatType.MaxMana), MaxMana),
             new(new(StatType.Armor), Armor),

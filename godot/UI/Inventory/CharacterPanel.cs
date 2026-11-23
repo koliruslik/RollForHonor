@@ -21,6 +21,7 @@ public partial class CharacterPanel : Control
     public event Action<InspectionTopic> InspectionRequested;
 
     private readonly Dictionary<StatKey, Label> _values = new();
+    private readonly Dictionary<StatType, Label> _primaryValues = new();
     private Label _health;
     private Label _mana;
     private Label _hints;
@@ -32,7 +33,9 @@ public partial class CharacterPanel : Control
         UiLayout.Place(panel, UiLayout.Text(L.Text("Character"), 24, heading: true), new Rect2(20, 16, 260, 48));
         UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(300, 20, 40, 40));
         UiLayout.Divider(panel, new Rect2(20, 80, 320, 2));
-        var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(20, 96, 320, 900));
+        BuildPrimaryAttributes(panel);
+        UiLayout.Divider(panel, new Rect2(20, 292, 320, 1));
+        var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(20, 312, 320, 684));
         var rows = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
         rows.AddThemeConstantOverride("separation", 6);
         var inset = new MarginContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -59,10 +62,34 @@ public partial class CharacterPanel : Control
         _health.Text = $"{actor.Health} / {actor.MaxHealth}";
         _mana.Text = $"{mana:0} / {stats.Get(new StatKey(StatType.MaxMana)):0}";
 
+        foreach (var pair in _primaryValues)
+        {
+            pair.Value.Text = stats.Get(new StatKey(pair.Key)).ToString("0.##", CultureInfo.InvariantCulture);
+        }
+
         foreach (var pair in _values)
         {
             pair.Value.Text = Format(pair.Key, stats.Get(pair.Key), baseStats);
             pair.Value.GetParent<Control>().Visible = pair.Key.Type != StatType.AddedDamage || stats.Get(pair.Key) != 0;
+        }
+    }
+
+    private void BuildPrimaryAttributes(Control panel)
+    {
+        var attributes = new[] { StatType.Strength, StatType.Dexterity, StatType.Constitution, StatType.Intelligence, StatType.Luck };
+
+        for (var index = 0; index < attributes.Length; index++)
+        {
+            var type = attributes[index];
+            var tile = UiLayout.Panel(panel, type.ToString(), new Rect2(20 + index % 3 * 108, 96 + index / 3 * 96, 104, 88));
+            tile.MouseFilter = MouseFilterEnum.Stop;
+            UiLayout.Place(tile, UiLayout.Icon(type.ToString().ToLowerInvariant()), new Rect2(34, 7, 36, 36));
+            var value = UiLayout.Place(tile, UiLayout.Text("0", 23, HonorTheme.Parchment), new Rect2(4, 50, 96, 30));
+            value.Name = "Value";
+            value.HorizontalAlignment = HorizontalAlignment.Center;
+            _primaryValues[type] = value;
+            tile.TooltipText = L.Text(type.ToString());
+            L.OnChanged(tile, () => tile.TooltipText = L.Text(type.ToString()));
         }
     }
 

@@ -181,8 +181,22 @@ public partial class ArenaHud : CanvasLayer
         _runtime = runtime;
         _arena = arena;
         _equipment = new EquipmentService(runtime.CombatState);
-        var bodies = new Node3D[] { arena.Player, arena.Opponent }
-            .Concat(arena.GetNode<Node3D>("Targets").GetChildren()
+        RefreshParticipants();
+        _actorBars.Preferences = new PreferencesStore().Load();
+        _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
+        _map.IsSelected = body => arena.Player.GetRequiredComponent<CombatAwareness>().Selection.TargetId == ((ICombatBody)body).CombatantId;
+        arena.ContactObserved += _history.Record;
+        RefreshHud();
+        RefreshHints();
+    }
+
+    /// <summary>Refreshes round actors in target selection, overhead bars and the minimap without recreating the HUD.</summary>
+    public void RefreshParticipants()
+    {
+        _bodies.Clear();
+        var bodies = new Node3D[] { _arena.Player }
+            .Concat(_arena.Enemies)
+            .Concat(_arena.GetNode<Node3D>("Targets").GetChildren()
                 .OfType<DemoCombatant>());
 
         foreach (var body in bodies)
@@ -190,17 +204,11 @@ public partial class ArenaHud : CanvasLayer
             _bodies[((ICombatBody)body).CombatantId] = body;
         }
 
-        _actorBars.Configure(runtime, arena, _bodies.Values);
-        _actorBars.Preferences = new PreferencesStore().Load();
-        _map.Configure(arena.GetNode<Node3D>("Map"), arena.Player, arena.Opponent);
+        _actorBars.Configure(_runtime, _arena, _bodies.Values);
+        _map.Configure(_arena.GetNode<Node3D>("Map"), _arena.Player, _arena.Opponent);
         _map.Participants = _bodies.Values
-            .Where(body => body != arena.Player)
+            .Where(body => body != _arena.Player)
             .ToArray();
-        _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
-        _map.IsSelected = body => arena.Player.GetRequiredComponent<CombatAwareness>().Selection.TargetId == ((ICombatBody)body).CombatantId;
-        arena.ContactObserved += _history.Record;
-        RefreshHud();
-        RefreshHints();
     }
 
     /// <summary>Opens or closes the inventory independently without pausing the world.</summary>
@@ -245,6 +253,7 @@ public partial class ArenaHud : CanvasLayer
         _roll.UpdateValue(_history.LastRoll);
         L.SetText(_attack, launch.ReadyAt > _runtime.GameTime ? L.Text("Recovering") : "");
         _character.Refresh(stats, state.GetStatProfile(id).BaseValues, read.Source, mana);
+        RefreshRoundUi(!read.Source.IsDefeated);
     }
 
 

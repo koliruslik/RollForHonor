@@ -4,4 +4,4 @@
 
 [node name="ArenaSession" type="Node3D"]
 script = ExtResource("1_runtime")
-StartupScenePath = "res://Arena.tscn"
+StartupScenePath = "res://Arena/RoundArena.tscn"

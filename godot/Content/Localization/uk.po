@@ -1227,3 +1227,54 @@ msgstr "критичний множник"
 
 msgid "Language"
 msgstr "Мова"
+
+msgid "Free time — explore and collect your loot."
+msgstr "Вільний час — досліджуйте та збирайте здобич."
+
+msgid "Continue exploring"
+msgstr "Продовжити дослідження"
+
+msgid "Next round"
+msgstr "Наступний раунд"
+
+msgid "Round {0} complete"
+msgstr "Раунд {0} завершено"
+
+msgid "Round {0} · Defeated {1}/{2}"
+msgstr "Раунд {0} · Переможено {1}/{2}"
+
+msgid "Free time"
+msgstr "Вільний час"
+
+msgid "Sentinel {0}"
+msgstr "Вартовий {0}"
+
+msgid "Picked up: {0}"
+msgstr "Підібрано: {0}"
+
+msgid "Inventory full. The item remains on the ground."
+msgstr "Інвентар заповнено. Предмет залишається на землі."
+
+msgid "Pickup could not be completed. Try again."
+msgstr "Не вдалося підібрати предмет. Спробуйте знову."
+
+msgid "{0}  Pick up {1}"
+msgstr "{0}  Підібрати {1}"
+
+msgid "Strength"
+msgstr "Сила"
+
+msgid "Dexterity"
+msgstr "Спритність"
+
+msgid "Constitution"
+msgstr "Статура"
+
+msgid "Intelligence"
+msgstr "Інтелект"
+
+msgid "Luck"
+msgstr "Удача"
+
+msgid "Allocated attribute points. Derived combat and loot bonuses are not configured yet."
+msgstr "Розподілені очки характеристики. Їхній вплив на бій і здобич ще не налаштовано."

@@ -58,7 +58,10 @@ public partial class GreyboxArena : Node3D
             target.GetNode<Label3D>("Name").Text = L.Format($"{target.Name}\n40 HP");
         }
 
-        ConfigureOpponent();
+        ConfigureOpponent(Opponent);
+        _enemies.Add(Opponent);
+        _roundRandom = new Random(SpawnSeed == 0 ? Random.Shared.Next() : SpawnSeed);
+        _pendingRound = RoundsEnabled;
 
         _status = GetNode<Label>("HUD/Info/Rows/State");
         _die = GetNode<Label>("HUD/Die");
@@ -117,6 +120,10 @@ public partial class GreyboxArena : Node3D
         {
             OpenWorkbench();
         }
+        else if (@event.IsActionPressed("rfh_pickup"))
+        {
+            PickUpNearest();
+        }
         else if (key.PhysicalKeycode == Key.R)
         {
             Restart();
@@ -141,11 +148,11 @@ public partial class GreyboxArena : Node3D
         .GetChildren()
         .OfType<DemoCombatant>();
 
-    private void ConfigureOpponent()
+    private void ConfigureOpponent(Enemy enemy)
     {
-        RegisterActorStats(Opponent);
-        Opponent.GetRequiredComponent<ActorState>().Configure(() =>
-            _runtime.CombatState.Read(Opponent.CombatantId, Opponent.CombatantId).Source.IsDefeated);
+        RegisterActorStats(enemy);
+        enemy.GetRequiredComponent<ActorState>().Configure(() =>
+            _runtime.CombatState.Read(enemy.CombatantId, enemy.CombatantId).Source.IsDefeated);
 
         var attack = new AttackDefinition(
             "sentinel-shot",
@@ -157,14 +164,14 @@ public partial class GreyboxArena : Node3D
                 AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact,
                 TimeSpan.FromSeconds(4)));
 
-        var combat = Opponent.GetRequiredComponent<ProjectileAttack>();
+        var combat = enemy.GetRequiredComponent<ProjectileAttack>();
         combat.Configure(_runtime.Attacks, _runtime.CombatState, attack,
             GD.Load<PackedScene>("res://Arena/EnemyProjectile.tscn"));
-        combat.ContactCompleted += (contact, input, name) => OnContact(Opponent.Name, contact, input, name);
+        combat.ContactCompleted += (contact, input, name) => OnContact(enemy.Name, contact, input, name);
 
-        Opponent.Controls.Configure(Player, _runtime.CombatState, () =>
-            _runtime.CombatState.ReadForStart(Opponent.CombatantId, "sentinel-shot", Guid.NewGuid()).ReadyAt <= _runtime.GameTime);
-        Opponent.CompleteConfiguration();
+        enemy.Controls.Configure(Player, _runtime.CombatState, () =>
+            _runtime.CombatState.ReadForStart(enemy.CombatantId, "sentinel-shot", Guid.NewGuid()).ReadyAt <= _runtime.GameTime);
+        enemy.CompleteConfiguration();
     }
 
     private void Append(string entry)
@@ -181,13 +188,15 @@ public partial class GreyboxArena : Node3D
     private void OnContact(string sourceName, AttackContactResult contact, CombatStateRead input, string targetName)
     {
         Append(DemoCombatJournal.Format(contact, input, sourceName, targetName));
-        ContactObserved?.Invoke(sourceName, contact, input, targetName);
+        var sourceBody = _enemies.FirstOrDefault(enemy => enemy.CombatantId == input.Source.Id);
+        var targetBody = _enemies.FirstOrDefault(enemy => enemy.CombatantId == input.Target.Id);
+        ContactObserved?.Invoke(sourceBody is null ? sourceName : ActorName(sourceBody), contact, input, targetBody is null ? targetName : ActorName(targetBody));
         if (contact.Impact is not { IsCommitted: true, Outcome: ResolvedCombat result })
         {
             return;
         }
 
-        foreach (var actor in new DynamicEntity[] { Player, Opponent })
+        foreach (var actor in new DynamicEntity[] { Player }.Concat(_enemies))
         {
             if (actor.CombatantId == input.Source.Id || actor.CombatantId == input.Target.Id)
             {

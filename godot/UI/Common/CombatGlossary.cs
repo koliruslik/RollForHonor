@@ -55,6 +55,8 @@ public static class CombatGlossary
 
         return key.Type switch
         {
+            StatType.Strength or StatType.Dexterity or StatType.Constitution or StatType.Intelligence or StatType.Luck =>
+                new(L.Text(key.Type.ToString()), L.Text("Allocated attribute points. Derived combat and loot bonuses are not configured yet."), HonorTheme.Brass),
             StatType.Armor => Armor(),
             StatType.DamageMultiplier => new(L.Text("All damage"), L.Text("Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately."), HonorTheme.Parchment,
                 [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]),

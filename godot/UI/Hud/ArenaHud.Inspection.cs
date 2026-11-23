@@ -25,7 +25,7 @@ public partial class ArenaHud
         }
 
         var target = _runtime.CombatState.Read(_arena.Player.CombatantId, id).Target;
-        L.SetText(_enemyName, L.Text(_bodies[id].Name));
+        L.SetText(_enemyName, _arena.ActorName(_bodies[id]));
         _enemyHealth.MaxValue = target.MaxHealth;
         _enemyHealth.Value = target.Health;
         _enemyAmount.Text = $"{target.Health} / {target.MaxHealth}";
