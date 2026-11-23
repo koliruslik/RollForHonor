@@ -35,7 +35,11 @@ current-health/effect updates retain its resolved offensive inputs.
 
 The supported attributes are MaxHealth, MaxMana, Armor, Evasion, MovementSpeed,
 AttackModifier, CriticalChance, CriticalMultiplier, typed Resistance and global
-or typed DamageMultiplier, plus typed AddedDamage. Fractions use 0.2 for 20%; an outgoing coefficient
+or typed DamageMultiplier, plus typed AddedDamage. Strength, Dexterity, Constitution, Intelligence and
+Luck are also represented as allocated primary points and shown in the character
+panel. They default to zero; progression and derivation of HP, damage, defenses
+or loot from these points are not configured. Item bonuses to these five
+attributes accept Flat only. Fractions use 0.2 for 20%; an outgoing coefficient
 of 1 is neutral. Missing maxima HP and damage/critical coefficients default to
 1; other values default to 0.
 

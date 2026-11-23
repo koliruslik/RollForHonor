@@ -9,11 +9,13 @@ d20 attacks, typed damage, defenses and effects.
 ## Current state
 
 - WASD movement, mouse-facing, a following top-down camera and aimed projectiles.
-- One ranged enemy that detects visible players, pursues directly and fires through
-  the shared combat pipeline.
+- Rounds of ten randomly placed ranged enemies using the shared combat pipeline,
+  with a completion banner and unlimited free time before starting the next round.
+- One persistent item drop per defeated enemy; nearby pickup checks the fixed bag capacity.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
+- Five primary attributes in a 3+2 icon grid: Strength, Dexterity, Constitution, Intelligence and Luck.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
 - Main-hand/offhand equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
 - Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
@@ -25,7 +27,7 @@ d20 attacks, typed damage, defenses and effects.
 
 This is an early prototype. Training targets are stationary; the enemy uses
 direct pursuit without pathfinding. Twelve authored starter items support the current
-equipment flow. Procedural maps, game save/load and enemy item drops are not implemented.
+equipment flow and supply the initial loot pool. Procedural maps and game save/load are not implemented.
 
 ## Run the prototype
 
@@ -55,11 +57,17 @@ or restarting creates a fresh session and resets its state.
 | Left click | Select/clear a world target; pin an item for comparison |
 | Alt | Show affix ranges, quality and tiers while inspecting items |
 | Mouse wheel | Zoom |
+| G | Pick up the nearest item within 2.5 world units |
 | I / C | Toggle inventory / character stats independently; gameplay continues |
 | H / Reference | Open the searchable game reference; gameplay pauses |
 | Escape | Close an overlay or open pause/settings/navigation |
 | R | Restart the arena |
 | F2 | Open the combat laboratory |
+
+After the tenth defeat, explore and collect loot for as long as you like.
+Choose Next round to spawn another ten enemies; health, mana, equipment and
+uncollected loot carry over. Primary attributes currently default to zero;
+progression and derived attribute formulas are not implemented.
 
 The laboratory provides stat editors and attack/tick buttons. See the
 [scene guide](docs/godot.md) for its controls and fixture limitations.

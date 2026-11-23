@@ -68,7 +68,7 @@ Engine-independent callers can supply a different table directly.
 
 | Current stat category | Allowed item operations |
 | --- | --- |
-| AttackModifier | Flat |
+| AttackModifier, Strength, Dexterity, Constitution, Intelligence, Luck | Flat |
 | MovementSpeed, CriticalChance, CriticalMultiplier | Increased, More |
 | Global or typed DamageMultiplier | Increased, More |
 | MaxHealth, MaxMana, Armor, Evasion, typed Resistance, typed AddedDamage | Flat, Increased, More |
@@ -143,7 +143,11 @@ var item = generator.Generate(
 
 `RandomDiceRoller` belongs to Infrastructure; Domain only consumes `IDiceRoller`.
 The example assumes imports from Domain Items and Infrastructure Dice. There is
-no bundled production item/affix pool, item drop service or crafting UI yet.
+no complete production item/affix pool or crafting UI yet. The playable arena
+uses its twelve authored starter entries as an initial drop pool: one uniformly
+selected entry per defeated enemy, with fresh d100 quality for each authored
+affix. Rarity, affix selection and selected tiers remain authored; no Luck
+formula is assumed.
 
 ## Crafting and stat projection
 
@@ -165,4 +169,11 @@ into a complete `StatProfile`; projection does not append entries to live state,
 heal the actor or modify a historical snapshot. The [equipment core](equipment.md)
 owns slot validation, canonical item ownership and atomic loadout/stat updates.
 The [game interface](interface.md) supports the authored starter kit and real equip/unequip.
-Enemy item acquisition, crafting owned/equipped items and game save/load remain future work.
+`ItemAcquisitionService` validates the supplied 12×5 bag layout against all
+currently unequipped owned items, including footprints, bounds and overlap. It
+finds a free rectangle without rearranging existing placements, then requests
+an atomic version-checked grant. The adapter rejects defeated owners and
+duplicate ownership across the session. Failed pickup leaves the same captured
+instance on the ground; retrying never rerolls it. Administrative initial-kit
+grants do not use the pickup service. Crafting owned/equipped items and game
+save/load remain future work.

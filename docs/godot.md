@@ -1,6 +1,6 @@
 # Godot runtime and test scenes
 
-[Project overview](../README.md) · [Documentation index](README.md)
+[Project overview](../README.md) В· [Documentation index](README.md)
 
 ## Runtime composition
 
@@ -39,7 +39,9 @@ Diagnostics default to off and are separate from the scene's result-based journa
 
 Normal Play starts the runtime without automatically running tests or quitting.
 `Bootstrap.tscn` hosts the [main menu](interface.md). Start Game loads
-`ArenaBootstrap.tscn`, which hosts `Arena.tscn` in a fresh session.
+`ArenaBootstrap.tscn`, which hosts `Arena/RoundArena.tscn` in a fresh session.
+That inherited scene enables rounds on the editable `Arena.tscn`; the base scene
+retains its single-enemy fixture for isolated tests.
 `WorkbenchBootstrap.tscn` hosts the separate `Game.tscn` combat laboratory.
 
 ## Actor foundation
@@ -102,11 +104,11 @@ bus; launch/contact events feed the existing scene-owned journal directly.
 
 ## Greybox arena
 
-Press **F5** from `godot/project.godot` to enter the arena through
-`Bootstrap.tscn`. The editable `Arena.tscn` contains a 120×120 colored greybox
+Press **F5** from `godot/project.godot` to open the title through
+`Bootstrap.tscn`, then choose Start Game. The editable `Arena.tscn` contains a 120Г—120 colored greybox
 map, obstacles, passages, 0.4 m and 4 m terraces, ramps, five stationary targets,
 an angled orthographic following camera and a directional arrow on the player.
-A red Sentinel is an active ranged opponent; the five training targets remain
+Normal play spawns ten red Sentinels per round; the five training targets remain
 stationary. The arena uses untextured greybox materials.
 
 | Input | Action |
@@ -115,12 +117,13 @@ stationary. The arena uses untextured greybox materials.
 | Mouse position | Face the observed surface point, rotating only visual yaw |
 | Right click | Request a projectile attack; movement can continue |
 | Mouse wheel | Zoom the camera |
+| G | Pick up the nearest ground item within 2.5 world units |
 | H / Reference | Open searchable rule and session explanations; gameplay pauses |
 | R / Restart arena | Start a fresh arena session |
 | F2 / Combat laboratory | Open the combat workbench in a fresh session |
 
 The camera follows position independently of facing. Physical WASD bindings are
-configured in Project Settings → Input Map (`arena_forward/back/left/right`).
+configured in Project Settings в†’ Input Map (`arena_forward/back/left/right`).
 The player reads held movement actions each physics step and queues discrete
 shoot commands. `PlayerInput` converts camera-relative axes into world-space
 intent; `MovementMotor` handles acceleration, braking, gravity, collisions and
@@ -189,7 +192,28 @@ The enemy label shows current HP and Idle/Engaged/Defeated observations. These
 labels describe controller activity and authoritative defeat, not another
 locomotion FSM. The shared journal identifies the actual attack source and
 recipient; its separate d20 shows the most recent committed impact from either
-side. A defeated actor remains as a physical body; press R to restart.
+side. In round play, defeated enemies stop physics, lose collision and hide after
+creating one captured drop. The base single-enemy fixture retains its defeated body.
+
+## Rounds and loot
+
+`GreyboxArena.Rounds` places exactly ten enemies in the authored courtyard. It
+uses bounded random candidates followed by a bounded grid fallback, validates
+flat floor contact and capsule clearance, keeps enemies separated and away
+from the player. Spawning does not require sight of the player, who can freely
+explore before starting another round.
+`SpawnSeed` permits reproducible engine checks; zero chooses a fresh scene seed.
+This is spawn selection on the existing map, not procedural map generation.
+
+Ten distinct authoritative defeats complete a round. Outstanding projectiles
+are cancelled, a nonmodal banner announces free time, and the next round waits
+for an explicit button press. Health, mana, equipment and uncollected drops
+carry over. Player defeat prevents advancing; R creates a fresh session.
+
+Every enemy rolls one item from the authored starter pool, with fresh captured
+d100 affix qualities. G attempts the nearest pickup. A full or fragmented bag
+leaves the exact item on the ground for a later attempt. See [items](items.md)
+for acquisition ownership and capacity checks.
 
 ## Combat laboratory
 
@@ -237,7 +261,7 @@ environment bodies layer 3; the projectile monitors both and ignores its source.
 The sample speed/shape relies on discrete overlap detection; this is not a
 high-speed projectile or swept-collision implementation.
 
-The scene uses a 1920×1080 design viewport, opening in a 1280×720 window with
+The scene uses a 1920Г—1080 design viewport, opening in a 1280Г—720 window with
 canvas scaling. Both stat panels expose current/maximum HP, armor, evasion,
 attack modifier, damage dice/count/flat bonus/type and every supported typed
 resistance. Resistance inputs are percentages; negative values are weaknesses.
@@ -265,7 +289,7 @@ contact, including evaded contacts; this work does not introduce a new successfu
 hit condition. Production bleeding-specific defense rules and status durations
 remain unspecified; the fixture tick pipeline uses current armor/resistance rules.
 
-Enable **Vampirism on attack** and set its percentage (0–100) on either side.
+Enable **Vampirism on attack** and set its percentage (0вЂ“100) on either side.
 `LifestealEffect` heals from actual opponent HP lost after defenses and any prior
 target health adjustments, excluding overkill. Healing rounds upward to whole
 HP and finalization clamps the source to maximum HP. Target damage and source

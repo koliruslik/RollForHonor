@@ -33,6 +33,7 @@ centered 1920×1080 design surface. Captures cover 1920×1080, 1280×720 and ult
 | --- | --- |
 | I or Inventory button | Open/close inventory independently |
 | C or Character button | Toggle the character panel independently |
+| G | Pick up the nearest ground item within 2.5 world units |
 | H or Reference button | Open the searchable reference and pause the game |
 | Escape or Menu button | Close the current overlay, or open/close pause |
 | R | Restart the arena while gameplay is active |
@@ -53,7 +54,11 @@ clicks inside their panels; the uncovered world remains interactive. Inventory
 and character windows do not pause movement, combat or the shared clock.
 
 The character window follows the left-hand wireframe layout and reads resolved
-stats from the owning adapter. Health and mana show current/max values. Typed
+stats from the owning adapter. Its top area contains Strength, Dexterity,
+Constitution, Intelligence and Luck in three columns and two rows. Each tile
+has an icon above its actual resolved value and a localized name tooltip.
+The attributes default to zero; no derived combat or loot formulas are implied.
+Health and mana show current/max values. Typed
 damage values show signed percentage bonuses: a resolved coefficient of 1.06
 is displayed as +6%. Nonzero flat typed damage bonuses have separate signed rows.
 Movement speed shows the percentage bonus relative to the character profile's
@@ -66,6 +71,11 @@ values. Reserved independent critical stats are not presented as active mechanic
 Pause, settings and the reference stop the world. Closing those screens restores the previous
 pause state, preserving a pause held by another owner. Opening or closing character
 stats never opens or closes inventory, and vice versa.
+
+When all ten enemies are defeated, a nonmodal banner announces the end of the
+round and free time. Continue exploring dismisses it; Next round remains
+available beside the objective. No countdown or automatic wave interrupts loot
+collection. Nearby items display a G prompt and pickup feedback.
 
 ## Equipment, inventory and item cards
 
@@ -88,9 +98,10 @@ adapter. Item rotation is not implemented.
 Right-click to equip/remove; drag to a compatible equipment slot or a free bag
 rectangle. Replacement and removal check room for all returning items, including
 a dependent quiver, before publication. A rejected action displays inventory
-feedback and preserves equipment, stats and ownership. This is currently a UI
-capacity check: future pickup/grant use cases must enforce the same fixed bag
-before publishing ownership, since `RegisterOwnedItem` remains a storage grant.
+feedback and preserves equipment, stats and ownership. World pickups use
+`ItemAcquisitionService` to validate the same complete fixed-bag layout before
+a version-checked ownership grant. `RegisterOwnedItem` remains an administrative
+storage grant for initial kits and fixtures.
 The grid rejects an overflowing refresh atomically; it never adds hidden rows.
 
 Hover an item for a cursor-following card clamped to the viewport. Left-click
@@ -174,13 +185,14 @@ selected-item details also closes its comparison without closing inventory.
 
 `godot/Content/Items/starter-items.json` provides twelve authored starter items for
 this UI pass. `StarterItemCatalog` creates Domain definitions and affix instances
-with retained values and owner-scoped instance IDs. It does not implement enemy
-drops or Luck-driven crafting. Starting-item creation uses the
+with retained values and owner-scoped instance IDs. Enemy drops choose from
+the same pool and roll fresh d100 qualities once per defeated enemy; Luck-driven
+selection and crafting formulas are not implemented. Starting-item creation uses the
 editable `godot/Items/ItemRarityRules.tres` table. The scene grants the kit once
 when registering its player; opening/refreshing UI never grants another copy.
 
 Future export presets must include the authored JSON content in the package.
-World pickup/drop flows, owned-item crafting, inventory save/load,
+Owned-item crafting, inventory save/load,
 progression/class screens and game save/load remain separate work.
 
 ## Searchable reference
