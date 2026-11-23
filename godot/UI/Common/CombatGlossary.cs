@@ -3,6 +3,7 @@ using Godot;
 using RollForHonor.Domain.Combat.Damage.Extensions;
 using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Stats;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
 
@@ -44,9 +45,9 @@ public static class CombatGlossary
         {
             if (key.Type == StatType.AddedDamage)
             {
-                return new($"Added {type.ToString().ToLowerInvariant()} damage",
-                    "Adds a flat amount to attack damage before outgoing multipliers, attack quality and defenses. It is not added again to periodic effect ticks.",
-                    DamageColor(type), [new($"{type} damage", DamageColor(type), () => Damage(type))]);
+                return new(L.Format($"Added {type.ToString().ToLowerInvariant()} damage"),
+                    L.Text("Adds a flat amount to attack damage before outgoing multipliers, attack quality and defenses. It is not added again to periodic effect ticks."),
+                    DamageColor(type), [new(L.Format($"{type} damage"), DamageColor(type), () => Damage(type))]);
             }
 
             return key.Type == StatType.Resistance ? Resistance(type) : Damage(type);
@@ -55,16 +56,16 @@ public static class CombatGlossary
         return key.Type switch
         {
             StatType.Armor => Armor(),
-            StatType.DamageMultiplier => new("All damage", "Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately.", HonorTheme.Parchment,
-                [new("Physical damage", HonorTheme.Secondary, Physical)]),
-            StatType.AttackModifier => new("Attack roll bonus", "Added to the attack's d20 roll. It affects attack quality and is not a flat damage bonus.", HonorTheme.Parchment),
-            StatType.MaxHealth => new("Maximum health", "The character's health limit. Raising the limit does not heal the character; lowering it clamps current health.", HonorTheme.Parchment),
-            StatType.MaxMana => new("Maximum mana", "The character's mana limit. Raising the limit does not refill mana; lowering it clamps the current balance.", HonorTheme.Parchment),
-            StatType.MovementSpeed => new("Movement speed", "Character movement speed. The character sheet shows its percentage change from the unmodified starting speed.", HonorTheme.Parchment),
-            StatType.CriticalChance => new("Critical chance", "Reserved stat. The current attack rules use d20 quality; this independent chance is not rolled by combat yet.", HonorTheme.Parchment),
-            StatType.CriticalMultiplier => new("Critical multiplier", "Reserved stat. Current critical damage uses the attack-quality coefficients rather than this independent multiplier.", HonorTheme.Parchment),
-            StatType.Evasion => new("Evasion", "A defensive stat used when resolving attack quality against the attack roll.", HonorTheme.Parchment),
-            _ => new(key.Type.ToString(), "This property contributes to the character's resolved statistics.", HonorTheme.Parchment)
+            StatType.DamageMultiplier => new(L.Text("All damage"), L.Text("Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately."), HonorTheme.Parchment,
+                [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]),
+            StatType.AttackModifier => new(L.Text("Attack roll bonus"), L.Text("Added to the attack's d20 roll. It affects attack quality and is not a flat damage bonus."), HonorTheme.Parchment),
+            StatType.MaxHealth => new(L.Text("Maximum health"), L.Text("The character's health limit. Raising the limit does not heal the character; lowering it clamps current health."), HonorTheme.Parchment),
+            StatType.MaxMana => new(L.Text("Maximum mana"), L.Text("The character's mana limit. Raising the limit does not refill mana; lowering it clamps the current balance."), HonorTheme.Parchment),
+            StatType.MovementSpeed => new(L.Text("Movement speed"), L.Text("Character movement speed. The character sheet shows its percentage change from the unmodified starting speed."), HonorTheme.Parchment),
+            StatType.CriticalChance => new(L.Text("Critical chance"), L.Text("Reserved stat. The current attack rules use d20 quality; this independent chance is not rolled by combat yet."), HonorTheme.Parchment),
+            StatType.CriticalMultiplier => new(L.Text("Critical multiplier"), L.Text("Reserved stat. Current critical damage uses the attack-quality coefficients rather than this independent multiplier."), HonorTheme.Parchment),
+            StatType.Evasion => new(L.Text("Evasion"), L.Text("A defensive stat used when resolving attack quality against the attack roll."), HonorTheme.Parchment),
+            _ => new(key.Type.ToString(), L.Text("This property contributes to the character's resolved statistics."), HonorTheme.Parchment)
         };
     }
 
@@ -74,14 +75,14 @@ public static class CombatGlossary
     public static InspectionTopic Damage(DamageType type)
     {
         var classification = type.IsPhysical()
-            ? "Physical damage. Armor reduces the combined physical hit first, then the matching resistance applies."
-            : $"Nonphysical damage. Armor does not reduce it; {type.ToString().ToLowerInvariant()} resistance applies instead.";
+            ? L.Text("Physical damage. Armor reduces the combined physical hit first, then the matching resistance applies.")
+            : L.Format($"Nonphysical damage. Armor does not reduce it; {type.ToString().ToLowerInvariant()} resistance applies instead.");
 
-        return new($"{type} damage", classification + "\n\nA damage type alone does not apply a status effect.", DamageColor(type),
+        return new(L.Format($"{type} damage"), L.Format($"{classification}{L.Text("\n\nA damage type alone does not apply a status effect.")}"), DamageColor(type),
         [
-            new($"{type} resistance", DamageColor(type), () => Resistance(type)),
-            type.IsPhysical() ? new("Armor", HonorTheme.Secondary, Armor)
-                : new("Physical damage", HonorTheme.Secondary, Physical)
+            new(L.Format($"{type} resistance"), DamageColor(type), () => Resistance(type)),
+            type.IsPhysical() ? new(L.Text("Armor"), HonorTheme.Secondary, Armor)
+                : new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)
         ]);
     }
 
@@ -91,28 +92,28 @@ public static class CombatGlossary
     public static InspectionTopic Resistance(DamageType type)
     {
         var defenseOrder = type.IsPhysical()
-            ? "Applies after armor. A positive physical hit retains at least one point of total physical damage."
-            : "Armor does not reduce this damage type.";
+            ? L.Text("Applies after armor. A positive physical hit retains at least one point of total physical damage.")
+            : L.Text("Armor does not reduce this damage type.");
 
-        return new($"{type} resistance",
-            $"Reduces incoming {type.ToString().ToLowerInvariant()} damage. 25% resistance leaves 75% of that damage before rounding. Negative resistance increases it. Resistance is capped at 100%.\n\n{defenseOrder}",
-            DamageColor(type), [new($"{type} damage", DamageColor(type), () => Damage(type))]);
+        return new(L.Format($"{type} resistance"),
+            L.Format($"Reduces incoming {type.ToString().ToLowerInvariant()} damage. 25% resistance leaves 75% of that damage before rounding. Negative resistance increases it. Resistance is capped at 100%.\n\n{defenseOrder}"),
+            DamageColor(type), [new(L.Format($"{type} damage"), DamageColor(type), () => Damage(type))]);
     }
 
     /// <summary>Explains the armor formula used by the current combat pipeline.</summary>
     /// <returns>An armor explanation linked to physical types.</returns>
-    public static InspectionTopic Armor() => new("Armor",
-        "Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage.",
-        HonorTheme.Secondary, [new("Physical damage", HonorTheme.Secondary, Physical)]);
+    public static InspectionTopic Armor() => new(L.Text("Armor"),
+        L.Text("Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."),
+        HonorTheme.Secondary, [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]);
 
     /// <summary>Explains the shared physical classification.</summary>
     /// <returns>Links to all three physical types and armor.</returns>
-    public static InspectionTopic Physical() => new("Physical damage",
-        "Piercing, bludgeoning and slashing are physical damage. Armor is applied to their combined hit, followed by each type's resistance.", HonorTheme.Secondary,
+    public static InspectionTopic Physical() => new(L.Text("Physical damage"),
+        L.Text("Piercing, bludgeoning and slashing are physical damage. Armor is applied to their combined hit, followed by each type's resistance."), HonorTheme.Secondary,
         [
-            new("Piercing damage", DamageColor(DamageType.Piercing), () => Damage(DamageType.Piercing)),
-            new("Bludgeoning damage", DamageColor(DamageType.Bludgeoning), () => Damage(DamageType.Bludgeoning)),
-            new("Slashing damage", DamageColor(DamageType.Slashing), () => Damage(DamageType.Slashing)),
-            new("Armor", HonorTheme.Secondary, Armor)
+            new(L.Text("Piercing damage"), DamageColor(DamageType.Piercing), () => Damage(DamageType.Piercing)),
+            new(L.Text("Bludgeoning damage"), DamageColor(DamageType.Bludgeoning), () => Damage(DamageType.Bludgeoning)),
+            new(L.Text("Slashing damage"), DamageColor(DamageType.Slashing), () => Damage(DamageType.Slashing)),
+            new(L.Text("Armor"), HonorTheme.Secondary, Armor)
         ]);
 }

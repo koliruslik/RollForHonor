@@ -3,6 +3,7 @@ using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -20,8 +21,8 @@ public static class CombatInspectionTopics
         var facts = resolved.Resolution.DiceTrace.Rolls
             .Select(value => new InspectionFact($"{value.Formula} [{string.Join(", ", value.Results)}] = {value.Total}", HonorTheme.Parchment));
 
-        return new($"{source} → {target} · d20 {roll?.Roll.Total.ToString() ?? "—"}",
-            roll?.ToString() ?? "This action did not include an attack roll.", HonorTheme.Secondary,
+        return new(L.Format($"{source} → {target} · d20 {roll?.Roll.Total.ToString() ?? "—"}"),
+            roll?.ToString() ?? L.Text("This action did not include an attack roll."), HonorTheme.Secondary,
             [CombatGlossary.Link(new StatKey(StatType.AttackModifier))], facts);
     }
 
@@ -32,24 +33,24 @@ public static class CombatInspectionTopics
     {
         if (result.DamageResolution is not { } damage)
         {
-            return new("Damage", "This action did not include a damage stage.", HonorTheme.Secondary);
+            return new(L.Text("Damage"), L.Text("This action did not include a damage stage."), HonorTheme.Secondary);
         }
 
         var links = damage.AfterDefenses.Breakdown.Steps
             .Select(step => new InspectionLink(StepName(step.Type), HonorTheme.Secondary, () => Stage(step)));
 
-        return new("Damage breakdown", "Recorded values before and after target defenses.", HonorTheme.Secondary, links,
+        return new(L.Text("Damage breakdown"), L.Text("Recorded values before and after target defenses."), HonorTheme.Secondary, links,
             TypedFacts(damage.BeforeDefenses.Damage, damage.AfterDefenses.Damage));
     }
 
     private static string StepName(DamageStepType type) => type switch
     {
-        DamageStepType.WeaponRoll => "Weapon dice",
-        DamageStepType.AttackerModifier => "Source modifiers",
-        DamageStepType.AttackQuality => "Attack quality",
-        DamageStepType.ArmorMitigation => "Armor reduction",
-        DamageStepType.ResistanceMitigation => "Resistance reduction",
-        DamageStepType.Finalization => "Minimum physical damage",
+        DamageStepType.WeaponRoll => L.Text("Weapon dice"),
+        DamageStepType.AttackerModifier => L.Text("Source modifiers"),
+        DamageStepType.AttackQuality => L.Text("Attack quality"),
+        DamageStepType.ArmorMitigation => L.Text("Armor reduction"),
+        DamageStepType.ResistanceMitigation => L.Text("Resistance reduction"),
+        DamageStepType.Finalization => L.Text("Minimum physical damage"),
         _ => type.ToString()
     };
 
@@ -59,9 +60,9 @@ public static class CombatInspectionTopics
             .Concat(step.Output.Components)
             .Select(component => component.Type)
             .Distinct()
-            .Select(type => new InspectionLink($"{type} damage", CombatGlossary.DamageColor(type), () => CombatGlossary.Damage(type)));
+            .Select(type => new InspectionLink(L.Format($"{type} damage"), CombatGlossary.DamageColor(type), () => CombatGlossary.Damage(type)));
 
-        return new(StepName(step.Type), "Input → output for this recorded stage.", HonorTheme.Secondary, types, TypedFacts(step.Input, step.Output));
+        return new(StepName(step.Type), L.Text("Input → output for this recorded stage."), HonorTheme.Secondary, types, TypedFacts(step.Input, step.Output));
     }
 
     private static InspectionFact[] TypedFacts(DamagePacket before, DamagePacket after) => before.Components
@@ -69,7 +70,7 @@ public static class CombatInspectionTopics
         .Select(component => component.Type)
         .Distinct()
         .Order()
-        .Select(type => new InspectionFact($"{type}  {Amount(before, type)} → {Amount(after, type)}", CombatGlossary.DamageColor(type)))
+        .Select(type => new InspectionFact(L.Format($"{type}  {Amount(before, type)} → {Amount(after, type)}"), CombatGlossary.DamageColor(type)))
         .ToArray();
 
     private static int Amount(DamagePacket packet, DamageType type) => packet.Components

@@ -2,10 +2,10 @@ using System;
 
 namespace RollForHonor.Godot.UI.Settings;
 
-/// <summary>Captures supported display and master-audio preferences independently of game progression.</summary>
+/// <summary>Captures display, audio and language preferences independently of game progression.</summary>
 public sealed record PlayerPreferences
 {
-    /// <summary>Gets the initial windowed, synchronized, 80-percent-volume settings.</summary>
+    /// <summary>Gets the initial Ukrainian, windowed, synchronized, 80-percent-volume settings.</summary>
     public static PlayerPreferences Default { get; } = new(false, true, 0.8f);
 
     /// <summary>Gets whether the game uses a borderless fullscreen window.</summary>
@@ -26,6 +26,9 @@ public sealed record PlayerPreferences
     /// <summary>Gets whether the player displays an overhead mana bar.</summary>
     public bool PlayerManaBar { get; }
 
+    /// <summary>Gets the supported interface locale, either Ukrainian (uk) or English (en).</summary>
+    public string Language { get; }
+
     /// <summary>Creates validated preferences without changing the display or audio.</summary>
     /// <param name="fullscreen">Whether fullscreen is requested.</param>
     /// <param name="vSync">Whether display synchronization is requested.</param>
@@ -33,12 +36,19 @@ public sealed record PlayerPreferences
     /// <param name="enemyHealthBars">Show enemy health bars.</param>
     /// <param name="playerHealthBar">Show player health.</param>
     /// <param name="playerManaBar">Show player mana.</param>
+    /// <param name="language">The supported interface locale; defaults to Ukrainian.</param>
     /// <exception cref="ArgumentOutOfRangeException">The volume is nonfinite or outside [0,1].</exception>
-    public PlayerPreferences(bool fullscreen, bool vSync, float masterVolume, bool enemyHealthBars = true, bool playerHealthBar = false, bool playerManaBar = false)
+    /// <exception cref="ArgumentException">The language is neither uk nor en.</exception>
+    public PlayerPreferences(bool fullscreen, bool vSync, float masterVolume, bool enemyHealthBars = true, bool playerHealthBar = false, bool playerManaBar = false, string language = "uk")
     {
         if (!float.IsFinite(masterVolume) || masterVolume is < 0 or > 1)
         {
             throw new ArgumentOutOfRangeException(nameof(masterVolume));
+        }
+
+        if (language is not ("uk" or "en"))
+        {
+            throw new ArgumentException("The interface language must be uk or en.", nameof(language));
         }
 
         Fullscreen = fullscreen;
@@ -47,5 +57,6 @@ public sealed record PlayerPreferences
         EnemyHealthBars = enemyHealthBars;
         PlayerHealthBar = playerHealthBar;
         PlayerManaBar = playerManaBar;
+        Language = language;
     }
 }

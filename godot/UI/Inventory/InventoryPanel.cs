@@ -7,6 +7,7 @@ using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.Gameplay.Input;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -93,9 +94,9 @@ public partial class InventoryPanel : Control
             .OrderByDescending(item => item.Rarity)
             .ThenBy(item => item.Base.Name, StringComparer.Ordinal)
             .ToArray();
-        _count.Text = $"ITEMS   {items.Length}";
+        L.SetText(_count, L.Format($"ITEMS   {items.Length}"));
         _bag.RefreshItems(items);
-        _status.Text = "";
+        L.SetText(_status, "");
     }
 
     /// <summary>Checks the fixed bag before publishing a proposed loadout, including dependent offhand returns.</summary>
@@ -118,15 +119,15 @@ public partial class InventoryPanel : Control
     /// <param name="message">The short action result.</param>
     public void ShowStatus(string message)
     {
-        _status.Text = message;
+        L.SetText(_status, message);
     }
 
     private void BuildHeader(Control panel)
     {
-        UiLayout.Place(panel, UiLayout.Text("Inventory", 24, heading: true), new Rect2(24, 16, 400, 48));
+        UiLayout.Place(panel, UiLayout.Text(L.Text("Inventory"), 24, heading: true), new Rect2(24, 16, 400, 48));
         UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(496, 20, 40, 40));
         UiLayout.Divider(panel, new Rect2(24, 80, 512, 2));
-        UiLayout.Place(panel, UiLayout.Text("EQUIPMENT", 14, HonorTheme.Brass), new Rect2(24, 96, 512, 32));
+        UiLayout.Place(panel, UiLayout.Text(L.Text("EQUIPMENT"), 14, HonorTheme.Brass), new Rect2(24, 96, 512, 32));
     }
 
     private void BuildPaperDoll(Control panel)
@@ -144,7 +145,7 @@ public partial class InventoryPanel : Control
 
     private void BuildInventory(Control panel)
     {
-        _count = UiLayout.Place(panel, UiLayout.Text("ITEMS", 14, HonorTheme.Brass), new Rect2(24, 600, 512, 32));
+        _count = UiLayout.Place(panel, UiLayout.Text(L.Text("ITEMS"), 14, HonorTheme.Brass), new Rect2(24, 600, 512, 32));
         _bag = new InventoryGridView
         {
             Name = "Grid",
@@ -168,13 +169,13 @@ public partial class InventoryPanel : Control
     {
         _hints.Text = string.Join("\n",
         [
-            "Hover  Inspect item",
-            "RMB  Equip / remove",
-            "LMB  Compare",
-            "Drag  Move / equip / remove",
-            $"{GameInputBindings.Name("rfh_details")}  Ranges / inspect tooltip",
-            "Underlined text  Details",
-            $"{GameInputBindings.Name("rfh_inventory")}  Close inventory"
+            L.Text("Hover  Inspect item"),
+            L.Text("RMB  Equip / remove"),
+            L.Text("LMB  Compare"),
+            L.Text("Drag  Move / equip / remove"),
+            L.Format($"{GameInputBindings.Name("rfh_details")}  Ranges / inspect tooltip"),
+            L.Text("Underlined text  Details"),
+            L.Format($"{GameInputBindings.Name("rfh_inventory")}  Close inventory")
         ]);
     }
 

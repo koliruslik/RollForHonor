@@ -7,6 +7,7 @@ using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.Gameplay.Input;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -28,7 +29,7 @@ public partial class CharacterPanel : Control
     public override void _Ready()
     {
         var panel = UiLayout.Panel(this, "Character", new Rect2(0, 0, 360, 1080));
-        UiLayout.Place(panel, UiLayout.Text("Character", 24, heading: true), new Rect2(20, 16, 260, 48));
+        UiLayout.Place(panel, UiLayout.Text(L.Text("Character"), 24, heading: true), new Rect2(20, 16, 260, 48));
         UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(300, 20, 40, 40));
         UiLayout.Divider(panel, new Rect2(20, 80, 320, 2));
         var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(20, 96, 320, 900));
@@ -53,7 +54,7 @@ public partial class CharacterPanel : Control
     /// <param name="mana">The current mana resource balance.</param>
     public void Refresh(StatBlock stats, StatBlock baseStats, CombatantSnapshot actor, decimal mana)
     {
-        _hints.Text = $"Scroll  Browse stats\n{GameInputBindings.Name("rfh_character")}  Close character";
+        L.SetText(_hints, L.Format($"Scroll  Browse stats\n{GameInputBindings.Name("rfh_character")}  Close character"));
 
         _health.Text = $"{actor.Health} / {actor.MaxHealth}";
         _mana.Text = $"{mana:0} / {stats.Get(new StatKey(StatType.MaxMana)):0}";
@@ -67,35 +68,35 @@ public partial class CharacterPanel : Control
 
     private void BuildResources(VBoxContainer rows)
     {
-        Section(rows, "VITALITY");
-        _health = Row(rows, "Health");
-        _mana = Row(rows, "Mana");
-        AddStat(rows, "Movement speed", new StatKey(StatType.MovementSpeed));
+        Section(rows, L.Text("VITALITY"));
+        _health = Row(rows, L.Text("Health"));
+        _mana = Row(rows, L.Text("Mana"));
+        AddStat(rows, L.Text("Movement speed"), new StatKey(StatType.MovementSpeed));
     }
 
     private void BuildCombat(VBoxContainer rows)
     {
-        Section(rows, "OFFENSE");
-        AddStat(rows, "Attack roll bonus", new StatKey(StatType.AttackModifier));
+        Section(rows, L.Text("OFFENSE"));
+        AddStat(rows, L.Text("Attack roll bonus"), new StatKey(StatType.AttackModifier));
 
         foreach (var type in Enum.GetValues<DamageType>())
         {
-            AddStat(rows, $"{type} damage", new StatKey(StatType.DamageMultiplier, type));
-            AddStat(rows, $"{type} flat damage", new StatKey(StatType.AddedDamage, type));
+            AddStat(rows, L.Format($"{type} damage"), new StatKey(StatType.DamageMultiplier, type));
+            AddStat(rows, L.Format($"{type} flat damage"), new StatKey(StatType.AddedDamage, type));
         }
 
-        Section(rows, "DEFENSE");
-        AddStat(rows, "Armor", new StatKey(StatType.Armor));
-        AddStat(rows, "Evasion", new StatKey(StatType.Evasion));
+        Section(rows, L.Text("DEFENSE"));
+        AddStat(rows, L.Text("Armor"), new StatKey(StatType.Armor));
+        AddStat(rows, L.Text("Evasion"), new StatKey(StatType.Evasion));
     }
 
     private void BuildResistances(VBoxContainer rows)
     {
-        Section(rows, "RESISTANCES");
+        Section(rows, L.Text("RESISTANCES"));
 
         foreach (var type in Enum.GetValues<DamageType>())
         {
-            AddStat(rows, type.ToString(), new StatKey(StatType.Resistance, type));
+            AddStat(rows, L.Text(type.ToString()), new StatKey(StatType.Resistance, type));
         }
     }
 
@@ -136,6 +137,11 @@ public partial class CharacterPanel : Control
             ? new RichTextLabel { FitContent = true, ScrollActive = false, MetaUnderlined = true, SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Stop }
             : (Control)new Label { Text = name, SizeFlagsHorizontal = SizeFlags.ExpandFill, ClipText = true };
         row.AddChild(heading);
+        if (heading is Label label)
+        {
+            L.SetText(label, name);
+        }
+
         var value = UiLayout.Text("", 18, HonorTheme.Parchment);
         value.CustomMinimumSize = new Vector2(84, 0);
         value.HorizontalAlignment = HorizontalAlignment.Right;
@@ -156,6 +162,11 @@ public partial class CharacterPanel : Control
     {
         var color = CombatGlossary.StatColor(key);
         InspectionText.Link(link, name, "inspect", color);
+        L.OnChanged(link, () =>
+        {
+            link.Clear();
+            InspectionText.Link(link, name, "inspect", color);
+        });
         value.AddThemeColorOverride("font_color", color);
         link.MetaClicked += _ =>
         {

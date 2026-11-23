@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.Effects.Models;
@@ -64,8 +65,8 @@ public partial class CombatDemoScene : Node3D
         _fire = GetNode<Button>("HUD/Panel/Rows/Fire");
         _enemyFire = GetNode<Button>("HUD/Panel/Rows/EnemyFire");
         _deliveryChoice = GetNode<OptionButton>("HUD/Panel/Rows/DeliveryControls/Delivery");
-        _deliveryChoice.AddItem("Projectile", 0);
-        _deliveryChoice.AddItem("Melee", 1);
+        _deliveryChoice.AddItem(L.Text("Projectile"), 0);
+        _deliveryChoice.AddItem(L.Text("Melee"), 1);
         GetNode<CheckButton>("HUD/Panel/Rows/DeliveryControls/NearTarget").Toggled += near =>
             Target.GlobalPosition = near ? Source.GlobalPosition + Vector3.Right * 1.5f : new Vector3(4, 0.9f, 0);
         _autoTicks = GetNode<CheckButton>("HUD/Panel/Rows/TickControls/Auto");
@@ -78,8 +79,8 @@ public partial class CombatDemoScene : Node3D
         var enemy = new CombatantSnapshot(Target.CombatantId, 50, 50, 5, 12, [], []);
         _runtime.CombatState.AddCombatant(player, [new(Mana, 100)]);
         _runtime.CombatState.AddCombatant(enemy, [new(Mana, 100)]);
-        SourceEditor.Configure("PLAYER", player, 5, 3);
-        TargetEditor.Configure("ENEMY", enemy, 5, 3);
+        SourceEditor.Configure(L.Text("PLAYER"), player, 5, 3);
+        TargetEditor.Configure(L.Text("ENEMY"), enemy, 5, 3);
         SourceEditor.ApplyRequested += () => ApplyDraft();
         TargetEditor.ApplyRequested += () => ApplyDraft(true);
         _fire.Pressed += () => FireFromInput(false);
@@ -87,7 +88,7 @@ public partial class CombatDemoScene : Node3D
         GetNode<Button>("HUD/Arena").Pressed += () => GetTree().ChangeSceneToFile("res://ArenaBootstrap.tscn");
         GetNode<Button>("HUD/Panel/Rows/Restart").Pressed += () => GetTree().ReloadCurrentScene();
         GetNode<Button>("HUD/JournalPanel/Rows/Clear").Pressed += () => { _journalEntries.Clear(); _journal.Text = ""; };
-        AppendJournal("Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nVampirism heals from actual opponent HP loss, rounded up. Next tick advances all living recipients; Auto uses game time.\n");
+        AppendJournal(L.Text("Combat workbench ready. Draft state applies with Apply; weapon/effect selections affect the next launch.\nVampirism heals from actual opponent HP loss, rounded up. Next tick advances all living recipients; Auto uses game time.\n"));
         RefreshState();
     }
 
@@ -102,13 +103,13 @@ public partial class CombatDemoScene : Node3D
             var current = _runtime.CombatState.Read(actor.CombatantId, actor.CombatantId).Source;
             var edited = (enemy ? TargetEditor : SourceEditor).BuildState(current);
             _runtime.CombatState.UpdateCombatant(edited);
-            AppendJournal($"[b]Edit {(enemy ? "Enemy" : "Player")}[/b]: HP {current.Health}/{current.MaxHealth} → {edited.Health}/{edited.MaxHealth}; armor {edited.Armor}; evasion {edited.Evasion}. Resources, statuses and cooldown retained.\n");
+            AppendJournal(L.Format($"[b]Edit {(enemy ? "Enemy" : "Player")}[/b]: HP {current.Health}/{current.MaxHealth} → {edited.Health}/{edited.MaxHealth}; armor {edited.Armor}; evasion {edited.Evasion}. Resources, statuses and cooldown retained.\n"));
             RefreshState();
             return true;
         }
         catch (ArgumentException error)
         {
-            AppendJournal($"[color=#ff7777]Draft rejected: {Escape(error.Message)}[/color]\n");
+            AppendJournal(L.Format($"[color=#ff7777]Draft rejected: {Escape(error.Message)}[/color]\n"));
             return false;
         }
     }
@@ -125,8 +126,8 @@ public partial class CombatDemoScene : Node3D
         var definition = new AttackDefinition(delivery.Key, editor.BuildAttack(delivery.Tags),
             TimeSpan.FromSeconds(0.8), [new(Mana, 10)], delivery.Rules);
         var start = _runtime.Attacks.Start(Guid.NewGuid(), source.CombatantId, definition);
-        AppendJournal($"[b]{(enemy ? "Enemy" : "Player")} launch[/b]: {start.Status}" +
-            (start.Attack is not null ? $" | cost 10 mana | damage {definition.Attack.Damage.Single().Dice} + {definition.Attack.Damage.Single().FlatDamage}" : " | no new cost or attack visual") + "\n");
+        AppendJournal(L.Format($"[b]{(enemy ? "Enemy" : "Player")} launch[/b]: {start.Status}") +
+            (start.Attack is not null ? L.Format($" | cost 10 mana | damage {definition.Attack.Damage.Single().Dice} + {definition.Attack.Damage.Single().FlatDamage}") : L.Text(" | no new cost or attack visual")) + "\n");
         if (start.Attack is { } attack)
         {
             var direction = (target.GlobalPosition - source.GlobalPosition).Normalized();
@@ -134,9 +135,12 @@ public partial class CombatDemoScene : Node3D
             delivery.Spawn(source, direction, attack,
                 contact => ShowContact(contact, input, enemy, attack),
                 contacted => input = _runtime.CombatState.Read(source.CombatantId, contacted.CombatantId));
-            _result.Text = $"{(enemy ? "Enemy" : "Player")}: {(_deliveryChoice.GetSelectedId() == 0 ? "arrow" : "melee window")}";
+            _result.Text = $"{(enemy ? L.Text("Enemy") : L.Text("Player"))}: {(_deliveryChoice.GetSelectedId() == 0 ? L.Text("arrow") : L.Text("melee window"))}";
         }
-        else _result.Text = $"Launch: {start.Status}";
+        else
+        {
+            _result.Text = L.Format($"Launch: {start.Status}");
+        }
         RefreshState();
         return start;
     }
@@ -186,13 +190,13 @@ public partial class CombatDemoScene : Node3D
             .SelectMany(actor => actor.Effects.Where(effect => effect.Definition is PeriodicDamageEffectDefinition)
                 .Select(effect => (actor.Id, effect.Id))).ToArray();
         var results = new List<PeriodicTickResult>();
-        AppendJournal($"\n[b]Tick round {TickRounds}[/b] | {pending.Length} periodic instances\n");
+        AppendJournal(L.Format($"\n[b]Tick round {TickRounds}[/b] | {pending.Length} periodic instances\n"));
         foreach (var (targetId, effectId) in pending)
         {
             var result = _runtime.Ticks.Tick(targetId, effectId);
             results.Add(result);
-            var sourceName = result.Request?.SourceId == Source.CombatantId ? "Player (captured)" : "Enemy (captured)";
-            AppendJournal(DemoCombatJournal.FormatTick(result, sourceName, targetId == Source.CombatantId ? "Player" : "Enemy"));
+            var sourceName = result.Request?.SourceId == Source.CombatantId ? L.Text("Player (captured)") : L.Text("Enemy (captured)");
+            AppendJournal(DemoCombatJournal.FormatTick(result, sourceName, targetId == Source.CombatantId ? L.Text("Player") : L.Text("Enemy")));
         }
         RefreshState();
         return results;
@@ -214,28 +218,31 @@ public partial class CombatDemoScene : Node3D
         var enemyMana = enemy.Resources.Single(value => value.Resource == Mana).Amount;
         var playerCooldown = Math.Max(0, (player.ReadyAt - _runtime.GameTime).TotalSeconds);
         var enemyCooldown = Math.Max(0, (enemy.ReadyAt - _runtime.GameTime).TotalSeconds);
-        _state.Text = $"Player: {read.Source.Health}/{read.Source.MaxHealth} HP | Mana {playerMana} | CD {playerCooldown:0.0}s\nEnemy: {read.Target.Health}/{read.Target.MaxHealth} HP | Mana {enemyMana} | CD {enemyCooldown:0.0}s";
+        _state.Text = L.Format($"Player: {read.Source.Health}/{read.Source.MaxHealth} HP | Mana {playerMana} | CD {playerCooldown:0.0}s\nEnemy: {read.Target.Health}/{read.Target.MaxHealth} HP | Mana {enemyMana} | CD {enemyCooldown:0.0}s");
         _fire.Disabled = read.Source.IsDefeated || read.Target.IsDefeated || playerMana < 10 || playerCooldown > 0;
         _enemyFire.Disabled = read.Source.IsDefeated || read.Target.IsDefeated || enemyMana < 10 || enemyCooldown > 0;
-        Source.GetNode<Label3D>("Name").Text = $"Player\n{read.Source.Health}/{read.Source.MaxHealth} HP";
-        Target.GetNode<Label3D>("Name").Text = $"Enemy\n{read.Target.Health}/{read.Target.MaxHealth} HP";
+        Source.GetNode<Label3D>("Name").Text = L.Format($"Player\n{read.Source.Health}/{read.Source.MaxHealth} HP");
+        Target.GetNode<Label3D>("Name").Text = L.Format($"Enemy\n{read.Target.Health}/{read.Target.MaxHealth} HP");
         GetNode<Label>("HUD/PlayerPanel/Rows/Live").Text = Live(read.Source);
         GetNode<Label>("HUD/EnemyPanel/Rows/Live").Text = Live(read.Target);
     }
-    private static string Live(CombatantSnapshot actor) => $"Live HP {actor.Health}/{actor.MaxHealth} | Statuses: " +
-        (actor.Effects.Count == 0 ? "none" : string.Join(", ", actor.Effects.Select(effect => DemoEffectCatalog.Name(effect.Definition.Id))));
+    private static string Live(CombatantSnapshot actor) => L.Format($"Live HP {actor.Health}/{actor.MaxHealth} | Statuses: ") +
+        (actor.Effects.Count == 0 ? L.Text("none") : string.Join(", ", actor.Effects.Select(effect => DemoEffectCatalog.Name(effect.Definition.Id))));
     private void ShowContact(AttackContactResult contact, CombatStateRead input, bool enemy, AttackInstance attack)
     {
         LastContact = contact;
-        AppendJournal(DemoCombatJournal.Format(contact, input, enemy ? "Enemy" : "Player", enemy ? "Player" : "Enemy", attack.Attack));
+        AppendJournal(DemoCombatJournal.Format(contact, input, enemy ? L.Text("Enemy") : L.Text("Player"), enemy ? L.Text("Player") : L.Text("Enemy"), attack.Attack));
         if (contact.Impact is { IsCommitted: true, Outcome: ResolvedCombat resolved })
         {
             CommittedImpacts++;
             var target = resolved.Resolution.Result.Target;
             _die.Text = $"d20\n{target.AttackRoll?.Roll.Results.Single()}";
-            _result.Text = $"{target.Outcome} ({(enemy ? "Player" : "Enemy")}) - see calculation below";
+            _result.Text = L.Format($"{target.Outcome} ({(enemy ? "Player" : "Enemy")}) - see calculation below");
         }
-        else _result.Text = $"Contact: {contact.Status} | Commit: {contact.Impact?.CommitStatus}";
+        else
+        {
+            _result.Text = L.Format($"Contact: {contact.Status} | Commit: {contact.Impact?.CommitStatus}");
+        }
         RefreshState();
     }
     private void AppendJournal(string text)

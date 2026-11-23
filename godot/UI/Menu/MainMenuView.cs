@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Menu;
 
@@ -51,16 +52,16 @@ public partial class MainMenuView : Control
 
     private void BuildNavigation(Control design)
     {
-        var start = UiLayout.Button("Start game", () => StartRequested?.Invoke(), true);
+        var start = UiLayout.Button(L.Text("Start game"), () => StartRequested?.Invoke(), true);
         start.Name = "Start";
         UiLayout.Place(design, start, new Rect2(128, 576, 496, 64));
-        var settings = UiLayout.Button("Settings", () => SettingsRequested?.Invoke());
+        var settings = UiLayout.Button(L.Text("Settings"), () => SettingsRequested?.Invoke());
         settings.Name = "Settings";
         UiLayout.Place(design, settings, new Rect2(128, 656, 496, 64));
-        var reference = UiLayout.Button("Reference", () => ReferenceRequested?.Invoke());
+        var reference = UiLayout.Button(L.Text("Reference"), () => ReferenceRequested?.Invoke());
         reference.Name = "Reference";
         UiLayout.Place(design, reference, new Rect2(128, 736, 496, 64));
-        var exit = UiLayout.Button("Exit", () => ExitRequested?.Invoke());
+        var exit = UiLayout.Button(L.Text("Exit"), () => ExitRequested?.Invoke());
         exit.Name = "Exit";
         UiLayout.Place(design, exit, new Rect2(128, 816, 496, 64));
         start.GrabFocus();
@@ -69,6 +70,6 @@ public partial class MainMenuView : Control
     private static void BuildFooter(Control design)
     {
         UiLayout.Divider(design, new Rect2(128, 944, 496, 1));
-        UiLayout.Place(design, UiLayout.Text("THE ASHEN COURT", 16, HonorTheme.Muted), new Rect2(128, 960, 496, 32));
+        UiLayout.Place(design, UiLayout.Text(L.Text("THE ASHEN COURT"), 16, HonorTheme.Muted), new Rect2(128, 960, 496, 32));
     }
 }

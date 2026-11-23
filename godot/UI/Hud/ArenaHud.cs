@@ -17,6 +17,7 @@ using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.CombatDemo;
 using System.Collections.Generic;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
@@ -237,12 +238,12 @@ public partial class ArenaHud : CanvasLayer
         var stats = state.GetStats(id);
         var launch = state.ReadForStart(id, "arena-shot", Guid.NewGuid());
         var mana = launch.Resources.Single().Amount;
-        _health.UpdateValue(read.Source.Health, read.Source.MaxHealth, "HEALTH");
-        _mana.UpdateValue(mana, stats.Get(new StatKey(StatType.MaxMana)), "MANA");
+        _health.UpdateValue(read.Source.Health, read.Source.MaxHealth, L.Text("HEALTH"));
+        _mana.UpdateValue(mana, stats.Get(new StatKey(StatType.MaxMana)), L.Text("MANA"));
         RefreshTarget();
-        _objective.Text = read.Source.IsDefeated ? "You have fallen. Open the menu to begin again." : read.Target.IsDefeated ? "The courtyard is yours." : "Defeat the Sentinel";
+        L.SetText(_objective, read.Source.IsDefeated ? L.Text("You have fallen. Open the menu to begin again.") : read.Target.IsDefeated ? L.Text("The courtyard is yours.") : L.Text("Defeat the Sentinel"));
         _roll.UpdateValue(_history.LastRoll);
-        _attack.Text = launch.ReadyAt > _runtime.GameTime ? "Recovering" : "";
+        L.SetText(_attack, launch.ReadyAt > _runtime.GameTime ? L.Text("Recovering") : "");
         _character.Refresh(stats, state.GetStatProfile(id).BaseValues, read.Source, mana);
     }
 
@@ -469,10 +470,10 @@ public partial class ArenaHud : CanvasLayer
 
         _details.SetStatus(result switch
         {
-            EquipmentChangeStatus.Applied => equipped ? "Returned to inventory." : "Equipped. Stats updated.",
-            EquipmentChangeStatus.Unchanged => "Already equipped.",
-            EquipmentChangeStatus.VersionConflict => "Your equipment changed. Select the item again.",
-            _ => "This item cannot be equipped in that slot."
+            EquipmentChangeStatus.Applied => equipped ? L.Text("Returned to inventory.") : L.Text("Equipped. Stats updated."),
+            EquipmentChangeStatus.Unchanged => L.Text("Already equipped."),
+            EquipmentChangeStatus.VersionConflict => L.Text("Your equipment changed. Select the item again."),
+            _ => L.Text("This item cannot be equipped in that slot.")
         });
     }
 
@@ -480,14 +481,14 @@ public partial class ArenaHud : CanvasLayer
     {
         if (!equipped && !read.Rules.CanEquip(read.Loadout, item, slot))
         {
-            _inventory.ShowStatus("Requires a compatible main hand or equipment slot.");
-            _details.SetStatus("Incompatible hand or slot.");
+            _inventory.ShowStatus(L.Text("Requires a compatible main hand or equipment slot."));
+            _details.SetStatus(L.Text("Incompatible hand or slot."));
             return false;
         }
 
         if (!equipped && read.Loadout.Slots.Any(pair => pair.Key != slot && pair.Value.Id == item.Id))
         {
-            _inventory.ShowStatus("Remove the item from its current slot first.");
+            _inventory.ShowStatus(L.Text("Remove the item from its current slot first."));
             return false;
         }
 
@@ -496,8 +497,8 @@ public partial class ArenaHud : CanvasLayer
 
         if (!_inventory.CanFitLoadout(read, proposed))
         {
-            _inventory.ShowStatus("Inventory full. Make room before changing equipment.");
-            _details.SetStatus("Inventory full. Make room before changing equipment.");
+            _inventory.ShowStatus(L.Text("Inventory full. Make room before changing equipment."));
+            _details.SetStatus(L.Text("Inventory full. Make room before changing equipment."));
             return false;
         }
 

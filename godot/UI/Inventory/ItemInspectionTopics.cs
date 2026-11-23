@@ -4,6 +4,7 @@ using RollForHonor.Domain.Items.Affixes.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -21,19 +22,19 @@ public static class ItemInspectionTopics
 
         if (item.Base.Weapon is { } weapon)
         {
-            facts.Insert(0, new($"Attack speed {weapon.AttacksPerSecond:0.##}/s · Mana cost {weapon.ManaCost:0.##}", HonorTheme.Parchment));
+            facts.Insert(0, new(L.Format($"Attack speed {weapon.AttacksPerSecond:0.##}/s · Mana cost {weapon.ManaCost:0.##}"), HonorTheme.Parchment));
             facts.AddRange(weapon.Damage
-                .Select(part => new InspectionFact(part.ToString(), CombatGlossary.DamageColor(part.Type))));
+                .Select(part => new InspectionFact(L.Damage(part), CombatGlossary.DamageColor(part.Type))));
         }
 
         var links = item.Base.Modifiers
             .Select(modifier => CombatGlossary.Link(modifier.Key))
             .Concat(item.Affixes
-                .Select(affix => new InspectionLink(affix.DefinitionId.Replace('-', ' ') + $" · {affix.TierId}",
+                .Select(affix => new InspectionLink(L.Format($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}"),
                     ItemPresentation.RarityColor(item.Rarity), () => Affix(item.Rarity, affix, true))));
 
-        return new(item.Base.Name,
-            $"{item.Rarity} · {item.Base.Footprint.Width}×{item.Base.Footprint.Height} cells\n\nCaptured base properties are listed above. Related affixes show their additional rolled values, ranges and tiers.",
+        return new(L.Text(item.Base.Name),
+            L.Format($"{item.Rarity} · {item.Base.Footprint.Width}×{item.Base.Footprint.Height} cells\n\nCaptured base properties are listed above. Related affixes show their additional rolled values, ranges and tiers."),
             ItemPresentation.RarityColor(item.Rarity), links, facts);
     }
 
@@ -47,13 +48,13 @@ public static class ItemInspectionTopics
         var facts = affix.Modifiers
             .Select((modifier, index) => new InspectionFact(FormatModifier(affix, modifier, index, detailed), CombatGlossary.StatColor(modifier.Key), true));
         var tiers = detailed
-            ? new[] { new InspectionFact("Available tiers: " + FormatAvailableTiers(affix), HonorTheme.Muted) }
+            ? new[] { new InspectionFact(L.Format($"{L.Text("Available tiers: ")}{FormatAvailableTiers(affix)}"), HonorTheme.Muted) }
             : [];
         var links = affix.Modifiers
             .Select(modifier => CombatGlossary.Link(modifier.Key))
             .DistinctBy(link => link.Text);
 
-        return new(affix.DefinitionId.Replace('-', ' ') + $" · {affix.TierId}", "", ItemPresentation.RarityColor(rarity), links, facts.Concat(tiers));
+        return new(L.Format($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}"), "", ItemPresentation.RarityColor(rarity), links, facts.Concat(tiers));
     }
 
     /// <summary>Formats an actual modifier with optional captured roll details.</summary>
@@ -74,7 +75,7 @@ public static class ItemInspectionTopics
         var range = affix.Ranges[index];
         var scale = modifier.Operation != StatOperation.Flat || modifier.Key.Type == StatType.Resistance ? 100 : 1;
 
-        return $"{value} [{range.Minimum * scale:0.##}/{range.Maximum * scale:0.##}] {affix.QualityRoll}% {affix.TierId}";
+        return L.Format($"{value} [{range.Minimum * scale:0.##}/{range.Maximum * scale:0.##}] {affix.QualityRoll}% {affix.TierId}");
     }
 
     /// <summary>Formats only the tier pool actually captured by the affix.</summary>
@@ -88,7 +89,9 @@ public static class ItemInspectionTopics
 
         if (continuous)
         {
-            return (tiers.Count == 1 ? "T1" : $"T1–T{tiers.Count}") + " (T1 strongest)";
+            var pool = tiers.Count == 1 ? "T1" : $"T1–T{tiers.Count}";
+
+            return L.Format($"{pool}{L.Text(" (T1 strongest)")}");
         }
 
         return string.Join(", ", affix.AvailableTierIds);

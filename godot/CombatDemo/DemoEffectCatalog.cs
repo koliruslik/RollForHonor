@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.Effects.Models;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.CombatDemo;
 
@@ -34,5 +35,5 @@ public static class DemoEffectCatalog
     /// <summary>Looks up a display name without making unregistered definitions look known.</summary>
     /// <param name="id">The definition identity recorded by combat.</param>
     /// <returns>The fixture name or the original identity.</returns>
-    public static string Name(EffectDefinitionId id) => id == Burning.Id ? "Burning" : id == Bleeding.Id ? "Bleeding" : id.ToString();
+    public static string Name(EffectDefinitionId id) => id == Burning.Id ? L.Text("Burning") : id == Bleeding.Id ? L.Text("Bleeding") : id.ToString();
 }

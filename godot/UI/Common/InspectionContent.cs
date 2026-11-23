@@ -1,4 +1,5 @@
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
 
@@ -29,7 +30,7 @@ public static class InspectionContent
             return;
         }
 
-        InspectionText.Write(body, "\n\nRELATED\n", HonorTheme.Muted);
+        InspectionText.Write(body, L.Text("\n\nRELATED\n"), HonorTheme.Muted);
 
         for (var index = 0; index < topic.Links.Count; index++)
         {

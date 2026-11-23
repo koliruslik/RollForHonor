@@ -66,5 +66,6 @@ jobs:
           godot
           --headless
           --path godot
+          --language en
           --run-tests
           --quit-on-finish

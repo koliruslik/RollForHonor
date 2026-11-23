@@ -5,6 +5,7 @@ using RollForHonor.Domain.Items.Affixes.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
@@ -15,18 +16,18 @@ public partial class ItemDetailsPanel
         _properties.Clear();
         _sources.Clear();
         _inspections.Clear();
-        Heading("BASE PROPERTIES");
+        Heading(L.Text("BASE PROPERTIES"));
         WriteWeapon();
         WriteModifiers();
 
         if (_item.Affixes.Count > 0)
         {
             _properties.AddText("\n");
-            Heading("AFFIXES");
+            Heading(L.Text("AFFIXES"));
 
             foreach (var affix in _item.Affixes)
             {
-                Heading($"{affix.DefinitionId.Replace('-', ' ')} · {affix.TierId}");
+                Heading($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}");
                 WriteAffix(affix);
             }
         }
@@ -46,11 +47,11 @@ public partial class ItemDetailsPanel
             return;
         }
 
-        _properties.AddText($"Attack speed  {weapon.AttacksPerSecond:0.##}/s\n");
+        _properties.AddText(L.Format($"Attack speed  {weapon.AttacksPerSecond:0.##}/s\n"));
 
         if (weapon.ManaCost > 0)
         {
-            _properties.AddText($"Mana cost  {weapon.ManaCost:0.##}\n");
+            _properties.AddText(L.Format($"Mana cost  {weapon.ManaCost:0.##}\n"));
         }
 
         foreach (var damage in weapon.Damage)
@@ -68,11 +69,12 @@ public partial class ItemDetailsPanel
             .Where(modifier => modifier.Key == key)
             .Select(modifier => new StatModifier(modifier.Key, modifier.Operation, modifier.Amount, "item-tooltip"));
         var value = new StatCalculator().Calculate(new StatProfile(new StatBlock(), flat)).Get(key);
-        var text = new RollForHonor.Domain.Combat.Damage.Models.DamageComponent(damage.Dice, checked(damage.FlatDamage + (int)decimal.Floor(value)), damage.Type).ToString();
+        var text = new RollForHonor.Domain.Combat.Damage.Models.DamageComponent(damage.Dice, checked(damage.FlatDamage + (int)decimal.Floor(value)), damage.Type);
+        var display = L.Damage(text);
         var contributors = _item.Affixes
             .Where(affix => affix.Modifiers.Any(modifier => modifier.Key == key))
             .ToArray();
-        WriteProperty(text, contributors, new StatKey(StatType.DamageMultiplier, damage.Type));
+        WriteProperty(display, contributors, new StatKey(StatType.DamageMultiplier, damage.Type));
     }
 
     private void WriteProperty(string text, IReadOnlyList<AffixInstance> contributors, StatKey key)
@@ -85,7 +87,7 @@ public partial class ItemDetailsPanel
 
         var id = _inspections.Count.ToString();
         _sources[id] = string.Join("\n\n", contributors
-            .Select(affix => affix.DefinitionId.Replace('-', ' ') + "\n" + FormatAffix(affix)));
+            .Select(affix => L.Text(affix.DefinitionId.Replace('-', ' ')) + "\n" + FormatAffix(affix)));
         _inspections[id] = PropertyTopic(text, key, contributors);
         InspectionText.Link(_properties, text, id, CombatGlossary.StatColor(key), contributors.Count > 0);
         _properties.AddText("\n");
@@ -112,7 +114,7 @@ public partial class ItemDetailsPanel
         var values = string.Join("\n", affix.Modifiers
             .Select((modifier, index) => FormatAffixModifier(affix, modifier, index)));
 
-        return _detailed ? values + "\nAvailable tiers: " + FormatAvailableTiers(affix) : values;
+        return _detailed ? values + L.Text("\nAvailable tiers: ") + FormatAvailableTiers(affix) : values;
     }
 
     private string FormatAffixModifier(AffixInstance affix, ItemModifier modifier, int index) =>
@@ -163,7 +165,7 @@ public partial class ItemDetailsPanel
 
         if (_detailed)
         {
-            InspectionText.Write(_properties, "Available tiers: " + FormatAvailableTiers(affix) + "\n", HonorTheme.Muted);
+            InspectionText.Write(_properties, L.Text("Available tiers: ") + FormatAvailableTiers(affix) + "\n", HonorTheme.Muted);
         }
     }
 }

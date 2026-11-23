@@ -149,7 +149,7 @@
     "id": "session.settings",
     "category": "Session",
     "title": "Display, sound and overhead bars",
-    "description": "Settings supports windowed/fullscreen mode, vertical synchronization, master volume and optional overhead bars for enemies and the player. Apply saves presentation preferences independently of a game run. Closing without applying discards edits. Language selection has not been implemented yet.",
+    "description": "Settings supports windowed/fullscreen mode, vertical synchronization, master volume and optional overhead bars for enemies and the player. Apply saves presentation preferences independently of a game run. Closing without applying discards edits. Language changes apply immediately and are saved with presentation preferences.",
     "related": [
       "session.restart"
     ]

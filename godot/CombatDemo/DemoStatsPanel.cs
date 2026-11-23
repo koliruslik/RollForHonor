@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using RollForHonor.Godot.UI.Localization;
 using RollForHonor.Domain.Combat.Attacks.Models;
 using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.State.Models;
@@ -28,32 +29,42 @@ public partial class DemoStatsPanel : VBoxContainer
     /// <param name="flatDamage">Initial flat weapon damage.</param>
     public void Configure(string title, CombatantSnapshot initial, int modifier, int flatDamage)
     {
-        AddChild(new Label { Text = title, Name = "Title" });
-        AddChild(new Label { Text = "Draft stats | Apply includes current HP", AutowrapMode = TextServer.AutowrapMode.WordSmart });
-        AddNumber("Health", "Current HP", 0, 100000, initial.Health);
-        AddNumber("MaxHealth", "Maximum HP", 1, 100000, initial.MaxHealth);
-        AddNumber("Armor", "Armor", -10000, 100000, initial.Armor);
-        AddNumber("Evasion", "Evasion", -10000, 10000, initial.Evasion);
-        AddNumber("Modifier", "Attack modifier", -1000, 1000, modifier);
-        AddNumber("DiceCount", "Damage dice count", 1, 20, 1);
-        AddNumber("DiceSides", "Damage die sides", 2, 1000, 6);
-        AddNumber("FlatDamage", "Flat damage", -10000, 10000, flatDamage);
+        AddChild(new Label { Text = L.Text(title), Name = "Title" });
+        AddChild(new Label { Text = L.Text("Draft stats | Apply includes current HP"), AutowrapMode = TextServer.AutowrapMode.WordSmart });
+        AddNumber("Health", L.Text("Current HP"), 0, 100000, initial.Health);
+        AddNumber("MaxHealth", L.Text("Maximum HP"), 1, 100000, initial.MaxHealth);
+        AddNumber("Armor", L.Text("Armor"), -10000, 100000, initial.Armor);
+        AddNumber("Evasion", L.Text("Evasion"), -10000, 10000, initial.Evasion);
+        AddNumber("Modifier", L.Text("Attack modifier"), -1000, 1000, modifier);
+        AddNumber("DiceCount", L.Text("Damage dice count"), 1, 20, 1);
+        AddNumber("DiceSides", L.Text("Damage die sides"), 2, 1000, 6);
+        AddNumber("FlatDamage", L.Text("Flat damage"), -10000, 10000, flatDamage);
         _damageType = new OptionButton { Name = "DamageType" };
-        foreach (var type in Enum.GetValues<DamageType>()) _damageType.AddItem(type.ToString(), (int)type);
-        AddChild(_damageType);
-        AddChild(new Label { Text = "Resistance % | negative = weakness" });
         foreach (var type in Enum.GetValues<DamageType>())
-            AddNumber(type.ToString(), type.ToString(), -1000, 100, (double)(initial.Resistances.SingleOrDefault(value => value.Type == type)?.Value ?? 0) * 100);
-        _burning = new CheckBox { Name = "Burning", Text = "Burning on contact" };
-        _bleeding = new CheckBox { Name = "Bleeding", Text = "Bleeding on contact" };
+        {
+            _damageType.AddItem(L.Text(type.ToString()), (int)type);
+        }
+
+        AddChild(_damageType);
+        AddChild(new Label { Text = L.Text("Resistance % | negative = weakness") });
+        foreach (var type in Enum.GetValues<DamageType>())
+        {
+            AddNumber(type.ToString(), L.Text(type.ToString()), -1000, 100, (double)(initial.Resistances.SingleOrDefault(value => value.Type == type)?.Value ?? 0) * 100);
+        }
+
+        _burning = new CheckBox { Name = "Burning", Text = L.Text("Burning on contact") };
+        _bleeding = new CheckBox { Name = "Bleeding", Text = L.Text("Bleeding on contact") };
         AddChild(_burning);
         AddChild(_bleeding);
-        _lifesteal = new CheckBox { Name = "Lifesteal", Text = "Vampirism on attack" };
+        _lifesteal = new CheckBox { Name = "Lifesteal", Text = L.Text("Vampirism on attack") };
         AddChild(_lifesteal);
-        AddNumber("LifestealPercent", "Vampirism %", 0, 100, 25);
-        AddChild(new Label { Text = "Ticks: 1d4 Fire / Slashing.\nNext tick / Auto: living targets only.\nStatus contact includes evasion.",
-            AutowrapMode = TextServer.AutowrapMode.WordSmart });
-        var apply = new Button { Text = "Apply draft stats (including HP)", Name = "Apply" };
+        AddNumber("LifestealPercent", L.Text("Vampirism %"), 0, 100, 25);
+        AddChild(new Label
+        {
+            Text = L.Text("Ticks: 1d4 Fire / Slashing.\nNext tick / Auto: living targets only.\nStatus contact includes evasion."),
+            AutowrapMode = TextServer.AutowrapMode.WordSmart
+        });
+        var apply = new Button { Text = L.Text("Apply draft stats (including HP)"), Name = "Apply" };
         apply.Pressed += () => ApplyRequested?.Invoke();
         AddChild(apply);
     }
@@ -74,12 +85,20 @@ public partial class DemoStatsPanel : VBoxContainer
         DemoEffectCatalog.Behaviors(_lifesteal.ButtonPressed, (decimal)_numbers["LifestealPercent"].Value / 100));
 
     private int Value(string key) => checked((int)_numbers[key].Value);
+
     private void AddNumber(string key, string label, double minimum, double maximum, double value)
     {
         var row = new HBoxContainer { Name = key + "Row" };
         row.AddChild(new Label { Text = label, SizeFlagsHorizontal = SizeFlags.ExpandFill });
-        var number = new SpinBox { Name = key, MinValue = minimum, MaxValue = maximum, Step = 1, Value = value,
-            CustomMinimumSize = new(115, 0) };
+        var number = new SpinBox
+        {
+            Name = key,
+            MinValue = minimum,
+            MaxValue = maximum,
+            Step = 1,
+            Value = value,
+            CustomMinimumSize = new(115, 0)
+        };
         _numbers.Add(key, number);
         row.AddChild(number);
         AddChild(row);

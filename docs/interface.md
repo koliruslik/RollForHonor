@@ -209,25 +209,43 @@ and preserves a pause owned elsewhere. Search owns text input, preventing I/C/H
 from triggering other UI shortcuts while typing. Escape closes transient cards
 first, then the reader. Inventory/character windows retain their prior state.
 
-## Localization readiness
+## Localization
 
-The game currently displays English. Language selection and locale persistence
-are not implemented. Godot's translation support can provide English (`en`) and
-Ukrainian (`uk`) without changing Domain combat/item/stat rules. The presentation
-layer requires a full text migration rather than only a Settings dropdown:
+Settings offers **Українська** (`uk`) and **English** (`en`). Apply saves the
+selected language in `user://presentation.cfg` before changing the running
+interface. Back/close discards an unapplied selection; Reset Defaults selects
+Ukrainian in the form until Apply is pressed. Missing, invalid or unsupported
+saved language fields fall back to Ukrainian. A failed save leaves the language
+unchanged. Launch with `godot --path godot --language en` or `--language uk` to
+override the saved startup choice. English source messages remain the fallback.
 
-- Move labels, descriptions and formatted sentences to stable translation keys
-  with placeholders. Localize item/affix names through stable content IDs.
-- Persist the validated language with `PlayerPreferences` and apply it through
-  `TranslationServer.SetLocale`, with English as the fallback.
-- Refresh constructed rich text, reference search/indexes and captured card text
-  on language changes while retaining original dice, ranges and numeric facts.
-- Replace the English-specific damage-word markup rule with semantic text runs;
-  verify Ukrainian glyphs, wrapping, percentages and longer labels in both locales.
+Switching language does not recreate the scene or reset combat, equipment,
+inventory positions, roll history or pinned cards. Native text bindings and
+constructed rich text refresh in place. Reference search retains its query,
+category and selected entry identity; its captured articles and item facts use
+the current language. Numeric facts and captured item rolls remain unchanged.
 
-Translation catalogs belong to Godot content; language-independent IDs and
-calculation models stay unchanged. Reference entries already have stable IDs,
-but the current captured `InspectionTopic` strings still need localization.
+`Content/Localization/uk.po` is registered with Godot's TranslationServer.
+It covers title/settings/pause screens, arena HUD and hints, inventory and
+character sheets, item and affix display names, linked explanations, reference
+articles/categories and the combat laboratory. Native scene labels use Godot's
+automatic translation; constructed text uses `UI/Localization/L` to translate
+complete templates before inserting values. Numeric facts keep invariant decimal
+formatting, dice notation, ranges, quality and tier IDs. The product title stays
+in English. Developer exceptions, console diagnostics and technical identifiers
+are outside the player-facing catalog.
+
+Item definitions and reference JSON retain English source text and stable IDs.
+Presentation translates their display fields when building cards and the search
+index. Search matches Ukrainian text case-insensitively as well as stable entry
+IDs. The same immutable item values feed both cards and reference entries;
+translation never rerolls items or changes Domain calculations. New authored text
+needs a matching catalog entry. Keep `{0}`-style placeholders and their numeric
+formats intact when editing translations.
+
+Rich-text damage-word styling recognizes English and Ukrainian forms without
+turning the common word into a link. Existing native metadata links and card
+pin/close behavior retain their original identities in both locales.
 
 ## Targets, combat state and recent results
 
@@ -271,7 +289,7 @@ are not implemented in this pass.
 
 The supported settings are windowed/fullscreen mode, vertical synchronization
 and linear master volume, plus enemy overhead health and optional player
-overhead health/mana bars. These bars contain no numbers; target HP numbers
+overhead health/mana bars and the interface language. These bars contain no numbers; target HP numbers
 remain in the top target panel. Apply saves `user://presentation.cfg` before applying
 the new values. Back/close discards unapplied edits; Reset Defaults changes the
 form until Apply is pressed. Invalid stored fields fall back to supported defaults

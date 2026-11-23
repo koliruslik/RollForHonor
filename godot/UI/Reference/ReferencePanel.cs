@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Godot;
 using RollForHonor.Godot.UI.Common;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Reference;
 
@@ -26,6 +27,7 @@ public partial class ReferencePanel : Control
     private Label _section;
     private RichTextLabel _body;
     private Button _inspect;
+    private string[] _categories = [];
 
     /// <inheritdoc />
     public override void _Ready()
@@ -35,6 +37,15 @@ public partial class ReferencePanel : Control
         BuildHeader(panel);
         BuildIndex(panel);
         BuildReader(panel);
+        L.OnChanged(this, () =>
+        {
+            _search.PlaceholderText = L.Text("Search rules, stats, items…");
+
+            if (Visible)
+            {
+                Open(_entries);
+            }
+        });
         Hide();
     }
 
@@ -46,14 +57,16 @@ public partial class ReferencePanel : Control
         ArgumentNullException.ThrowIfNull(entries);
 
         _entries = entries;
-        var previous = _category.GetItemText(_category.Selected);
+        var previous = _category.Selected > 0 ? L.Refresh(_categories[_category.Selected - 1]) : "";
         _category.Clear();
-        _category.AddItem("All sections");
-
-        foreach (var category in entries
+        _category.AddItem(L.Text("All sections"));
+        _categories = entries
             .Select(entry => entry.Category)
             .Distinct(StringComparer.Ordinal)
-            .OrderBy(value => value, StringComparer.Ordinal))
+            .OrderBy(value => value, StringComparer.Ordinal)
+            .ToArray();
+
+        foreach (var category in _categories)
         {
             _category.AddItem(category);
 
@@ -78,13 +91,13 @@ public partial class ReferencePanel : Control
 
     private void BuildHeader(Control panel)
     {
-        UiLayout.Place(panel, UiLayout.Text("Reference", 28, heading: true), new Rect2(28, 20, 800, 48));
+        UiLayout.Place(panel, UiLayout.Text(L.Text("Reference"), 28, heading: true), new Rect2(28, 20, 800, 48));
         UiLayout.Place(panel, UiLayout.CloseButton(Close), new Rect2(932, 24, 40, 40));
         UiLayout.Divider(panel, new Rect2(28, 88, 944, 1));
-        _search = UiLayout.Place(panel, new LineEdit { Name = "Search", PlaceholderText = "Search rules, stats, items…", ClearButtonEnabled = true }, new Rect2(28, 112, 604, 44));
+        _search = UiLayout.Place(panel, new LineEdit { Name = "Search", PlaceholderText = L.Text("Search rules, stats, items…"), ClearButtonEnabled = true }, new Rect2(28, 112, 604, 44));
         _search.TextChanged += _ => Filter();
         _category = UiLayout.Place(panel, new OptionButton { Name = "Category" }, new Rect2(648, 112, 324, 44));
-        _category.AddItem("All sections");
+        _category.AddItem(L.Text("All sections"));
         _category.ItemSelected += _ => Filter();
     }
 
@@ -106,9 +119,9 @@ public partial class ReferencePanel : Control
         _body = UiLayout.Place(panel, new RichTextLabel { Name = "Article", MetaUnderlined = true }, new Rect2(368, 292, 604, 454));
         _body.AddThemeFontSizeOverride("normal_font_size", 18);
         _body.MetaClicked += FollowLink;
-        _inspect = UiLayout.Place(panel, UiLayout.Button("Open as card", () => InspectionRequested?.Invoke(_selected.Topic)), new Rect2(368, 766, 236, 48));
+        _inspect = UiLayout.Place(panel, UiLayout.Button(L.Text("Open as card"), () => InspectionRequested?.Invoke(_selected.Topic)), new Rect2(368, 766, 236, 48));
         _inspect.Name = "Inspect";
-        UiLayout.Place(panel, UiLayout.Text("Search · Select a topic · Underlined text opens related cards · Pin to retain", 12, new Color(HonorTheme.Muted, 0.6f)), new Rect2(28, 846, 944, 28));
+        UiLayout.Place(panel, UiLayout.Text(L.Text("Search · Select a topic · Underlined text opens related cards · Pin to retain"), 12, new Color(HonorTheme.Muted, 0.6f)), new Rect2(28, 846, 944, 28));
     }
 
     private void Filter()
@@ -123,7 +136,7 @@ public partial class ReferencePanel : Control
         var visible = _entries
             .Where(entry => (_category.Selected == 0 || entry.Category == category) && entry.Matches(_search.Text))
             .ToArray();
-        _count.Text = $"{visible.Length} / {_entries.Count} TOPICS";
+        L.SetText(_count, L.Format($"{visible.Length} / {_entries.Count} TOPICS"));
 
         foreach (var entry in visible)
         {
@@ -149,8 +162,8 @@ public partial class ReferencePanel : Control
     private void Select(ReferenceEntry entry)
     {
         _selected = entry;
-        _section.Text = entry?.Category ?? "SEARCH";
-        _title.Text = entry?.Topic.Title ?? "No matching topics";
+        L.SetText(_section, entry?.Category ?? L.Text("SEARCH"));
+        L.SetText(_title, entry?.Topic.Title ?? L.Text("No matching topics"));
         _inspect.Disabled = entry is null;
         _body.ScrollToLine(0);
 
@@ -165,7 +178,7 @@ public partial class ReferencePanel : Control
         if (entry is null)
         {
             _body.Clear();
-            _body.AddText("Try another search or choose All sections.");
+            _body.AddText(L.Text("Try another search or choose All sections."));
             return;
         }
 
