@@ -4,7 +4,7 @@ using RollForHonor.Domain.Dice.Services;
 
 namespace RollForHonor.Domain.Combat.Resolution.Services.Steps;
 
-/// <summary>Applies resolved source damage coefficients before hit quality and defenses without rolling additional dice.</summary>
+/// <summary>Adds typed flat attack damage and applies resolved source coefficients before hit quality and defenses without extra dice.</summary>
 public sealed class SourceDamageStep : ICombatStep
 {
     /// <inheritdoc />
@@ -24,6 +24,17 @@ public sealed class SourceDamageStep : ICombatStep
 
         var packet = raw.Damage;
         var steps = raw.Breakdown.Steps.ToList();
+
+        var added = context.Request.StateSnapshot.Source.Offense.AddedDamage;
+
+        if (context.Request.Attack is not null && added.Count > 0)
+        {
+            var next = new DamagePacket(packet.Components
+                .Concat(added)
+                .ToArray());
+            steps.Add(new DamageStep(DamageStepType.AttackerModifier, packet, next, origin: "CharacterStats:AddedDamage", flatBonus: added.Sum(value => value.Amount)));
+            packet = next;
+        }
 
         var types = packet.Components
             .Select(component => component.Type)

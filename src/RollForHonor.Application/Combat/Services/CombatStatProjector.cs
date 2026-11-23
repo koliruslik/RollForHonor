@@ -25,7 +25,9 @@ public sealed class CombatStatProjector
         var offense = new CombatOffense(
             checked((int)decimal.Floor(stats.Get(new(StatType.AttackModifier)))),
             Enum.GetValues<DamageType>()
-                .Select(type => new KeyValuePair<DamageType, decimal>(type, stats.Get(new(StatType.DamageMultiplier, type)))));
+                .Select(type => new KeyValuePair<DamageType, decimal>(type, stats.Get(new(StatType.DamageMultiplier, type)))),
+            Enum.GetValues<DamageType>()
+                .Select(type => new DamageAmount(type, checked((int)decimal.Floor(stats.Get(new(StatType.AddedDamage, type)))))));
 
         return new CombatantSnapshot(current.Id, Math.Min(current.Health, maxHealth), maxHealth,
             checked((int)decimal.Floor(stats.Get(new(StatType.Armor)))),

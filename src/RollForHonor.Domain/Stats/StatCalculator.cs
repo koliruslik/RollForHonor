@@ -15,17 +15,17 @@ public sealed class StatCalculator
         ArgumentNullException.ThrowIfNull(profile);
 
         var keys = Enum.GetValues<StatType>()
-            .Where(type => type != StatType.Resistance)
+            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage))
             .Select(type => new StatKey(type))
             .Concat(Enum.GetValues<DamageType>()
-                .SelectMany(damage => new[] { new StatKey(StatType.Resistance, damage), new StatKey(StatType.DamageMultiplier, damage) }));
+                .SelectMany(damage => new[] { new StatKey(StatType.Resistance, damage), new StatKey(StatType.DamageMultiplier, damage), new StatKey(StatType.AddedDamage, damage) }));
 
         return new StatBlock(keys.Select(key => new KeyValuePair<StatKey, decimal>(key, CalculateValue(profile, key))));
     }
 
     private static decimal CalculateValue(StatProfile profile, StatKey key)
     {
-        var global = new StatKey(key.Type, key.Type == StatType.Resistance ? key.DamageKind : null);
+        var global = new StatKey(key.Type, key.Type is StatType.Resistance or StatType.AddedDamage ? key.DamageKind : null);
         var combineDamage = key.Type == StatType.DamageMultiplier && key.DamageKind is not null;
         var entries = profile.Modifiers
             .Where(modifier => modifier.Key == key || combineDamage && modifier.Key == global)
