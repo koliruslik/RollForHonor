@@ -6,6 +6,7 @@ using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Commands;
 using RollForHonor.Godot.Gameplay.Movement;
+using RollForHonor.Godot.Gameplay.Targeting;
 
 namespace RollForHonor.Godot.Gameplay.AI;
 
@@ -70,6 +71,7 @@ public partial class EnemyController : EntityComponent
         }
 
         HasVisibleTarget = true;
+        Host.GetRequiredComponent<CombatAwareness>().Selection.Select(_target.CombatantId);
         var horizontal = new Vector3(offset.X, 0, offset.Z);
 
         if (!horizontal.IsZeroApprox())

@@ -24,12 +24,12 @@ public partial class Player : DynamicEntity
     /// <inheritdoc />
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (!IsConfigured || !Controls.HardwareInput || @event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Right } mouse)
+        if (!IsConfigured || !Controls.HardwareInput || !@event.IsActionPressed("rfh_primary"))
         {
             return;
         }
 
-        Controls.ShootAtCursor(mouse.Position);
+        Controls.ShootAtCursor(@event is InputEventMouseButton mouse ? mouse.Position : GetViewport().GetMousePosition());
         GetViewport().SetInputAsHandled();
     }
 }

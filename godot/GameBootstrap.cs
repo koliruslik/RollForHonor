@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using Chickensoft.GoDotTest;
 using Godot;
+using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Application.Combat.Services;
 using RollForHonor.Domain.Combat.Damage.Configuration;
 using RollForHonor.Domain.Combat.Damage.Services;
@@ -49,7 +50,12 @@ public partial class GameBootstrap : Node3D
     /// <inheritdoc />
     public override void _EnterTree()
     {
-        if (_attacks is not null) return;
+        GameInputBindings.EnsureDefaults();
+
+        if (_attacks is not null)
+        {
+            return;
+        }
         var diagnostics = CombatDiagnosticsEnabled
             ? new LoggerCombatDiagnostics(new GodotCombatLogger(), DiagnosticView) : null;
         var impacts = new CombatImpactService(CombatState, new CombatSnapshotBuilder(),

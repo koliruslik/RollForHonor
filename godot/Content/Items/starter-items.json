@@ -1,0 +1,417 @@
+[
+  {
+    "id": "ashen-longbow",
+    "name": "Ashen Longbow",
+    "tag": "weapon",
+    "rarity": "Rare",
+    "modifiers": [
+      {
+        "type": "AttackModifier",
+        "operation": "Flat",
+        "value": 1
+      }
+    ],
+    "affixes": [
+      {
+        "id": "steady-hand",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "AttackModifier",
+            "operation": "Flat",
+            "minimum": 1,
+            "maximum": 3,
+            "precision": 0
+          }
+        ]
+      },
+      {
+        "id": "barbed-shaft",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "AddedDamage",
+            "damage": "Piercing",
+            "operation": "Flat",
+            "minimum": 1,
+            "maximum": 3,
+            "precision": 0
+          }
+        ]
+      }
+    ],
+    "weapon": {
+      "attacksPerSecond": 4,
+      "manaCost": 10,
+      "damage": [
+        {
+          "count": 1,
+          "sides": 6,
+          "flat": 3,
+          "type": "Piercing"
+        }
+      ]
+    },
+    "inventorySize": {
+      "width": 2,
+      "height": 3
+    },
+    "tags": [
+      "weapon",
+      "bow",
+      "two-handed"
+    ]
+  },
+  {
+    "id": "embercoat",
+    "name": "Embercoat Vest",
+    "tag": "body-armor",
+    "rarity": "Rare",
+    "modifiers": [
+      {
+        "type": "Armor",
+        "operation": "Flat",
+        "value": 3
+      }
+    ],
+    "affixes": [
+      {
+        "id": "vitality",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "MaxHealth",
+            "operation": "Flat",
+            "minimum": 12,
+            "maximum": 24,
+            "precision": 0
+          }
+        ]
+      },
+      {
+        "id": "ember-ward",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "Resistance",
+            "operation": "Flat",
+            "minimum": 0.05,
+            "maximum": 0.12,
+            "precision": 2,
+            "damage": "Fire"
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 2,
+      "height": 3
+    }
+  },
+  {
+    "id": "wayfarer-boots",
+    "name": "Wayfarer Boots",
+    "tag": "boots",
+    "rarity": "Uncommon",
+    "modifiers": [
+      {
+        "type": "Armor",
+        "operation": "Flat",
+        "value": 1
+      }
+    ],
+    "affixes": [
+      {
+        "id": "fleet-footed",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "MovementSpeed",
+            "operation": "Increased",
+            "minimum": 0.08,
+            "maximum": 0.16,
+            "precision": 2
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 2,
+      "height": 2
+    }
+  },
+  {
+    "id": "warden-helm",
+    "name": "Warden Helm",
+    "tag": "helmet",
+    "rarity": "Uncommon",
+    "modifiers": [
+      {
+        "type": "Armor",
+        "operation": "Flat",
+        "value": 2
+      }
+    ],
+    "affixes": [
+      {
+        "id": "watchful",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "Evasion",
+            "operation": "Flat",
+            "minimum": 1,
+            "maximum": 3,
+            "precision": 0
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 2,
+      "height": 2
+    }
+  },
+  {
+    "id": "moonstone-pendant",
+    "name": "Moonstone Pendant",
+    "tag": "amulet",
+    "rarity": "Rare",
+    "modifiers": [
+      {
+        "type": "MaxMana",
+        "operation": "Flat",
+        "value": 20
+      }
+    ],
+    "affixes": [
+      {
+        "id": "deep-well",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "MaxMana",
+            "operation": "Flat",
+            "minimum": 15,
+            "maximum": 35,
+            "precision": 0
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 1,
+      "height": 1
+    }
+  },
+  {
+    "id": "cinder-band",
+    "name": "Cinder Band",
+    "tag": "ring",
+    "rarity": "Rare",
+    "modifiers": [
+      {
+        "type": "MaxMana",
+        "operation": "Flat",
+        "value": 5
+      }
+    ],
+    "affixes": [
+      {
+        "id": "fire-ward",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "Resistance",
+            "operation": "Flat",
+            "minimum": 0.08,
+            "maximum": 0.16,
+            "precision": 2,
+            "damage": "Fire"
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 1,
+      "height": 1
+    }
+  },
+  {
+    "id": "oathkeeper-ring",
+    "name": "Oathkeeper Ring",
+    "tag": "ring",
+    "rarity": "Epic",
+    "modifiers": [
+      {
+        "type": "MaxMana",
+        "operation": "Flat",
+        "value": 5
+      }
+    ],
+    "affixes": [
+      {
+        "id": "unbroken-oath",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "DamageMultiplier",
+            "operation": "Increased",
+            "minimum": 0.03,
+            "maximum": 0.07,
+            "precision": 2
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 1,
+      "height": 1
+    }
+  },
+  {
+    "id": "pilgrim-coat",
+    "name": "Pilgrim Coat",
+    "tag": "body-armor",
+    "rarity": "Common",
+    "modifiers": [
+      {
+        "type": "Armor",
+        "operation": "Flat",
+        "value": 2
+      },
+      {
+        "type": "MaxHealth",
+        "operation": "Flat",
+        "value": 8
+      }
+    ],
+    "affixes": [],
+    "inventorySize": {
+      "width": 2,
+      "height": 3
+    }
+  },
+  {
+    "id": "iron-bow",
+    "name": "Ironwood Bow",
+    "tag": "weapon",
+    "rarity": "Common",
+    "modifiers": [
+      {
+        "type": "AttackModifier",
+        "operation": "Flat",
+        "value": 1
+      }
+    ],
+    "affixes": [],
+    "weapon": {
+      "attacksPerSecond": 3,
+      "manaCost": 6,
+      "damage": [
+        {
+          "count": 1,
+          "sides": 4,
+          "flat": 2,
+          "type": "Piercing"
+        }
+      ]
+    },
+    "inventorySize": {
+      "width": 2,
+      "height": 3
+    },
+    "tags": [
+      "weapon",
+      "bow",
+      "two-handed"
+    ]
+  },
+  {
+    "id": "winter-loop",
+    "name": "Winter Loop",
+    "tag": "ring",
+    "rarity": "Uncommon",
+    "modifiers": [
+      {
+        "type": "MaxMana",
+        "operation": "Flat",
+        "value": 5
+      }
+    ],
+    "affixes": [
+      {
+        "id": "cold-ward",
+        "tier": "T2",
+        "quality": 72,
+        "modifiers": [
+          {
+            "type": "Resistance",
+            "operation": "Flat",
+            "minimum": 0.06,
+            "maximum": 0.12,
+            "precision": 2,
+            "damage": "Cold"
+          }
+        ]
+      }
+    ],
+    "inventorySize": {
+      "width": 1,
+      "height": 1
+    }
+  },
+  {
+    "id": "ranger-quiver",
+    "name": "Ranger Quiver",
+    "tag": "offhand",
+    "tags": [
+      "offhand",
+      "quiver"
+    ],
+    "rarity": "Common",
+    "modifiers": [
+      {
+        "type": "AttackModifier",
+        "operation": "Flat",
+        "value": 1
+      }
+    ],
+    "affixes": [],
+    "inventorySize": {
+      "width": 1,
+      "height": 3
+    }
+  },
+  {
+    "id": "iron-shield",
+    "name": "Iron Shield",
+    "tag": "offhand",
+    "tags": [
+      "offhand",
+      "shield"
+    ],
+    "rarity": "Common",
+    "modifiers": [
+      {
+        "type": "Armor",
+        "operation": "Flat",
+        "value": 4
+      }
+    ],
+    "affixes": [],
+    "inventorySize": {
+      "width": 2,
+      "height": 3
+    }
+  }
+]
