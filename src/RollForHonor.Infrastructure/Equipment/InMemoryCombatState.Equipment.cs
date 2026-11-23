@@ -16,7 +16,7 @@ public sealed partial class InMemoryCombatState
     private readonly EquipmentRules _equipmentRules;
 
     /// <summary>Creates an isolated session with optional immutable equipment compatibility rules.</summary>
-    /// <param name="equipmentRules">Optional slot rules; absent uses the seven default slot/tag mappings.</param>
+    /// <param name="equipmentRules">Optional slot and hand pairing rules; absent uses the default equipment rules.</param>
     public InMemoryCombatState(EquipmentRules? equipmentRules = null)
     {
         _equipmentRules = equipmentRules ?? EquipmentRules.Default;
@@ -116,7 +116,7 @@ public sealed partial class InMemoryCombatState
     private void ValidateLoadout(EquipmentInventory equipment, EquipmentLoadout loadout)
     {
         if (loadout.Slots.Any(pair => !equipment.OwnedItems.TryGetValue(pair.Value.Id, out var canonical)
-            || !ReferenceEquals(pair.Value, canonical) || !_equipmentRules.CanEquip(pair.Value, pair.Key)))
+            || !ReferenceEquals(pair.Value, canonical) || !_equipmentRules.CanEquip(loadout, pair.Value, pair.Key)))
         {
             throw new InvalidOperationException("Equipment must contain canonical owned items in compatible slots.");
         }

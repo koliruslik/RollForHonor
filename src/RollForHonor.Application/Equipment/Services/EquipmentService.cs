@@ -21,7 +21,7 @@ public sealed class EquipmentService
         _state = state;
     }
 
-    /// <summary>Equips an owned instance, replacing one slot without accumulating old bonuses.</summary>
+    /// <summary>Equips an owned instance, replacing its slot and returning incompatible offhands without retaining old bonuses.</summary>
     /// <param name="ownerId">The owning stat-managed actor.</param>
     /// <param name="itemId">The nonblank owned item identity.</param>
     /// <param name="slot">The defined target slot.</param>
@@ -42,7 +42,7 @@ public sealed class EquipmentService
             return EquipmentChangeStatus.ItemNotOwned;
         }
 
-        if (!state.Rules.CanEquip(item, slot))
+        if (!state.Rules.CanEquip(state.Loadout, item, slot))
         {
             return EquipmentChangeStatus.IncompatibleSlot;
         }

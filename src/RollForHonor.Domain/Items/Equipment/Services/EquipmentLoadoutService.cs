@@ -19,7 +19,7 @@ public sealed class EquipmentLoadoutService
         _rules = rules;
     }
 
-    /// <summary>Places an item in one slot, replacing its current occupant and retaining the other slots.</summary>
+    /// <summary>Replaces a slot and removes an offhand made incompatible by a main-hand change.</summary>
     /// <param name="loadout">The immutable original equipment.</param>
     /// <param name="item">The item to equip.</param>
     /// <param name="slot">The defined target slot.</param>
@@ -32,7 +32,7 @@ public sealed class EquipmentLoadoutService
         ArgumentNullException.ThrowIfNull(loadout);
         ArgumentNullException.ThrowIfNull(item);
 
-        if (!_rules.CanEquip(item, slot))
+        if (!_rules.CanEquip(loadout, item, slot))
         {
             throw new ArgumentException("The item is incompatible with this slot.", nameof(item));
         }
@@ -51,10 +51,10 @@ public sealed class EquipmentLoadoutService
             .Where(pair => pair.Key != slot)
             .Append(new KeyValuePair<EquipmentSlot, ItemInstance>(slot, item));
 
-        return new EquipmentLoadout(slots);
+        return RemoveIncompatibleOffHand(new EquipmentLoadout(slots));
     }
 
-    /// <summary>Empties a slot while retaining every other captured item.</summary>
+    /// <summary>Empties a slot and removes an offhand which requires the removed main-hand weapon.</summary>
     /// <param name="loadout">The immutable original equipment.</param>
     /// <param name="slot">The defined slot to empty.</param>
     /// <returns>A new loadout, or the original when the slot was already empty.</returns>
@@ -69,6 +69,24 @@ public sealed class EquipmentLoadoutService
             return loadout;
         }
 
-        return new EquipmentLoadout(loadout.Slots.Where(pair => pair.Key != slot));
+        var retained = loadout.Slots
+            .Where(pair => pair.Key != slot);
+
+        return RemoveIncompatibleOffHand(new EquipmentLoadout(retained));
+    }
+
+    private EquipmentLoadout RemoveIncompatibleOffHand(EquipmentLoadout loadout)
+    {
+        var offHand = loadout.GetItem(EquipmentSlot.OffHand);
+
+        if (offHand is null || _rules.CanEquip(loadout, offHand, EquipmentSlot.OffHand))
+        {
+            return loadout;
+        }
+
+        var retained = loadout.Slots
+            .Where(pair => pair.Key != EquipmentSlot.OffHand);
+
+        return new EquipmentLoadout(retained);
     }
 }
