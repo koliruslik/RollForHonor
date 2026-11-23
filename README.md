@@ -19,6 +19,7 @@ d20 attacks, typed damage, defenses and effects.
 - Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
 - Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
 - A searchable game reference sharing those explanations, with owned-item, affix and recent-combat snapshots.
+- Ukrainian/English interface with saved live language switching, localized item/affix names and searchable reference.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
@@ -36,7 +37,11 @@ dotnet restore RollForHonor.sln
 dotnet build RollForHonor.sln --no-restore
 ```
 
-Open `godot/project.godot` in Godot .NET and press **F5** for the main menu, then choose **Start Game**.
+Open `godot/project.godot` in Godot .NET and press **F5** for the main menu, then choose **Почати гру** (Start Game).
+The interface initially uses Ukrainian. Choose **Мова / Language** in Settings
+and Apply to switch immediately between Ukrainian and English; the choice is saved.
+Launch with `godot --path godot --language en` to override the saved startup language;
+see [localization](docs/interface.md#localization) for scope and catalogs.
 Press **F2** to switch between the arena and combat laboratory. Switching scenes
 or restarting creates a fresh session and resets its state.
 

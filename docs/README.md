@@ -7,7 +7,7 @@
 | [Character stats](stats.md) | Base definitions, modifier stacking, runtime ownership and combat projection |
 | [Items and affixes](items.md) | Rarity rules, immutable items, weighted procedural generation and stat inputs |
 | [Equipment](equipment.md) | Slot rules, ownership, atomic equip/unequip and non-equipment stat inputs |
-| [Game interface](interface.md) | Screens, HUD, inventory, searchable reference, shared explanations and localization readiness |
+| [Game interface](interface.md) | Screens, HUD, inventory, searchable reference, shared explanations and Ukrainian localization |
 | [Combat](combat.md) | Layer responsibilities, calculation order, damage/defense rules, launch/contact contracts and returned facts |
 | [Godot](godot.md) | Runtime composition, arena controls, physical delivery, editable laboratory, vampirism and periodic rounds |
 | [Console](console.md) | Smoke scenarios, diagnostic views/JSONL, IDE launch profiles, text duel and benchmark interpretation |
@@ -27,12 +27,14 @@ dotnet build RollForHonor.sln --configuration Debug --no-restore
 dotnet test RollForHonor.sln --configuration Debug --no-build --no-restore
 dotnet run --project tools/RollForHonor.Console --configuration Debug --no-build --no-restore -- smoke
 godot --headless --editor --path godot --quit
-godot --headless --path godot --run-tests --quit-on-finish
+godot --headless --path godot --language en --run-tests --quit-on-finish
 ```
 
 The .NET test command runs the Domain and Application suites. It does not start
 Godot: engine tests require the final command above. Build Debug before using
 the runtime test flags. Normal game startup does not run tests automatically.
+Existing text assertions run in English; localization tests temporarily select
+Ukrainian to verify native labels, reference search, authored coverage and numeric facts.
 The [CI workflow](../.github/workflows/ci.yaml) performs these same stages.
 
 | Coverage | Sources |
