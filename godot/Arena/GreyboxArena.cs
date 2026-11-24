@@ -188,15 +188,21 @@ public partial class GreyboxArena : Node3D
     private void OnContact(string sourceName, AttackContactResult contact, CombatStateRead input, string targetName)
     {
         Append(DemoCombatJournal.Format(contact, input, sourceName, targetName));
-        var sourceBody = _enemies.FirstOrDefault(enemy => enemy.CombatantId == input.Source.Id);
-        var targetBody = _enemies.FirstOrDefault(enemy => enemy.CombatantId == input.Target.Id);
+        var sourceBody = _enemies
+            .Concat(_adminEnemies)
+            .FirstOrDefault(enemy => enemy.CombatantId == input.Source.Id);
+        var targetBody = _enemies
+            .Concat(_adminEnemies)
+            .FirstOrDefault(enemy => enemy.CombatantId == input.Target.Id);
         ContactObserved?.Invoke(sourceBody is null ? sourceName : ActorName(sourceBody), contact, input, targetBody is null ? targetName : ActorName(targetBody));
         if (contact.Impact is not { IsCommitted: true, Outcome: ResolvedCombat result })
         {
             return;
         }
 
-        foreach (var actor in new DynamicEntity[] { Player }.Concat(_enemies))
+        foreach (var actor in new DynamicEntity[] { Player }
+            .Concat(_enemies)
+            .Concat(_adminEnemies))
         {
             if (actor.CombatantId == input.Source.Id || actor.CombatantId == input.Target.Id)
             {

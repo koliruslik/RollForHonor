@@ -61,7 +61,7 @@ public sealed class ItemStatRules
     private static StatOperation[] GetDefaultOperations(StatType type) => type switch
     {
         StatType.AttackModifier or StatType.Strength or StatType.Dexterity or StatType.Constitution
-            or StatType.Intelligence or StatType.Luck => [StatOperation.Flat],
+            or StatType.Intelligence or StatType.Luck or StatType.HealthRecovery or StatType.ManaRecovery => [StatOperation.Flat],
         StatType.MovementSpeed or StatType.CriticalChance or StatType.CriticalMultiplier
             or StatType.DamageMultiplier => [StatOperation.Increased, StatOperation.More],
         _ => [StatOperation.Flat, StatOperation.Increased, StatOperation.More]

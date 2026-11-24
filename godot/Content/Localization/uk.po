@@ -1290,3 +1290,135 @@ msgstr "Викинути предмет"
 
 msgid "Remove equipped items before dropping them."
 msgstr "Спочатку зніміть споряджений предмет, щоб викинути його."
+
+msgid "Health recovery"
+msgstr "Відновлення здоров’я"
+
+msgid "Mana recovery"
+msgstr "Відновлення мани"
+
+msgid "HealthRecovery"
+msgstr "Відновлення здоров’я"
+
+msgid "ManaRecovery"
+msgstr "Відновлення мани"
+
+msgid " /s"
+msgstr " /с"
+
+msgid "Planned role: physical damage. These allocated points do not increase damage yet; the conversion formula is not configured."
+msgstr "Призначення: фізична шкода. Наразі ці очки ще не збільшують шкоду: формулу їхнього впливу не налаштовано."
+
+msgid "Planned role: attack speed and movement speed. These allocated points do not change speed yet; the conversion formulas are not configured."
+msgstr "Призначення: швидкість атаки та руху. Наразі ці очки ще не змінюють швидкість: формули їхнього впливу не налаштовано."
+
+msgid "Planned role: maximum health and resistances. These allocated points do not change defenses yet; the conversion formulas are not configured."
+msgstr "Призначення: максимальне здоров’я та опори. Наразі ці очки ще не змінюють захист: формули їхнього впливу не налаштовано."
+
+msgid "Planned role: magic damage and mana. These allocated points do not change damage or resources yet; the conversion formulas are not configured."
+msgstr "Призначення: магічна шкода та мана. Наразі ці очки ще не змінюють шкоду чи ресурси: формули їхнього впливу не налаштовано."
+
+msgid "Planned role: loot, gold and affix generation rolls. These allocated points do not affect the current drops yet; Luck formulas and monster drop tables are planned."
+msgstr "Призначення: кидки здобичі, золота й генерації афіксів. Наразі ці очки ще не впливають на випадіння: формули Удачі й таблиці монстрів заплановано."
+
+msgid "Health points recovered per game second, up to maximum health. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."
+msgstr "Кількість одиниць здоров’я, що відновлюється за секунду гри, до максимуму. Відновлення зупиняється на паузі та після смерті. Це одиниці за секунду, не відсотки."
+
+msgid "Mana points recovered per game second, up to maximum mana. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."
+msgstr "Кількість одиниць мани, що відновлюється за секунду гри, до максимуму. Відновлення зупиняється на паузі та після смерті. Це одиниці за секунду, не відсотки."
+
+msgid "G · Click · Drag into bag"
+msgstr "G · Клік · Перетягніть у сумку"
+
+msgid "Inventory full! Make room to pick up this item."
+msgstr "Інвентар заповнено! Звільніть місце, щоб підібрати предмет."
+
+msgid "ACTIONS"
+msgstr "ДІЇ"
+
+msgid "No actions yet."
+msgstr "Дій ще немає."
+
+msgid "Recent actions"
+msgstr "Останні дії"
+
+msgid "Select a recorded action to inspect its details."
+msgstr "Виберіть записану дію, щоб переглянути подробиці."
+
+msgid "Action"
+msgstr "Дія"
+
+msgid "Defeated: {0}"
+msgstr "Переможено: {0}"
+
+msgid "Dropped: {0}"
+msgstr "Викинуто: {0}"
+
+msgid "Admin tools"
+msgstr "Адмін-панель"
+
+msgid "World"
+msgstr "Світ"
+
+msgid "Stats"
+msgstr "Характеристики"
+
+msgid "Monster"
+msgstr "Монстр"
+
+msgid "Spawn monster"
+msgstr "Створити монстра"
+
+msgid "Spawn queued. Sandbox enemies do not count toward the round."
+msgstr "Створення в черзі. Тестові вороги не зараховуються до раунду."
+
+msgid "Cannot spawn after player defeat."
+msgstr "Не можна створювати ворогів після смерті гравця."
+
+msgid "Gold tools will be available when the wallet is implemented. The world keeps running."
+msgstr "Інструменти золота з’являться разом із гаманцем. Гра продовжується."
+
+msgid "Create item"
+msgstr "Створити предмет"
+
+msgid "Choose any item from the current catalog. A full bag leaves the created item at your feet."
+msgstr "Виберіть предмет із поточного каталогу. Якщо сумка повна, предмет з’явиться біля ніг."
+
+msgid "Base value"
+msgstr "Базове значення"
+
+msgid "Apply stat"
+msgstr "Застосувати"
+
+msgid "Resolved value: {0:0.##}"
+msgstr "Підсумкове значення: {0:0.##}"
+
+msgid "Stat updated. Equipped bonuses are preserved."
+msgstr "Характеристику змінено. Бонуси спорядження збережено."
+
+msgid "Invalid stat value. No change was published."
+msgstr "Некоректне значення. Зміни не застосовано."
+
+msgid "Item created in inventory."
+msgstr "Предмет створено в інвентарі."
+
+msgid "Item created on the ground."
+msgstr "Предмет створено на землі."
+
+msgid "Admin: spawned Sentinel."
+msgstr "Адмін: створено Вартового."
+
+msgid "Defeated: sandbox Sentinel"
+msgstr "Переможено: тестовий Вартовий"
+
+msgid "Admin: changed {0} to {1:0.##}."
+msgstr "Адмін: {0} змінено на {1:0.##}."
+
+msgid "Admin: created {0}."
+msgstr "Адмін: створено {0}."
+
+msgid "Equipped: {0}"
+msgstr "Споряджено: {0}"
+
+msgid "Removed: {0}"
+msgstr "Знято: {0}"

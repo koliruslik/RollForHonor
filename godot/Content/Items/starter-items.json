@@ -14,7 +14,7 @@
     "affixes": [
       {
         "id": "steady-hand",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -28,7 +28,7 @@
       },
       {
         "id": "barbed-shaft",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -79,7 +79,7 @@
     "affixes": [
       {
         "id": "vitality",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -93,7 +93,7 @@
       },
       {
         "id": "ember-ward",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -127,7 +127,7 @@
     "affixes": [
       {
         "id": "fleet-footed",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -160,7 +160,7 @@
     "affixes": [
       {
         "id": "watchful",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -193,7 +193,7 @@
     "affixes": [
       {
         "id": "deep-well",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -226,7 +226,7 @@
     "affixes": [
       {
         "id": "fire-ward",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -260,7 +260,7 @@
     "affixes": [
       {
         "id": "unbroken-oath",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {
@@ -351,7 +351,7 @@
     "affixes": [
       {
         "id": "cold-ward",
-        "tier": "T2",
+        "tier": "T1",
         "quality": 72,
         "modifiers": [
           {

@@ -17,7 +17,7 @@ public partial class ArenaHud
         BuildMap();
         BuildActionBar();
         _actorBars = UiLayout.Place(_design, new ActorBars { Name = "ActorBars" }, new Rect2(0, 0, 1920, 1080));
-        _history = UiLayout.Place(_design, new CombatHistoryPanel { Name = "History" }, new Rect2(24, 680, 400, 230));
+        _history = UiLayout.Place(_design, new ActionJournalPanel { Name = "History" }, new Rect2(24, 680, 400, 230));
         _history.InspectionRequested += OpenInspection;
         BuildRoundUi();
     }

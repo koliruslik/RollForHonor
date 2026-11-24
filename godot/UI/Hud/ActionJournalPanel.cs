@@ -11,8 +11,8 @@ using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Hud;
 
-/// <summary>Retains bounded committed combat entries with links to immutable roll and damage explanations.</summary>
-public partial class CombatHistoryPanel : Control
+/// <summary>Retains bounded action entries, including combat facts and immutable inspection links.</summary>
+public partial class ActionJournalPanel : Control
 {
     /// <summary>Raised when a journal entry opens a linked explanation.</summary>
     public event Action<InspectionTopic> InspectionRequested;
@@ -34,7 +34,7 @@ public partial class CombatHistoryPanel : Control
         MouseFilter = MouseFilterEnum.Ignore;
         _panel = UiLayout.Panel(this, "Journal", new Rect2(0, 0, 400, 230));
         _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.8f), new Color(HonorTheme.Border, 0.5f)));
-        UiLayout.Place(_panel, UiLayout.Text(L.Text("COMBAT"), 13, HonorTheme.Muted), new Rect2(16, 8, 200, 28));
+        UiLayout.Place(_panel, UiLayout.Text(L.Text("ACTIONS"), 13, HonorTheme.Muted), new Rect2(16, 8, 200, 28));
         _toggle = UiLayout.Place(_panel, UiLayout.Button(L.Text("Details"), ToggleDetails), new Rect2(280, 8, 104, 40));
         _toggle.AddThemeFontSizeOverride("font_size", 13);
         _text = UiLayout.Place(_panel, new RichTextLabel { Name = "Entries", MetaUnderlined = true, MouseFilter = MouseFilterEnum.Stop }, new Rect2(16, 56, 368, 156));
@@ -72,7 +72,7 @@ public partial class CombatHistoryPanel : Control
         var damage = CombatInspectionTopics.Damage(result);
         var topic = new InspectionTopic(L.Format($"{source} → {target}"), L.Format($"{outcome}\nDamage {before} → {after} (blocked {before - after})"), HonorTheme.Secondary,
             [new(L.Text("Dice and bonuses"), HonorTheme.Secondary, () => dice), new(L.Text("Damage breakdown"), HonorTheme.Secondary, () => damage)]);
-        Enqueue(_entries, new Entry(source, target, outcome, before, after, topic, dice, damage), 12);
+        Enqueue(_entries, new Entry(source, target, outcome, before, after, topic, dice, damage, null), 12);
 
         if (result.AttackRoll is { } roll)
         {
@@ -80,6 +80,15 @@ public partial class CombatHistoryPanel : Control
             Enqueue(_rolls, dice, 8);
         }
 
+        Refresh();
+    }
+
+    /// <summary>Records a completed noncombat action without changing the retained d20 result.</summary>
+    /// <param name="message">A translated or retained formatted action description.</param>
+    public void RecordAction(string message)
+    {
+        var topic = new InspectionTopic(L.Text("Action"), message, HonorTheme.Secondary);
+        Enqueue(_entries, new Entry("", "", "", 0, 0, topic, null, null, message), 12);
         Refresh();
     }
 
@@ -92,10 +101,10 @@ public partial class CombatHistoryPanel : Control
 
     /// <summary>Captures retained journal entries with the original damage stages and dice links.</summary>
     /// <returns>An independent history explanation; reading it does not repeat combat calculations.</returns>
-    public InspectionTopic CreateCombatHistoryTopic() => new(L.Text("Recent combat"),
-        _entries.Count == 0 ? L.Text("No attacks yet.") : L.Text("Select a recorded attack to inspect its outcome, dice and damage stages."), HonorTheme.Secondary,
+    public InspectionTopic CreateActionHistoryTopic() => new(L.Text("Recent actions"),
+        _entries.Count == 0 ? L.Text("No actions yet.") : L.Text("Select a recorded action to inspect its details."), HonorTheme.Secondary,
         _entries.Reverse()
-            .Select(entry => new InspectionLink(entry.Topic.Title, HonorTheme.Secondary, () => entry.Topic)));
+            .Select(entry => new InspectionLink(entry.Action ?? entry.Topic.Title, HonorTheme.Secondary, () => entry.Topic)));
 
     private void Refresh()
     {
@@ -104,7 +113,7 @@ public partial class CombatHistoryPanel : Control
 
         if (_entries.Count == 0)
         {
-            _text.AddText(L.Text("No attacks yet."));
+            _text.AddText(L.Text("No actions yet."));
             return;
         }
 
@@ -114,6 +123,12 @@ public partial class CombatHistoryPanel : Control
 
         foreach (var entry in visible)
         {
+            if (entry.Action is not null)
+            {
+                _text.AddText(L.Refresh(entry.Action) + "\n\n");
+                continue;
+            }
+
             _text.AddText(L.Format($"{entry.Source} → {entry.Target}: "));
             WriteLink(entry.Outcome, entry.Topic);
             _text.AddText(L.Text("\nDamage "));
@@ -167,5 +182,5 @@ public partial class CombatHistoryPanel : Control
     }
 
     private sealed record Entry(string Source, string Target, string Outcome, int Before, int After,
-        InspectionTopic Topic, InspectionTopic Dice, InspectionTopic Damage);
+        InspectionTopic Topic, InspectionTopic Dice, InspectionTopic Damage, string Action);
 }

@@ -29,6 +29,11 @@ public partial class ArenaCamera : Node3D
     /// <inheritdoc />
     public override void _UnhandledInput(InputEvent @event)
     {
+        if (GetViewport().GuiGetHoveredControl() is not null)
+        {
+            return;
+        }
+
         var closer = @event.IsActionPressed("rfh_zoom_in");
         var farther = @event.IsActionPressed("rfh_zoom_out");
 

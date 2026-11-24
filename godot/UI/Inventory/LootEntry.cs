@@ -18,12 +18,15 @@ public partial class LootEntry : Button
     public override void _Ready()
     {
         FocusMode = FocusModeEnum.None;
-        CustomMinimumSize = new Vector2(380, 48);
+        CustomMinimumSize = new Vector2(288, 34);
         MouseDefaultCursorShape = CursorShape.PointingHand;
+        AddThemeStyleboxOverride("normal", HonorTheme.Panel(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0), 2));
+        AddThemeStyleboxOverride("hover", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.35f), new Color(HonorTheme.Brass, 0.45f), 2));
+        AddThemeStyleboxOverride("pressed", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.45f), HonorTheme.Brass, 2));
         var color = ItemPresentation.RarityColor(Item.Rarity);
-        var icon = UiLayout.Place(this, UiLayout.Icon(IconKey), new Rect2(10, 8, 32, 32));
+        var icon = UiLayout.Place(this, UiLayout.Icon(IconKey), new Rect2(6, 5, 24, 24));
         icon.Modulate = color;
-        var label = UiLayout.Place(this, UiLayout.Text(L.Text(Item.Base.Name), 17, color), new Rect2(54, 4, 304, 40));
+        var label = UiLayout.Place(this, UiLayout.Text(L.Text(Item.Base.Name), 14, color), new Rect2(38, 1, 242, 32));
         label.ClipText = true;
         TooltipText = L.Text(Item.Base.Name);
         L.OnChanged(this, () => TooltipText = L.Text(Item.Base.Name));

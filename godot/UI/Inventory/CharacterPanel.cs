@@ -35,7 +35,7 @@ public partial class CharacterPanel : Control
         UiLayout.Divider(panel, new Rect2(20, 80, 320, 2));
         BuildPrimaryAttributes(panel);
         UiLayout.Divider(panel, new Rect2(20, 292, 320, 1));
-        var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(20, 312, 320, 684));
+        var scroll = UiLayout.Place(panel, new ScrollContainer { Name = "StatsScroll", HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled, MouseForcePassScrollEvents = false }, new Rect2(20, 312, 320, 684));
         var rows = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
         rows.AddThemeConstantOverride("separation", 6);
         var inset = new MarginContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -81,13 +81,15 @@ public partial class CharacterPanel : Control
         for (var index = 0; index < attributes.Length; index++)
         {
             var type = attributes[index];
-            var tile = UiLayout.Panel(panel, type.ToString(), new Rect2(20 + index % 3 * 108, 96 + index / 3 * 96, 104, 88));
-            tile.MouseFilter = MouseFilterEnum.Stop;
-            UiLayout.Place(tile, UiLayout.Icon(type.ToString().ToLowerInvariant()), new Rect2(34, 7, 36, 36));
-            var value = UiLayout.Place(tile, UiLayout.Text("0", 23, HonorTheme.Parchment), new Rect2(4, 50, 96, 30));
-            value.Name = "Value";
-            value.HorizontalAlignment = HorizontalAlignment.Center;
+            var position = index < 3 ? new Vector2(20 + index * 108, 96) : new Vector2(74 + (index - 3) * 108, 174);
+            var tile = UiLayout.Place(panel, new PrimaryAttributeDie { Name = type.ToString(), IconKey = type.ToString().ToLowerInvariant() }, new Rect2(position, new Vector2(96, 96)));
+            var value = tile.GetNode<Label>("Value");
             _primaryValues[type] = value;
+            tile.Requested += () =>
+            {
+                var topic = CombatGlossary.Stat(new(type));
+                InspectionRequested?.Invoke(new(topic.Title, topic.Description, topic.Accent, topic.Links, [new(value.Text, HonorTheme.Parchment)]));
+            };
             tile.TooltipText = L.Text(type.ToString());
             L.OnChanged(tile, () => tile.TooltipText = L.Text(type.ToString()));
         }
@@ -98,6 +100,8 @@ public partial class CharacterPanel : Control
         Section(rows, L.Text("VITALITY"));
         _health = Row(rows, L.Text("Health"));
         _mana = Row(rows, L.Text("Mana"));
+        AddStat(rows, L.Text("Health recovery"), new(StatType.HealthRecovery));
+        AddStat(rows, L.Text("Mana recovery"), new(StatType.ManaRecovery));
         AddStat(rows, L.Text("Movement speed"), new StatKey(StatType.MovementSpeed));
     }
 
@@ -129,6 +133,7 @@ public partial class CharacterPanel : Control
 
     private static string Format(StatKey key, decimal value, StatBlock baseStats) => key.Type switch
     {
+        StatType.HealthRecovery or StatType.ManaRecovery => value.ToString("0.##", CultureInfo.InvariantCulture) + L.Text(" /s"),
         StatType.Resistance => (value * 100).ToString("0.#", CultureInfo.InvariantCulture) + "%",
         StatType.MovementSpeed => FormatMovementBonus(value, baseStats.Get(key)),
         StatType.DamageMultiplier => ((value - 1) * 100).ToString("+0.##;-0.##;0", CultureInfo.InvariantCulture) + "%",
@@ -159,7 +164,7 @@ public partial class CharacterPanel : Control
     private Label Row(VBoxContainer rows, string name, StatKey? key = null)
     {
         var row = new HBoxContainer { CustomMinimumSize = new Vector2(0, 28) };
-        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type == StatType.Armor);
+        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type is StatType.Armor or StatType.HealthRecovery or StatType.ManaRecovery);
         var heading = linked
             ? new RichTextLabel { FitContent = true, ScrollActive = false, MetaUnderlined = true, SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Stop }
             : (Control)new Label { Text = name, SizeFlagsHorizontal = SizeFlags.ExpandFill, ClipText = true };

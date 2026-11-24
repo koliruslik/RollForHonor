@@ -26,18 +26,21 @@ public partial class NearbyLootPanel : Control
 
     private readonly Dictionary<string, LootEntry> _entries = new(StringComparer.Ordinal);
     private VBoxContainer _rows;
+    private Panel _panel;
+    private ScrollContainer _scroll;
     private string _highlightedId;
 
     /// <inheritdoc />
     public override void _Ready()
     {
-        var panel = UiLayout.Panel(this, "Panel", new Rect2(0, 0, 420, 320));
-        UiLayout.Place(panel, UiLayout.Text(L.Text("Nearby loot"), 22, HonorTheme.Brass, true), new Rect2(16, 8, 388, 36));
-        var hints = UiLayout.Place(panel, UiLayout.Text(L.Text("G  Pick selected · Click to take · Drag into bag"), 13, HonorTheme.Muted), new Rect2(16, 46, 388, 40));
-        hints.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(14, 92, 392, 212));
+        _panel = UiLayout.Panel(this, "Panel", new Rect2(0, 0, 320, 160));
+        _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.58f), new Color(HonorTheme.Border, 0.35f), 8));
+        UiLayout.Place(_panel, UiLayout.Text(L.Text("Nearby loot"), 16, HonorTheme.Brass, true), new Rect2(12, 6, 296, 26));
+        UiLayout.Place(_panel, UiLayout.Text(L.Text("G · Click · Drag into bag"), 11, HonorTheme.Muted), new Rect2(12, 32, 296, 22));
+        _scroll = UiLayout.Place(_panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled, MouseForcePassScrollEvents = false }, new Rect2(8, 58, 304, 92));
         _rows = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
-        scroll.AddChild(_rows);
+        _rows.AddThemeConstantOverride("separation", 2);
+        _scroll.AddChild(_rows);
         Hide();
     }
 
@@ -45,6 +48,9 @@ public partial class NearbyLootPanel : Control
     /// <param name="drops">The currently reachable world items in nearest-first order.</param>
     public void Refresh(IReadOnlyList<WorldItemDrop> drops)
     {
+        var height = Math.Max(1, Math.Min(drops.Count, 5)) * 36;
+        _scroll.Size = new Vector2(304, height);
+        Size = _panel.Size = new Vector2(320, 66 + height);
         var ids = drops
             .Select(drop => drop.Item.Id)
             .ToHashSet(StringComparer.Ordinal);
@@ -94,7 +100,7 @@ public partial class NearbyLootPanel : Control
 
             if (SelectedItemId is not null)
             {
-                _entries[SelectedItemId].AddThemeStyleboxOverride("normal", HonorTheme.Panel(HonorTheme.Ink, HonorTheme.Brass));
+                _entries[SelectedItemId].AddThemeStyleboxOverride("normal", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.18f), new Color(HonorTheme.Brass, 0.65f), 2));
             }
 
             _highlightedId = SelectedItemId;

@@ -4,6 +4,7 @@ using System.Linq;
 using Godot;
 using RollForHonor.Application.Items;
 using RollForHonor.Application.Resources;
+using RollForHonor.Domain.Stats;
 using RollForHonor.Domain.Items.Inventory.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Combat.State.Models;
@@ -25,9 +26,6 @@ public partial class GreyboxArena
 
     /// <summary>The maximum number of living enemies admitted together.</summary>
     public const int EnemiesPerPair = 2;
-
-    /// <summary>Mana recovered per unpaused game second.</summary>
-    public const decimal ManaPerSecond = 10;
 
     /// <summary>Gets or sets whether the inherited arena hosts rounds instead of the single-enemy test fixture.</summary>
     [Export]
@@ -58,6 +56,7 @@ public partial class GreyboxArena
     public string PickupFeedback => _runtime.GameTime < _feedbackUntil ? L.Refresh(_pickupFeedback) : "";
 
     private TimeSpan _lastManaRecovery;
+    private decimal _healthRecoveryFraction;
 
     private readonly List<Enemy> _enemies = [];
     private readonly List<WorldItemDrop> _drops = [];
@@ -75,13 +74,8 @@ public partial class GreyboxArena
             return;
         }
 
-        var elapsed = _runtime.GameTime - _lastManaRecovery;
-
-        if (elapsed >= TimeSpan.FromSeconds(1))
-        {
-            new ManaRecoveryService(_runtime.CombatState).Recover(Player.CombatantId, elapsed, ManaPerSecond);
-            _lastManaRecovery = _runtime.GameTime;
-        }
+        StepAdminEnemies();
+        StepRecovery();
 
         _drops.RemoveAll(drop => !GodotObject.IsInstanceValid(drop) || drop.Collected);
 
@@ -97,6 +91,7 @@ public partial class GreyboxArena
                 continue;
             }
 
+            GetNode<ArenaHud>("Presentation").RecordAction(L.Format($"Defeated: {ActorName(enemy)}"));
             CreateDrop(StarterItemCatalog.RollDrop(enemy.CombatantId, new RandomDiceRoller(_roundRandom)), enemy.Position);
             enemy.GetRequiredComponent<ActorState>().PhysicsStep(0);
             enemy.SetPhysicsProcess(false);
@@ -187,6 +182,7 @@ public partial class GreyboxArena
         }
 
         CreateDrop(item, Player.Position);
+        GetNode<ArenaHud>("Presentation").RecordAction(L.Format($"Dropped: {L.Text(item.Base.Name)}"));
 
         return true;
     }
@@ -199,6 +195,35 @@ public partial class GreyboxArena
         var index = actor is Enemy enemy ? _enemies.IndexOf(enemy) : -1;
 
         return RoundsEnabled && index >= 0 ? L.Format($"Sentinel {index + 1}") : L.Text(actor.Name);
+    }
+
+    private void StepRecovery()
+    {
+        var elapsed = _runtime.GameTime - _lastManaRecovery;
+
+        if (elapsed < TimeSpan.FromSeconds(1))
+        {
+            return;
+        }
+
+        var state = _runtime.CombatState;
+        var stats = state.GetStats(Player.CombatantId);
+        new ManaRecoveryService(state).Recover(Player.CombatantId, elapsed, stats.Get(new(StatType.ManaRecovery)));
+        var actor = state.Read(Player.CombatantId, Player.CombatantId).Source;
+
+        if (actor.IsDefeated || actor.Health == actor.MaxHealth)
+        {
+            _healthRecoveryFraction = 0;
+        }
+        else
+        {
+            _healthRecoveryFraction += stats.Get(new(StatType.HealthRecovery)) * (decimal)elapsed.Ticks / TimeSpan.TicksPerSecond;
+            var whole = decimal.Truncate(_healthRecoveryFraction);
+            _healthRecoveryFraction -= whole;
+            state.RestoreHealth(Player.CombatantId, (int)Math.Min(int.MaxValue, whole));
+        }
+
+        _lastManaRecovery = _runtime.GameTime;
     }
 
     private void CreateDrop(ItemInstance item, Vector3 position)
@@ -269,7 +294,7 @@ public partial class GreyboxArena
     private List<Vector3> PlanSpawns()
     {
         var positions = new List<Vector3>();
-        var exclusions = new global::Godot.Collections.Array<Rid>(_enemies.Select(enemy => enemy.GetRid()));
+        var exclusions = new global::Godot.Collections.Array<Rid>();
         using var shape = new CapsuleShape3D { Radius = 0.65f, Height = 1.8f };
 
         for (var attempt = 0; attempt < 512 && positions.Count < EnemiesPerPair; attempt++)

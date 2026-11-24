@@ -19,7 +19,7 @@ public static class ReferenceCatalog
     /// <summary>Builds an independent reference snapshot without creating items or rolling dice.</summary>
     /// <param name="items">Optional currently owned items; absent omits session-specific item entries.</param>
     /// <param name="rolls">Optional captured recent-roll history.</param>
-    /// <param name="combat">Optional captured combat journal.</param>
+    /// <param name="combat">Optional captured action journal, including combat and world actions.</param>
     /// <returns>Stable, unique entries sorted by category and title.</returns>
     /// <exception cref="JsonException">Authored reference content is malformed.</exception>
     /// <exception cref="ArgumentException">A content or item identity is duplicated.</exception>

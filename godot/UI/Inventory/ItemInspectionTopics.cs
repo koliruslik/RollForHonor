@@ -78,22 +78,16 @@ public static class ItemInspectionTopics
         return L.Format($"{value} [{range.Minimum * scale:0.##}/{range.Maximum * scale:0.##}] {affix.QualityRoll}% {affix.TierId}");
     }
 
-    /// <summary>Formats only the tier pool actually captured by the affix.</summary>
+    /// <summary>Formats the numbered tier bounds as T1 or T1–Tx.</summary>
     /// <param name="affix">The captured affix and available tier identities.</param>
-    /// <returns>A continuous T1 range when complete, otherwise the actual tier IDs.</returns>
+    /// <returns>The T1-based display range; bespoke tier labels use the T1 placeholder.</returns>
     public static string FormatAvailableTiers(AffixInstance affix)
     {
-        var tiers = affix.AvailableTierIds.ToHashSet(StringComparer.Ordinal);
-        var continuous = Enumerable.Range(1, tiers.Count)
-            .All(rank => tiers.Contains($"T{rank}"));
+        var maximum = affix.AvailableTierIds
+            .Select(id => id.StartsWith("T", StringComparison.Ordinal) && int.TryParse(id.AsSpan(1), out var rank) ? rank : 1)
+            .DefaultIfEmpty(1)
+            .Max();
 
-        if (continuous)
-        {
-            var pool = tiers.Count == 1 ? "T1" : $"T1–T{tiers.Count}";
-
-            return L.Format($"{pool}{L.Text(" (T1 strongest)")}");
-        }
-
-        return string.Join(", ", affix.AvailableTierIds);
+        return maximum <= 1 ? "T1" : $"T1–T{maximum}";
     }
 }

@@ -55,8 +55,13 @@ public static class CombatGlossary
 
         return key.Type switch
         {
-            StatType.Strength or StatType.Dexterity or StatType.Constitution or StatType.Intelligence or StatType.Luck =>
-                new(L.Text(key.Type.ToString()), L.Text("Allocated attribute points. Derived combat and loot bonuses are not configured yet."), HonorTheme.Brass),
+            StatType.Strength => new(L.Text("Strength"), L.Text("Planned role: physical damage. These allocated points do not increase damage yet; the conversion formula is not configured."), HonorTheme.Brass),
+            StatType.Dexterity => new(L.Text("Dexterity"), L.Text("Planned role: attack speed and movement speed. These allocated points do not change speed yet; the conversion formulas are not configured."), HonorTheme.Brass),
+            StatType.Constitution => new(L.Text("Constitution"), L.Text("Planned role: maximum health and resistances. These allocated points do not change defenses yet; the conversion formulas are not configured."), HonorTheme.Brass),
+            StatType.Intelligence => new(L.Text("Intelligence"), L.Text("Planned role: magic damage and mana. These allocated points do not change damage or resources yet; the conversion formulas are not configured."), HonorTheme.Brass),
+            StatType.Luck => new(L.Text("Luck"), L.Text("Planned role: loot, gold and affix generation rolls. These allocated points do not affect the current drops yet; Luck formulas and monster drop tables are planned."), HonorTheme.Brass),
+            StatType.HealthRecovery => new(L.Text("Health recovery"), L.Text("Health points recovered per game second, up to maximum health. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."), HonorTheme.Secondary),
+            StatType.ManaRecovery => new(L.Text("Mana recovery"), L.Text("Mana points recovered per game second, up to maximum mana. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."), HonorTheme.Secondary),
             StatType.Armor => Armor(),
             StatType.DamageMultiplier => new(L.Text("All damage"), L.Text("Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately."), HonorTheme.Parchment,
                 [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]),

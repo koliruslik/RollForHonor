@@ -49,5 +49,11 @@ public enum StatType
     Intelligence,
 
     /// <summary>Allocated Luck points; loot and dice scaling are not configured.</summary>
-    Luck
+    Luck,
+
+    /// <summary>Flat health points recovered per game second.</summary>
+    HealthRecovery,
+
+    /// <summary>Flat mana points recovered per game second.</summary>
+    ManaRecovery
 }

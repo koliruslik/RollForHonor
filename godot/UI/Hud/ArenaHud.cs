@@ -1,3 +1,4 @@
+using RollForHonor.Godot.UI.Admin;
 using System;
 using System.Linq;
 using Godot;
@@ -24,6 +25,7 @@ namespace RollForHonor.Godot.UI.Hud;
 /// <summary>Coordinates styled HUD, live character/equipment windows and owned pause/settings navigation.</summary>
 public partial class ArenaHud : CanvasLayer
 {
+    private AdminPanel _admin;
     private GameBootstrap _runtime;
     private GreyboxArena _arena;
     private EquipmentService _equipment;
@@ -38,7 +40,7 @@ public partial class ArenaHud : CanvasLayer
     private ColorRect _pauseShade;
     private SettingsPanel _settings;
     private ActorBars _actorBars;
-    private CombatHistoryPanel _history;
+    private ActionJournalPanel _history;
     private FloatingTip _textTip;
     private InspectionStack _inspector;
     private ItemDetailsPanel _itemTip;
@@ -65,7 +67,7 @@ public partial class ArenaHud : CanvasLayer
     {
         GameInputBindings.EnsureDefaults();
         ProcessMode = ProcessModeEnum.Always;
-        var root = new Control { Name = "Root", Theme = HonorTheme.Create() };
+        var root = new Control { Name = "Root", Theme = HonorTheme.Create(), MouseFilter = Control.MouseFilterEnum.Ignore };
         AddChild(root);
         _design = UiLayout.Design(root, true);
         BuildHud();
@@ -74,6 +76,8 @@ public partial class ArenaHud : CanvasLayer
         BuildSettings();
         BuildReference();
         BuildTooltips();
+        _admin = UiLayout.Place(_design, new AdminPanel { Name = "Admin" }, new Rect2(670, 200, 580, 440));
+        _admin.Closed += () => _admin.Hide();
         _design.Resized += UpdateDockLayout;
         UpdateDockLayout();
     }
@@ -111,12 +115,25 @@ public partial class ArenaHud : CanvasLayer
             return;
         }
 
-        if (GetViewport().GuiGetFocusOwner() is LineEdit && !key.IsActionPressed("rfh_menu"))
+        if (GetViewport().GuiGetFocusOwner() is LineEdit && !key.IsActionPressed("rfh_menu") && key.PhysicalKeycode != Key.F3)
         {
             return;
         }
 
-        if (key.IsActionPressed("rfh_reference") && !_settings.Visible)
+        if (key.PhysicalKeycode == Key.F3)
+        {
+            if (_admin.Visible)
+            {
+                _admin.Hide();
+            }
+            else
+            {
+                _admin.Position = new Vector2((_design.Size.X - 580) / 2, 200);
+                _admin.Open();
+                _admin.MoveToFront();
+            }
+        }
+        else if (key.IsActionPressed("rfh_reference") && !_settings.Visible)
         {
             ToggleReference();
         }
@@ -181,6 +198,7 @@ public partial class ArenaHud : CanvasLayer
         _runtime = runtime;
         _arena = arena;
         _equipment = new EquipmentService(runtime.CombatState);
+        _admin.Configure(runtime, arena);
         RefreshParticipants();
         _actorBars.Preferences = new PreferencesStore().Load();
         _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
@@ -196,6 +214,7 @@ public partial class ArenaHud : CanvasLayer
         _bodies.Clear();
         var bodies = new Node3D[] { _arena.Player }
             .Concat(_arena.Enemies)
+            .Concat(_arena.AdminEnemies)
             .Concat(_arena.GetNode<Node3D>("Targets").GetChildren()
                 .OfType<DemoCombatant>());
 
@@ -287,6 +306,12 @@ public partial class ArenaHud : CanvasLayer
 
     private void Escape()
     {
+        if (_admin.Visible)
+        {
+            _admin.Hide();
+            return;
+        }
+
         if (!_settings.Visible && !_pause.Visible && _inspector.CloseLast())
         {
             return;
@@ -489,6 +514,12 @@ public partial class ArenaHud : CanvasLayer
         }
 
         var result = equipped ? _equipment.UnequipItem(owner, slot) : _equipment.EquipItem(owner, item.Id, slot);
+
+        if (result == EquipmentChangeStatus.Applied)
+        {
+            _history.RecordAction(equipped ? L.Format($"Removed: {L.Text(item.Base.Name)}") : L.Format($"Equipped: {L.Text(item.Base.Name)}"));
+        }
+
         RefreshWindows();
 
         if (_selected?.Id != item.Id)
@@ -525,6 +556,7 @@ public partial class ArenaHud : CanvasLayer
 
         if (!_inventory.CanFitLoadout(read, proposed))
         {
+            ShowCapacityWarning();
             _inventory.ShowStatus(L.Text("Inventory full. Make room before changing equipment."));
             _details.SetStatus(L.Text("Inventory full. Make room before changing equipment."));
             return false;

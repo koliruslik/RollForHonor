@@ -38,6 +38,14 @@ public partial class ActorStatDefinition : Resource
     [Export]
     public int MaxMana { get; set; }
 
+    /// <summary>Gets or sets flat HP recovered per game second.</summary>
+    [Export]
+    public float HealthRecovery { get; set; }
+
+    /// <summary>Gets or sets flat mana recovered per game second.</summary>
+    [Export]
+    public float ManaRecovery { get; set; }
+
     /// <summary>Gets or sets base armor for the existing defense formula.</summary>
     [Export]
     public int Armor { get; set; }
@@ -83,6 +91,8 @@ public partial class ActorStatDefinition : Resource
             new(new(StatType.Luck), Luck),
             new(new(StatType.MaxHealth), MaxHealth),
             new(new(StatType.MaxMana), MaxMana),
+            new(new(StatType.HealthRecovery), (decimal)HealthRecovery),
+            new(new(StatType.ManaRecovery), (decimal)ManaRecovery),
             new(new(StatType.Armor), Armor),
             new(new(StatType.Evasion), Evasion),
             new(new(StatType.MovementSpeed), (decimal)MovementSpeed),

@@ -29,7 +29,7 @@ public partial class ArenaHud
         _textTip.Hide();
         _inspector.Clear();
         var read = _runtime.CombatState.ReadEquipment(_arena.Player.CombatantId);
-        _reference.Open(ReferenceCatalog.Create(read.OwnedItems.Values, _history.CreateDiceHistoryTopic(), _history.CreateCombatHistoryTopic()));
+        _reference.Open(ReferenceCatalog.Create(read.OwnedItems.Values, _history.CreateDiceHistoryTopic(), _history.CreateActionHistoryTopic()));
         UpdatePause();
     }
 
