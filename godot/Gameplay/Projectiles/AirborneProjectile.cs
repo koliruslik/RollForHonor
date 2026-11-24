@@ -57,6 +57,14 @@ public partial class AirborneProjectile : CharacterBody3D
     /// <inheritdoc />
     public override void _ExitTree() => _attack?.End();
 
+    /// <summary>Ends the attack and stops physical delivery when its arena round is over.</summary>
+    public void Cancel()
+    {
+        _attack?.End();
+        SetPhysicsProcess(false);
+        QueueFree();
+    }
+
     /// <summary>Configures a fresh projectile before scene-tree entry.</summary>
     /// <param name="attack">The accepted attack context.</param>
     /// <param name="source">The source body excluded from projectile collision.</param>

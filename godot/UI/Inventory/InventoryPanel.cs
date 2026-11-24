@@ -5,6 +5,7 @@ using Godot;
 using RollForHonor.Application.Equipment.Models;
 using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Domain.Items.Models;
+using RollForHonor.Domain.Items.Inventory.Models;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Godot.UI.Localization;
@@ -14,6 +15,15 @@ namespace RollForHonor.Godot.UI.Inventory;
 /// <summary>Shows a compact equipment paper doll and a fixed twelve-by-five bag of owned items.</summary>
 public partial class InventoryPanel : Control
 {
+    /// <summary>Gets the current immutable bag layout used by capacity-checked pickup.</summary>
+    public InventoryGridLayout CurrentLayout => _bag.Layout;
+
+    /// <summary>Gets or sets the nearby-world item lookup for native dragging.</summary>
+    public Func<string, ItemInstance> ResolveWorldItem { get; set; }
+
+    /// <summary>Gets or sets pickup into the requested exact bag rectangle.</summary>
+    public Func<string, InventoryPosition, bool> ReceiveWorldItem { get; set; }
+
     /// <summary>Raised when an owned item is selected for inspection.</summary>
     public event Action<ItemInstance> ItemSelected;
 
@@ -149,6 +159,8 @@ public partial class InventoryPanel : Control
         _bag = new InventoryGridView
         {
             Name = "Grid",
+            ResolveExternalItem = id => ResolveWorldItem?.Invoke(id),
+            ReceiveExternalItem = (id, position) => ReceiveWorldItem?.Invoke(id, position) == true,
             ResolveItem = id => _state is not null && _state.OwnedItems.TryGetValue(id, out var item) ? item : null,
             IsEquipped = IsEquipped,
             IconKey = item => ItemPresentation.Icon(item, ItemPresentation.Slot(item, _state.Rules))

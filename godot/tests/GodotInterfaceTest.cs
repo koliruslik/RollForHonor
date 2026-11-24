@@ -360,18 +360,18 @@ public sealed class GodotInterfaceTest : TestClass
             var properties = tooltip.GetNode<RichTextLabel>("Card/Properties");
             properties.GetParsedText().ShouldContain("1d6 + 5");
             properties.GetParsedText().ShouldContain("AFFIXES");
-            properties.GetParsedText().ShouldContain("steady hand · T2");
+            properties.GetParsedText().ShouldContain("steady hand · T1");
             properties.GetParsedText().ShouldContain("+2 attack roll");
-            properties.GetParsedText().ShouldContain("barbed shaft · T2");
+            properties.GetParsedText().ShouldContain("barbed shaft · T1");
             properties.GetParsedText().ShouldNotContain("72%");
             properties.GetParsedText().ShouldNotContain("Available tiers:");
             tooltip.SetDetailed(true);
-            properties.GetParsedText().ShouldContain("[1/3] 72% T2");
-            properties.GetParsedText().ShouldContain("Available tiers: T2");
+            properties.GetParsedText().ShouldContain("[1/3] 72% T1");
+            properties.GetParsedText().ShouldContain("Available tiers: T1");
             properties.GetParsedText().ShouldNotContain("T1–T16");
             tooltip.SetDetailed(false);
             properties.GetParsedText().ShouldNotContain("72%");
-            properties.GetParsedText().ShouldContain("steady hand · T2");
+            properties.GetParsedText().ShouldContain("steady hand · T1");
         }
         finally
         {
@@ -402,7 +402,7 @@ public sealed class GodotInterfaceTest : TestClass
                 card.ShowItem(item, null, false, null);
                 var text = card.GetNode<RichTextLabel>("Card/Properties").GetParsedText();
                 text.ShouldContain($"vitality · T{count}");
-                text.ShouldContain($"Available tiers: T1–T{count} (T1 strongest)");
+                text.ShouldContain($"Available tiers: T1–T{count}");
                 card.SetDetailed(false);
                 text = card.GetNode<RichTextLabel>("Card/Properties").GetParsedText();
                 text.ShouldContain("vitality");
@@ -666,7 +666,7 @@ public sealed class GodotInterfaceTest : TestClass
             tooltip.GetChild<Label>(0).Text.ShouldNotContain("72%");
             card.SetDetailed(true);
             properties.EmitSignal(RichTextLabel.SignalName.MetaHoverStarted, "0");
-            tooltip.GetChild<Label>(0).Text.ShouldContain("[1/3] 72% T2");
+            tooltip.GetChild<Label>(0).Text.ShouldContain("[1/3] 72% T1");
             properties.EmitSignal(RichTextLabel.SignalName.MetaHoverEnded, "0");
             tooltip.Visible.ShouldBeFalse();
         }

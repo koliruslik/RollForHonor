@@ -80,7 +80,7 @@ public sealed class GodotInspectionTest : TestClass
             card.SetDetailed(false);
             root.EmitSignal(RichTextLabel.SignalName.MetaClicked, "2");
             stack.Count.ShouldBe(2);
-            stack.GetNode<RichTextLabel>("Level1/Card/Body").GetParsedText().ShouldContain("[1/3] 72% T2");
+            stack.GetNode<RichTextLabel>("Level1/Card/Body").GetParsedText().ShouldContain("[1/3] 72% T1");
             stack.GetNode<RichTextLabel>("Level1/Card/Body").MetaUnderlined.ShouldBeTrue();
             hud.ToggleInventory();
             stack.Count.ShouldBe(0);

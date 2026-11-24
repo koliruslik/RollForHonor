@@ -1,3 +1,4 @@
+using RollForHonor.Godot.UI.Admin;
 using System;
 using System.Linq;
 using Godot;
@@ -24,6 +25,8 @@ namespace RollForHonor.Godot.UI.Hud;
 /// <summary>Coordinates styled HUD, live character/equipment windows and owned pause/settings navigation.</summary>
 public partial class ArenaHud : CanvasLayer
 {
+    private WorldDropTarget _worldDropTarget;
+    private AdminPanel _admin;
     private GameBootstrap _runtime;
     private GreyboxArena _arena;
     private EquipmentService _equipment;
@@ -38,7 +41,7 @@ public partial class ArenaHud : CanvasLayer
     private ColorRect _pauseShade;
     private SettingsPanel _settings;
     private ActorBars _actorBars;
-    private CombatHistoryPanel _history;
+    private ActionJournalPanel _history;
     private FloatingTip _textTip;
     private InspectionStack _inspector;
     private ItemDetailsPanel _itemTip;
@@ -65,7 +68,7 @@ public partial class ArenaHud : CanvasLayer
     {
         GameInputBindings.EnsureDefaults();
         ProcessMode = ProcessModeEnum.Always;
-        var root = new Control { Name = "Root", Theme = HonorTheme.Create() };
+        var root = new Control { Name = "Root", Theme = HonorTheme.Create(), MouseFilter = Control.MouseFilterEnum.Ignore };
         AddChild(root);
         _design = UiLayout.Design(root, true);
         BuildHud();
@@ -74,6 +77,8 @@ public partial class ArenaHud : CanvasLayer
         BuildSettings();
         BuildReference();
         BuildTooltips();
+        _admin = UiLayout.Place(_design, new AdminPanel { Name = "Admin" }, new Rect2(670, 200, 580, 440));
+        _admin.Closed += () => _admin.Hide();
         _design.Resized += UpdateDockLayout;
         UpdateDockLayout();
     }
@@ -86,6 +91,9 @@ public partial class ArenaHud : CanvasLayer
             return;
         }
 
+        var data = GetViewport().GuiGetDragData();
+        _worldDropTarget.Size = _design.Size;
+        _worldDropTarget.Visible = GetViewport().GuiIsDragging() && ItemCell.TryReadItem(data, out var dragged) && CanDiscardItem(dragged);
         RefreshHud();
         RefreshWindows();
         RefreshHover();
@@ -111,12 +119,25 @@ public partial class ArenaHud : CanvasLayer
             return;
         }
 
-        if (GetViewport().GuiGetFocusOwner() is LineEdit && !key.IsActionPressed("rfh_menu"))
+        if (GetViewport().GuiGetFocusOwner() is LineEdit && !key.IsActionPressed("rfh_menu") && key.PhysicalKeycode != Key.F3)
         {
             return;
         }
 
-        if (key.IsActionPressed("rfh_reference") && !_settings.Visible)
+        if (key.PhysicalKeycode == Key.F3)
+        {
+            if (_admin.Visible)
+            {
+                _admin.Hide();
+            }
+            else
+            {
+                _admin.Position = new Vector2((_design.Size.X - 580) / 2, 200);
+                _admin.Open();
+                _admin.MoveToFront();
+            }
+        }
+        else if (key.IsActionPressed("rfh_reference") && !_settings.Visible)
         {
             ToggleReference();
         }
@@ -180,9 +201,26 @@ public partial class ArenaHud : CanvasLayer
     {
         _runtime = runtime;
         _arena = arena;
+        arena.CameraRig.IsZoomBlocked = IsPointerOverInterface;
         _equipment = new EquipmentService(runtime.CombatState);
-        var bodies = new Node3D[] { arena.Player, arena.Opponent }
-            .Concat(arena.GetNode<Node3D>("Targets").GetChildren()
+        _admin.Configure(runtime, arena);
+        RefreshParticipants();
+        _actorBars.Preferences = new PreferencesStore().Load();
+        _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
+        _map.IsSelected = body => arena.Player.GetRequiredComponent<CombatAwareness>().Selection.TargetId == ((ICombatBody)body).CombatantId;
+        arena.ContactObserved += _history.Record;
+        RefreshHud();
+        RefreshHints();
+    }
+
+    /// <summary>Refreshes round actors in target selection, overhead bars and the minimap without recreating the HUD.</summary>
+    public void RefreshParticipants()
+    {
+        _bodies.Clear();
+        var bodies = new Node3D[] { _arena.Player }
+            .Concat(_arena.Enemies)
+            .Concat(_arena.AdminEnemies)
+            .Concat(_arena.GetNode<Node3D>("Targets").GetChildren()
                 .OfType<DemoCombatant>());
 
         foreach (var body in bodies)
@@ -190,17 +228,11 @@ public partial class ArenaHud : CanvasLayer
             _bodies[((ICombatBody)body).CombatantId] = body;
         }
 
-        _actorBars.Configure(runtime, arena, _bodies.Values);
-        _actorBars.Preferences = new PreferencesStore().Load();
-        _map.Configure(arena.GetNode<Node3D>("Map"), arena.Player, arena.Opponent);
+        _actorBars.Configure(_runtime, _arena, _bodies.Values);
+        _map.Configure(_arena.GetNode<Node3D>("Map"), _arena.Player, _arena.Opponent);
         _map.Participants = _bodies.Values
-            .Where(body => body != arena.Player)
+            .Where(body => body != _arena.Player)
             .ToArray();
-        _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
-        _map.IsSelected = body => arena.Player.GetRequiredComponent<CombatAwareness>().Selection.TargetId == ((ICombatBody)body).CombatantId;
-        arena.ContactObserved += _history.Record;
-        RefreshHud();
-        RefreshHints();
     }
 
     /// <summary>Opens or closes the inventory independently without pausing the world.</summary>
@@ -245,6 +277,7 @@ public partial class ArenaHud : CanvasLayer
         _roll.UpdateValue(_history.LastRoll);
         L.SetText(_attack, launch.ReadyAt > _runtime.GameTime ? L.Text("Recovering") : "");
         _character.Refresh(stats, state.GetStatProfile(id).BaseValues, read.Source, mana);
+        RefreshRoundUi(!read.Source.IsDefeated);
     }
 
 
@@ -252,6 +285,25 @@ public partial class ArenaHud : CanvasLayer
 
 
 
+
+    private bool IsPointerOverInterface(Vector2 point) => _design.GetChildren()
+        .OfType<Control>()
+        .Any(control => IsInteractiveAt(control, point));
+
+    private static bool IsInteractiveAt(Control control, Vector2 point)
+    {
+        if (!control.IsVisibleInTree())
+        {
+            return false;
+        }
+
+        var local = control.GetGlobalTransformWithCanvas().AffineInverse() * point;
+
+        return control.MouseFilter != Control.MouseFilterEnum.Ignore && new Rect2(Vector2.Zero, control.Size).HasPoint(local)
+            || control.GetChildren()
+                .OfType<Control>()
+                .Any(child => IsInteractiveAt(child, point));
+    }
 
     private void RefreshWindows()
     {
@@ -278,6 +330,12 @@ public partial class ArenaHud : CanvasLayer
 
     private void Escape()
     {
+        if (_admin.Visible)
+        {
+            _admin.Hide();
+            return;
+        }
+
         if (!_settings.Visible && !_pause.Visible && _inspector.CloseLast())
         {
             return;
@@ -350,6 +408,47 @@ public partial class ArenaHud : CanvasLayer
         {
             _comparison.Hide();
         }
+    }
+
+    private void DiscardSelected()
+    {
+        if (_selected is not null)
+        {
+            DiscardOwnedItem(_selected.Id);
+        }
+    }
+
+    private bool CanDiscardItem(string id)
+    {
+        if (GetTree().Paused || !_inventory.Visible)
+        {
+            return false;
+        }
+
+        var owner = _arena.Player.CombatantId;
+        var read = _runtime.CombatState.ReadEquipment(owner);
+
+        return !_runtime.CombatState.Read(owner, owner).Source.IsDefeated
+            && read.OwnedItems.ContainsKey(id);
+    }
+
+    private bool DiscardOwnedItem(string id)
+    {
+        if (!CanDiscardItem(id) || !_arena.DiscardItem(id))
+        {
+            _inventory.ShowStatus(L.Text("Could not drop the item. Check nearby ground and inventory space."));
+            return false;
+        }
+
+        if (_selected?.Id == id)
+        {
+            CloseDetails();
+        }
+
+        _inventoryVersion = -1;
+        RefreshWindows();
+
+        return true;
     }
 
     private void CloseWindows()
@@ -461,6 +560,12 @@ public partial class ArenaHud : CanvasLayer
         }
 
         var result = equipped ? _equipment.UnequipItem(owner, slot) : _equipment.EquipItem(owner, item.Id, slot);
+
+        if (result == EquipmentChangeStatus.Applied)
+        {
+            _history.RecordAction(equipped ? L.Format($"Removed: {L.Text(item.Base.Name)}") : L.Format($"Equipped: {L.Text(item.Base.Name)}"));
+        }
+
         RefreshWindows();
 
         if (_selected?.Id != item.Id)
@@ -497,6 +602,7 @@ public partial class ArenaHud : CanvasLayer
 
         if (!_inventory.CanFitLoadout(read, proposed))
         {
+            ShowCapacityWarning();
             _inventory.ShowStatus(L.Text("Inventory full. Make room before changing equipment."));
             _details.SetStatus(L.Text("Inventory full. Make room before changing equipment."));
             return false;

@@ -30,7 +30,7 @@ Numbered content tiers use T1 for the strongest tier; each affix defines its own
 pool, for example T1–T16, T1–T15 or T1–T4. This is independent of item rarity.
 Author higher required power for stronger tiers: the generator selects by power
 threshold, not by parsing the tier ID. Custom IDs remain supported. The current
-starter-kit fixtures contain only their selected T2; complete numeric tier
+starter-kit fixtures contain only their temporary T1; complete numeric tier
 progression tables are not authored yet.
 
 `AffixInstance` retains its owned ID, definition/family/tier IDs, compatibility,
@@ -68,7 +68,7 @@ Engine-independent callers can supply a different table directly.
 
 | Current stat category | Allowed item operations |
 | --- | --- |
-| AttackModifier | Flat |
+| AttackModifier, Strength, Dexterity, Constitution, Intelligence, Luck, HealthRecovery, ManaRecovery | Flat |
 | MovementSpeed, CriticalChance, CriticalMultiplier | Increased, More |
 | Global or typed DamageMultiplier | Increased, More |
 | MaxHealth, MaxMana, Armor, Evasion, typed Resistance, typed AddedDamage | Flat, Increased, More |
@@ -143,7 +143,11 @@ var item = generator.Generate(
 
 `RandomDiceRoller` belongs to Infrastructure; Domain only consumes `IDiceRoller`.
 The example assumes imports from Domain Items and Infrastructure Dice. There is
-no bundled production item/affix pool, item drop service or crafting UI yet.
+no complete production item/affix pool or crafting UI yet. The playable arena
+uses its twelve authored starter entries as an initial drop pool: one uniformly
+selected entry per defeated enemy, with fresh d100 quality for each authored
+affix. Rarity, affix selection and selected tiers remain authored; no Luck
+formula is assumed.
 
 ## Crafting and stat projection
 
@@ -165,4 +169,21 @@ into a complete `StatProfile`; projection does not append entries to live state,
 heal the actor or modify a historical snapshot. The [equipment core](equipment.md)
 owns slot validation, canonical item ownership and atomic loadout/stat updates.
 The [game interface](interface.md) supports the authored starter kit and real equip/unequip.
-Enemy item acquisition, crafting owned/equipped items and game save/load remain future work.
+`ItemAcquisitionService` validates the supplied 12×5 bag layout against all
+currently unequipped owned items, including footprints, bounds and overlap. It
+finds a free rectangle without rearranging existing placements, or validates the
+exact requested rectangle for native dragging, then requests
+an atomic version-checked grant. The adapter rejects defeated owners and
+duplicate ownership across the session. Failed pickup leaves the same captured
+instance on the ground; retrying never rerolls it. Administrative initial-kit
+grants do not use the pickup service. Crafting owned/equipped items and game
+save/load remain future work.
+
+
+`ItemReleaseService` uses a version-checked release port to remove one owned bag
+or equipped item from a living owner. Equipped releases recompose loadout/stats
+and clamp current resources at the same publication boundary as ownership
+removal. Dependent equipment is retained in the bag only after a complete spatial
+capacity check. Absent, stale, defeated-owner and insufficient-return-space
+requests leave ownership, loadout and stats unchanged. Godot then represents the same immutable instance on
+free ground near the player; reacquiring it does not generate or reroll another item.

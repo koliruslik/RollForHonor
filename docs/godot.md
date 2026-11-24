@@ -39,7 +39,9 @@ Diagnostics default to off and are separate from the scene's result-based journa
 
 Normal Play starts the runtime without automatically running tests or quitting.
 `Bootstrap.tscn` hosts the [main menu](interface.md). Start Game loads
-`ArenaBootstrap.tscn`, which hosts `Arena.tscn` in a fresh session.
+`ArenaBootstrap.tscn`, which hosts `Arena/RoundArena.tscn` in a fresh session.
+That inherited scene enables rounds on the editable `Arena.tscn`; the base scene
+retains its single-enemy fixture for isolated tests.
 `WorkbenchBootstrap.tscn` hosts the separate `Game.tscn` combat laboratory.
 
 ## Actor foundation
@@ -102,11 +104,11 @@ bus; launch/contact events feed the existing scene-owned journal directly.
 
 ## Greybox arena
 
-Press **F5** from `godot/project.godot` to enter the arena through
-`Bootstrap.tscn`. The editable `Arena.tscn` contains a 120×120 colored greybox
+Press **F5** from `godot/project.godot` to open the title through
+`Bootstrap.tscn`, then choose Start Game. The editable `Arena.tscn` contains a 120×120 colored greybox
 map, obstacles, passages, 0.4 m and 4 m terraces, ramps, five stationary targets,
 an angled orthographic following camera and a directional arrow on the player.
-A red Sentinel is an active ranged opponent; the five training targets remain
+Normal play spawns ten red Sentinels per round; the five training targets remain
 stationary. The arena uses untextured greybox materials.
 
 | Input | Action |
@@ -115,6 +117,7 @@ stationary. The arena uses untextured greybox materials.
 | Mouse position | Face the observed surface point, rotating only visual yaw |
 | Right click | Request a projectile attack; movement can continue |
 | Mouse wheel | Zoom the camera |
+| G | Pick up the nearest ground item within 2.5 world units |
 | H / Reference | Open searchable rule and session explanations; gameplay pauses |
 | R / Restart arena | Start a fresh arena session |
 | F2 / Combat laboratory | Open the combat workbench in a fresh session |
@@ -189,7 +192,59 @@ The enemy label shows current HP and Idle/Engaged/Defeated observations. These
 labels describe controller activity and authoritative defeat, not another
 locomotion FSM. The shared journal identifies the actual attack source and
 recipient; its separate d20 shows the most recent committed impact from either
-side. A defeated actor remains as a physical body; press R to restart.
+side. In round play, defeated enemies stop physics, lose collision and hide after
+creating one captured drop. The base single-enemy fixture retains its defeated body.
+
+## Rounds and loot
+
+`GreyboxArena.Rounds` admits ten enemies per round in five successive pairs.
+The first pair appears at round start; the next waits for both living enemies
+to be defeated. At most two enemies are active together. Each pair is placed
+in the authored courtyard. Placement
+uses bounded random candidates followed by a bounded grid fallback, validates
+flat floor contact and capsule clearance, keeps enemies separated and away
+from the player. Spawning does not require sight of the player, who can freely
+explore before starting another round.
+`SpawnSeed` permits reproducible engine checks; zero chooses a fresh scene seed.
+This is spawn selection on the existing map, not procedural map generation.
+
+Ten distinct authoritative defeats complete a round. Outstanding projectiles
+are cancelled, a nonmodal banner announces free time, and the next round waits
+for an explicit button press. Health, mana, equipment and uncollected drops
+carry over. Player defeat prevents advancing; R creates a fresh session.
+
+Every enemy rolls one item from the authored starter pool, with fresh captured
+d100 affix qualities. A nearby-loot menu lists items within 2.5 units; G takes
+the selected row (nearest initially), clicking takes a specific item, and native
+dragging into an open bag validates the chosen rectangle. A full or fragmented bag
+leaves the exact item on the ground for a later attempt. See [items](items.md)
+for acquisition ownership and capacity checks. Selected bag items can be dropped
+on free nearby ground, including directly from equipped slots. The same captured
+instance survives release and reacquisition.
+
+The round host reads HealthRecovery and ManaRecovery from resolved stats and
+restores resources in one-second batches, including free time. Player content
+starts at 2 HP/s and 10 mana/s. Fractional HP carries while hurt; full or defeated
+actors do not bank healing. Application converts elapsed game time to a mana request;
+the adapter restores at most the live maximum under the same lock as spending.
+Full or defeated actors cause no publication. Pausing stops elapsed game time.
+
+Ground loot uses a bounded search around its origin, validating floor contact,
+terrain/obstacle clearance and separation from existing uncollected drops.
+Existing drops stay in place; collected space can be reused. A player release
+checks for a valid position before removing ownership, so blocked ground keeps
+the item equipped or in the bag. Already-generated enemy/admin loot waits in a
+captured pending queue when placement is blocked and retries without rerolling.
+
+## Sandbox tools
+
+F3 opens the live admin panel. The current catalog contains the Sentinel and
+twelve authored item entries. Generated admin items receive unique identities;
+full bags leave them on the ground. Stat edits replace non-equipment base inputs
+through the canonical adapter and preserve equipped contributions. Sandbox
+enemy spawning is queued for the next physics step, uses validated placement
+and does not change the ten-enemy round counter. Their defeat can still produce
+a drop and an action-journal entry. Gold grants wait for an implemented wallet.
 
 ## Combat laboratory
 

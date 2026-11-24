@@ -12,7 +12,7 @@ public partial class FloatingTip : PanelContainer
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        AddThemeStyleboxOverride("panel", HonorTheme.Panel(HonorTheme.Ink, HonorTheme.Brass, 14));
+        AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink, 0.86f), HonorTheme.Brass, 14));
         _text = UiLayout.Text("", 16);
         _text.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         _text.CustomMinimumSize = new Vector2(360, 0);
@@ -26,7 +26,8 @@ public partial class FloatingTip : PanelContainer
         if (Visible)
         {
             var parent = GetParent<Control>();
-            Position = (parent.GetLocalMousePosition() + new Vector2(20, 20)).Clamp(Vector2.Zero, (parent.Size - Size).Max(Vector2.Zero));
+            var cursor = parent.GetLocalMousePosition();
+            Position = TooltipPlacement.Place(parent.Size, Size, cursor, TooltipPlacement.SourceBounds(parent, cursor));
         }
     }
 

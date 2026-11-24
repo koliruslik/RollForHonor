@@ -33,7 +33,7 @@ public sealed record StatModifier
     /// <param name="operation">A defined calculation operation.</param>
     /// <param name="amount">The flat amount or fractional increase/more value.</param>
     /// <param name="source">A nonempty origin identifier.</param>
-    /// <exception cref="ArgumentException">The origin is blank or flat damage-coefficient modification is requested.</exception>
+    /// <exception cref="ArgumentException">The origin is blank, flat damage-coefficient modification is requested, or a recovery modifier is not Flat.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The operation is undefined or a More factor would be negative.</exception>
     public StatModifier(StatKey key, StatOperation operation, decimal amount, string source)
     {
@@ -47,6 +47,11 @@ public sealed record StatModifier
         if (key.Type == StatType.DamageMultiplier && operation == StatOperation.Flat)
         {
             throw new ArgumentException("Use Increased or More for outgoing damage coefficients.", nameof(operation));
+        }
+
+        if (key.Type is StatType.HealthRecovery or StatType.ManaRecovery && operation != StatOperation.Flat)
+        {
+            throw new ArgumentException("Recovery modifiers use flat points per second.", nameof(operation));
         }
 
         Key = key;

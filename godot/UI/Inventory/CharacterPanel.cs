@@ -21,6 +21,7 @@ public partial class CharacterPanel : Control
     public event Action<InspectionTopic> InspectionRequested;
 
     private readonly Dictionary<StatKey, Label> _values = new();
+    private readonly Dictionary<StatType, Label> _primaryValues = new();
     private Label _health;
     private Label _mana;
     private Label _hints;
@@ -32,7 +33,9 @@ public partial class CharacterPanel : Control
         UiLayout.Place(panel, UiLayout.Text(L.Text("Character"), 24, heading: true), new Rect2(20, 16, 260, 48));
         UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(300, 20, 40, 40));
         UiLayout.Divider(panel, new Rect2(20, 80, 320, 2));
-        var scroll = UiLayout.Place(panel, new ScrollContainer { HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled }, new Rect2(20, 96, 320, 900));
+        BuildPrimaryAttributes(panel);
+        UiLayout.Divider(panel, new Rect2(20, 292, 320, 1));
+        var scroll = UiLayout.Place(panel, new ScrollContainer { Name = "StatsScroll", HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled, MouseForcePassScrollEvents = false }, new Rect2(20, 312, 320, 684));
         var rows = new VBoxContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
         rows.AddThemeConstantOverride("separation", 6);
         var inset = new MarginContainer { SizeFlagsHorizontal = SizeFlags.ExpandFill };
@@ -59,10 +62,36 @@ public partial class CharacterPanel : Control
         _health.Text = $"{actor.Health} / {actor.MaxHealth}";
         _mana.Text = $"{mana:0} / {stats.Get(new StatKey(StatType.MaxMana)):0}";
 
+        foreach (var pair in _primaryValues)
+        {
+            pair.Value.Text = stats.Get(new StatKey(pair.Key)).ToString("0.##", CultureInfo.InvariantCulture);
+        }
+
         foreach (var pair in _values)
         {
             pair.Value.Text = Format(pair.Key, stats.Get(pair.Key), baseStats);
             pair.Value.GetParent<Control>().Visible = pair.Key.Type != StatType.AddedDamage || stats.Get(pair.Key) != 0;
+        }
+    }
+
+    private void BuildPrimaryAttributes(Control panel)
+    {
+        var attributes = new[] { StatType.Strength, StatType.Dexterity, StatType.Constitution, StatType.Intelligence, StatType.Luck };
+
+        for (var index = 0; index < attributes.Length; index++)
+        {
+            var type = attributes[index];
+            var position = index < 3 ? new Vector2(20 + index * 108, 96) : new Vector2(74 + (index - 3) * 108, 174);
+            var tile = UiLayout.Place(panel, new PrimaryAttributeDie { Name = type.ToString(), IconKey = type.ToString().ToLowerInvariant() }, new Rect2(position, new Vector2(96, 96)));
+            var value = tile.GetNode<Label>("Value");
+            _primaryValues[type] = value;
+            tile.Requested += () =>
+            {
+                var topic = CombatGlossary.Stat(new(type));
+                InspectionRequested?.Invoke(new(topic.Title, topic.Description, topic.Accent, topic.Links, [new(value.Text, HonorTheme.Parchment)]));
+            };
+            tile.TooltipText = L.Text(type.ToString());
+            L.OnChanged(tile, () => tile.TooltipText = L.Text(type.ToString()));
         }
     }
 
@@ -71,6 +100,8 @@ public partial class CharacterPanel : Control
         Section(rows, L.Text("VITALITY"));
         _health = Row(rows, L.Text("Health"));
         _mana = Row(rows, L.Text("Mana"));
+        AddStat(rows, L.Text("Health recovery"), new(StatType.HealthRecovery));
+        AddStat(rows, L.Text("Mana recovery"), new(StatType.ManaRecovery));
         AddStat(rows, L.Text("Movement speed"), new StatKey(StatType.MovementSpeed));
     }
 
@@ -102,6 +133,7 @@ public partial class CharacterPanel : Control
 
     private static string Format(StatKey key, decimal value, StatBlock baseStats) => key.Type switch
     {
+        StatType.HealthRecovery or StatType.ManaRecovery => value.ToString("0.##", CultureInfo.InvariantCulture) + L.Text(" /s"),
         StatType.Resistance => (value * 100).ToString("0.#", CultureInfo.InvariantCulture) + "%",
         StatType.MovementSpeed => FormatMovementBonus(value, baseStats.Get(key)),
         StatType.DamageMultiplier => ((value - 1) * 100).ToString("+0.##;-0.##;0", CultureInfo.InvariantCulture) + "%",
@@ -132,7 +164,7 @@ public partial class CharacterPanel : Control
     private Label Row(VBoxContainer rows, string name, StatKey? key = null)
     {
         var row = new HBoxContainer { CustomMinimumSize = new Vector2(0, 28) };
-        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type == StatType.Armor);
+        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type is StatType.Armor or StatType.HealthRecovery or StatType.ManaRecovery);
         var heading = linked
             ? new RichTextLabel { FitContent = true, ScrollActive = false, MetaUnderlined = true, SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Stop }
             : (Control)new Label { Text = name, SizeFlagsHorizontal = SizeFlags.ExpandFill, ClipText = true };

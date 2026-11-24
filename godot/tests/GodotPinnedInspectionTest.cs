@@ -112,7 +112,7 @@ public sealed class GodotPinnedInspectionTest : TestClass
         try
         {
             var hud = arena.GetNode<ArenaHud>("Presentation");
-            var history = hud.GetNode<CombatHistoryPanel>("Root/Design/History");
+            var history = hud.GetNode<ActionJournalPanel>("Root/Design/History");
             var input = runtime.CombatState.Read(combat.Source.CombatantId, combat.Target.CombatantId);
             combat.Fire();
 

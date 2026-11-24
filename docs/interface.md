@@ -33,6 +33,7 @@ centered 1920×1080 design surface. Captures cover 1920×1080, 1280×720 and ult
 | --- | --- |
 | I or Inventory button | Open/close inventory independently |
 | C or Character button | Toggle the character panel independently |
+| G | Pick up the selected nearby item within 2.5 world units |
 | H or Reference button | Open the searchable reference and pause the game |
 | Escape or Menu button | Close the current overlay, or open/close pause |
 | R | Restart the arena while gameplay is active |
@@ -53,7 +54,12 @@ clicks inside their panels; the uncovered world remains interactive. Inventory
 and character windows do not pause movement, combat or the shared clock.
 
 The character window follows the left-hand wireframe layout and reads resolved
-stats from the owning adapter. Health and mana show current/max values. Typed
+stats from the owning adapter. Its top area contains Strength, Dexterity,
+Constitution, Intelligence and Luck in a staggered 3+2 arrangement of faceted d20 tiles. Each tile has an icon
+above its resolved value. Click or focus/activate it to open the shared
+explanation, including the intended role and current implementation limits.
+The attributes default to zero; no derived combat or loot formulas are implied.
+Health and mana show current/max values. Typed
 damage values show signed percentage bonuses: a resolved coefficient of 1.06
 is displayed as +6%. Nonzero flat typed damage bonuses have separate signed rows.
 Movement speed shows the percentage bonus relative to the character profile's
@@ -66,6 +72,38 @@ values. Reserved independent critical stats are not presented as active mechanic
 Pause, settings and the reference stop the world. Closing those screens restores the previous
 pause state, preserving a pause held by another owner. Opening or closing character
 stats never opens or closes inventory, and vice versa.
+
+When all ten enemies are defeated, a nonmodal banner announces the end of the
+round and free time. Continue exploring dismisses it; Next round remains
+available beside the objective. No countdown or automatic wave interrupts loot
+collection. Two enemies appear at a time, with the next pair waiting for both
+defeats. Health and mana recover from their resolved flat points-per-second
+stats, initially 2 HP/s and 10 mana/s, including free time. The sheet displays
+these rates as units per second rather than percentage bonuses. Recovery stops
+on pause and after defeat; fractional HP accumulates until a whole point can heal.
+
+Nearby items appear in a scrollable menu within 2.5 world units. The nearest is
+selected initially; hover selects another row for G, click takes that exact item,
+and dragging a row into the open inventory places it in the chosen free rectangle.
+The compact translucent menu grows to at most five visible rows and scrolls
+additional entries. A high-contrast five-game-second notice reports full bags.
+Character-sheet scrolling is consumed by the GUI and does not zoom the world.
+Rows persist while dragging, and moving out of range rejects the pickup. Failed
+pickup preserves the world item and displays feedback even with inventory open.
+
+## Action journal and admin tools
+
+The bounded action journal uses consecutive rows without blank separators and retains combat calculations and dice links alongside
+defeats, pickups, dropped items, equipment changes and admin mutations. Noncombat
+entries do not replace the last d20 result. Future gold awards can enter the same
+action-recording API when an actual wallet exists.
+
+F3 opens compact live World/Items/Stats tabs. Spawn current catalog enemies,
+create current catalog items, or edit player/enemy base stats; equipment bonuses
+remain composed through the canonical adapter. The world keeps running. Sandbox
+enemies do not count toward round completion. A full bag places an admin-created
+item on free ground near the player. Gold grants await the wallet; the panel reports that
+limit explicitly.
 
 ## Equipment, inventory and item cards
 
@@ -88,21 +126,31 @@ adapter. Item rotation is not implemented.
 Right-click to equip/remove; drag to a compatible equipment slot or a free bag
 rectangle. Replacement and removal check room for all returning items, including
 a dependent quiver, before publication. A rejected action displays inventory
-feedback and preserves equipment, stats and ownership. This is currently a UI
-capacity check: future pickup/grant use cases must enforce the same fixed bag
-before publishing ownership, since `RegisterOwnedItem` remains a storage grant.
+feedback and preserves equipment, stats and ownership. World pickups use
+`ItemAcquisitionService` to validate the same complete fixed-bag layout before
+a version-checked ownership grant. `RegisterOwnedItem` remains an administrative
+storage grant for initial kits and fixtures.
 The grid rejects an overflowing refresh atomically; it never adds hidden rows.
+Select a bag item and choose Drop item on its card, or drag it out of inventory
+onto uncovered world space, to leave it on free ground near the player. Native drag routing
+keeps drops over inventory/UI controls inside those controls; failed bag moves
+do not fall through into world release. Equipped items can also be released directly from their card or dragged from the
+paper doll; ownership and equipped bonuses are removed together. Dependent
+equipment, such as a quiver returned after its bow is dropped, must fit in the bag
+before the operation is accepted.
+Dropping and picking up preserve the exact item identity and captured rolls.
 
-Hover an item for a cursor-following card clamped to the viewport. Left-click
+Hover an item for a slightly translucent card placed beside the source. It
+chooses a free right/left/below/above position within the viewport, avoiding
+the cursor and hovered item/property whenever space permits. Alt inspection
+retains its stationary interactive behavior. Hover cards hide during dragging. Left-click
 pins it for comparison. Affix names, selected tiers and individual rolled values
 are always visible beneath the base properties. Hold Alt to add captured ranges
 and quality in the format `value [minimum/maximum] quality% tier`, plus the actual
-tier pool of each affix. Releasing Alt hides this additional information while
-keeping the affixes visible. T1 denotes the strongest content tier; pools can end
-at T16, T15, T4 or another authored tier. A complete numbered pool is shown as
-`T1–T16`; incomplete or custom pools list their actual IDs without inventing tiers.
-The current starter-kit fixtures define only T2, so their available pool is T2;
-complete progression and balance tables remain content work.
+available rank bounds. Releasing Alt hides this additional information while
+keeping affixes visible. Available ranks always display as `T1` or `T1–Tx`,
+with T1 strongest. Current authored affixes temporarily use T1 only. Complete
+rank tables and balance are deferred until after the main reward/upgrade loop.
 Damage and resistance text use matching, muted semantic colors for each of the
 seven damage types. The common word "damage" stays neutral and is not part of
 text links; the type or modifier is the underlined target. Item rarity retains its
@@ -174,13 +222,14 @@ selected-item details also closes its comparison without closing inventory.
 
 `godot/Content/Items/starter-items.json` provides twelve authored starter items for
 this UI pass. `StarterItemCatalog` creates Domain definitions and affix instances
-with retained values and owner-scoped instance IDs. It does not implement enemy
-drops or Luck-driven crafting. Starting-item creation uses the
+with retained values and owner-scoped instance IDs. Enemy drops choose from
+the same pool and roll fresh d100 qualities once per defeated enemy; Luck-driven
+selection and crafting formulas are not implemented. Starting-item creation uses the
 editable `godot/Items/ItemRarityRules.tres` table. The scene grants the kit once
 when registering its player; opening/refreshing UI never grants another copy.
 
 Future export presets must include the authored JSON content in the package.
-World pickup/drop flows, owned-item crafting, inventory save/load,
+Owned-item crafting, inventory save/load,
 progression/class screens and game save/load remain separate work.
 
 ## Searchable reference

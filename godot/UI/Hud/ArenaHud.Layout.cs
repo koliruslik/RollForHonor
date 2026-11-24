@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
@@ -10,14 +11,22 @@ public partial class ArenaHud
 {
     private void BuildHud()
     {
+        _worldDropTarget = UiLayout.Place(_design, new WorldDropTarget
+        {
+            Name = "WorldDropTarget",
+            Visible = false,
+            CanRelease = CanDiscardItem,
+            Release = DiscardOwnedItem
+        }, new Rect2(0, 0, 1920, 1080));
         UiLayout.Place(_design, UiLayout.Text("ROLL FOR HONOR", 20, HonorTheme.Brass, true), new Rect2(32, 24, 330, 40));
 
         BuildEnemyBar();
         BuildMap();
         BuildActionBar();
         _actorBars = UiLayout.Place(_design, new ActorBars { Name = "ActorBars" }, new Rect2(0, 0, 1920, 1080));
-        _history = UiLayout.Place(_design, new CombatHistoryPanel { Name = "History" }, new Rect2(24, 680, 400, 230));
+        _history = UiLayout.Place(_design, new ActionJournalPanel { Name = "History" }, new Rect2(24, 680, 400, 230));
         _history.InspectionRequested += OpenInspection;
+        BuildRoundUi();
     }
 
     private void BuildWindows()
@@ -27,6 +36,9 @@ public partial class ArenaHud
         _inventory = UiLayout.Place(_inventoryGroup, new InventoryPanel { Name = "Inventory" }, new Rect2(1360, 0, 560, 1080));
         _comparison = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "Comparison" }, new Rect2(696, 16, 320, 620));
         _details = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "ItemDetails" }, new Rect2(1028, 16, 320, 620));
+        _inventory.ResolveWorldItem = id => _arena.NearbyDrops().FirstOrDefault(drop => drop.Item.Id == id)?.Item;
+        _inventory.ReceiveWorldItem = (id, position) => _arena.PickUpItem(id, position);
+        _details.DropRequested += DiscardSelected;
         _inventory.ItemSelected += SelectItem;
         _inventory.ItemHovered += HoverItem;
         _inventory.ItemActivated += ActivateItem;

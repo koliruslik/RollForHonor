@@ -25,7 +25,7 @@ public partial class ArenaHud
         }
 
         var target = _runtime.CombatState.Read(_arena.Player.CombatantId, id).Target;
-        L.SetText(_enemyName, L.Text(_bodies[id].Name));
+        L.SetText(_enemyName, _arena.ActorName(_bodies[id]));
         _enemyHealth.MaxValue = target.MaxHealth;
         _enemyHealth.Value = target.Health;
         _enemyAmount.Text = $"{target.Health} / {target.MaxHealth}";
@@ -39,7 +39,7 @@ public partial class ArenaHud
         _comparison.SetDetailed(detailed);
         _itemTip.SetDetailed(detailed);
 
-        if (!_inventory.Visible || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
+        if (GetViewport().GuiIsDragging() || (!_inventory.Visible && !_nearbyLoot.Visible) || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
         {
             _itemTip.Hide();
         }

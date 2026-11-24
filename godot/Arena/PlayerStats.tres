@@ -9,3 +9,5 @@ MaxMana = 500
 Armor = 2
 Evasion = 12
 MovementSpeed = 6.0
+HealthRecovery = 2.0
+ManaRecovery = 10.0
