@@ -479,6 +479,83 @@ public sealed class GodotRoundTest : TestClass
         }
     }
 
+    /// <summary>Native world-drop callbacks release only bag items, preserve identity and reject a duplicate release.</summary>
+    /// <returns>Completes after the live bag is initialized.</returns>
+    [Test]
+    public async Task DraggingBagItemsIntoWorldUsesCanonicalRelease()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud.ToggleInventory();
+            var owner = arena.Player.CombatantId;
+            var state = arena.GetParent<GameBootstrap>().CombatState;
+            var bow = state.ReadEquipment(owner).OwnedItems.Values.Single(item => item.Base.Id == "ashen-longbow");
+            var target = hud.GetNode<WorldDropTarget>("Root/Design/WorldDropTarget");
+            var payload = new global::Godot.Collections.Dictionary { ["rfh-item-id"] = bow.Id };
+            target._CanDropData(Vector2.Zero, payload).ShouldBeTrue();
+            target._DropData(Vector2.Zero, payload);
+            arena.Drops.Single().Item.ShouldBeSameAs(bow);
+            state.ReadEquipment(owner).OwnedItems.ContainsKey(bow.Id).ShouldBeFalse();
+            target._CanDropData(Vector2.Zero, payload).ShouldBeFalse();
+            target._DropData(Vector2.Zero, payload);
+            arena.Drops.Count.ShouldBe(1);
+            arena.PickUpItem(bow.Id).ShouldBeTrue();
+            new EquipmentService(state).EquipItem(owner, bow.Id, EquipmentSlot.Weapon);
+            target._CanDropData(Vector2.Zero, payload).ShouldBeFalse();
+            state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.Weapon).ShouldBeSameAs(bow);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>Hover cards remain on screen without covering the cursor or source across edges and aspect ratios.</summary>
+    [Test]
+    public void TooltipPlacementAvoidsTheHoveredSourceAcrossViewportEdges()
+    {
+        foreach (var bounds in new[] { new Vector2(1920, 1080), new Vector2(1280, 720), new Vector2(2560, 1080) })
+        {
+            foreach (var cursor in new[] { new Vector2(20, 20), bounds - new Vector2(20, 20), bounds / 2, new Vector2(bounds.X - 20, 30), new Vector2(30, bounds.Y - 20) })
+            {
+                var source = new Rect2(cursor - Vector2.One * 16, Vector2.One * 32);
+                var size = new Vector2(320, 420);
+                var point = RollForHonor.Godot.UI.Common.TooltipPlacement.Place(bounds, size, cursor, source);
+                var tooltip = new Rect2(point, size);
+                new Rect2(Vector2.Zero, bounds).Encloses(tooltip).ShouldBeTrue();
+                tooltip.HasPoint(cursor).ShouldBeFalse();
+                tooltip.Intersects(source).ShouldBeFalse();
+            }
+        }
+    }
+
+    /// <summary>General actions render on consecutive lines without blank separators or synthetic dice results.</summary>
+    [Test]
+    public void ActionJournalDoesNotInsertBlankLinesBetweenActions()
+    {
+        var journal = new ActionJournalPanel();
+        TestScene.AddChild(journal);
+
+        try
+        {
+            journal.RecordAction("First action");
+            journal.RecordAction("Second action");
+            var text = journal.GetNode<RichTextLabel>("Journal/Entries").GetParsedText();
+            text.ShouldBe("Second action\nFirst action\n");
+            text.ShouldNotContain("\n\n");
+            journal.LastRoll.ShouldBeNull();
+        }
+        finally
+        {
+            journal.Free();
+        }
+    }
+
     private GreyboxArena Create(int seed = 724)
     {
         var runtime = TestScene.GetTree().Root.GetChildren().OfType<GameBootstrap>().Single();
