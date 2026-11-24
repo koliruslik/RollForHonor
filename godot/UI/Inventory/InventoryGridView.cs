@@ -24,6 +24,22 @@ public partial class InventoryGridView : Control
     /// <summary>Gets the immutable current grid, with twelve columns and five rows.</summary>
     public InventoryGridLayout Layout { get; private set; } = new(Columns, Rows);
 
+    /// <summary>Gets remembered and pending cells for deterministic equipment-return placement.</summary>
+    public IReadOnlyDictionary<string, InventoryPosition> PreferredPositions
+    {
+        get
+        {
+            var preferred = new Dictionary<string, InventoryPosition>(_remembered);
+
+            foreach (var pair in _requested)
+            {
+                preferred[pair.Key] = pair.Value;
+            }
+
+            return preferred;
+        }
+    }
+
     /// <summary>Gets or sets the canonical owner-scoped lookup.</summary>
     public Func<string, ItemInstance> ResolveItem { get; set; }
 
@@ -43,7 +59,7 @@ public partial class InventoryGridView : Control
     public event Action<string> ItemHovered;
 
     /// <summary>Raised synchronously to return an equipped item to its requested cells.</summary>
-    public event Action<string> UnequipRequested;
+    public event Action<string, InventoryPosition> UnequipRequested;
 
     /// <summary>Gets or sets a nearby-world lookup for native bag drops.</summary>
     public Func<string, ItemInstance> ResolveExternalItem { get; set; }
@@ -223,7 +239,7 @@ public partial class InventoryGridView : Control
                 }
                 else
                 {
-                    UnequipRequested?.Invoke(id);
+                    UnequipRequested?.Invoke(id, position);
                 }
             }
             finally
@@ -237,59 +253,7 @@ public partial class InventoryGridView : Control
     }
 
     private bool TryBuildLayout(IReadOnlyList<ItemInstance> items, out InventoryGridLayout updated)
-    {
-        ArgumentNullException.ThrowIfNull(items);
-
-        if (items.Any(item => item is null || item.Base.Footprint.Width > Layout.Columns || item.Base.Footprint.Height > Layout.Rows))
-        {
-            throw new ArgumentException("Inventory items must be nonnull and fit the fixed grid dimensions.", nameof(items));
-        }
-
-        var incoming = items.ToDictionary(item => item.Id, StringComparer.Ordinal);
-        updated = Layout;
-
-        var removed = Layout.Placements.Values
-            .Where(entry => !incoming.ContainsKey(entry.ItemId));
-
-        foreach (var entry in removed)
-        {
-            updated = _placement.Remove(updated, entry.ItemId);
-        }
-
-        foreach (var item in items
-            .OrderByDescending(item => item.Base.Footprint.Height)
-            .ThenByDescending(item => item.Base.Footprint.Width)
-            .ThenBy(item => item.Id, StringComparer.Ordinal))
-        {
-            if (!TryPlaceItem(updated, item, out updated))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private bool TryPlaceItem(InventoryGridLayout layout, ItemInstance item, out InventoryGridLayout updated)
-    {
-        updated = layout;
-
-        if (layout.Placements.TryGetValue(item.Id, out var existing) && existing.Footprint == item.Base.Footprint)
-        {
-            return true;
-        }
-
-        layout = _placement.Remove(layout, item.Id);
-
-        if ((_requested.TryGetValue(item.Id, out var position) || _remembered.TryGetValue(item.Id, out position))
-            && _placement.TryPlace(layout, item.Id, item.Base.Footprint, position, out updated))
-        {
-            return true;
-        }
-
-        return _placement.TryFindSpace(layout, item.Base.Footprint, out position)
-            && _placement.TryPlace(layout, item.Id, item.Base.Footprint, position, out updated);
-    }
+        => new InventoryLayoutService().TryReconcile(Layout, items, out updated, PreferredPositions);
 
     private void RebuildTiles()
     {

@@ -19,5 +19,8 @@ public enum EquipmentChangeStatus
     IncompatibleSlot,
 
     /// <summary>The same owned item is already equipped in another slot.</summary>
-    AlreadyEquippedElsewhere
+    AlreadyEquippedElsewhere,
+
+    /// <summary>The fixed bag cannot contain every item returned by the operation.</summary>
+    InventoryFull
 }

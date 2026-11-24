@@ -22,7 +22,7 @@ d20 attacks, typed damage, defenses and effects.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
 - Five primary attributes in a staggered 3+2 grid of clickable d20 tiles: Strength, Dexterity, Constitution, Intelligence and Luck.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
-- Main-hand/offhand equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
+- Main-hand/offhand equipment with owned items, atomic stat updates and capacity-checked, version-checked equip/unequip operations.
 - Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
 - Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
 - A searchable game reference sharing those explanations, with owned-item, affix and recent-combat snapshots.

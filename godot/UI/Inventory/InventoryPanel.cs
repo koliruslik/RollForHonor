@@ -18,6 +18,9 @@ public partial class InventoryPanel : Control
     /// <summary>Gets the current immutable bag layout used by capacity-checked pickup.</summary>
     public InventoryGridLayout CurrentLayout => _bag.Layout;
 
+    /// <summary>Gets remembered and pending cells used when returning equipment to the bag.</summary>
+    public IReadOnlyDictionary<string, InventoryPosition> PreferredPositions => _bag.PreferredPositions;
+
     /// <summary>Gets or sets the nearby-world item lookup for native dragging.</summary>
     public Func<string, ItemInstance> ResolveWorldItem { get; set; }
 
@@ -34,7 +37,7 @@ public partial class InventoryPanel : Control
     public event Action<string, EquipmentSlot> EquipRequested;
 
     /// <summary>Raised when an equipped item is dropped into the inventory grid.</summary>
-    public event Action<string> UnequipRequested;
+    public event Action<string, InventoryPosition> UnequipRequested;
 
     /// <summary>Raised when the inventory is closed independently of character stats.</summary>
     public event Action Closed;
@@ -109,22 +112,6 @@ public partial class InventoryPanel : Control
         L.SetText(_status, "");
     }
 
-    /// <summary>Checks the fixed bag before publishing a proposed loadout, including dependent offhand returns.</summary>
-    /// <param name="state">The consistent canonical ownership read.</param>
-    /// <param name="loadout">The proposed equipped items.</param>
-    /// <returns>True when all remaining owned items fit without expanding the bag.</returns>
-    public bool CanFitLoadout(EquipmentStateRead state, EquipmentLoadout loadout)
-    {
-        var equipped = loadout.Slots.Values
-            .Select(item => item.Id)
-            .ToHashSet(StringComparer.Ordinal);
-        var items = state.OwnedItems.Values
-            .Where(item => !equipped.Contains(item.Id))
-            .ToArray();
-
-        return _bag.CanFitItems(items);
-    }
-
     /// <summary>Shows feedback for a rejected item action above the inventory hints.</summary>
     /// <param name="message">The short action result.</param>
     public void ShowStatus(string message)
@@ -168,7 +155,7 @@ public partial class InventoryPanel : Control
         _bag.ItemSelected += Select;
         _bag.ItemActivated += id => ItemActivated?.Invoke(id);
         _bag.ItemHovered += Hover;
-        _bag.UnequipRequested += id => UnequipRequested?.Invoke(id);
+        _bag.UnequipRequested += (id, position) => UnequipRequested?.Invoke(id, position);
         UiLayout.Place(panel, _bag, new Rect2(28, 648, InventoryGridView.Columns * InventoryGridView.CellSize, InventoryGridView.Rows * InventoryGridView.CellSize));
         _status = UiLayout.Place(panel, UiLayout.Text("", 13, HonorTheme.Brass), new Rect2(24, 872, 512, 24));
         _status.Name = "InventoryStatus";

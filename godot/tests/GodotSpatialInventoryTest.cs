@@ -237,6 +237,42 @@ public sealed class GodotSpatialInventoryTest : TestClass
         }
     }
 
+    /// <summary>Equipment requests refresh slots and return an item to the dragged cells immediately.</summary>
+    [Test]
+    public void EquipmentDragRefreshesPanelsBeforeTheNextFrame()
+    {
+        var arena = CreateArena();
+
+        try
+        {
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud.ToggleInventory();
+            var grid = (InventoryGridView)hud.FindChild("Grid", true, false);
+            var bow = (ItemCell)hud.FindChild("ashen-longbow", true, false);
+            var id = bow.ItemId;
+            var original = grid.Layout.Placements[id].Position;
+            var hand = (ItemCell)hud.FindChild("Weapon", true, false);
+            var payload = new global::Godot.Collections.Dictionary { ["rfh-item-id"] = id };
+
+            hand._DropData(Vector2.One, payload);
+
+            hand.ItemId.ShouldBe(id);
+            grid.Layout.Placements.ContainsKey(id).ShouldBeFalse();
+            var destination = new Vector2(original.Column, original.Row) * InventoryGridView.CellSize + Vector2.One * 4;
+            grid._CanDropData(destination, payload).ShouldBeTrue();
+            grid._DropData(destination, payload);
+
+            hand.ItemId.ShouldBeEmpty();
+            grid.Layout.Placements[id].Position.ShouldBe(original);
+            arena.GetParent<GameBootstrap>().CombatState.ReadEquipment(arena.Player.CombatantId)
+                .Loadout.GetItem(EquipmentSlot.Weapon).ShouldBeNull();
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
     private GreyboxArena CreateArena()
     {
         var runtime = TestScene.GetTree().Root.GetChildren()
