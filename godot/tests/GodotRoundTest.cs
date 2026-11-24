@@ -143,6 +143,8 @@ public sealed class GodotRoundTest : TestClass
 
             arena.Player.GlobalPosition = drop.GlobalPosition;
             arena.PickUpNearest().ShouldBeFalse();
+            hud._Process(0);
+            hud.GetNode<Panel>("Root/Design/InventoryFullNotice").Visible.ShouldBeTrue();
             drop.Collected.ShouldBeFalse();
             drop.Item.ShouldBeSameAs(item);
             var state = arena.GetParent<GameBootstrap>().CombatState;
@@ -179,17 +181,22 @@ public sealed class GodotRoundTest : TestClass
 
             for (var index = 0; index < types.Length; index++)
             {
-                var tile = panel.GetNode<Panel>($"Character/{types[index]}");
+                var tile = panel.GetNode<PrimaryAttributeDie>($"Character/{types[index]}");
                 tile.GetNode<Label>("Value").Text.ShouldBe((index + 2).ToString());
-                tile.Position.X.ShouldBe(20 + index % 3 * 108);
-                tile.Position.Y.ShouldBe(96 + index / 3 * 96);
+                tile.Position.X.ShouldBe(index < 3 ? 20 + index * 108 : 74 + (index - 3) * 108);
+                tile.Position.Y.ShouldBe(index < 3 ? 96 : 174);
             }
 
+            RollForHonor.Godot.UI.Common.InspectionTopic inspected = null;
+            panel.InspectionRequested += topic => inspected = topic;
+            panel.GetNode<PrimaryAttributeDie>("Character/Strength")._GuiInput(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = true });
+            inspected.Title.ShouldBe(L.Text("Strength"));
+            inspected.Description.ShouldContain("physical damage");
             panel.GetNodeOrNull("Character/Wisdom").ShouldBeNull();
             stats.Get(new StatKey(StatType.MaxHealth)).ShouldBe(100);
             TranslationServer.SetLocale("uk");
             panel.Refresh(stats, profile.BaseValues, new(id, 100, 100, 0, 0, [], []), 0);
-            panel.GetNode<Panel>("Character/Strength").TooltipText.ShouldBe(L.Text("Strength"));
+            panel.GetNode<PrimaryAttributeDie>("Character/Strength").TooltipText.ShouldBe(L.Text("Strength"));
             panel.GetNode<Label>("Character/Luck/Value").Text.ShouldBe("6");
         }
         finally
@@ -349,6 +356,125 @@ public sealed class GodotRoundTest : TestClass
         finally
         {
             tree.Paused = previousPause;
+            arena.Free();
+        }
+    }
+
+    /// <summary>Live recovery inputs drive both resources; fractional health accumulates and cannot revive a defeated player.</summary>
+    /// <returns>Completes after the native round starts.</returns>
+    [Test]
+    public async Task HealthRecoveryUsesFlatResolvedRatesAndPreservesFractions()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var runtime = arena.GetParent<GameBootstrap>();
+            var owner = arena.Player.CombatantId;
+            var state = runtime.CombatState;
+            var profile = state.ReadEquipment(owner).NonEquipmentProfile;
+            state.UpdateNonEquipmentStats(owner, new(profile.BaseValues.With(new(StatType.HealthRecovery), 0.5m).With(new(StatType.ManaRecovery), 3), profile.Modifiers));
+            var actor = state.Read(owner, owner).Source;
+            state.UpdateCombatant(new(owner, 50, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, actor.Effects, actor.Offense));
+            runtime._Process(1);
+            arena._PhysicsProcess(0);
+            state.Read(owner, owner).Source.Health.ShouldBe(50);
+            runtime._Process(1);
+            arena._PhysicsProcess(0);
+            state.Read(owner, owner).Source.Health.ShouldBe(51);
+            Defeat(arena, owner);
+            runtime._Process(10);
+            arena._PhysicsProcess(0);
+            state.Read(owner, owner).Source.Health.ShouldBe(0);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>The compact admin surface edits canonical bases, creates unique items and queues sandbox actors outside round accounting.</summary>
+    /// <returns>Completes after queued physics spawning.</returns>
+    [Test]
+    public async Task AdminToolsEditStatsCreateItemsAndKeepRoundAccounting()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud._Input(new InputEventKey { PhysicalKeycode = Key.F3, Pressed = true });
+            var admin = hud.GetNode<RollForHonor.Godot.UI.Admin.AdminPanel>("Root/Design/Admin");
+            admin.Visible.ShouldBeTrue();
+            var state = arena.GetParent<GameBootstrap>().CombatState;
+            var stat = admin.GetNode<OptionButton>("Panel/Tabs/Stats/Stat");
+            var manaIndex = Enumerable.Range(0, stat.ItemCount).Single(index => stat.GetItemText(index) == "Mana recovery");
+            stat.Select(manaIndex);
+            stat.EmitSignal(OptionButton.SignalName.ItemSelected, manaIndex);
+            admin.GetNode<SpinBox>("Panel/Tabs/Stats/Value").Value = 27.5;
+            admin.GetNode<Button>("Panel/Tabs/Stats/Apply").EmitSignal(Button.SignalName.Pressed);
+            state.GetStats(arena.Player.CombatantId).Get(new(StatType.ManaRecovery)).ShouldBe(27.5m);
+            var count = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Count + arena.Drops.Count;
+            admin.GetNode<Button>("Panel/Tabs/Items/Create").EmitSignal(Button.SignalName.Pressed);
+            (state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Count + arena.Drops.Count).ShouldBe(count + 1);
+            admin.GetNode<Button>("Panel/Tabs/World/Spawn").EmitSignal(Button.SignalName.Pressed);
+            await Frames(2);
+            arena.AdminEnemies.Count.ShouldBe(1);
+            arena.Enemies.Count.ShouldBe(2);
+            arena.DefeatedCount.ShouldBe(0);
+            arena.AdminEnemies[0].Controls.ThinkingEnabled = false;
+            var journal = hud.GetNode<ActionJournalPanel>("Root/Design/History");
+            var text = journal.GetNode<RichTextLabel>("Journal/Entries").GetParsedText();
+            text.ShouldContain("Admin: created");
+            text.ShouldContain("Admin: spawned");
+            journal.LastRoll.ShouldBeNull();
+            admin.GetNode<TabContainer>("Panel/Tabs").CurrentTab = 2;
+            admin.GetNode<SpinBox>("Panel/Tabs/Stats/Value").GetLineEdit().GrabFocus();
+            hud._Input(new InputEventKey { PhysicalKeycode = Key.F3, Pressed = true });
+            admin.Visible.ShouldBeFalse();
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>Native wheel input scrolls the character sheet without zooming; wheel input over the world still zooms.</summary>
+    /// <returns>Completes after GUI hover and native input processing.</returns>
+    [Test]
+    public async Task CharacterWheelDoesNotZoomTheWorld()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud.ToggleCharacter();
+            var scroll = (ScrollContainer)hud.FindChild("StatsScroll", true, false);
+            scroll.MouseForcePassScrollEvents.ShouldBeFalse();
+            var point = scroll.GetGlobalTransformWithCanvas() * new Vector2(140, 140);
+            Input.ParseInputEvent(new InputEventMouseMotion { Position = point });
+            await Frames(2);
+            var before = arena.CameraRig.Camera.Size;
+            Input.ParseInputEvent(new InputEventMouseButton { Position = point, ButtonIndex = MouseButton.WheelDown, Pressed = true });
+            await Frames(2);
+            arena.CameraRig.Camera.Size.ShouldBe(before);
+
+            var world = arena.CameraRig.Camera.GetViewport().GetVisibleRect().Size / 2;
+            Input.ParseInputEvent(new InputEventMouseMotion { Position = world });
+            await Frames(2);
+            Input.ParseInputEvent(new InputEventMouseButton { Position = world, ButtonIndex = MouseButton.WheelDown, Pressed = true });
+            await Frames(2);
+            arena.CameraRig.Camera.Size.ShouldBeGreaterThan(before);
+        }
+        finally
+        {
             arena.Free();
         }
     }
