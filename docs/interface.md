@@ -102,7 +102,7 @@ F3 opens compact live World/Items/Stats tabs. Spawn current catalog enemies,
 create current catalog items, or edit player/enemy base stats; equipment bonuses
 remain composed through the canonical adapter. The world keeps running. Sandbox
 enemies do not count toward round completion. A full bag places an admin-created
-item at the player's feet. Gold grants await the wallet; the panel reports that
+item on free ground near the player. Gold grants await the wallet; the panel reports that
 limit explicitly.
 
 ## Equipment, inventory and item cards
@@ -132,9 +132,12 @@ a version-checked ownership grant. `RegisterOwnedItem` remains an administrative
 storage grant for initial kits and fixtures.
 The grid rejects an overflowing refresh atomically; it never adds hidden rows.
 Select a bag item and choose Drop item on its card, or drag it out of inventory
-onto uncovered world space, to leave it at the player's feet. Native drag routing
+onto uncovered world space, to leave it on free ground near the player. Native drag routing
 keeps drops over inventory/UI controls inside those controls; failed bag moves
-do not fall through into world release. Equipped items must first be removed through the existing equipment flow.
+do not fall through into world release. Equipped items can also be released directly from their card or dragged from the
+paper doll; ownership and equipped bonuses are removed together. Dependent
+equipment, such as a quiver returned after its bow is dropped, must fit in the bag
+before the operation is accepted.
 Dropping and picking up preserve the exact item identity and captured rolls.
 
 Hover an item for a slightly translucent card placed beside the source. It

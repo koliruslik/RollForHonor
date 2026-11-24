@@ -180,7 +180,10 @@ grants do not use the pickup service. Crafting owned/equipped items and game
 save/load remain future work.
 
 
-`ItemReleaseService` uses a version-checked release port to remove one unequipped
-bag item from a living owner. Equipped, absent, stale and defeated-owner requests
-leave ownership unchanged. Godot then represents the same immutable instance at
-the player's feet; reacquiring it does not generate or reroll another item.
+`ItemReleaseService` uses a version-checked release port to remove one owned bag
+or equipped item from a living owner. Equipped releases recompose loadout/stats
+and clamp current resources at the same publication boundary as ownership
+removal. Dependent equipment is retained in the bag only after a complete spatial
+capacity check. Absent, stale, defeated-owner and insufficient-return-space
+requests leave ownership, loadout and stats unchanged. Godot then represents the same immutable instance on
+free ground near the player; reacquiring it does not generate or reroll another item.

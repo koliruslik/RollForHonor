@@ -219,7 +219,7 @@ the selected row (nearest initially), clicking takes a specific item, and native
 dragging into an open bag validates the chosen rectangle. A full or fragmented bag
 leaves the exact item on the ground for a later attempt. See [items](items.md)
 for acquisition ownership and capacity checks. Selected bag items can be dropped
-at the player's feet; equipped items must first be removed. The same captured
+on free nearby ground, including directly from equipped slots. The same captured
 instance survives release and reacquisition.
 
 The round host reads HealthRecovery and ManaRecovery from resolved stats and
@@ -228,6 +228,13 @@ starts at 2 HP/s and 10 mana/s. Fractional HP carries while hurt; full or defeat
 actors do not bank healing. Application converts elapsed game time to a mana request;
 the adapter restores at most the live maximum under the same lock as spending.
 Full or defeated actors cause no publication. Pausing stops elapsed game time.
+
+Ground loot uses a bounded search around its origin, validating floor contact,
+terrain/obstacle clearance and separation from existing uncollected drops.
+Existing drops stay in place; collected space can be reused. A player release
+checks for a valid position before removing ownership, so blocked ground keeps
+the item equipped or in the bag. Already-generated enemy/admin loot waits in a
+captured pending queue when placement is blocked and retries without rerolling.
 
 ## Sandbox tools
 
