@@ -348,10 +348,22 @@ Presentation code lives in `godot/UI/Common`, `Menu`, `Settings`, `Hud`, `Refere
 and `Inventory`. `InspectionStack` owns explanation branches; `InspectionPane` draws
 one card; `InspectionTopic` retains text and lazy related links. `CombatGlossary`
 owns shared colors and rule descriptions. `ItemDetailsPanel.Properties` keeps
-item rendering separate from card sizing and input. `ArenaHud` separates layout composition from interaction/lifecycle
-coordination. Item rules and arithmetic remain in Domain; equipment commands
-remain in Application. The legacy detailed combat laboratory and its result-based
-journal remain available through F2. The arena's old diagnostic controls are
+item rendering separate from card sizing and input. `ArenaHud` composes the controls
+and routes top-level input. `InventoryWindowController` owns item selection,
+comparison, equipment requests and pickup feedback. `CombatHudPresenter` reads
+live health, mana, character stats and targeting data, and connects the action
+journal to observed combat results. `HudNavigationController` owns pause,
+settings and reference navigation, including restoration of the previous pause
+state. `ArenaRoundPresenter` owns round banners, nearby loot and capacity notices.
+
+Panels emit user requests such as `EquipRequested(itemId, slot)`; the item-window
+controller invokes `EquipmentService` and refreshes inventory and character data
+through ordinary calls. Application checks spatial capacity before committing
+all equipment changes, including dependent offhand returns. The shared Domain
+`InventoryLayoutService` retains occupied cells and applies remembered or requested
+return positions in both the operation check and the rendered grid. Item rules
+and arithmetic remain in Domain; equipment commands remain in Application.
+The legacy detailed combat laboratory and its result-based journal remain available through F2. The arena's old diagnostic controls are
 hidden, and retain the committed d20 bridge used by existing regression tests.
 
 Engine tests exercise actual buttons, settings-file round trips, discard-on-close,

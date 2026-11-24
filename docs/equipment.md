@@ -13,7 +13,8 @@ These types know nothing about actor ownership, Godot or session storage.
 
 Application `EquipmentService` handles `EquipItem` and `UnequipItem`. It reads
 owned items and rules, rejects ordinary ownership/compatibility failures, builds
-the Domain loadout and requests a version-checked commit. The adapter contract
+the Domain loadout, checks fixed-bag capacity for every returned item and requests
+a version-checked commit. The adapter contract
 requires stat recomposition and equipment publication to succeed together.
 
 Infrastructure implements `IEquipmentStateAdapter` on `InMemoryCombatState`.
@@ -26,7 +27,7 @@ clamped resource values are ready.
 
 Godot's existing `ActorStats` reads resolved speed for the motor. The
 [game interface](interface.md) connects item cards and equipped slots to the same
-Application operations, using an authored starter kit without item drops.
+Application operations, using an authored starter kit and the arena loot flow.
 
 ## Minimal slot rules
 
@@ -54,7 +55,13 @@ Equipping a new main weapon removes a now-incompatible offhand from the proposed
 loadout. Removing a bow also removes its dependent quiver. Both remain owned;
 bonuses are recomposed from the resulting loadout in one atomic commit. Direct
 adapter proposals are checked against both slot tags and the complete hand pair.
-The game UI also checks bag space for all returned items before the operation.
+`EquipmentService` checks bag space for all returned items before publication.
+Callers can supply the current twelve-by-five layout and preferred return cells;
+without a layout, the service packs the proposed bag contents deterministically.
+Capacity failures return `InventoryFull` without changing equipment,
+stats or resources. A supplied layout must represent all current bag items.
+The game passes its actual arranged cells and remembered or requested positions,
+using the same Domain reconciliation rules as inventory rendering.
 
 Both rings require distinct instance IDs; matching bases are allowed. A base can
 retain general affix tags such as `armor` alongside its specific equipment tag.
@@ -85,8 +92,8 @@ current item or removing an empty slot is an unchanged operation: no new version
 stat calculation, healing or resource change. Even unchanged operations verify
 the expected version, so a concurrent unequip cannot be hidden by an old read.
 
-Expected gameplay failures return ItemNotOwned, IncompatibleSlot or
-AlreadyEquippedElsewhere. Publication returns Applied, Unchanged or
+Expected gameplay failures return ItemNotOwned, IncompatibleSlot,
+AlreadyEquippedElsewhere or InventoryFull. Publication returns Applied, Unchanged or
 VersionConflict. Application performs one attempt without silently retrying.
 Invalid arguments, inconsistent port data, forged direct proposals and arithmetic
 failures throw without partial publication. The adapter independently rechecks
@@ -132,7 +139,8 @@ launch receipts/cooldowns and in-flight impacts. An actual Godot test verifies
 boots change motor speed and armor and unequipping restores previous values.
 
 This is an in-memory equipment core with a fixed-grid game inventory interface.
-The UI checks spatial capacity for its equipment actions. Ownership grants do not
-yet enforce bag placement; future pickup/transfer use cases, owned-item crafting
-and persistence must share a consistent publication boundary with affected
-loadouts and stat profiles.
+Equipment operations enforce capacity in Application, including calls from other
+screens. Pickup also checks the supplied live bag layout before an atomic grant.
+Manual bag positions remain local to the inventory view; low-level ownership
+registration and direct adapter proposals do not enforce bag placement. Future
+transfers, owned-item crafting and persistence need a shared layout owner.
