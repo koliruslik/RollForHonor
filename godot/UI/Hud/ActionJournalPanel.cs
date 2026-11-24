@@ -125,7 +125,7 @@ public partial class ActionJournalPanel : Control
         {
             if (entry.Action is not null)
             {
-                _text.AddText(L.Refresh(entry.Action) + "\n\n");
+                _text.AddText(L.Refresh(entry.Action) + "\n");
                 continue;
             }
 
@@ -141,7 +141,7 @@ public partial class ActionJournalPanel : Control
                 WriteLink(L.Text("Dice and bonuses"), entry.Dice);
             }
 
-            _text.AddText("\n\n");
+            _text.AddText("\n");
         }
     }
 

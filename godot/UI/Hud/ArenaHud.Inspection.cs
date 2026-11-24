@@ -39,7 +39,7 @@ public partial class ArenaHud
         _comparison.SetDetailed(detailed);
         _itemTip.SetDetailed(detailed);
 
-        if ((!_inventory.Visible && !_nearbyLoot.Visible) || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
+        if (GetViewport().GuiIsDragging() || (!_inventory.Visible && !_nearbyLoot.Visible) || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
         {
             _itemTip.Hide();
         }

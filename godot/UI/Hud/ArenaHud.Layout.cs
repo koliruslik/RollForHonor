@@ -11,6 +11,13 @@ public partial class ArenaHud
 {
     private void BuildHud()
     {
+        _worldDropTarget = UiLayout.Place(_design, new WorldDropTarget
+        {
+            Name = "WorldDropTarget",
+            Visible = false,
+            CanRelease = CanDiscardItem,
+            Release = DiscardOwnedItem
+        }, new Rect2(0, 0, 1920, 1080));
         UiLayout.Place(_design, UiLayout.Text("ROLL FOR HONOR", 20, HonorTheme.Brass, true), new Rect2(32, 24, 330, 40));
 
         BuildEnemyBar();

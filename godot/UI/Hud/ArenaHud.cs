@@ -25,6 +25,7 @@ namespace RollForHonor.Godot.UI.Hud;
 /// <summary>Coordinates styled HUD, live character/equipment windows and owned pause/settings navigation.</summary>
 public partial class ArenaHud : CanvasLayer
 {
+    private WorldDropTarget _worldDropTarget;
     private AdminPanel _admin;
     private GameBootstrap _runtime;
     private GreyboxArena _arena;
@@ -90,6 +91,9 @@ public partial class ArenaHud : CanvasLayer
             return;
         }
 
+        var data = GetViewport().GuiGetDragData();
+        _worldDropTarget.Size = _design.Size;
+        _worldDropTarget.Visible = GetViewport().GuiIsDragging() && ItemCell.TryReadItem(data, out var dragged) && CanDiscardItem(dragged);
         RefreshHud();
         RefreshWindows();
         RefreshHover();
@@ -388,21 +392,42 @@ public partial class ArenaHud : CanvasLayer
 
     private void DiscardSelected()
     {
-        if (_selected is null)
+        if (_selected is not null)
         {
-            return;
+            DiscardOwnedItem(_selected.Id);
+        }
+    }
+
+    private bool CanDiscardItem(string id)
+    {
+        if (GetTree().Paused || !_inventory.Visible)
+        {
+            return false;
         }
 
-        if (_arena.DiscardItem(_selected.Id))
+        var owner = _arena.Player.CombatantId;
+        var read = _runtime.CombatState.ReadEquipment(owner);
+
+        return !_runtime.CombatState.Read(owner, owner).Source.IsDefeated
+            && read.OwnedItems.ContainsKey(id) && !read.Loadout.Slots.Values.Any(item => item.Id == id);
+    }
+
+    private bool DiscardOwnedItem(string id)
+    {
+        if (!CanDiscardItem(id) || !_arena.DiscardItem(id))
+        {
+            return false;
+        }
+
+        if (_selected?.Id == id)
         {
             CloseDetails();
-            _inventoryVersion = -1;
-            RefreshWindows();
         }
-        else
-        {
-            _details.SetStatus(L.Text("Remove equipped items before dropping them."));
-        }
+
+        _inventoryVersion = -1;
+        RefreshWindows();
+
+        return true;
     }
 
     private void CloseWindows()

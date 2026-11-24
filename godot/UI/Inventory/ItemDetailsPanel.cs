@@ -105,8 +105,9 @@ public partial class ItemDetailsPanel : Control
         if (_hover)
         {
             var parent = GetParent<Control>();
-            var preferred = _detailed ? Position : parent.GetLocalMousePosition() + new Vector2(18, 18);
-            Position = preferred.Clamp(Vector2.Zero, (parent.Size - Size).Max(Vector2.Zero));
+            var cursor = parent.GetLocalMousePosition();
+            Position = _detailed ? Position.Clamp(Vector2.Zero, (parent.Size - Size).Max(Vector2.Zero))
+                : TooltipPlacement.Place(parent.Size, Size, cursor, TooltipPlacement.SourceBounds(parent, cursor));
         }
     }
 
@@ -124,8 +125,8 @@ public partial class ItemDetailsPanel : Control
 
         _item = item;
         var color = ItemPresentation.RarityColor(item.Rarity);
-        _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), color, 0));
-        _header.AddThemeStyleboxOverride("panel", HonorTheme.Panel(HonorTheme.Ink.Lerp(color.Darkened(0.55f), 0.4f), color, 0));
+        _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), _hover ? 0.86f : 1), color, 0));
+        _header.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.55f), 0.4f), _hover ? 0.86f : 1), color, 0));
         L.SetText(_caption, _hover ? L.Text("ITEM") : L.Text("SELECTED ITEM"));
         L.SetText(_name, L.Text(item.Base.Name));
         _name.AddThemeColorOverride("font_color", color.Lightened(0.15f));
