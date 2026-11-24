@@ -12,7 +12,8 @@ d20 attacks, typed damage, defenses and effects.
 - Rounds of ten randomly placed ranged enemies, appearing in successive pairs,
   with a completion banner and unlimited free time before starting the next round.
 - One persistent item drop per defeated enemy; nearby loot supports G, mouse pickup
-  and dragging into an open bag. Bag items can be dropped back into the world.
+  and dragging into an open bag. Drop bag items with the card button or by
+  dragging them onto uncovered world space.
 - Flat health/mana recovery stats, initially 2 HP/s and 10 mana/s for the player.
 - An action journal for combat, defeats, pickups, equipment and sandbox changes.
 - Compact F3 admin tools for current monster/item catalogs and actor base stats.

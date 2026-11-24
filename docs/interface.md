@@ -93,7 +93,7 @@ pickup preserves the world item and displays feedback even with inventory open.
 
 ## Action journal and admin tools
 
-The bounded action journal retains combat calculations and dice links alongside
+The bounded action journal uses consecutive rows without blank separators and retains combat calculations and dice links alongside
 defeats, pickups, dropped items, equipment changes and admin mutations. Noncombat
 entries do not replace the last d20 result. Future gold awards can enter the same
 action-recording API when an actual wallet exists.
@@ -131,11 +131,16 @@ feedback and preserves equipment, stats and ownership. World pickups use
 a version-checked ownership grant. `RegisterOwnedItem` remains an administrative
 storage grant for initial kits and fixtures.
 The grid rejects an overflowing refresh atomically; it never adds hidden rows.
-Select a bag item and choose Drop item on its card to leave it at the player's
-feet. Equipped items must first be removed through the existing equipment flow.
+Select a bag item and choose Drop item on its card, or drag it out of inventory
+onto uncovered world space, to leave it at the player's feet. Native drag routing
+keeps drops over inventory/UI controls inside those controls; failed bag moves
+do not fall through into world release. Equipped items must first be removed through the existing equipment flow.
 Dropping and picking up preserve the exact item identity and captured rolls.
 
-Hover an item for a cursor-following card clamped to the viewport. Left-click
+Hover an item for a slightly translucent card placed beside the source. It
+chooses a free right/left/below/above position within the viewport, avoiding
+the cursor and hovered item/property whenever space permits. Alt inspection
+retains its stationary interactive behavior. Hover cards hide during dragging. Left-click
 pins it for comparison. Affix names, selected tiers and individual rolled values
 are always visible beneath the base properties. Hold Alt to add captured ranges
 and quality in the format `value [minimum/maximum] quality% tier`, plus the actual
