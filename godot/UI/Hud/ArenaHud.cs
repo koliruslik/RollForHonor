@@ -361,6 +361,25 @@ public partial class ArenaHud : CanvasLayer
         }
     }
 
+    private void DiscardSelected()
+    {
+        if (_selected is null)
+        {
+            return;
+        }
+
+        if (_arena.DiscardItem(_selected.Id))
+        {
+            CloseDetails();
+            _inventoryVersion = -1;
+            RefreshWindows();
+        }
+        else
+        {
+            _details.SetStatus(L.Text("Remove equipped items before dropping them."));
+        }
+    }
+
     private void CloseWindows()
     {
         _inventory.Hide();

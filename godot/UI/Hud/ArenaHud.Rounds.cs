@@ -1,4 +1,7 @@
+using System.Linq;
 using Godot;
+using RollForHonor.Domain.Items.Inventory.Models;
+using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Application.Items;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Godot.Arena;
@@ -10,6 +13,10 @@ namespace RollForHonor.Godot.UI.Hud;
 
 public partial class ArenaHud
 {
+    /// <summary>Gets the selected nearby-menu item when that menu is available.</summary>
+    public string SelectedLootId => _nearbyLoot.Visible ? _nearbyLoot.SelectedItemId : null;
+
+    private NearbyLootPanel _nearbyLoot;
     private Panel _roundBanner;
     private Label _roundTitle;
     private Label _lootPrompt;
@@ -18,12 +25,13 @@ public partial class ArenaHud
 
     /// <summary>Capacity-checks and publishes one captured pickup against the live bag layout.</summary>
     /// <param name="item">The unowned dropped instance.</param>
+    /// <param name="destination">Optional exact top-left bag cell.</param>
     /// <returns>The acquisition result; rejection leaves the item in the world.</returns>
-    public ItemAcquisitionStatus AcquireItem(ItemInstance item)
+    public ItemAcquisitionStatus AcquireItem(ItemInstance item, InventoryPosition? destination = null)
     {
         var state = _runtime.CombatState;
         _inventory.Refresh(state.ReadEquipment(_arena.Player.CombatantId));
-        var result = new ItemAcquisitionService(state).Acquire(_arena.Player.CombatantId, item, _inventory.CurrentLayout);
+        var result = new ItemAcquisitionService(state).Acquire(_arena.Player.CombatantId, item, _inventory.CurrentLayout, destination);
 
         if (result == ItemAcquisitionStatus.Acquired)
         {
@@ -35,6 +43,10 @@ public partial class ArenaHud
 
     private void BuildRoundUi()
     {
+        _nearbyLoot = UiLayout.Place(_design, new NearbyLootPanel { Name = "NearbyLoot" }, new Rect2(750, 530, 420, 320));
+        _nearbyLoot.IconKey = item => ItemPresentation.Icon(item, ItemPresentation.Slot(item, _runtime.CombatState.ReadEquipment(_arena.Player.CombatantId).Rules));
+        _nearbyLoot.PickupRequested += id => _arena.PickUpItem(id);
+        _nearbyLoot.ItemHovered += HoverItem;
         _roundBanner = UiLayout.Panel(_design, "RoundComplete", new Rect2(650, 138, 620, 172));
         _roundTitle = UiLayout.Place(_roundBanner, UiLayout.Text("", 25, HonorTheme.Brass, true), new Rect2(24, 16, 530, 40));
         UiLayout.Place(_roundBanner, UiLayout.Text(L.Text("Free time — explore and collect your loot."), 18), new Rect2(24, 62, 572, 36));
@@ -44,7 +56,7 @@ public partial class ArenaHud
         _nextRound = UiLayout.Place(_design, UiLayout.Button(L.Text("Next round"), () => _arena.StartNextRound()), new Rect2(1550, 372, 333, 48));
         _nextRound.Name = "NextRound";
         _nextRound.Hide();
-        _lootPrompt = UiLayout.Place(_design, UiLayout.Text("", 18, HonorTheme.Brass), new Rect2(500, 880, 920, 44));
+        _lootPrompt = UiLayout.Place(_design, UiLayout.Text("", 18, HonorTheme.Brass), new Rect2(750, 858, 420, 64));
         _lootPrompt.Name = "LootPrompt";
         _lootPrompt.HorizontalAlignment = HorizontalAlignment.Center;
         _lootPrompt.AutowrapMode = TextServer.AutowrapMode.WordSmart;
@@ -53,12 +65,16 @@ public partial class ArenaHud
     private void RefreshRoundUi(bool alive)
     {
         _roundBanner.Position = new Vector2((_design.Size.X - 620) / 2, 138);
-        _lootPrompt.Position = new Vector2((_design.Size.X - 920) / 2, 866);
         _nextRound.Position = new Vector2(_design.Size.X - 370, 372);
         var available = _arena.RoundsEnabled && alive && !_pause.Visible && !_settings.Visible && !_reference.Visible;
+        var nearbyDrops = _arena.NearbyDrops();
+        _nearbyLoot.Refresh(nearbyDrops);
+        _nearbyLoot.Position = new Vector2((_design.Size.X - (_inventory.Visible ? 560 : 0) + (_character.Visible ? 360 : 0) - 420) / 2, 530);
+        _lootPrompt.Position = _nearbyLoot.Position + new Vector2(0, 328);
+        _nearbyLoot.Visible = available && nearbyDrops.Count > 0;
         _roundBanner.Visible = available && _arena.RoundComplete && _dismissedRound != _arena.RoundNumber;
         _nextRound.Visible = available && _arena.RoundComplete;
-        _lootPrompt.Visible = available && !_inventory.Visible && !_character.Visible;
+        _lootPrompt.Visible = available;
 
         if (!_arena.RoundsEnabled)
         {
@@ -66,9 +82,7 @@ public partial class ArenaHud
         }
 
         L.SetText(_roundTitle, L.Format($"Round {_arena.RoundNumber} complete"));
-        var nearby = _arena.NearestDrop();
-        L.SetText(_lootPrompt, _arena.PickupFeedback.Length > 0 ? _arena.PickupFeedback
-            : nearby is null ? "" : L.Format($"{GameInputBindings.Name("rfh_pickup")}  Pick up {L.Text(nearby.Item.Base.Name)}"));
+        L.SetText(_lootPrompt, _arena.PickupFeedback);
 
         if (alive)
         {

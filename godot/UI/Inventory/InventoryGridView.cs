@@ -45,6 +45,12 @@ public partial class InventoryGridView : Control
     /// <summary>Raised synchronously to return an equipped item to its requested cells.</summary>
     public event Action<string> UnequipRequested;
 
+    /// <summary>Gets or sets a nearby-world lookup for native bag drops.</summary>
+    public Func<string, ItemInstance> ResolveExternalItem { get; set; }
+
+    /// <summary>Gets or sets the capacity-checked pickup into the requested top-left cell.</summary>
+    public Func<string, InventoryPosition, bool> ReceiveExternalItem { get; set; }
+
     private readonly InventoryGridService _placement = new();
     private readonly Dictionary<string, InventoryPosition> _remembered = new();
     private readonly Dictionary<string, InventoryPosition> _requested = new();
@@ -171,9 +177,9 @@ public partial class InventoryGridView : Control
 
     private bool CanPlaceAt(string id, Vector2 topLeft)
     {
-        var item = ResolveItem?.Invoke(id);
+        var item = ResolveItem?.Invoke(id) ?? ResolveExternalItem?.Invoke(id);
 
-        if (item is null || (!_items.ContainsKey(id) && IsEquipped?.Invoke(id) != true))
+        if (item is null || (!_items.ContainsKey(id) && IsEquipped?.Invoke(id) != true && ResolveExternalItem?.Invoke(id) is null))
         {
             return false;
         }
@@ -209,8 +215,21 @@ public partial class InventoryGridView : Control
         else
         {
             _requested[id] = position;
-            UnequipRequested?.Invoke(id);
-            _requested.Remove(id);
+            try
+            {
+                if (ResolveExternalItem?.Invoke(id) is not null)
+                {
+                    ReceiveExternalItem?.Invoke(id, position);
+                }
+                else
+                {
+                    UnequipRequested?.Invoke(id);
+                }
+            }
+            finally
+            {
+                _requested.Remove(id);
+            }
         }
 
         _previewVisible = false;

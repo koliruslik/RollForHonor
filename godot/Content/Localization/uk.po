@@ -1278,3 +1278,15 @@ msgstr "Удача"
 
 msgid "Allocated attribute points. Derived combat and loot bonuses are not configured yet."
 msgstr "Розподілені очки характеристики. Їхній вплив на бій і здобич ще не налаштовано."
+
+msgid "Nearby loot"
+msgstr "Здобич поруч"
+
+msgid "G  Pick selected · Click to take · Drag into bag"
+msgstr "G  Підібрати вибране · Клік: взяти · Перетягніть у сумку"
+
+msgid "Drop item"
+msgstr "Викинути предмет"
+
+msgid "Remove equipped items before dropping them."
+msgstr "Спочатку зніміть споряджений предмет, щоб викинути його."

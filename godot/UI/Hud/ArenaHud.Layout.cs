@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
@@ -28,6 +29,9 @@ public partial class ArenaHud
         _inventory = UiLayout.Place(_inventoryGroup, new InventoryPanel { Name = "Inventory" }, new Rect2(1360, 0, 560, 1080));
         _comparison = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "Comparison" }, new Rect2(696, 16, 320, 620));
         _details = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "ItemDetails" }, new Rect2(1028, 16, 320, 620));
+        _inventory.ResolveWorldItem = id => _arena.NearbyDrops().FirstOrDefault(drop => drop.Item.Id == id)?.Item;
+        _inventory.ReceiveWorldItem = (id, position) => _arena.PickUpItem(id, position);
+        _details.DropRequested += DiscardSelected;
         _inventory.ItemSelected += SelectItem;
         _inventory.ItemHovered += HoverItem;
         _inventory.ItemActivated += ActivateItem;

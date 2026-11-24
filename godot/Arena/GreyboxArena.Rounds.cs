@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using RollForHonor.Application.Items;
+using RollForHonor.Application.Resources;
+using RollForHonor.Domain.Items.Inventory.Models;
+using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.Gameplay.Actors;
@@ -19,6 +22,12 @@ public partial class GreyboxArena
 {
     /// <summary>The exact enemy count in each playable round.</summary>
     public const int EnemiesPerRound = 10;
+
+    /// <summary>The maximum number of living enemies admitted together.</summary>
+    public const int EnemiesPerPair = 2;
+
+    /// <summary>Mana recovered per unpaused game second.</summary>
+    public const decimal ManaPerSecond = 10;
 
     /// <summary>Gets or sets whether the inherited arena hosts rounds instead of the single-enemy test fixture.</summary>
     [Export]
@@ -48,6 +57,8 @@ public partial class GreyboxArena
     /// <summary>Gets the current short pickup feedback in the active language.</summary>
     public string PickupFeedback => _runtime.GameTime < _feedbackUntil ? L.Refresh(_pickupFeedback) : "";
 
+    private TimeSpan _lastManaRecovery;
+
     private readonly List<Enemy> _enemies = [];
     private readonly List<WorldItemDrop> _drops = [];
     private readonly HashSet<CombatantId> _defeated = [];
@@ -64,6 +75,14 @@ public partial class GreyboxArena
             return;
         }
 
+        var elapsed = _runtime.GameTime - _lastManaRecovery;
+
+        if (elapsed >= TimeSpan.FromSeconds(1))
+        {
+            new ManaRecoveryService(_runtime.CombatState).Recover(Player.CombatantId, elapsed, ManaPerSecond);
+            _lastManaRecovery = _runtime.GameTime;
+        }
+
         _drops.RemoveAll(drop => !GodotObject.IsInstanceValid(drop) || drop.Collected);
 
         if (_pendingRound && PlayerIsAlive())
@@ -78,14 +97,16 @@ public partial class GreyboxArena
                 continue;
             }
 
-            var drop = new WorldItemDrop { Name = $"Loot{Guid.NewGuid():N}", Position = enemy.Position };
-            drop.Configure(StarterItemCatalog.RollDrop(enemy.CombatantId, new RandomDiceRoller(_roundRandom)));
-            AddChild(drop);
-            _drops.Add(drop);
+            CreateDrop(StarterItemCatalog.RollDrop(enemy.CombatantId, new RandomDiceRoller(_roundRandom)), enemy.Position);
             enemy.GetRequiredComponent<ActorState>().PhysicsStep(0);
             enemy.SetPhysicsProcess(false);
             enemy.CollisionLayer = enemy.CollisionMask = 0;
             enemy.Hide();
+        }
+
+        if (RoundNumber > 0 && _enemies.Count < EnemiesPerRound && _defeated.Count == _enemies.Count && PlayerIsAlive())
+        {
+            SpawnPair();
         }
 
         if (!RoundComplete && RoundNumber > 0 && _defeated.Count == EnemiesPerRound && PlayerIsAlive())
@@ -111,18 +132,29 @@ public partial class GreyboxArena
         return true;
     }
 
-    /// <summary>Finds the nearest uncollected item within 2.5 world units of a living player.</summary>
-    /// <returns>The nearby drop, or null when no pickup is available.</returns>
-    public WorldItemDrop NearestDrop() => PlayerIsAlive() ? Drops
+    /// <summary>Lists uncollected items within 2.5 world units in a stable nearest-first order.</summary>
+    /// <returns>The currently reachable items, or an empty list for defeated players.</returns>
+    public IReadOnlyList<WorldItemDrop> NearbyDrops() => PlayerIsAlive() ? Drops
         .Where(drop => drop.GlobalPosition.DistanceSquaredTo(Player.GlobalPosition) <= 6.25f)
         .OrderBy(drop => drop.GlobalPosition.DistanceSquaredTo(Player.GlobalPosition))
-        .FirstOrDefault() : null;
+        .ThenBy(drop => drop.Item.Id, StringComparer.Ordinal)
+        .ToArray() : [];
 
-    /// <summary>Attempts a nearby pickup without consuming or rerolling rejected drops.</summary>
-    /// <returns>True only when the item was granted and its world representation removed.</returns>
-    public bool PickUpNearest()
+    /// <summary>Finds the nearest uncollected item within pickup range of a living player.</summary>
+    /// <returns>The nearby drop, or null when none is available.</returns>
+    public WorldItemDrop NearestDrop() => NearbyDrops().FirstOrDefault();
+
+    /// <summary>Picks the nearby-menu selection, falling back to the nearest item.</summary>
+    /// <returns>True when the selected captured item became owned.</returns>
+    public bool PickUpNearest() => PickUpItem(GetNode<ArenaHud>("Presentation").SelectedLootId ?? NearestDrop()?.Item.Id);
+
+    /// <summary>Attempts a specific nearby pickup without consuming or rerolling rejected drops.</summary>
+    /// <param name="itemId">The selected world instance.</param>
+    /// <param name="destination">Optional exact top-left bag cell for native dragging.</param>
+    /// <returns>True only after successful ownership publication.</returns>
+    public bool PickUpItem(string itemId, InventoryPosition? destination = null)
     {
-        var drop = NearestDrop();
+        var drop = NearbyDrops().FirstOrDefault(value => value.Item.Id == itemId);
 
         if (drop is null)
         {
@@ -131,7 +163,7 @@ public partial class GreyboxArena
 
         return drop.TryCollect(item =>
         {
-            var result = GetNode<ArenaHud>("Presentation").AcquireItem(item);
+            var result = GetNode<ArenaHud>("Presentation").AcquireItem(item, destination);
             _pickupFeedback = result == ItemAcquisitionStatus.Acquired
                 ? L.Format($"Picked up: {L.Text(item.Base.Name)}")
                 : result == ItemAcquisitionStatus.InventoryFull ? L.Text("Inventory full. The item remains on the ground.")
@@ -140,6 +172,23 @@ public partial class GreyboxArena
 
             return result == ItemAcquisitionStatus.Acquired;
         });
+    }
+
+    /// <summary>Releases a bag item at the player's feet, preserving its exact captured instance.</summary>
+    /// <param name="itemId">The owned bag identity; equipped items must first be removed.</param>
+    /// <returns>True when one item left ownership and entered the world.</returns>
+    public bool DiscardItem(string itemId)
+    {
+        var item = new ItemReleaseService(_runtime.CombatState).Release(Player.CombatantId, itemId);
+
+        if (item is null)
+        {
+            return false;
+        }
+
+        CreateDrop(item, Player.Position);
+
+        return true;
     }
 
     /// <summary>Gets a localized actor label while leaving scene node identities unchanged.</summary>
@@ -152,18 +201,19 @@ public partial class GreyboxArena
         return RoundsEnabled && index >= 0 ? L.Format($"Sentinel {index + 1}") : L.Text(actor.Name);
     }
 
+    private void CreateDrop(ItemInstance item, Vector3 position)
+    {
+        var drop = new WorldItemDrop { Name = $"Loot{Guid.NewGuid():N}", Position = position };
+        drop.Configure(item);
+        AddChild(drop);
+        _drops.Add(drop);
+    }
+
     private bool PlayerIsAlive() => !_runtime.CombatState.Read(Player.CombatantId, Player.CombatantId).Source.IsDefeated;
 
     private void SpawnRound()
     {
         _pendingRound = false;
-        var positions = PlanSpawns();
-
-        if (positions.Count != EnemiesPerRound)
-        {
-            throw new InvalidOperationException("The authored courtyard could not provide ten clear, separated enemy spawns.");
-        }
-
         StopProjectiles();
         var first = RoundNumber == 0 ? Opponent : null;
 
@@ -181,15 +231,28 @@ public partial class GreyboxArena
         _defeated.Clear();
         RoundNumber++;
         RoundComplete = false;
+        Player.GetRequiredComponent<CombatAwareness>().Selection.Reset();
+        SpawnPair(first);
+    }
+
+    private void SpawnPair(Enemy first = null)
+    {
+        var positions = PlanSpawns();
+
+        if (positions.Count != EnemiesPerPair)
+        {
+            throw new InvalidOperationException("The authored courtyard could not provide two clear enemy spawns.");
+        }
+
         var scene = GD.Load<PackedScene>("res://Arena/Enemy.tscn");
 
-        for (var index = 0; index < EnemiesPerRound; index++)
+        for (var index = 0; index < EnemiesPerPair; index++)
         {
             var enemy = index == 0 && first is not null ? first : scene.Instantiate<Enemy>();
 
             if (enemy != first)
             {
-                enemy.Name = $"Round{RoundNumber}Enemy{index + 1}";
+                enemy.Name = $"Round{RoundNumber}Enemy{_enemies.Count + 1}";
                 enemy.Position = positions[index];
                 AddChild(enemy);
                 ConfigureOpponent(enemy);
@@ -199,8 +262,7 @@ public partial class GreyboxArena
             _enemies.Add(enemy);
         }
 
-        Opponent = _enemies[0];
-        Player.GetRequiredComponent<CombatAwareness>().Selection.Reset();
+        Opponent = _enemies.First(enemy => !_defeated.Contains(enemy.CombatantId));
         GetNode<ArenaHud>("Presentation").RefreshParticipants();
     }
 
@@ -210,14 +272,14 @@ public partial class GreyboxArena
         var exclusions = new global::Godot.Collections.Array<Rid>(_enemies.Select(enemy => enemy.GetRid()));
         using var shape = new CapsuleShape3D { Radius = 0.65f, Height = 1.8f };
 
-        for (var attempt = 0; attempt < 512 && positions.Count < EnemiesPerRound; attempt++)
+        for (var attempt = 0; attempt < 512 && positions.Count < EnemiesPerPair; attempt++)
         {
             TrySpawnPoint(new Vector3(-29 + (float)_roundRandom.NextDouble() * 24, 0, 11 + (float)_roundRandom.NextDouble() * 23), positions, exclusions, shape);
         }
 
-        for (var z = 12; z <= 34 && positions.Count < EnemiesPerRound; z += 3)
+        for (var z = 12; z <= 34 && positions.Count < EnemiesPerPair; z += 3)
         {
-            for (var x = -28; x <= -5 && positions.Count < EnemiesPerRound; x += 3)
+            for (var x = -28; x <= -5 && positions.Count < EnemiesPerPair; x += 3)
             {
                 TrySpawnPoint(new Vector3(x, 0, z), positions, exclusions, shape);
             }

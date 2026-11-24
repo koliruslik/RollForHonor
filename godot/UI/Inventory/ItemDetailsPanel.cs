@@ -15,6 +15,9 @@ public partial class ItemDetailsPanel : Control
     /// <summary>Raised when this pinned card is dismissed.</summary>
     public event Action Closed;
 
+    /// <summary>Raised when an unequipped selected item is discarded into the world.</summary>
+    public event Action DropRequested;
+
     /// <summary>Raised when the pointer inspects affixes contributing to a highlighted property.</summary>
     public event Action<string> AffixHovered;
 
@@ -33,6 +36,7 @@ public partial class ItemDetailsPanel : Control
     private RichTextLabel _properties;
     private Button _action;
     private Button _close;
+    private Button _discard;
     private Label _status;
     private Action _activate;
     private ItemInstance _item;
@@ -78,6 +82,9 @@ public partial class ItemDetailsPanel : Control
         };
         _action = UiLayout.Place(_panel, UiLayout.Button(L.Text("Equip"), () => _activate?.Invoke(), true), new Rect2(20, 536, 280, 48));
         _action.Name = "Action";
+        _discard = UiLayout.Place(_panel, UiLayout.Button(L.Text("Drop item"), () => DropRequested?.Invoke()), new Rect2(20, 590, 280, 44));
+        _discard.Name = "Discard";
+        _discard.Hide();
         _status = UiLayout.Place(_panel, UiLayout.Text(L.Text("Hold Alt for ranges and available tiers"), 12, new Color(HonorTheme.Muted, 0.55f)), new Rect2(20, 604, 280, 52));
         _status.Name = "Status";
         _status.AutowrapMode = TextServer.AutowrapMode.WordSmart;
@@ -127,6 +134,7 @@ public partial class ItemDetailsPanel : Control
         _rarity.AddThemeColorOverride("font_color", color);
         _icon.Texture = GD.Load<Texture2D>($"res://UI/Assets/{ItemPresentation.Icon(item, slot)}.svg");
         _action.Visible = !_hover;
+        _discard.Visible = !_hover && !equipped && DropRequested is not null;
         _action.Disabled = slot is null;
         L.SetText(_action, slot is null ? L.Text("Cannot equip") : equipped ? L.Format($"Unequip · {slotName}") : L.Format($"Equip · {slotName}"));
         _activate = activate;
@@ -143,6 +151,7 @@ public partial class ItemDetailsPanel : Control
         ShowItem(item, slot, true, null);
         L.SetText(_caption, L.Text("CURRENTLY EQUIPPED"));
         _action.Hide();
+        _discard.Hide();
         RefreshLayout();
     }
 
@@ -190,7 +199,7 @@ public partial class ItemDetailsPanel : Control
     {
         var actionHeight = _action.Visible ? Mathf.Max(48, _action.GetCombinedMinimumSize().Y) : 0;
         var statusHeight = Mathf.Max(24, _status.GetCombinedMinimumSize().Y);
-        var footerHeight = 16 + actionHeight + (_action.Visible ? 20 : 0) + statusHeight + 24;
+        var footerHeight = 16 + actionHeight + (_action.Visible ? 20 : 0) + (_discard.Visible ? 52 : 0) + statusHeight + 24;
         var contentLimit = Mathf.Max(24, AvailableHeight() - 180 - footerHeight);
         var contentHeight = Mathf.Clamp(_properties.GetContentHeight() + 4, 24, contentLimit);
         _properties.Size = new Vector2(280, contentHeight);
@@ -212,6 +221,13 @@ public partial class ItemDetailsPanel : Control
             _action.Position = new Vector2(20, top);
             _action.Size = new Vector2(280, actionHeight);
             top += actionHeight + 20;
+        }
+
+        if (_discard.Visible)
+        {
+            _discard.Position = new Vector2(20, top);
+            _discard.Size = new Vector2(280, 44);
+            top += 52;
         }
 
         _status.Position = new Vector2(20, top);

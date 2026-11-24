@@ -4,6 +4,7 @@ using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
 using RollForHonor.Application.Equipment.Ports;
 using RollForHonor.Application.Items;
+using RollForHonor.Application.Resources;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Changes;
 using RollForHonor.Domain.Combat.State.Models;
@@ -21,7 +22,7 @@ namespace RollForHonor.Infrastructure.Combat;
 /// Item acquisition publishes version-checked ownership after Application validates bag capacity; administrative grants bypass capacity. Transfers and persistence are not implemented.
 /// Nothing is persisted, and a new adapter starts a separate session.
 /// </remarks>
-public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter
+public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter, IItemReleaseStateAdapter, IManaRecoveryStateAdapter
 {
     private readonly object _gate = new();
     private SessionData _data = new();

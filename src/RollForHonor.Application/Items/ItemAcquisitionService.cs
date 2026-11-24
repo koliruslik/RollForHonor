@@ -23,11 +23,12 @@ public sealed class ItemAcquisitionService
     /// <param name="owner">The stat-managed recipient.</param>
     /// <param name="item">The immutable dropped instance.</param>
     /// <param name="layout">The current bag layout, excluding equipped items.</param>
+    /// <param name="destination">Optional exact top-left cell; omitted uses the first fitting rectangle.</param>
     /// <returns>The capacity, ownership or atomic publication result.</returns>
     /// <exception cref="ArgumentNullException">An input is null.</exception>
     /// <exception cref="InvalidOperationException">The layout does not exactly represent the owner's current bag.</exception>
     /// <exception cref="KeyNotFoundException">The owner is not registered.</exception>
-    public ItemAcquisitionStatus Acquire(CombatantId owner, ItemInstance item, InventoryGridLayout layout)
+    public ItemAcquisitionStatus Acquire(CombatantId owner, ItemInstance item, InventoryGridLayout layout, InventoryPosition? destination = null)
     {
         ArgumentNullException.ThrowIfNull(owner);
         ArgumentNullException.ThrowIfNull(item);
@@ -55,7 +56,9 @@ public sealed class ItemAcquisitionService
             throw new InvalidOperationException("The pickup layout must represent every unequipped owned item in the fixed bag.");
         }
 
-        if (!placement.TryFindSpace(layout, item.Base.Footprint, out _))
+        if (destination is { } position
+            ? !placement.CanPlace(layout, item.Id, item.Base.Footprint, position)
+            : !placement.TryFindSpace(layout, item.Base.Footprint, out _))
         {
             return ItemAcquisitionStatus.InventoryFull;
         }
