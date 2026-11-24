@@ -28,10 +28,10 @@ public sealed class GodotRoundTest : TestClass
     {
     }
 
-    /// <summary>Ten distinct, separated actors spawn once; ten deaths produce ten stable drops and unlimited free time.</summary>
+    /// <summary>Five successive pairs produce ten stable drops and unlimited free time after the tenth defeat.</summary>
     /// <returns>Completes after physics has spawned, defeated and replaced a full round.</returns>
     [Test]
-    public async Task TenEnemiesCompleteOneRoundAndPreserveLootIntoTheNext()
+    public async Task PairsCompleteOneRoundAndPreserveLootIntoTheNext()
     {
         var arena = Create();
 
@@ -39,13 +39,13 @@ public sealed class GodotRoundTest : TestClass
         {
             await Frames(3);
             StopThinking(arena);
-            arena.Enemies.Count.ShouldBe(10);
+            arena.Enemies.Count.ShouldBe(2);
             arena.RoundNumber.ShouldBe(1);
             arena.Enemies
                 .Select(enemy => enemy.CombatantId)
                 .Distinct()
                 .Count()
-                .ShouldBe(10);
+                .ShouldBe(2);
             var positions = arena.Enemies
                 .Select(enemy => enemy.Position)
                 .ToArray();
@@ -58,12 +58,20 @@ public sealed class GodotRoundTest : TestClass
                 .ShouldBeGreaterThan(2.9f);
             arena.StartNextRound().ShouldBeFalse();
 
-            foreach (var enemy in arena.Enemies.Take(9))
+            Defeat(arena, arena.Enemies[0].CombatantId);
+            await Frames(2);
+            arena.DefeatedCount.ShouldBe(1);
+            arena.Enemies.Count.ShouldBe(2);
+
+            for (var defeated = 1; defeated < 9; defeated++)
             {
+                var enemy = arena.Enemies.First(value => !value.GetRequiredComponent<RollForHonor.Godot.Gameplay.Actors.ActorState>().IsDefeated);
                 Defeat(arena, enemy.CombatantId);
+                await Frames(2);
+                StopThinking(arena);
+                (arena.Enemies.Count - arena.DefeatedCount).ShouldBeLessThanOrEqualTo(2);
             }
 
-            await Frames(2);
             arena.DefeatedCount.ShouldBe(9);
             arena.RoundComplete.ShouldBeFalse();
             arena.Drops.Count.ShouldBe(9);
@@ -84,6 +92,7 @@ public sealed class GodotRoundTest : TestClass
             arena.Drops
                 .Select(drop => drop.Item)
                 .ShouldBe(items);
+            arena.Enemies.Count.ShouldBe(10);
             var hud = arena.GetNode<ArenaHud>("Presentation");
             hud.GetNode<Panel>("Root/Design/RoundComplete").Visible.ShouldBeTrue();
             arena.Player.Position = new Vector3(35, 0.1f, -35);
@@ -93,7 +102,7 @@ public sealed class GodotRoundTest : TestClass
             StopThinking(arena);
             arena.RoundNumber.ShouldBe(2);
             arena.DefeatedCount.ShouldBe(0);
-            arena.Enemies.Count.ShouldBe(10);
+            arena.Enemies.Count.ShouldBe(2);
             arena.Drops
                 .Select(drop => drop.Item)
                 .ShouldBe(items);
@@ -190,7 +199,7 @@ public sealed class GodotRoundTest : TestClass
         }
     }
 
-    /// <summary>Different seeds still fill the courtyard with ten unique, separated spawns.</summary>
+    /// <summary>Different seeds place two unique, separated spawns in the courtyard.</summary>
     /// <returns>Completes after multiple native physics spawn passes.</returns>
     [Test]
     public async Task SpawnSeedsProduceDifferentValidRounds()
@@ -208,7 +217,7 @@ public sealed class GodotRoundTest : TestClass
                 var positions = arena.Enemies
                     .Select(enemy => enemy.Position)
                     .ToArray();
-                positions.Length.ShouldBe(10);
+                positions.Length.ShouldBe(2);
                 positions.All(point => point.Y < 0.3f).ShouldBeTrue();
                 positions
                     .SelectMany((point, index) => positions
@@ -228,6 +237,119 @@ public sealed class GodotRoundTest : TestClass
             {
                 arena.Free();
             }
+        }
+    }
+
+    /// <summary>Real card discard, selected-G pickup and exact bag drops preserve identities and reject stale range.</summary>
+    /// <returns>Completes after native menu and inventory controls have refreshed.</returns>
+    [Test]
+    public async Task NearbyLootSupportsDiscardSelectionAndExactBagDragging()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            var state = arena.GetParent<GameBootstrap>().CombatState;
+            var owner = arena.Player.CombatantId;
+            hud.ToggleInventory();
+            var grid = (InventoryGridView)hud.FindChild("Grid", true, false);
+            var bow = state.ReadEquipment(owner).OwnedItems.Values.Single(item => item.Base.Id == "ashen-longbow");
+            var oldPosition = grid.Layout.Placements[bow.Id].Position;
+            var bowCell = (ItemCell)hud.FindChild("ashen-longbow", true, false);
+            bowCell.EmitSignal(Button.SignalName.Pressed);
+            hud.GetNode<Button>("Root/Design/InventoryOverlay/ItemDetails/Card/Discard").EmitSignal(Button.SignalName.Pressed);
+            state.ReadEquipment(owner).OwnedItems.ContainsKey(bow.Id).ShouldBeFalse();
+            arena.Drops.Single().Item.ShouldBeSameAs(bow);
+            var ring = state.ReadEquipment(owner).OwnedItems.Values.First(item => item.Base.Footprint.Width == 1 && item.Base.Footprint.Height == 1);
+            arena.DiscardItem(ring.Id).ShouldBeTrue();
+            await Frames(2);
+            hud._Process(0);
+            var panel = hud.GetNode<NearbyLootPanel>("Root/Design/NearbyLoot");
+            panel.Visible.ShouldBeTrue();
+            var entries = panel.FindChildren("*", "Button", true, false)
+                .OfType<LootEntry>()
+                .ToArray();
+            entries.Length.ShouldBe(2);
+            entries.Single(entry => entry.Item.Id == ring.Id).EmitSignal(Control.SignalName.MouseEntered);
+            arena._UnhandledKeyInput(new InputEventKey { PhysicalKeycode = Key.G, Pressed = true });
+            state.ReadEquipment(owner).OwnedItems[ring.Id].ShouldBeSameAs(ring);
+            arena.Drops.Single().Item.ShouldBeSameAs(bow);
+            hud._Process(0);
+            var payload = new global::Godot.Collections.Dictionary { ["rfh-item-id"] = bow.Id, ["rfh-grab-cell"] = Vector2I.Zero };
+            var occupied = grid.Layout.Placements.Values.First().Position;
+            var blockedPoint = new Vector2(occupied.Column, occupied.Row) * InventoryGridView.CellSize + Vector2.One;
+            grid._CanDropData(blockedPoint, payload).ShouldBeFalse();
+            grid._DropData(blockedPoint, payload);
+            arena.Drops.Count.ShouldBe(1);
+            var point = new Vector2(oldPosition.Column, oldPosition.Row) * InventoryGridView.CellSize + Vector2.One;
+            var playerPosition = arena.Player.Position;
+            arena.Player.Position += new Vector3(20, 0, 0);
+            grid._CanDropData(point, payload).ShouldBeFalse();
+            arena.PickUpItem(bow.Id).ShouldBeFalse();
+            arena.Player.Position = playerPosition;
+            grid._CanDropData(point, payload).ShouldBeTrue();
+            grid._DropData(point, payload);
+            grid.Layout.Placements[bow.Id].Position.ShouldBe(oldPosition);
+            state.ReadEquipment(owner).OwnedItems[bow.Id].ShouldBeSameAs(bow);
+            arena.Drops.Count.ShouldBe(0);
+            arena.DiscardItem(bow.Id).ShouldBeTrue();
+            await Frames(2);
+            hud._Process(0);
+            panel.FindChildren("*", "Button", true, false)
+                .OfType<LootEntry>()
+                .Single()
+                .EmitSignal(Button.SignalName.Pressed);
+            state.ReadEquipment(owner).OwnedItems[bow.Id].ShouldBeSameAs(bow);
+            arena.Drops.Count.ShouldBe(0);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>Spent mana returns during game time, pauses with the tree and stops after player defeat.</summary>
+    /// <returns>Completes after the round host and projectile capability are initialized.</returns>
+    [Test]
+    public async Task ManaRecoveryUsesUnpausedGameTimeAndStopsAfterDefeat()
+    {
+        var arena = Create();
+        var tree = TestScene.GetTree();
+        var previousPause = tree.Paused;
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var runtime = arena.GetParent<GameBootstrap>();
+            var owner = arena.Player.CombatantId;
+            arena.Player.GetRequiredComponent<RollForHonor.Godot.Gameplay.Combat.ProjectileAttack>().RequestAttack(arena.Player.Position + Vector3.Right * 5 + Vector3.Up);
+            decimal Mana() => runtime.CombatState.ReadForStart(owner, "arena-shot", Guid.NewGuid()).Resources.Single().Amount;
+            var spent = Mana();
+            spent.ShouldBeLessThan(500);
+            runtime._Process(1);
+            arena._PhysicsProcess(0);
+            Mana().ShouldBeGreaterThan(spent);
+            var time = runtime.GameTime;
+            tree.Paused = true;
+            runtime._Process(3);
+            arena._PhysicsProcess(0);
+            runtime.GameTime.ShouldBe(time);
+            tree.Paused = false;
+            runtime.CombatState.UpdateStats(owner, new ActorStatDefinition { MaxHealth = 100, MaxMana = 1000 }.CreateProfile());
+            Defeat(arena, owner);
+            var before = Mana();
+            runtime._Process(2);
+            arena._PhysicsProcess(0);
+            Mana().ShouldBe(before);
+        }
+        finally
+        {
+            tree.Paused = previousPause;
+            arena.Free();
         }
     }
 

@@ -108,6 +108,72 @@ public sealed class ItemAcquisitionTests
         Assert.Equal(version, state.ReadEquipment(owner).Version);
     }
 
+    /// <summary>An occupied requested rectangle rejects even when automatic placement elsewhere would succeed.</summary>
+    [Fact]
+    public void ExactPickupChecksTheChosenRectangle()
+    {
+        var state = new InMemoryCombatState();
+        var owner = new CombatantId(Guid.NewGuid());
+        state.AddStatCombatant(owner, new StatProfile(new StatBlock()));
+        var blocker = Item("blocker", 2, 2);
+        state.RegisterOwnedItem(owner, blocker);
+        var grid = new InventoryGridService();
+        grid.TryPlace(new(12, 5), blocker.Id, blocker.Base.Footprint, new(0, 0), out var layout);
+        var service = new ItemAcquisitionService(state);
+        var loot = Item("exact", 2, 3);
+        var version = state.ReadEquipment(owner).Version;
+
+        Assert.Equal(ItemAcquisitionStatus.InventoryFull, service.Acquire(owner, loot, layout, new(1, 1)));
+        Assert.Equal(ItemAcquisitionStatus.InventoryFull, service.Acquire(owner, loot, layout, new(11, 4)));
+        Assert.Equal(version, state.ReadEquipment(owner).Version);
+        Assert.Equal(ItemAcquisitionStatus.Acquired, service.Acquire(owner, loot, layout, new(10, 2)));
+        Assert.Same(loot, state.ReadEquipment(owner).OwnedItems[loot.Id]);
+    }
+
+    /// <summary>Release and reacquisition preserve the original immutable item without duplication.</summary>
+    [Fact]
+    public void ReleaseRetainsCapturedValuesAndRejectsStaleOrDuplicateRequests()
+    {
+        var state = new InMemoryCombatState();
+        var owner = new CombatantId(Guid.NewGuid());
+        state.AddStatCombatant(owner, new StatProfile(new StatBlock()));
+        var item = Item("release", 1, 1);
+        state.RegisterOwnedItem(owner, item);
+        var version = state.ReadEquipment(owner).Version;
+        Assert.Null(state.TryReleaseItem(owner, item.Id, version - 1));
+        Assert.Same(item, new ItemReleaseService(state).Release(owner, item.Id));
+        var after = state.ReadEquipment(owner).Version;
+        Assert.Null(new ItemReleaseService(state).Release(owner, item.Id));
+        Assert.Equal(after, state.ReadEquipment(owner).Version);
+        Assert.Equal(ItemAcquisitionStatus.Acquired, new ItemAcquisitionService(state).Acquire(owner, item, new(12, 5)));
+        Assert.Same(item, state.ReadEquipment(owner).OwnedItems[item.Id]);
+    }
+
+    /// <summary>Equipped, foreign and defeated-owner releases preserve canonical ownership and the session version.</summary>
+    [Fact]
+    public void ReleaseCannotBypassEquipmentOrDefeat()
+    {
+        var state = new InMemoryCombatState();
+        var owner = new CombatantId(Guid.NewGuid());
+        state.AddStatCombatant(owner, new StatProfile(new StatBlock()));
+        var ring = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)
+            .Create("equipped", new ItemDefinition("ring", "Ring", ["ring"]), ItemRarity.Common);
+        state.RegisterOwnedItem(owner, ring);
+        var equipment = new RollForHonor.Application.Equipment.Services.EquipmentService(state);
+        equipment.EquipItem(owner, ring.Id, EquipmentSlot.RingLeft);
+        var version = state.ReadEquipment(owner).Version;
+        Assert.Null(new ItemReleaseService(state).Release(owner, ring.Id));
+        Assert.Null(new ItemReleaseService(state).Release(owner, "foreign"));
+        Assert.Equal(version, state.ReadEquipment(owner).Version);
+        equipment.UnequipItem(owner, EquipmentSlot.RingLeft);
+        var actor = state.Read(owner, owner).Source;
+        state.UpdateCombatant(new(owner, 0, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, actor.Effects, actor.Offense));
+        version = state.ReadEquipment(owner).Version;
+        Assert.Null(new ItemReleaseService(state).Release(owner, ring.Id));
+        Assert.Equal(version, state.ReadEquipment(owner).Version);
+        Assert.Same(ring, state.ReadEquipment(owner).OwnedItems[ring.Id]);
+    }
+
     private static ItemInstance Item(string id, int width, int height) => new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)
         .Create(id, new ItemDefinition("test", "Test item", footprint: new ItemFootprint(width, height)), ItemRarity.Common);
 
