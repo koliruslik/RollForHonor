@@ -208,14 +208,15 @@ public sealed class ItemAcquisitionTests
         var quiver = factory.Create("quiver", new ItemDefinition("quiver", "Quiver", ["offhand", "quiver"], footprint: new ItemFootprint(1, 2)), ItemRarity.Common);
         var full = Item("full", 12, 5);
 
-        foreach (var item in new[] { bow, quiver, full })
+        foreach (var item in new[] { bow, quiver })
         {
             state.RegisterOwnedItem(owner, item);
         }
 
         var equipment = new RollForHonor.Application.Equipment.Services.EquipmentService(state);
-        equipment.EquipItem(owner, bow.Id, EquipmentSlot.Weapon);
-        equipment.EquipItem(owner, quiver.Id, EquipmentSlot.OffHand);
+        Assert.Equal(EquipmentChangeStatus.Applied, equipment.EquipItem(owner, bow.Id, EquipmentSlot.Weapon));
+        Assert.Equal(EquipmentChangeStatus.Applied, equipment.EquipItem(owner, quiver.Id, EquipmentSlot.OffHand));
+        state.RegisterOwnedItem(owner, full);
         new InventoryGridService().TryPlace(new(12, 5), full.Id, full.Base.Footprint, new(0, 0), out var layout);
         var version = state.ReadEquipment(owner).Version;
         var release = new ItemReleaseService(state);
