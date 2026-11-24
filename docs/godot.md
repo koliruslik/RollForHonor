@@ -222,10 +222,22 @@ for acquisition ownership and capacity checks. Selected bag items can be dropped
 at the player's feet; equipped items must first be removed. The same captured
 instance survives release and reacquisition.
 
-The round host recovers 10 mana per unpaused game second in one-second batches,
-including free time. Application converts elapsed game time to a recovery request;
+The round host reads HealthRecovery and ManaRecovery from resolved stats and
+restores resources in one-second batches, including free time. Player content
+starts at 2 HP/s and 10 mana/s. Fractional HP carries while hurt; full or defeated
+actors do not bank healing. Application converts elapsed game time to a mana request;
 the adapter restores at most the live maximum under the same lock as spending.
 Full or defeated actors cause no publication. Pausing stops elapsed game time.
+
+## Sandbox tools
+
+F3 opens the live admin panel. The current catalog contains the Sentinel and
+twelve authored item entries. Generated admin items receive unique identities;
+full bags leave them on the ground. Stat edits replace non-equipment base inputs
+through the canonical adapter and preserve equipped contributions. Sandbox
+enemy spawning is queued for the next physics step, uses validated placement
+and does not change the ten-enemy round counter. Their defeat can still produce
+a drop and an action-journal entry. Gold grants wait for an implemented wallet.
 
 ## Combat laboratory
 

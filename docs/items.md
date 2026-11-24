@@ -30,7 +30,7 @@ Numbered content tiers use T1 for the strongest tier; each affix defines its own
 pool, for example T1–T16, T1–T15 or T1–T4. This is independent of item rarity.
 Author higher required power for stronger tiers: the generator selects by power
 threshold, not by parsing the tier ID. Custom IDs remain supported. The current
-starter-kit fixtures contain only their selected T2; complete numeric tier
+starter-kit fixtures contain only their temporary T1; complete numeric tier
 progression tables are not authored yet.
 
 `AffixInstance` retains its owned ID, definition/family/tier IDs, compatibility,
@@ -68,7 +68,7 @@ Engine-independent callers can supply a different table directly.
 
 | Current stat category | Allowed item operations |
 | --- | --- |
-| AttackModifier, Strength, Dexterity, Constitution, Intelligence, Luck | Flat |
+| AttackModifier, Strength, Dexterity, Constitution, Intelligence, Luck, HealthRecovery, ManaRecovery | Flat |
 | MovementSpeed, CriticalChance, CriticalMultiplier | Increased, More |
 | Global or typed DamageMultiplier | Increased, More |
 | MaxHealth, MaxMana, Armor, Evasion, typed Resistance, typed AddedDamage | Flat, Increased, More |

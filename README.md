@@ -13,11 +13,13 @@ d20 attacks, typed damage, defenses and effects.
   with a completion banner and unlimited free time before starting the next round.
 - One persistent item drop per defeated enemy; nearby loot supports G, mouse pickup
   and dragging into an open bag. Bag items can be dropped back into the world.
-- Mana recovery of 10 per game second, capped at the current maximum.
+- Flat health/mana recovery stats, initially 2 HP/s and 10 mana/s for the player.
+- An action journal for combat, defeats, pickups, equipment and sandbox changes.
+- Compact F3 admin tools for current monster/item catalogs and actor base stats.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
-- Five primary attributes in a 3+2 icon grid: Strength, Dexterity, Constitution, Intelligence and Luck.
+- Five primary attributes in a staggered 3+2 grid of clickable d20 tiles: Strength, Dexterity, Constitution, Intelligence and Luck.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
 - Main-hand/offhand equipment with owned items, atomic stat updates and version-checked equip/unequip operations.
 - Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
@@ -59,6 +61,7 @@ or restarting creates a fresh session and resets its state.
 | Left click | Select/clear a world target; pin an item for comparison |
 | Alt | Show affix ranges, quality and tiers while inspecting items |
 | Mouse wheel | Zoom |
+| F3 | Toggle live admin tools |
 | G | Pick up the selected nearby item within 2.5 world units |
 | I / C | Toggle inventory / character stats independently; gameplay continues |
 | H / Reference | Open the searchable game reference; gameplay pauses |

@@ -31,11 +31,17 @@ derived HP maxima/defenses; change its profile through `UpdateStats` when no gea
 is equipped, or `UpdateNonEquipmentStats` to preserve equipped contributions. Explicit
 current-health/effect updates retain its resolved offensive inputs.
 
+HealthRecovery and ManaRecovery are flat points per game second; only Flat
+modifiers are accepted. Player content starts at 2 HP/s and 10 mana/s. Other
+definitions default to zero. Recovery reads the resolved rates and current
+maxima; it cannot revive actors. Whole HP is restored with a retained fractional
+remainder while hurt, and full/defeated actors do not bank recovery.
+
 ## Calculation
 
 The supported attributes are MaxHealth, MaxMana, Armor, Evasion, MovementSpeed,
 AttackModifier, CriticalChance, CriticalMultiplier, typed Resistance and global
-or typed DamageMultiplier, plus typed AddedDamage. Strength, Dexterity, Constitution, Intelligence and
+or typed DamageMultiplier, plus typed AddedDamage, HealthRecovery and ManaRecovery. Strength, Dexterity, Constitution, Intelligence and
 Luck are also represented as allocated primary points and shown in the character
 panel. They default to zero; progression and derivation of HP, damage, defenses
 or loot from these points are not configured. Item bonuses to these five

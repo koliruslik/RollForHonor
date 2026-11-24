@@ -55,8 +55,9 @@ and character windows do not pause movement, combat or the shared clock.
 
 The character window follows the left-hand wireframe layout and reads resolved
 stats from the owning adapter. Its top area contains Strength, Dexterity,
-Constitution, Intelligence and Luck in three columns and two rows. Each tile
-has an icon above its actual resolved value and a localized name tooltip.
+Constitution, Intelligence and Luck in a staggered 3+2 arrangement of faceted d20 tiles. Each tile has an icon
+above its resolved value. Click or focus/activate it to open the shared
+explanation, including the intended role and current implementation limits.
 The attributes default to zero; no derived combat or loot formulas are implied.
 Health and mana show current/max values. Typed
 damage values show signed percentage bonuses: a resolved coefficient of 1.06
@@ -76,13 +77,33 @@ When all ten enemies are defeated, a nonmodal banner announces the end of the
 round and free time. Continue exploring dismisses it; Next round remains
 available beside the objective. No countdown or automatic wave interrupts loot
 collection. Two enemies appear at a time, with the next pair waiting for both
-defeats. Mana recovers at 10 per unpaused game second, including free time.
+defeats. Health and mana recover from their resolved flat points-per-second
+stats, initially 2 HP/s and 10 mana/s, including free time. The sheet displays
+these rates as units per second rather than percentage bonuses. Recovery stops
+on pause and after defeat; fractional HP accumulates until a whole point can heal.
 
 Nearby items appear in a scrollable menu within 2.5 world units. The nearest is
 selected initially; hover selects another row for G, click takes that exact item,
 and dragging a row into the open inventory places it in the chosen free rectangle.
+The compact translucent menu grows to at most five visible rows and scrolls
+additional entries. A high-contrast five-game-second notice reports full bags.
+Character-sheet scrolling is consumed by the GUI and does not zoom the world.
 Rows persist while dragging, and moving out of range rejects the pickup. Failed
 pickup preserves the world item and displays feedback even with inventory open.
+
+## Action journal and admin tools
+
+The bounded action journal retains combat calculations and dice links alongside
+defeats, pickups, dropped items, equipment changes and admin mutations. Noncombat
+entries do not replace the last d20 result. Future gold awards can enter the same
+action-recording API when an actual wallet exists.
+
+F3 opens compact live World/Items/Stats tabs. Spawn current catalog enemies,
+create current catalog items, or edit player/enemy base stats; equipment bonuses
+remain composed through the canonical adapter. The world keeps running. Sandbox
+enemies do not count toward round completion. A full bag places an admin-created
+item at the player's feet. Gold grants await the wallet; the panel reports that
+limit explicitly.
 
 ## Equipment, inventory and item cards
 
@@ -118,12 +139,10 @@ Hover an item for a cursor-following card clamped to the viewport. Left-click
 pins it for comparison. Affix names, selected tiers and individual rolled values
 are always visible beneath the base properties. Hold Alt to add captured ranges
 and quality in the format `value [minimum/maximum] quality% tier`, plus the actual
-tier pool of each affix. Releasing Alt hides this additional information while
-keeping the affixes visible. T1 denotes the strongest content tier; pools can end
-at T16, T15, T4 or another authored tier. A complete numbered pool is shown as
-`T1–T16`; incomplete or custom pools list their actual IDs without inventing tiers.
-The current starter-kit fixtures define only T2, so their available pool is T2;
-complete progression and balance tables remain content work.
+available rank bounds. Releasing Alt hides this additional information while
+keeping affixes visible. Available ranks always display as `T1` or `T1–Tx`,
+with T1 strongest. Current authored affixes temporarily use T1 only. Complete
+rank tables and balance are deferred until after the main reward/upgrade loop.
 Damage and resistance text use matching, muted semantic colors for each of the
 seven damage types. The common word "damage" stays neutral and is not part of
 text links; the type or modifier is the underlined target. Item rarity retains its
