@@ -9,9 +9,11 @@ d20 attacks, typed damage, defenses and effects.
 ## Current state
 
 - WASD movement, mouse-facing, a following top-down camera and aimed projectiles.
-- Rounds of ten randomly placed ranged enemies using the shared combat pipeline,
+- Rounds of ten randomly placed ranged enemies, appearing in successive pairs,
   with a completion banner and unlimited free time before starting the next round.
-- One persistent item drop per defeated enemy; nearby pickup checks the fixed bag capacity.
+- One persistent item drop per defeated enemy; nearby loot supports G, mouse pickup
+  and dragging into an open bag. Bag items can be dropped back into the world.
+- Mana recovery of 10 per game second, capped at the current maximum.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
@@ -57,7 +59,7 @@ or restarting creates a fresh session and resets its state.
 | Left click | Select/clear a world target; pin an item for comparison |
 | Alt | Show affix ranges, quality and tiers while inspecting items |
 | Mouse wheel | Zoom |
-| G | Pick up the nearest item within 2.5 world units |
+| G | Pick up the selected nearby item within 2.5 world units |
 | I / C | Toggle inventory / character stats independently; gameplay continues |
 | H / Reference | Open the searchable game reference; gameplay pauses |
 | Escape | Close an overlay or open pause/settings/navigation |
@@ -65,7 +67,7 @@ or restarting creates a fresh session and resets its state.
 | F2 | Open the combat laboratory |
 
 After the tenth defeat, explore and collect loot for as long as you like.
-Choose Next round to spawn another ten enemies; health, mana, equipment and
+Choose Next round to start another five pairs; health, mana, equipment and
 uncollected loot carry over. Primary attributes currently default to zero;
 progression and derived attribute formulas are not implemented.
 

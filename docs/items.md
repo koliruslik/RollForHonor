@@ -171,9 +171,16 @@ owns slot validation, canonical item ownership and atomic loadout/stat updates.
 The [game interface](interface.md) supports the authored starter kit and real equip/unequip.
 `ItemAcquisitionService` validates the supplied 12×5 bag layout against all
 currently unequipped owned items, including footprints, bounds and overlap. It
-finds a free rectangle without rearranging existing placements, then requests
+finds a free rectangle without rearranging existing placements, or validates the
+exact requested rectangle for native dragging, then requests
 an atomic version-checked grant. The adapter rejects defeated owners and
 duplicate ownership across the session. Failed pickup leaves the same captured
 instance on the ground; retrying never rerolls it. Administrative initial-kit
 grants do not use the pickup service. Crafting owned/equipped items and game
 save/load remain future work.
+
+
+`ItemReleaseService` uses a version-checked release port to remove one unequipped
+bag item from a living owner. Equipped, absent, stale and defeated-owner requests
+leave ownership unchanged. Godot then represents the same immutable instance at
+the player's feet; reacquiring it does not generate or reroll another item.

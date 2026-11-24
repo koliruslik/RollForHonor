@@ -33,7 +33,7 @@ centered 1920×1080 design surface. Captures cover 1920×1080, 1280×720 and ult
 | --- | --- |
 | I or Inventory button | Open/close inventory independently |
 | C or Character button | Toggle the character panel independently |
-| G | Pick up the nearest ground item within 2.5 world units |
+| G | Pick up the selected nearby item within 2.5 world units |
 | H or Reference button | Open the searchable reference and pause the game |
 | Escape or Menu button | Close the current overlay, or open/close pause |
 | R | Restart the arena while gameplay is active |
@@ -75,7 +75,14 @@ stats never opens or closes inventory, and vice versa.
 When all ten enemies are defeated, a nonmodal banner announces the end of the
 round and free time. Continue exploring dismisses it; Next round remains
 available beside the objective. No countdown or automatic wave interrupts loot
-collection. Nearby items display a G prompt and pickup feedback.
+collection. Two enemies appear at a time, with the next pair waiting for both
+defeats. Mana recovers at 10 per unpaused game second, including free time.
+
+Nearby items appear in a scrollable menu within 2.5 world units. The nearest is
+selected initially; hover selects another row for G, click takes that exact item,
+and dragging a row into the open inventory places it in the chosen free rectangle.
+Rows persist while dragging, and moving out of range rejects the pickup. Failed
+pickup preserves the world item and displays feedback even with inventory open.
 
 ## Equipment, inventory and item cards
 
@@ -103,6 +110,9 @@ feedback and preserves equipment, stats and ownership. World pickups use
 a version-checked ownership grant. `RegisterOwnedItem` remains an administrative
 storage grant for initial kits and fixtures.
 The grid rejects an overflowing refresh atomically; it never adds hidden rows.
+Select a bag item and choose Drop item on its card to leave it at the player's
+feet. Equipped items must first be removed through the existing equipment flow.
+Dropping and picking up preserve the exact item identity and captured rolls.
 
 Hover an item for a cursor-following card clamped to the viewport. Left-click
 pins it for comparison. Affix names, selected tiers and individual rolled values

@@ -1,6 +1,6 @@
 # Godot runtime and test scenes
 
-[Project overview](../README.md) В· [Documentation index](README.md)
+[Project overview](../README.md) · [Documentation index](README.md)
 
 ## Runtime composition
 
@@ -105,7 +105,7 @@ bus; launch/contact events feed the existing scene-owned journal directly.
 ## Greybox arena
 
 Press **F5** from `godot/project.godot` to open the title through
-`Bootstrap.tscn`, then choose Start Game. The editable `Arena.tscn` contains a 120Г—120 colored greybox
+`Bootstrap.tscn`, then choose Start Game. The editable `Arena.tscn` contains a 120×120 colored greybox
 map, obstacles, passages, 0.4 m and 4 m terraces, ramps, five stationary targets,
 an angled orthographic following camera and a directional arrow on the player.
 Normal play spawns ten red Sentinels per round; the five training targets remain
@@ -123,7 +123,7 @@ stationary. The arena uses untextured greybox materials.
 | F2 / Combat laboratory | Open the combat workbench in a fresh session |
 
 The camera follows position independently of facing. Physical WASD bindings are
-configured in Project Settings в†’ Input Map (`arena_forward/back/left/right`).
+configured in Project Settings → Input Map (`arena_forward/back/left/right`).
 The player reads held movement actions each physics step and queues discrete
 shoot commands. `PlayerInput` converts camera-relative axes into world-space
 intent; `MovementMotor` handles acceleration, braking, gravity, collisions and
@@ -197,7 +197,10 @@ creating one captured drop. The base single-enemy fixture retains its defeated b
 
 ## Rounds and loot
 
-`GreyboxArena.Rounds` places exactly ten enemies in the authored courtyard. It
+`GreyboxArena.Rounds` admits ten enemies per round in five successive pairs.
+The first pair appears at round start; the next waits for both living enemies
+to be defeated. At most two enemies are active together. Each pair is placed
+in the authored courtyard. Placement
 uses bounded random candidates followed by a bounded grid fallback, validates
 flat floor contact and capsule clearance, keeps enemies separated and away
 from the player. Spawning does not require sight of the player, who can freely
@@ -211,9 +214,18 @@ for an explicit button press. Health, mana, equipment and uncollected drops
 carry over. Player defeat prevents advancing; R creates a fresh session.
 
 Every enemy rolls one item from the authored starter pool, with fresh captured
-d100 affix qualities. G attempts the nearest pickup. A full or fragmented bag
+d100 affix qualities. A nearby-loot menu lists items within 2.5 units; G takes
+the selected row (nearest initially), clicking takes a specific item, and native
+dragging into an open bag validates the chosen rectangle. A full or fragmented bag
 leaves the exact item on the ground for a later attempt. See [items](items.md)
-for acquisition ownership and capacity checks.
+for acquisition ownership and capacity checks. Selected bag items can be dropped
+at the player's feet; equipped items must first be removed. The same captured
+instance survives release and reacquisition.
+
+The round host recovers 10 mana per unpaused game second in one-second batches,
+including free time. Application converts elapsed game time to a recovery request;
+the adapter restores at most the live maximum under the same lock as spending.
+Full or defeated actors cause no publication. Pausing stops elapsed game time.
 
 ## Combat laboratory
 
@@ -261,7 +273,7 @@ environment bodies layer 3; the projectile monitors both and ignores its source.
 The sample speed/shape relies on discrete overlap detection; this is not a
 high-speed projectile or swept-collision implementation.
 
-The scene uses a 1920Г—1080 design viewport, opening in a 1280Г—720 window with
+The scene uses a 1920×1080 design viewport, opening in a 1280×720 window with
 canvas scaling. Both stat panels expose current/maximum HP, armor, evasion,
 attack modifier, damage dice/count/flat bonus/type and every supported typed
 resistance. Resistance inputs are percentages; negative values are weaknesses.
@@ -289,7 +301,7 @@ contact, including evaded contacts; this work does not introduce a new successfu
 hit condition. Production bleeding-specific defense rules and status durations
 remain unspecified; the fixture tick pipeline uses current armor/resistance rules.
 
-Enable **Vampirism on attack** and set its percentage (0вЂ“100) on either side.
+Enable **Vampirism on attack** and set its percentage (0–100) on either side.
 `LifestealEffect` heals from actual opponent HP lost after defenses and any prior
 target health adjustments, excluding overkill. Healing rounds upward to whole
 HP and finalization clamps the source to maximum HP. Target damage and source
