@@ -26,6 +26,15 @@ public partial class ArenaHud
     private TimeSpan _capacityNoticeUntil;
     private int _dismissedRound = -1;
 
+    /// <summary>Reads the actual fixed bag layout, retaining current player-arranged positions.</summary>
+    /// <returns>The layout corresponding to canonical unequipped ownership.</returns>
+    public InventoryGridLayout ReadBagLayout()
+    {
+        _inventory.Refresh(_runtime.CombatState.ReadEquipment(_arena.Player.CombatantId));
+
+        return _inventory.CurrentLayout;
+    }
+
     /// <summary>Capacity-checks and publishes one captured pickup against the live bag layout.</summary>
     /// <param name="item">The unowned dropped instance.</param>
     /// <param name="destination">Optional exact top-left bag cell.</param>

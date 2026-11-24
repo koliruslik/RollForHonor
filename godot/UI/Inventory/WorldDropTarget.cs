@@ -3,10 +3,10 @@ using Godot;
 
 namespace RollForHonor.Godot.UI.Inventory;
 
-/// <summary>An invisible native drag destination behind the HUD, active only for owned bag drags.</summary>
+/// <summary>An invisible native drag destination behind the HUD, active only for owned inventory or equipment drags.</summary>
 public partial class WorldDropTarget : Control
 {
-    /// <summary>Gets or sets the current canonical bag-item release check.</summary>
+    /// <summary>Gets or sets the current canonical owned-item release check.</summary>
     public Func<string, bool> CanRelease { get; set; }
 
     /// <summary>Gets or sets the authoritative release operation.</summary>

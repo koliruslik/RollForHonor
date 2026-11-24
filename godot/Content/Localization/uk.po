@@ -1422,3 +1422,9 @@ msgstr "Споряджено: {0}"
 
 msgid "Removed: {0}"
 msgstr "Знято: {0}"
+
+msgid "Could not drop the item. Check nearby ground and inventory space."
+msgstr "Не вдалося викинути предмет. Перевірте вільне місце поруч і в інвентарі."
+
+msgid "Item created; waiting for free ground nearby."
+msgstr "Предмет створено; очікуємо вільного місця на землі поруч."

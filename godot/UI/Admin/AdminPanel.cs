@@ -176,13 +176,11 @@ public partial class AdminPanel : Control
         var hud = _arena.GetNode<ArenaHud>("Presentation");
         var acquired = hud.AcquireItem(item, recordAction: false) == RollForHonor.Application.Items.ItemAcquisitionStatus.Acquired;
 
-        if (!acquired)
-        {
-            _arena.PlaceAdminItem(item);
-        }
+        var placed = !acquired && _arena.PlaceAdminItem(item);
 
         hud.RecordAction(L.Format($"Admin: created {L.Text(item.Base.Name)}."));
-        SetStatus(acquired ? L.Text("Item created in inventory.") : L.Text("Item created on the ground."));
+        SetStatus(acquired ? L.Text("Item created in inventory.") : placed ? L.Text("Item created on the ground.")
+            : L.Text("Item created; waiting for free ground nearby."));
     }
 
     private void SetStatus(string message) => L.SetText(_status, message);

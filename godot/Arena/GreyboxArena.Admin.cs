@@ -35,9 +35,10 @@ public partial class GreyboxArena
         return true;
     }
 
-    /// <summary>Places a captured admin-created item at the player's feet when the bag cannot hold it.</summary>
+    /// <summary>Places or queues a captured admin-created item on free ground near the player.</summary>
     /// <param name="item">The generated immutable instance.</param>
-    public void PlaceAdminItem(ItemInstance item) => CreateDrop(item, Player.Position);
+    /// <returns>True when placed; false when retained in the pending placement queue.</returns>
+    public bool PlaceAdminItem(ItemInstance item) => CreateDrop(item, Player.Position);
 
     private void StepAdminEnemies()
     {

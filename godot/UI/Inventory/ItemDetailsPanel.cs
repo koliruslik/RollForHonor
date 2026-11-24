@@ -15,7 +15,7 @@ public partial class ItemDetailsPanel : Control
     /// <summary>Raised when this pinned card is dismissed.</summary>
     public event Action Closed;
 
-    /// <summary>Raised when an unequipped selected item is discarded into the world.</summary>
+    /// <summary>Raised when the selected owned item is discarded into the world.</summary>
     public event Action DropRequested;
 
     /// <summary>Raised when the pointer inspects affixes contributing to a highlighted property.</summary>
@@ -135,7 +135,7 @@ public partial class ItemDetailsPanel : Control
         _rarity.AddThemeColorOverride("font_color", color);
         _icon.Texture = GD.Load<Texture2D>($"res://UI/Assets/{ItemPresentation.Icon(item, slot)}.svg");
         _action.Visible = !_hover;
-        _discard.Visible = !_hover && !equipped && DropRequested is not null;
+        _discard.Visible = !_hover && DropRequested is not null;
         _action.Disabled = slot is null;
         L.SetText(_action, slot is null ? L.Text("Cannot equip") : equipped ? L.Format($"Unequip · {slotName}") : L.Format($"Equip · {slotName}"));
         _activate = activate;

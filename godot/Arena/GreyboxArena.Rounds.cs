@@ -74,6 +74,7 @@ public partial class GreyboxArena
             return;
         }
 
+        PlacePendingDrops();
         StepAdminEnemies();
         StepRecovery();
 
@@ -169,19 +170,24 @@ public partial class GreyboxArena
         });
     }
 
-    /// <summary>Releases a bag item at the player's feet, preserving its exact captured instance.</summary>
-    /// <param name="itemId">The owned bag identity; equipped items must first be removed.</param>
-    /// <returns>True when one item left ownership and entered the world.</returns>
+    /// <summary>Releases an owned item onto free nearby ground, preserving its exact captured instance.</summary>
+    /// <param name="itemId">The owned bag or equipped identity.</param>
+    /// <returns>True when one item left ownership and entered the world; false if no safe position or valid release exists.</returns>
     public bool DiscardItem(string itemId)
     {
-        var item = new ItemReleaseService(_runtime.CombatState).Release(Player.CombatantId, itemId);
+        if (!TryFindDropPosition(Player.Position, out var position))
+        {
+            return false;
+        }
+
+        var item = new ItemReleaseService(_runtime.CombatState).Release(Player.CombatantId, itemId, GetNode<ArenaHud>("Presentation").ReadBagLayout());
 
         if (item is null)
         {
             return false;
         }
 
-        CreateDrop(item, Player.Position);
+        AddDropAt(item, position);
         GetNode<ArenaHud>("Presentation").RecordAction(L.Format($"Dropped: {L.Text(item.Base.Name)}"));
 
         return true;
@@ -224,14 +230,6 @@ public partial class GreyboxArena
         }
 
         _lastManaRecovery = _runtime.GameTime;
-    }
-
-    private void CreateDrop(ItemInstance item, Vector3 position)
-    {
-        var drop = new WorldItemDrop { Name = $"Loot{Guid.NewGuid():N}", Position = position };
-        drop.Configure(item);
-        AddChild(drop);
-        _drops.Add(drop);
     }
 
     private bool PlayerIsAlive() => !_runtime.CombatState.Read(Player.CombatantId, Player.CombatantId).Source.IsDefeated;

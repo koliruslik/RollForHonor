@@ -40,21 +40,8 @@ public sealed class ItemAcquisitionService
             return ItemAcquisitionStatus.AlreadyOwned;
         }
 
-        var equipped = read.Loadout.Slots.Values
-            .Select(value => value.Id)
-            .ToHashSet(StringComparer.Ordinal);
-        var bag = read.OwnedItems.Values
-            .Where(value => !equipped.Contains(value.Id))
-            .ToDictionary(value => value.Id, StringComparer.Ordinal);
+        ItemBagLayout.Validate(read, layout);
         var placement = new InventoryGridService();
-
-        if (layout.Columns != 12 || layout.Rows != 5 || layout.Placements.Count != bag.Count
-            || layout.Placements.Values.Any(entry => !bag.TryGetValue(entry.ItemId, out var existing)
-                || entry.Footprint != existing.Base.Footprint
-                || !placement.CanPlace(layout, entry.ItemId, entry.Footprint, entry.Position)))
-        {
-            throw new InvalidOperationException("The pickup layout must represent every unequipped owned item in the fixed bag.");
-        }
 
         if (destination is { } position
             ? !placement.CanPlace(layout, item.Id, item.Base.Footprint, position)

@@ -201,6 +201,7 @@ public partial class ArenaHud : CanvasLayer
     {
         _runtime = runtime;
         _arena = arena;
+        arena.CameraRig.IsZoomBlocked = IsPointerOverInterface;
         _equipment = new EquipmentService(runtime.CombatState);
         _admin.Configure(runtime, arena);
         RefreshParticipants();
@@ -284,6 +285,25 @@ public partial class ArenaHud : CanvasLayer
 
 
 
+
+    private bool IsPointerOverInterface(Vector2 point) => _design.GetChildren()
+        .OfType<Control>()
+        .Any(control => IsInteractiveAt(control, point));
+
+    private static bool IsInteractiveAt(Control control, Vector2 point)
+    {
+        if (!control.IsVisibleInTree())
+        {
+            return false;
+        }
+
+        var local = control.GetGlobalTransformWithCanvas().AffineInverse() * point;
+
+        return control.MouseFilter != Control.MouseFilterEnum.Ignore && new Rect2(Vector2.Zero, control.Size).HasPoint(local)
+            || control.GetChildren()
+                .OfType<Control>()
+                .Any(child => IsInteractiveAt(child, point));
+    }
 
     private void RefreshWindows()
     {
@@ -409,13 +429,14 @@ public partial class ArenaHud : CanvasLayer
         var read = _runtime.CombatState.ReadEquipment(owner);
 
         return !_runtime.CombatState.Read(owner, owner).Source.IsDefeated
-            && read.OwnedItems.ContainsKey(id) && !read.Loadout.Slots.Values.Any(item => item.Id == id);
+            && read.OwnedItems.ContainsKey(id);
     }
 
     private bool DiscardOwnedItem(string id)
     {
         if (!CanDiscardItem(id) || !_arena.DiscardItem(id))
         {
+            _inventory.ShowStatus(L.Text("Could not drop the item. Check nearby ground and inventory space."));
             return false;
         }
 
