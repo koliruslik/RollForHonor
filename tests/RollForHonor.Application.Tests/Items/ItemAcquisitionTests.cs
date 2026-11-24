@@ -149,29 +149,88 @@ public sealed class ItemAcquisitionTests
         Assert.Same(item, state.ReadEquipment(owner).OwnedItems[item.Id]);
     }
 
-    /// <summary>Equipped, foreign and defeated-owner releases preserve canonical ownership and the session version.</summary>
+    /// <summary>Foreign and defeated-owner releases preserve canonical ownership and the session version.</summary>
     [Fact]
-    public void ReleaseCannotBypassEquipmentOrDefeat()
+    public void ReleaseRejectsForeignAndDefeatedOwners()
     {
         var state = new InMemoryCombatState();
         var owner = new CombatantId(Guid.NewGuid());
         state.AddStatCombatant(owner, new StatProfile(new StatBlock()));
-        var ring = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)
-            .Create("equipped", new ItemDefinition("ring", "Ring", ["ring"]), ItemRarity.Common);
-        state.RegisterOwnedItem(owner, ring);
-        var equipment = new RollForHonor.Application.Equipment.Services.EquipmentService(state);
-        equipment.EquipItem(owner, ring.Id, EquipmentSlot.RingLeft);
+        var item = Item("retained", 1, 1);
+        state.RegisterOwnedItem(owner, item);
         var version = state.ReadEquipment(owner).Version;
-        Assert.Null(new ItemReleaseService(state).Release(owner, ring.Id));
         Assert.Null(new ItemReleaseService(state).Release(owner, "foreign"));
         Assert.Equal(version, state.ReadEquipment(owner).Version);
-        equipment.UnequipItem(owner, EquipmentSlot.RingLeft);
         var actor = state.Read(owner, owner).Source;
         state.UpdateCombatant(new(owner, 0, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, actor.Effects, actor.Offense));
         version = state.ReadEquipment(owner).Version;
-        Assert.Null(new ItemReleaseService(state).Release(owner, ring.Id));
+        Assert.Null(new ItemReleaseService(state).Release(owner, item.Id));
         Assert.Equal(version, state.ReadEquipment(owner).Version);
-        Assert.Same(ring, state.ReadEquipment(owner).OwnedItems[ring.Id]);
+        Assert.Same(item, state.ReadEquipment(owner).OwnedItems[item.Id]);
+    }
+
+    /// <summary>Releasing equipped items removes their bonuses and ownership together, clamping current HP once.</summary>
+    [Fact]
+    public void EquippedReleaseRecomposesStatsWithOnePublication()
+    {
+        var state = new InMemoryCombatState();
+        var owner = new CombatantId(Guid.NewGuid());
+        state.AddStatCombatant(owner, new(new StatBlock([new(new(StatType.MaxHealth), 100)])));
+        var ring = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)
+            .Create("equipped", new ItemDefinition("ring", "Ring", ["ring"],
+                [new(new(StatType.MaxHealth), StatOperation.Flat, 50), new(new(StatType.Armor), StatOperation.Flat, 3)]), ItemRarity.Common);
+        state.RegisterOwnedItem(owner, ring);
+        new RollForHonor.Application.Equipment.Services.EquipmentService(state).EquipItem(owner, ring.Id, EquipmentSlot.RingLeft);
+        var actor = state.Read(owner, owner).Source;
+        state.UpdateCombatant(new(owner, 140, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, actor.Effects, actor.Offense));
+        var version = state.ReadEquipment(owner).Version;
+        Assert.Null(state.TryReleaseItem(owner, ring.Id, version - 1));
+        Assert.Equal(150, state.Read(owner, owner).Source.MaxHealth);
+        Assert.Same(ring, new ItemReleaseService(state).Release(owner, ring.Id));
+        var after = state.ReadEquipment(owner);
+        Assert.Equal(version + 1, after.Version);
+        Assert.Null(after.Loadout.GetItem(EquipmentSlot.RingLeft));
+        Assert.False(after.OwnedItems.ContainsKey(ring.Id));
+        Assert.Equal(100, state.Read(owner, owner).Source.MaxHealth);
+        Assert.Equal(100, state.Read(owner, owner).Source.Health);
+        Assert.Equal(0, state.GetStats(owner).Get(new(StatType.Armor)));
+    }
+
+    /// <summary>A dependent quiver needs a real bag rectangle before its main weapon can be released.</summary>
+    [Fact]
+    public void EquippedReleaseChecksDependentReturnsBeforeSpendingOwnership()
+    {
+        var state = new InMemoryCombatState();
+        var owner = new CombatantId(Guid.NewGuid());
+        state.AddStatCombatant(owner, new StatProfile(new StatBlock()));
+        var factory = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default);
+        var bow = factory.Create("bow", new ItemDefinition("bow", "Bow", ["weapon", "bow"]), ItemRarity.Common);
+        var quiver = factory.Create("quiver", new ItemDefinition("quiver", "Quiver", ["offhand", "quiver"], footprint: new ItemFootprint(1, 2)), ItemRarity.Common);
+        var full = Item("full", 12, 5);
+
+        foreach (var item in new[] { bow, quiver, full })
+        {
+            state.RegisterOwnedItem(owner, item);
+        }
+
+        var equipment = new RollForHonor.Application.Equipment.Services.EquipmentService(state);
+        equipment.EquipItem(owner, bow.Id, EquipmentSlot.Weapon);
+        equipment.EquipItem(owner, quiver.Id, EquipmentSlot.OffHand);
+        new InventoryGridService().TryPlace(new(12, 5), full.Id, full.Base.Footprint, new(0, 0), out var layout);
+        var version = state.ReadEquipment(owner).Version;
+        var release = new ItemReleaseService(state);
+        Assert.Null(release.Release(owner, bow.Id, layout));
+        Assert.Null(release.Release(owner, bow.Id));
+        Assert.Throws<InvalidOperationException>(() => release.Release(owner, bow.Id, new(12, 5)));
+        Assert.Equal(version, state.ReadEquipment(owner).Version);
+        Assert.Same(bow, state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.Weapon));
+        Assert.Same(quiver, state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.OffHand));
+        Assert.Same(full, release.Release(owner, full.Id));
+        Assert.Same(bow, release.Release(owner, bow.Id, new(12, 5)));
+        var after = state.ReadEquipment(owner);
+        Assert.Null(after.Loadout.GetItem(EquipmentSlot.Weapon));
+        Assert.Null(after.Loadout.GetItem(EquipmentSlot.OffHand));
+        Assert.Same(quiver, Assert.Single(after.OwnedItems).Value);
     }
 
     private static ItemInstance Item(string id, int width, int height) => new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)

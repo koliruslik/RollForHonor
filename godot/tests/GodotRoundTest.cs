@@ -443,8 +443,8 @@ public sealed class GodotRoundTest : TestClass
         }
     }
 
-    /// <summary>Native wheel input scrolls the character sheet without zooming; wheel input over the world still zooms.</summary>
-    /// <returns>Completes after GUI hover and native input processing.</returns>
+    /// <summary>Viewport-coordinate wheel events over the character sheet cannot zoom, while world events still can.</summary>
+    /// <returns>Completes after the native scene and interface are configured.</returns>
     [Test]
     public async Task CharacterWheelDoesNotZoomTheWorld()
     {
@@ -459,18 +459,13 @@ public sealed class GodotRoundTest : TestClass
             var scroll = (ScrollContainer)hud.FindChild("StatsScroll", true, false);
             scroll.MouseForcePassScrollEvents.ShouldBeFalse();
             var point = scroll.GetGlobalTransformWithCanvas() * new Vector2(140, 140);
-            Input.ParseInputEvent(new InputEventMouseMotion { Position = point });
-            await Frames(2);
+            arena.CameraRig.IsZoomBlocked(point).ShouldBeTrue();
             var before = arena.CameraRig.Camera.Size;
-            Input.ParseInputEvent(new InputEventMouseButton { Position = point, ButtonIndex = MouseButton.WheelDown, Pressed = true });
-            await Frames(2);
+            arena.CameraRig._UnhandledInput(new InputEventMouseButton { Position = point, ButtonIndex = MouseButton.WheelDown, Pressed = true });
             arena.CameraRig.Camera.Size.ShouldBe(before);
-
             var world = arena.CameraRig.Camera.GetViewport().GetVisibleRect().Size / 2;
-            Input.ParseInputEvent(new InputEventMouseMotion { Position = world });
-            await Frames(2);
-            Input.ParseInputEvent(new InputEventMouseButton { Position = world, ButtonIndex = MouseButton.WheelDown, Pressed = true });
-            await Frames(2);
+            arena.CameraRig.IsZoomBlocked(world).ShouldBeFalse();
+            arena.CameraRig._UnhandledInput(new InputEventMouseButton { Position = world, ButtonIndex = MouseButton.WheelDown, Pressed = true });
             arena.CameraRig.Camera.Size.ShouldBeGreaterThan(before);
         }
         finally
@@ -479,7 +474,7 @@ public sealed class GodotRoundTest : TestClass
         }
     }
 
-    /// <summary>Native world-drop callbacks release only bag items, preserve identity and reject a duplicate release.</summary>
+    /// <summary>Native world-drop callbacks release bag and equipped items, preserve identity and reject a duplicate release.</summary>
     /// <returns>Completes after the live bag is initialized.</returns>
     [Test]
     public async Task DraggingBagItemsIntoWorldUsesCanonicalRelease()
@@ -506,8 +501,10 @@ public sealed class GodotRoundTest : TestClass
             arena.Drops.Count.ShouldBe(1);
             arena.PickUpItem(bow.Id).ShouldBeTrue();
             new EquipmentService(state).EquipItem(owner, bow.Id, EquipmentSlot.Weapon);
-            target._CanDropData(Vector2.Zero, payload).ShouldBeFalse();
-            state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.Weapon).ShouldBeSameAs(bow);
+            target._CanDropData(Vector2.Zero, payload).ShouldBeTrue();
+            target._DropData(Vector2.Zero, payload);
+            state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.Weapon).ShouldBeNull();
+            arena.Drops.Single().Item.ShouldBeSameAs(bow);
         }
         finally
         {
@@ -553,6 +550,138 @@ public sealed class GodotRoundTest : TestClass
         finally
         {
             journal.Free();
+        }
+    }
+
+    /// <summary>Repeated releases at one player position separate every captured drop and reuse only collected space.</summary>
+    /// <returns>Completes after native terrain is registered.</returns>
+    [Test]
+    public async Task RepeatedDiscardsUseSeparateGroundPositionsAndReuseFreedSpace()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var state = arena.GetParent<GameBootstrap>().CombatState;
+            var items = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Values.ToArray();
+
+            foreach (var item in items)
+            {
+                arena.DiscardItem(item.Id).ShouldBeTrue();
+            }
+
+            arena.Drops.Count.ShouldBe(items.Length);
+            var positions = arena.Drops
+                .Select(drop => drop.Position)
+                .ToArray();
+            positions
+                .SelectMany((point, index) => positions
+                    .Skip(index + 1)
+                    .Select(other => new Vector2(point.X - other.X, point.Z - other.Z).Length()))
+                .Min()
+                .ShouldBeGreaterThanOrEqualTo(0.79f);
+
+            foreach (var item in items)
+            {
+                arena.Drops.Single(drop => drop.Item.Id == item.Id).Item.ShouldBeSameAs(item);
+            }
+
+            var first = arena.Drops[0];
+            var freed = first.Position;
+            arena.PickUpItem(first.Item.Id).ShouldBeTrue();
+            var retained = arena.Drops
+                .Select(drop => drop.Position)
+                .ToArray();
+            arena.DiscardItem(first.Item.Id).ShouldBeTrue();
+            arena.Drops.Single(drop => drop.Item.Id == first.Item.Id).Position.ShouldBe(freed);
+            arena.Drops
+                .Where(drop => drop.Item.Id != first.Item.Id)
+                .Select(drop => drop.Position)
+                .ShouldBe(retained);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>Blocked ground rejects release without ownership loss; pending generated loot survives until space becomes available.</summary>
+    /// <returns>Completes after physics observes blocker insertion and removal.</returns>
+    [Test]
+    public async Task BlockedDropAreaRetainsBagItemsAndPendingGeneratedLoot()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            arena.Player.SetPhysicsProcess(false);
+            var runtime = arena.GetParent<GameBootstrap>();
+            var state = runtime.CombatState;
+            var owner = arena.Player.CombatantId;
+            var item = state.ReadEquipment(owner).OwnedItems.Values.First();
+            var blocker = new StaticBody3D { CollisionLayer = 4, CollisionMask = 0, Position = arena.Player.Position + Vector3.Up };
+            blocker.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = new Vector3(18, 4, 18) } });
+            arena.AddChild(blocker);
+            await Frames(2);
+            var version = state.ReadEquipment(owner).Version;
+            arena.DiscardItem(item.Id).ShouldBeFalse();
+            state.ReadEquipment(owner).Version.ShouldBe(version);
+            state.ReadEquipment(owner).OwnedItems[item.Id].ShouldBeSameAs(item);
+            arena.Drops.Count.ShouldBe(0);
+            var generated = new ItemFactory(ItemRarityRules.Default, ItemStatRules.Default)
+                .Create("pending-placement", new ItemDefinition("test", "Test item"), ItemRarity.Common);
+            arena.PlaceAdminItem(generated).ShouldBeFalse();
+            arena.Drops.Count.ShouldBe(0);
+            blocker.Free();
+            await Frames(2);
+            runtime._Process(1.1);
+            arena._PhysicsProcess(0);
+            arena.Drops.Single().Item.ShouldBeSameAs(generated);
+            arena.DiscardItem(item.Id).ShouldBeTrue();
+            arena.Drops.Count.ShouldBe(2);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>The equipped-item card offers direct release and removes the actual runtime bonuses.</summary>
+    /// <returns>Completes after the live equipment UI has been initialized.</returns>
+    [Test]
+    public async Task EquippedItemCardCanDropWithoutAnIntermediateBagSlot()
+    {
+        var arena = Create();
+
+        try
+        {
+            await Frames(3);
+            StopThinking(arena);
+            var state = arena.GetParent<GameBootstrap>().CombatState;
+            var owner = arena.Player.CombatantId;
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud.ToggleInventory();
+            var armor = state.ReadEquipment(owner).OwnedItems.Values.Single(item => item.Base.Id == "embercoat");
+            var baseline = state.GetStats(owner).Get(new(StatType.MaxHealth));
+            new EquipmentService(state).EquipItem(owner, armor.Id, EquipmentSlot.BodyArmor);
+            hud._Process(0);
+            state.GetStats(owner).Get(new(StatType.MaxHealth)).ShouldBeGreaterThan(baseline);
+            ((ItemCell)hud.FindChild("BodyArmor", true, false)).EmitSignal(Button.SignalName.Pressed);
+            var discard = hud.GetNode<Button>("Root/Design/InventoryOverlay/ItemDetails/Card/Discard");
+            discard.Visible.ShouldBeTrue();
+            discard.EmitSignal(Button.SignalName.Pressed);
+            state.ReadEquipment(owner).Loadout.GetItem(EquipmentSlot.BodyArmor).ShouldBeNull();
+            state.ReadEquipment(owner).OwnedItems.ContainsKey(armor.Id).ShouldBeFalse();
+            state.GetStats(owner).Get(new(StatType.MaxHealth)).ShouldBe(baseline);
+            arena.Drops.Single().Item.ShouldBeSameAs(armor);
+        }
+        finally
+        {
+            arena.Free();
         }
     }
 
