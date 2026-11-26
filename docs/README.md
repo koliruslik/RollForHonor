@@ -7,6 +7,8 @@
 | [Character stats](stats.md) | Base definitions, modifier stacking, runtime ownership and combat projection |
 | [Items and affixes](items.md) | Rarity rules, immutable items, weighted procedural generation and stat inputs |
 | [Equipment](equipment.md) | Slot rules, ownership, atomic equip/unequip and non-equipment stat inputs |
+| [Rewards and gold](rewards.md) | Independent loot-group rolls, captured amounts, wallet ownership and world collection |
+| [Live loot tables](loot-tables.md) | Per-monster probabilities, base stats and every affix tier, generated from runtime JSON |
 | [Game interface](interface.md) | Screens, HUD, inventory, searchable reference, shared explanations and Ukrainian localization |
 | [Combat](combat.md) | Layer responsibilities, calculation order, damage/defense rules, launch/contact contracts and returned facts |
 | [Godot](godot.md) | Runtime composition, arena controls, physical delivery, editable laboratory, vampirism and periodic rounds |

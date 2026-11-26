@@ -5,7 +5,7 @@
 ## Screens and navigation
 
 Normal Play opens the title screen through `Bootstrap.tscn`. Start Game loads
-`ArenaBootstrap.tscn`, creating a fresh combat session and starting kit. Settings
+`ArenaBootstrap.tscn`, creating a fresh combat session and a once-only choice of starting bow, sword or wand. Settings
 opens the same presentation-preference panel used in the pause menu. Reference
 opens the shared game guide without creating a session. Exit closes the application.
 
@@ -55,11 +55,14 @@ and character windows do not pause movement, combat or the shared clock.
 
 The character window follows the left-hand wireframe layout and reads resolved
 stats from the owning adapter. Its top area contains Strength, Dexterity,
-Constitution, Intelligence and Luck in a staggered 3+2 arrangement of faceted d20 tiles. Each tile has an icon
+Intelligence and Luck in a 2×2 arrangement of faceted d20 tiles, with level / 10 above. Each tile has an icon
 above its resolved value. Click or focus/activate it to open the shared
 explanation, including the intended role and current implementation limits.
-The attributes default to zero; no derived combat or loot formulas are implied.
-Health and mana show current/max values. Typed
+The attributes default to zero; STR/DEX/INT gate equipment and Luck affects captured loot rolls.
+Health and mana show current/max values. The EHP row shows average full-health EHP across seven damage types. It has no
+hover tooltip; click it for each type and all 21 mixed 50/50 pairs, with nested
+resistance and defense explanations. Its reference assumptions are described in
+[Character stats](stats.md#effective-health-display). Typed
 damage values show signed percentage bonuses: a resolved coefficient of 1.06
 is displayed as +6%. Nonzero flat typed damage bonuses have separate signed rows.
 Movement speed shows the percentage bonus relative to the character profile's
@@ -67,7 +70,7 @@ unmodified starting speed: 6 to 6.84 displays +14%, and unchanged speed displays
 0%. With a zero baseline the percentage is undefined and displays a dash.
 These values do not represent DPS estimates. Armor, evasion,
 source attack bonuses and typed resistances use their real runtime
-values. Reserved independent critical stats are not presented as active mechanics.
+values. Critical roll bonus and multiplier describe the active independent d20 check.
 
 Pause, settings and the reference stop the world. Closing those screens restores the previous
 pause state, preserving a pause held by another owner. Opening or closing character
@@ -82,7 +85,15 @@ stats, initially 2 HP/s and 10 mana/s, including free time. The sheet displays
 these rates as units per second rather than percentage bonuses. Recovery stops
 on pause and after defeat; fractional HP accumulates until a whole point can heal.
 
-Nearby items appear in a scrollable menu within 2.5 world units. The nearest is
+Playable rounds automatically collect only gold within 2.5 world units, checked
+every 0.25 game seconds. Ctrl+G or the compact Auto gold toggle in Nearby loot
+switches the mode for the current run, with a notification and journal entry.
+`GreyboxArena.AutoGoldPickupEnabled` defaults to true on a fresh run. Item pickup
+always requires G, click or drag; automatic gold does not require bag space.
+Pause, defeat, starter selection and dragging suspend automatic gold pickup.
+Text-field focus suppresses the hotkey, and Ctrl+G does not also activate plain G.
+
+Nearby items still appear in a scrollable menu within 2.5 world units. The nearest is
 selected initially; hover selects another row for G, click takes that exact item,
 and dragging a row into the open inventory places it in the chosen free rectangle.
 The compact translucent menu grows to at most five visible rows and scrolls
@@ -91,19 +102,22 @@ Character-sheet scrolling is consumed by the GUI and does not zoom the world.
 Rows persist while dragging, and moving out of range rejects the pickup. Failed
 pickup preserves the world item and displays feedback even with inventory open.
 
+Gold has its own wallet value in inventory. Captured gold on the ground appears
+in the nearby menu and is collected automatically or with G/click, without occupying bag
+cells. Its amount is retained across rejected pickups. Sentinel guarantees 6–14
+gold on the ground and optional equipment; see [rewards](rewards.md).
+
 ## Action journal and admin tools
 
 The bounded action journal uses consecutive rows without blank separators and retains combat calculations and dice links alongside
 defeats, pickups, dropped items, equipment changes and admin mutations. Noncombat
-entries do not replace the last d20 result. Future gold awards can enter the same
-action-recording API when an actual wallet exists.
+entries do not replace the last d20 result. Gold pickups also appear in this journal.
 
 F3 opens compact live World/Items/Stats tabs. Spawn current catalog enemies,
 create current catalog items, or edit player/enemy base stats; equipment bonuses
 remain composed through the canonical adapter. The world keeps running. Sandbox
 enemies do not count toward round completion. A full bag places an admin-created
-item on free ground near the player. Gold grants await the wallet; the panel reports that
-limit explicitly.
+item on free ground near the player. Admin gold grants are not implemented.
 
 ## Equipment, inventory and item cards
 
@@ -149,8 +163,8 @@ are always visible beneath the base properties. Hold Alt to add captured ranges
 and quality in the format `value [minimum/maximum] quality% tier`, plus the actual
 available rank bounds. Releasing Alt hides this additional information while
 keeping affixes visible. Available ranks always display as `T1` or `T1–Tx`,
-with T1 strongest. Current authored affixes temporarily use T1 only. Complete
-rank tables and balance are deferred until after the main reward/upgrade loop.
+with T1 strongest. Live families use the accepted seven-tier table; level-1
+items use the weakest available tier. Legacy presentation fixtures can still use T1.
 Damage and resistance text use matching, muted semantic colors for each of the
 seven damage types. The common word "damage" stays neutral and is not part of
 text links; the type or modifier is the underlined target. Item rarity retains its
@@ -220,13 +234,11 @@ shows the actual item currently occupying the replacement slot, including its
 base properties and affixes. Both cards have independent close buttons. Closing
 selected-item details also closes its comparison without closing inventory.
 
-`godot/Content/Items/starter-items.json` provides twelve authored starter items for
-this UI pass. `StarterItemCatalog` creates Domain definitions and affix instances
-with retained values and owner-scoped instance IDs. Enemy drops choose from
-the same pool and roll fresh d100 qualities once per defeated enemy; Luck-driven
-selection and crafting formulas are not implemented. Starting-item creation uses the
-editable `godot/Items/ItemRarityRules.tres` table. The scene grants the kit once
-when registering its player; opening/refreshing UI never grants another copy.
+`godot/Content/Loot` supplies the production starter selection, enemy drops and
+admin creation. A playable run pauses for a once-only choice of a Common bow,
+sword or wand; no other items or points are granted. All three temporarily use
+the same bow attack. `starter-items.json` and `StarterItemCatalog` remain the
+explicit laboratory/presentation fixture. Opening UI never grants items.
 
 Future export presets must include the authored JSON content in the package.
 Owned-item crafting, inventory save/load,
@@ -235,10 +247,11 @@ progression/class screens and game save/load remain separate work.
 ## Searchable reference
 
 Reference is available from the title screen, pause menu, the HUD button and H.
-The reader has a section filter, word-based search, an entry index and an article.
-It covers combat, damage/resistances, stats, equipment, rarity, tiers, quality,
-modifier stacking, controls and session behavior. Reserved or planned mechanics
-are identified explicitly instead of presenting them as active rules.
+It opens on Monsters, with a creature library and details for the selected entry.
+Items and Affixes are full-width tables; Rules keeps grouped explanations, and
+Journal shows captured session history. Search stays within the selected section.
+Table filters select equipment slots or loot rarity. Per-monster tables show both
+rarity totals and individual-base chances per kill, with rarity-colored rows.
 
 `ReferenceCatalog` indexes the existing `CombatGlossary` topics and authored
 `Content/Reference/topics.json`. Shared `ItemInspectionTopics` supplies the same
@@ -247,10 +260,10 @@ actual affix values, ranges, quality and tier pools used by item cards.
 cards. Related links open the existing `InspectionStack`; Open as card also
 supports pinning and dragging. Pins survive closing the reader.
 
-In a running game, opening the reference captures current owned items/affixes,
-recent rolls and the retained combat journal. These are immutable inspection
-snapshots, not generated sample values. Reopening refreshes them; existing pins
-retain their captured facts. The title-screen reader omits session-specific
+In a running game, opening the reference captures recent rolls and the retained
+combat journal. Rolled affixes are inspected on their actual items in inventory;
+the reader has one shared affix table instead of separate per-item affix articles.
+Reopening refreshes session snapshots; existing pins retain their captured facts. The title-screen reader omits session-specific
 entries and never grants items. Reading does not reroll or resolve combat.
 
 The reader pauses gameplay while open, returns to the pause menu if opened there,
@@ -382,3 +395,34 @@ also verify a real left-click on underlined item damage; deeper captured branche
 use the same RichTextLabel metadata signals exercised by the engine tests.
 Additional checks cover pinned-child survival, drag retention, affix-only display,
 centered d20 geometry and linked journal facts from an actual physics contact.
+
+Reference opens on the bestiary and separates Monsters, Items, Affixes, Rules and
+Journal. Select a monster to read its actual stats, attack definition and concrete
+per-kill loot entries. Aggregate rarity and no-equipment rows are omitted from
+this list; generation probabilities remain unchanged.
+
+Items are ordered by generation, then rarity, then branch. The table shows only
+item name, ilvl, requirements and properties. Rarity is encoded by the name/frame
+color, with a rarity filter available. ilvl displays the actual affix gate, separate
+from the character's required equipment level; unreleased values show a dash.
+Repeated page titles and introductory paragraphs are omitted. Column headings
+and cells open captured inspection cards with nested links to damage, defenses,
+requirements and affix-level rules. Weapon rates use compact localized units;
+base mana/second is base cadence × cost/attack, explained in the mana-cost card.
+
+Affixes use a T7–T1 selector with the selected tier's value range and minimum ilvl,
+plus slot/search filters. Switching tiers preserves search/filter state. All
+families have the same presentation; no status column or drop-status paragraph
+is shown. This UI choice does not enable additional families in generation.
+F3 lists the 21 released generation-1 bases. Its rarity selector creates Common,
+Uncommon, Rare, Epic or Legendary items and previews the corresponding name.
+Restart the session after content changes to create new captured items.
+
+Gold rows in nearby pickup retain a compact brass border even when another item
+is selected. Selection changes preserve the border and do not change row height.
+Player-facing Ukrainian instructions use the formal plural address.
+
+Sword and wand bases use their own vector icons in the bag, equipped slots,
+item details, nearby loot and the primary attack button. The attack button reads
+the currently equipped weapon, including its rarity color, when the HUD refreshes.
+The bow retains its bow icon.

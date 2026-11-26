@@ -30,20 +30,17 @@ directly mutating live game state.
 
 ## Damage rules
 
-Combat calculation uses explicitly composed steps, including production weapon
-damage and defense rules. An ordinary attack is evaluated against the
-target's evasion and classified as:
+The game explicitly enables rating rules in `BasicAttackPipelineFactory`.
+Only natural 1 is a full miss. Natural 20 is full quality. On natural 2–19,
+`d20 + accuracy < 6 + EvasionRating / 10` gives glancing quality ×0.5;
+otherwise the quality is full (×1). Fractional evasion is preserved.
 
-| Attack margin | Outcome |
-| ---: | --- |
-| `≤ -10` | Evaded |
-| `-9` to `-1` | Glancing Hit |
-| `0` to `9` | Hit |
-| `≥ 10` | Critical Hit |
-
-Natural-roll thresholds can upgrade or downgrade the resulting outcome by one
-step. The standard configuration uses a natural `1` for downgrades and a
-natural `20` for upgrades.
+After quality, a separate `d20 + CriticalRollBonus >= 20` produces a critical
+with base multiplier ×2. A glancing crit still applies glancing quality first.
+Misses do not roll a critical die. The actual die, bonus and coefficient are
+retained in the breakdown, and all performed dice are in the trace.
+The old margin-based policy and coefficient-5 armor remain explicit laboratory
+policies; they are not the game's selected composition.
 
 Every typed weapon-damage component rolls through the supplied deterministic
 dice source and adds its flat bonus. A component cannot fall below zero. The
@@ -62,10 +59,10 @@ negative resistance values represent weaknesses. Both defense stages preserve
 the existing calculation history and append their input and output packets.
 Resistance values use fractions (`0.25` means 25% reduction), must not exceed
 `1`, and must be unique per type in a combatant snapshot. This is a shared rule
-for players and enemies; equipment-driven stat aggregation is not implemented.
+for players and enemies; equipped contributions are aggregated before projection.
 Snapshot construction rejects duplicate or above-one resistances before a request
 can enter the pipeline. Defense calculation retains its defensive validation.
-`HitMagnitudeArmorFormula` uses `A / (A + 5D)` as the reduction fraction,
+The game selects `RatingArmorFormula`: `A / (A + 30D)` as the reduction fraction,
 where `A` is armor and `D` is combined physical hit damage. Remaining damage
 rounds upward; non-positive armor provides no reduction. There is no percentage
 reduction cap. After resistances, a hit with positive physical input retains at
@@ -206,7 +203,7 @@ The use case:
 `CombatStateRead` reuses existing immutable `CombatantSnapshot` views as adapter
 read data; it does not prescribe a live entity model or database. The default
 `CombatSnapshotBuilder` assembles those views and their version into
-`CombatStateSnapshot`. Stat-managed actors are projected atomically from the [character stat model](stats.md); automatic equipment-modifier collection is not implemented.
+`CombatStateSnapshot`. Stat-managed actors are projected atomically from the [character stat model](stats.md); equipment-modifier collection is applied by the shared equipment composer.
 Pipeline composition is explicitly supplied and invoked anew per impact.
 
 `CombatImpactResult` separates the Domain outcome from `Applied`,
