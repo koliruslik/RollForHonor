@@ -16,6 +16,25 @@ namespace RollForHonor.Application.Tests.Combat;
 /// <summary>Verifies atomic stat ownership, current-resource separation and actual pipeline consumption.</summary>
 public sealed class CharacterStatRuntimeTests
 {
+    /// <summary>Typed extra-dice modifiers survive stat calculation and projection without inventing a global dice key.</summary>
+    [Fact]
+    public void EquipmentStyleDiceAndCadenceModifiersReachResolvedCombatInputs()
+    {
+        var profile = new StatProfile(new StatBlock(),
+            [new(new(StatType.AddedDamageD4, DamageType.Fire), StatOperation.Flat, 2, "dice-affix"),
+             new(new(StatType.AttackSpeed), StatOperation.Increased, 0.25m, "speed-affix")]);
+        var stats = new StatCalculator().Calculate(profile);
+        var current = new CombatantSnapshot(new(Guid.NewGuid()), 100, 100, 0, 0, [], []);
+        var projected = new CombatStatProjector().Project(current, stats);
+        var component = Assert.Single(projected.Offense.AddedDice);
+
+        Assert.Equal(2, component.Dice.Count);
+        Assert.Equal(4, component.Dice.Sides);
+        Assert.Equal(DamageType.Fire, component.Type);
+        Assert.Equal(1.25m, stats.Get(new(StatType.AttackSpeed)));
+        Assert.Throws<ArgumentException>(() => new StatKey(StatType.AddedDamageD4));
+    }
+
     /// <summary>Stat changes publish one new version without altering historical views or healing on maximum increases.</summary>
     [Fact]
     public void MaximumChangesClampDownwardWithoutHealingAndPreserveHistoricalReads()

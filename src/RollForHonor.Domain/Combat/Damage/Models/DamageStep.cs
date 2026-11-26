@@ -1,3 +1,5 @@
+using RollForHonor.Domain.Dice.Models;
+
 namespace RollForHonor.Domain.Combat.Damage.Models;
 
 /// <summary>
@@ -19,6 +21,9 @@ public sealed record DamageStep
     public string? Origin { get; }
     /// <summary>Gets a reported flat modifier, without inferring it from packet differences.</summary>
     public int? FlatBonus { get; }
+
+    /// <summary>Gets an actual decision die such as the independent critical d20.</summary>
+    public DiceRoll? DecisionRoll { get; }
     /// <summary>Gets explicitly reported per-component rolls, copied independently of optional diagnostic capture.</summary>
     public IReadOnlyList<DamageComponentRoll> ComponentRolls { get; }
 
@@ -32,6 +37,7 @@ public sealed record DamageStep
     /// <param name="origin">Optional modifier origin; null means unreported.</param>
     /// <param name="flatBonus">Actual supplied flat modifier, if reported.</param>
     /// <param name="componentRolls">Optional actual component dice/results reported by this stage; null means none.</param>
+    /// <param name="decisionRoll">Optional actual decision roll retained separately from component dice.</param>
     /// <exception cref="ArgumentException">A reported component roll is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
     /// <exception cref="ArgumentNullException">The input or output packet is null.</exception>
@@ -39,7 +45,7 @@ public sealed record DamageStep
         DamageStepType type,
         DamagePacket input,
         DamagePacket output, decimal? multiplier = null, string? origin = null, int? flatBonus = null,
-        IReadOnlyList<DamageComponentRoll>? componentRolls = null)
+        IReadOnlyList<DamageComponentRoll>? componentRolls = null, DiceRoll? decisionRoll = null)
     {
         if (!Enum.IsDefined(type))
         {
@@ -52,6 +58,7 @@ public sealed record DamageStep
         var rolls = componentRolls?.ToArray() ?? [];
         if (rolls.Any(roll => roll is null))
             throw new ArgumentException("Component rolls cannot contain null.", nameof(componentRolls));
+        DecisionRoll = decisionRoll;
         ComponentRolls = Array.AsReadOnly(rolls);
         Type = type;
         Input = input;

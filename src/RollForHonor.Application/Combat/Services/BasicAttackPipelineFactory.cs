@@ -20,16 +20,28 @@ public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
 
     /// <summary>Creates reusable stateless calculation steps with explicit hit-quality coefficients.</summary>
     /// <param name="multipliers">Nonnegative quality coefficients; the composition root chooses the balance values.</param>
+    /// <param name="ratingRules">Whether to use rating armor, natural-one misses and independent criticals.</param>
     /// <exception cref="ArgumentNullException">The coefficients are null.</exception>
-    public BasicAttackPipelineFactory(DamageMultipliers multipliers)
+    public BasicAttackPipelineFactory(DamageMultipliers multipliers, bool ratingRules = false)
     {
         ArgumentNullException.ThrowIfNull(multipliers);
-        _pipeline = new([
-            new AttackRollStep(new AttackRollResolver()), new AttackOutcomeStep(new D20AttackOutcomePolicy()),
-            new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(), new AttackQualityStep(new AttackQualityDamageResolver(multipliers)),
-            new DefenseStep(new DefenseResolver(new HitMagnitudeArmorFormula())),
-            new ApplyNewEffectsStep(new CombatEffectResolver(new ResolutionEffectInstanceIdFactory()))
-        ]);
+        var steps = new List<ICombatStep>
+        {
+            new AttackRollStep(new AttackRollResolver()),
+            new AttackOutcomeStep(ratingRules ? new RatingAttackOutcomePolicy() : new D20AttackOutcomePolicy()),
+            new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(),
+            new AttackQualityStep(new AttackQualityDamageResolver(multipliers))
+        };
+
+        if (ratingRules)
+        {
+            steps.Add(new IndependentCriticalStep());
+        }
+
+        steps.Add(new DefenseStep(new DefenseResolver(ratingRules ? new RatingArmorFormula() : new HitMagnitudeArmorFormula())));
+        steps.Add(new ApplyNewEffectsStep(new CombatEffectResolver(new ResolutionEffectInstanceIdFactory())));
+        _pipeline = new(steps);
+
     }
 
     /// <inheritdoc />

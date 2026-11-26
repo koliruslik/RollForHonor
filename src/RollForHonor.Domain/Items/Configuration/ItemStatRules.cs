@@ -9,6 +9,7 @@ public sealed class ItemStatRules
 {
     /// <summary>Gets initial rules: flat attack bonuses, percentage-only damage/crit/movement bonuses, both elsewhere.</summary>
     public static ItemStatRules Default { get; } = new(Enum.GetValues<StatType>()
+        .Where(type => type != StatType.CharacterLevel)
         .Select(type => new KeyValuePair<StatType, IEnumerable<StatOperation>>(type, GetDefaultOperations(type))));
 
     private readonly ImmutableDictionary<StatType, ImmutableHashSet<StatOperation>> _operations;
@@ -60,9 +61,9 @@ public sealed class ItemStatRules
 
     private static StatOperation[] GetDefaultOperations(StatType type) => type switch
     {
-        StatType.AttackModifier or StatType.Strength or StatType.Dexterity or StatType.Constitution
+        StatType.AttackModifier or StatType.CriticalRollBonus or StatType.Strength or StatType.Dexterity or StatType.Constitution
             or StatType.Intelligence or StatType.Luck or StatType.HealthRecovery or StatType.ManaRecovery => [StatOperation.Flat],
-        StatType.MovementSpeed or StatType.CriticalChance or StatType.CriticalMultiplier
+        StatType.MovementSpeed or StatType.AttackSpeed or StatType.CriticalChance or StatType.CriticalMultiplier
             or StatType.DamageMultiplier => [StatOperation.Increased, StatOperation.More],
         _ => [StatOperation.Flat, StatOperation.Increased, StatOperation.More]
     };

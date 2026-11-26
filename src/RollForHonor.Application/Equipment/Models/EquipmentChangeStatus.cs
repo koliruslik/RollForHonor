@@ -22,5 +22,8 @@ public enum EquipmentChangeStatus
     AlreadyEquippedElsewhere,
 
     /// <summary>The fixed bag cannot contain every item returned by the operation.</summary>
-    InventoryFull
+    InventoryFull,
+
+    /// <summary>Level, branch attributes or released content requirements are not satisfied.</summary>
+    RequirementsNotMet
 }

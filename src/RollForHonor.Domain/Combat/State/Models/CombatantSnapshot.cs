@@ -22,6 +22,9 @@ public sealed record CombatantSnapshot
     /// <summary>Gets the evasion value used by attack rules.</summary>
     public int Evasion { get; }
 
+    /// <summary>Gets the aggregate fractional evasion rating before comparison rounding.</summary>
+    public decimal EvasionRating { get; }
+
     /// <summary>Gets typed resistance values.</summary>
     public IReadOnlyList<ResistanceValue> Resistances { get; }
 
@@ -45,6 +48,7 @@ public sealed record CombatantSnapshot
     /// <param name="resistances">Unique typed resistance fractions no greater than one; negatives represent weaknesses.</param>
     /// <param name="effects">Active effect instances.</param>
     /// <param name="offense">Optional resolved offensive view; null uses neutral inputs.</param>
+    /// <param name="evasionRating">Optional fractional rating; omitted preserves the legacy evasion value.</param>
     /// <exception cref="ArgumentNullException">A reference argument is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Health bounds are invalid.</exception>
     /// <exception cref="ArgumentException">
@@ -58,7 +62,7 @@ public sealed record CombatantSnapshot
         int evasion,
         IReadOnlyList<ResistanceValue> resistances,
         IReadOnlyList<CombatEffectSnapshot> effects,
-        CombatOffense? offense = null)
+        CombatOffense? offense = null, decimal? evasionRating = null)
     {
         ArgumentNullException.ThrowIfNull(id);
         ArgumentOutOfRangeException.ThrowIfLessThan(maxHealth, 1);
@@ -105,6 +109,7 @@ public sealed record CombatantSnapshot
         MaxHealth = maxHealth;
         Armor = armor;
         Evasion = evasion;
+        EvasionRating = evasionRating ?? evasion;
         Resistances = Array.AsReadOnly(resistanceValues);
         Effects = Array.AsReadOnly(effectValues);
     }

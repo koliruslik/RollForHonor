@@ -29,7 +29,7 @@ public sealed class ItemCraftingService
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(affix);
 
-        return _factory.Create(item.Id, item.Base, item.Rarity, item.Affixes.Append(affix));
+        return _factory.Create(item.Id, item.Base, item.Rarity, item.Affixes.Append(affix), item.GenerationLevel);
     }
 
     /// <summary>Replaces exactly one affix, also supporting a value reroll supplied by the affix roller.</summary>
@@ -49,7 +49,7 @@ public sealed class ItemCraftingService
         var affixes = item.Affixes
             .Select(affix => affix.Id == affixId ? replacement : affix);
 
-        return _factory.Create(item.Id, item.Base, item.Rarity, affixes);
+        return _factory.Create(item.Id, item.Base, item.Rarity, affixes, item.GenerationLevel);
     }
 
     /// <summary>Removes an affix without lowering rarity or changing the other rolls.</summary>
@@ -67,7 +67,7 @@ public sealed class ItemCraftingService
         var affixes = item.Affixes
             .Where(affix => affix.Id != affixId);
 
-        return _factory.Create(item.Id, item.Base, item.Rarity, affixes);
+        return _factory.Create(item.Id, item.Base, item.Rarity, affixes, item.GenerationLevel);
     }
 
     /// <summary>Explicitly raises rarity while preserving occupied slots; callers must enforce any future resource/recipe requirements.</summary>
@@ -91,7 +91,7 @@ public sealed class ItemCraftingService
             throw new ArgumentException("Rarity upgrades must explicitly increase rarity.", nameof(rarity));
         }
 
-        return _factory.Create(item.Id, item.Base, rarity, item.Affixes);
+        return _factory.Create(item.Id, item.Base, rarity, item.Affixes, item.GenerationLevel);
     }
 
     private static void RequireAffix(ItemInstance item, string affixId)

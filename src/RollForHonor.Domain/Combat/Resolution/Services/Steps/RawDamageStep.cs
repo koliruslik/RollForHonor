@@ -4,7 +4,7 @@ using RollForHonor.Domain.Dice.Services;
 
 namespace RollForHonor.Domain.Combat.Resolution.Services.Steps;
 
-/// <summary>Calculates unscaled damage once, without requiring an attack roll or outcome.</summary>
+/// <summary>Calculates unscaled damage once, including source extra dice for attacks but not periodic ticks.</summary>
 public sealed class RawDamageStep : ICombatStep
 {
     private readonly IRawDamageResolver _resolver;
@@ -22,7 +22,15 @@ public sealed class RawDamageStep : ICombatStep
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(dice);
         if (context.BeforeDefenses is not null || context.AfterDefenses is not null)
+        {
             throw new InvalidOperationException("Damage has already been resolved.");
-        return context with { BeforeDefenses = _resolver.Resolve(context.Request.Damage, dice) };
+        }
+        var damage = context.Request.Attack is null
+            ? context.Request.Damage
+            : context.Request.Damage
+                .Concat(context.Request.StateSnapshot.Source.Offense.AddedDice)
+                .ToArray();
+
+        return context with { BeforeDefenses = _resolver.Resolve(damage, dice) };
     }
 }

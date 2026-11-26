@@ -1,6 +1,7 @@
 using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Stats;
+using RollForHonor.Domain.Dice.Models;
 
 namespace RollForHonor.Application.Combat.Services;
 
@@ -27,11 +28,18 @@ public sealed class CombatStatProjector
             Enum.GetValues<DamageType>()
                 .Select(type => new KeyValuePair<DamageType, decimal>(type, stats.Get(new(StatType.DamageMultiplier, type)))),
             Enum.GetValues<DamageType>()
-                .Select(type => new DamageAmount(type, checked((int)decimal.Floor(stats.Get(new(StatType.AddedDamage, type)))))));
+                .Select(type => new DamageAmount(type, checked((int)decimal.Floor(stats.Get(new(StatType.AddedDamage, type)))))),
+            DamageDiceStats.Types
+                .SelectMany(type => Enum.GetValues<DamageType>()
+                    .Select(damage => (Type: damage, Sides: DamageDiceStats.Sides(type), Count: checked((int)decimal.Floor(stats.Get(new(type, damage)))))))
+                .Where(value => value.Count > 0)
+                .Select(value => new DamageComponent(new DiceFormula(value.Count, value.Sides), 0, value.Type)),
+            checked((int)decimal.Floor(stats.Get(new(StatType.CriticalRollBonus)))),
+            stats.Get(new(StatType.CriticalMultiplier)));
 
         return new CombatantSnapshot(current.Id, Math.Min(current.Health, maxHealth), maxHealth,
             checked((int)decimal.Floor(stats.Get(new(StatType.Armor)))),
             checked((int)decimal.Floor(stats.Get(new(StatType.Evasion)))),
-            resistances, current.Effects, offense);
+            resistances, current.Effects, offense, stats.Get(new(StatType.Evasion)));
     }
 }

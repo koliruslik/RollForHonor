@@ -12,8 +12,17 @@ public sealed class CombatOffense
     /// <summary>Gets the additive d20 modifier, separate from attack-specific modifiers.</summary>
     public int AttackModifier { get; }
 
+    /// <summary>Gets the bonus on the independent critical d20.</summary>
+    public int CriticalRollBonus { get; }
+
+    /// <summary>Gets the independently resolved critical damage coefficient.</summary>
+    public decimal CriticalMultiplier { get; }
+
     /// <summary>Gets copied, nonzero typed flat attack bonuses.</summary>
     public IReadOnlyList<DamageAmount> AddedDamage { get; }
+
+    /// <summary>Gets copied extra dice rolled once per attack impact, excluded from periodic ticks.</summary>
+    public IReadOnlyList<DamageComponent> AddedDice { get; }
 
     private readonly ImmutableDictionary<DamageType, decimal> _multipliers;
 
@@ -21,9 +30,12 @@ public sealed class CombatOffense
     /// <param name="attackModifier">The source's additional d20 modifier.</param>
     /// <param name="multipliers">Optional unique typed coefficients; omitted types use 1.</param>
     /// <param name="addedDamage">Optional nonnull typed flat attack bonuses; zero values are omitted.</param>
+    /// <param name="addedDice">Optional nonnull extra attack components.</param>
+    /// <param name="criticalRollBonus">The independent critical d20 bonus.</param>
+    /// <param name="criticalMultiplier">The coefficient on a successful critical check.</param>
     /// <exception cref="ArgumentException">Damage types are undefined/duplicated, coefficients are negative, or a flat bonus is null.</exception>
     public CombatOffense(int attackModifier = 0, IEnumerable<KeyValuePair<DamageType, decimal>>? multipliers = null,
-        IEnumerable<DamageAmount>? addedDamage = null)
+        IEnumerable<DamageAmount>? addedDamage = null, IEnumerable<DamageComponent>? addedDice = null, int criticalRollBonus = 0, decimal criticalMultiplier = 2)
     {
         var values = multipliers?.ToImmutableDictionary() ?? ImmutableDictionary<DamageType, decimal>.Empty;
 
@@ -42,6 +54,16 @@ public sealed class CombatOffense
         AddedDamage = Array.AsReadOnly(flat
             .Where(value => value.Amount > 0)
             .ToArray());
+        var extra = addedDice?.ToArray() ?? [];
+
+        if (extra.Any(value => value is null))
+        {
+            throw new ArgumentException("Extra dice cannot contain null.", nameof(addedDice));
+        }
+
+        AddedDice = Array.AsReadOnly(extra);
+        CriticalRollBonus = criticalRollBonus;
+        CriticalMultiplier = Math.Max(1, criticalMultiplier);
         AttackModifier = attackModifier;
         _multipliers = values;
     }

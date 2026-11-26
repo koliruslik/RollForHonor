@@ -14,5 +14,8 @@ public enum DamageStepType
     ShieldAbsorption,
     ArmorMitigation,
     ResistanceMitigation,
-    Finalization
+    Finalization,
+
+    /// <summary>An independent critical d20 check applied after primary quality.</summary>
+    CriticalCheck
 }

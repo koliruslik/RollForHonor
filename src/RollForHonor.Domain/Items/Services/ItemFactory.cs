@@ -30,12 +30,14 @@ public sealed class ItemFactory
     /// <param name="definition">The base snapshot to retain.</param>
     /// <param name="rarity">The explicit rarity.</param>
     /// <param name="affixes">Optional existing affixes, copied in supplied order.</param>
+    /// <param name="generationLevel">The positive immutable affix-gating level.</param>
     /// <returns>A new immutable item with no random rolls.</returns>
     /// <exception cref="ArgumentNullException">The definition is null.</exception>
     /// <exception cref="ArgumentException">Identity, capacity, compatibility, affix uniqueness or stat rules are violated.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">The rarity is undefined.</exception>
-    public ItemInstance Create(string id, ItemDefinition definition, ItemRarity rarity, IEnumerable<AffixInstance>? affixes = null)
+    /// <exception cref="ArgumentOutOfRangeException">The rarity is undefined or the generation level is not positive.</exception>
+    public ItemInstance Create(string id, ItemDefinition definition, ItemRarity rarity, IEnumerable<AffixInstance>? affixes = null, int generationLevel = 1)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(generationLevel);
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
         ArgumentNullException.ThrowIfNull(definition);
 
@@ -43,7 +45,7 @@ public sealed class ItemFactory
         ValidateAffixes(definition, rarity, entries);
         ValidateModifiers(definition, entries);
 
-        return new ItemInstance(id, definition, rarity, entries);
+        return new ItemInstance(id, definition, rarity, entries, generationLevel);
     }
 
     private void ValidateAffixes(ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes)
@@ -69,6 +71,12 @@ public sealed class ItemFactory
         foreach (var modifier in modifiers)
         {
             _statRules.Validate(modifier);
+
+            if (modifier.Key.Type == RollForHonor.Domain.Stats.StatType.CriticalRollBonus
+                && (!definition.Tags.Contains("amulet") && !definition.Tags.Contains("ring") || modifier.Amount < 0 || modifier.Amount > 3))
+            {
+                throw new ArgumentException("Critical roll bonuses are limited to 0 through +3 on amulets and rings.", nameof(definition));
+            }
         }
     }
 
