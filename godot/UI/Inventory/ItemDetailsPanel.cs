@@ -128,7 +128,7 @@ public partial class ItemDetailsPanel : Control
         _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), _hover ? 0.86f : 1), color, 0));
         _header.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.55f), 0.4f), _hover ? 0.86f : 1), color, 0));
         L.SetText(_caption, _hover ? L.Text("ITEM") : L.Text("SELECTED ITEM"));
-        L.SetText(_name, L.Text(item.Base.Name));
+        L.SetText(_name, ItemPresentation.Name(item));
         _name.AddThemeColorOverride("font_color", color.Lightened(0.15f));
         var slotName = slot is { } target ? ItemPresentation.SlotName(target) : L.Text("Item");
         L.SetText(_rarity, L.Format($"{item.Rarity}\n{slotName}"));

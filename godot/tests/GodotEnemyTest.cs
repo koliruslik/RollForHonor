@@ -64,14 +64,28 @@ public sealed class GodotEnemyTest : TestClass
         var arena = Create(new(-10, 0.05f, 32), new(-16, 0.05f, 32));
         var launches = new List<TimeSpan>();
         var committed = 0;
+        var damageTaken = 0;
         var combat = arena.Opponent.GetRequiredComponent<ProjectileAttack>();
         combat.LaunchCompleted += result =>
         {
             result.Status.ShouldBe(AttackStartStatus.Started);
             launches.Add(Runtime.GameTime);
         };
-        combat.ContactCompleted += (contact, _, _) => committed += contact.Impact?.IsCommitted == true ? 1 : 0;
+        combat.ContactCompleted += (contact, _, _) =>
+        {
+            if (contact.Impact?.IsCommitted == true)
+            {
+                committed++;
+                var result = ((RollForHonor.Domain.Combat.Resolution.Models.ResolvedCombat)contact.Impact.Outcome).Resolution.Result;
+                result.SourceId.ShouldBe(arena.Opponent.CombatantId);
+                result.Target.TargetId.ShouldBe(arena.Player.CombatantId);
+                damageTaken += result.Target.DamageResolution.AfterDefenses.Damage.Components.Sum(component => component.Amount);
+            }
+        };
         RemoveDefenses(arena.Player);
+        var profile = Runtime.CombatState.GetStatProfile(arena.Player.CombatantId);
+        Runtime.CombatState.UpdateStats(arena.Player.CombatantId,
+            new(profile.BaseValues.With(new(StatType.HealthRecovery), 0), profile.Modifiers));
 
         try
         {
@@ -81,7 +95,7 @@ public sealed class GodotEnemyTest : TestClass
             launches.Count.ShouldBeInRange(2, 3);
             (launches[1] - launches[0]).ShouldBeGreaterThanOrEqualTo(TimeSpan.FromSeconds(1.5));
             committed.ShouldBeGreaterThan(0);
-            player.Health.ShouldBeLessThan(100);
+            player.Health.ShouldBe(100 - damageTaken);
             arena.Opponent.GetRequiredComponent<MovementMotor>().HorizontalSpeed.ShouldBeLessThan(0.01f);
             Runtime.CombatState.ReadForStart(arena.Player.CombatantId, "arena-shot", Guid.NewGuid()).Resources.Single().Amount.ShouldBe(500m);
             arena.GetNode<RichTextLabel>("HUD/Journal/Rows/Text").Text.ShouldContain("Sentinel");
@@ -160,7 +174,7 @@ public sealed class GodotEnemyTest : TestClass
         {
             await Frames(25);
             arena.Opponent.GetRequiredComponent<MovementMotor>().HorizontalSpeed.ShouldBeGreaterThan(1);
-            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 2, 12, [], []));
+            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 0, 0, [], []));
             await Frames(3);
 
             arena.Opponent.Controls.HasVisibleTarget.ShouldBeFalse();

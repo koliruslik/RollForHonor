@@ -60,14 +60,14 @@ public partial class GameBootstrap : Node3D
         var diagnostics = CombatDiagnosticsEnabled
             ? new LoggerCombatDiagnostics(new GodotCombatLogger(), DiagnosticView) : null;
         var impacts = new CombatImpactService(CombatState, new CombatSnapshotBuilder(),
-            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2)),
+            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2), ratingRules: true),
             () => new RandomDiceRoller(), diagnostics);
         _attacks = new AttackInitiationService(CombatState,
             new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
             impacts, () => _gameTime, diagnostics);
         _ticks = new PeriodicEffectService(CombatState,
             new CombatPipeline([new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(),
-                new DefenseStep(new DefenseResolver(new HitMagnitudeArmorFormula()))]), () => new RandomDiceRoller());
+                new DefenseStep(new DefenseResolver(new RatingArmorFormula()))]), () => new RandomDiceRoller());
     }
 
     /// <inheritdoc />

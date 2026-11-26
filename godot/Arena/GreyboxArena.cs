@@ -1,22 +1,24 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Godot;
-using RollForHonor.Godot.UI.Localization;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Domain.Combat.Attacks.Models;
 using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Items.Equipment.Models;
+using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.CombatDemo;
+using RollForHonor.Godot.Content.Loot;
 using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Input;
 using RollForHonor.Godot.Gameplay.Stats;
-using RollForHonor.Godot.UI.Hud;
 using RollForHonor.Godot.Gameplay.Targeting;
-using RollForHonor.Domain.Items.Equipment.Models;
+using RollForHonor.Godot.UI.Hud;
+using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.Arena;
 
@@ -120,7 +122,7 @@ public partial class GreyboxArena : Node3D
         {
             OpenWorkbench();
         }
-        else if (@event.IsActionPressed("rfh_pickup"))
+        else if (@event.IsActionPressed("rfh_pickup", false, true))
         {
             PickUpNearest();
         }
@@ -154,15 +156,7 @@ public partial class GreyboxArena : Node3D
         enemy.GetRequiredComponent<ActorState>().Configure(() =>
             _runtime.CombatState.Read(enemy.CombatantId, enemy.CombatantId).Source.IsDefeated);
 
-        var attack = new AttackDefinition(
-            "sentinel-shot",
-            new(new(1, 20), 5, NaturalOutcomeShiftRules.Standard,
-                [new(new(1, 6), 2, DamageType.Piercing)], [], AttackTags.Projectile),
-            TimeSpan.FromSeconds(1.5),
-            [],
-            new(AttackRepeatPolicy.OncePerTarget,
-                AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact,
-                TimeSpan.FromSeconds(4)));
+        var attack = SentinelAttackContent.Create();
 
         var combat = enemy.GetRequiredComponent<ProjectileAttack>();
         combat.Configure(_runtime.Attacks, _runtime.CombatState, attack,
@@ -223,9 +217,11 @@ public partial class GreyboxArena : Node3D
     {
         var weapon = _runtime.CombatState.ReadEquipment(Player.CombatantId).Loadout.GetItem(EquipmentSlot.Weapon)?.Base.Weapon;
 
+        var speed = _runtime.CombatState.GetStats(Player.CombatantId).Get(new(StatType.AttackSpeed));
+
         return new AttackDefinition("arena-shot",
             new(new(1, 20), 8, NaturalOutcomeShiftRules.Standard, weapon?.Damage ?? [new(new(1, 6), 3, DamageType.Piercing)], [], AttackTags.Projectile),
-            weapon is null ? TimeSpan.FromSeconds(0.25) : TimeSpan.FromSeconds((double)(1 / weapon.AttacksPerSecond)),
+            TimeSpan.FromSeconds((double)(1 / Math.Max(0.01m, (weapon?.AttacksPerSecond ?? 4) * speed))),
             [new(new("mana"), weapon?.ManaCost ?? 10)],
             new(AttackRepeatPolicy.OncePerTarget, AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact, TimeSpan.FromSeconds(4)));
     }
@@ -235,7 +231,7 @@ public partial class GreyboxArena : Node3D
 
     private void ConfigurePresentation()
     {
-        foreach (var item in StarterItemCatalog.Create(Player.CombatantId))
+        foreach (var item in RoundsEnabled ? System.Array.Empty<RollForHonor.Domain.Items.Models.ItemInstance>() : StarterItemCatalog.Create(Player.CombatantId))
         {
             _runtime.CombatState.RegisterOwnedItem(Player.CombatantId, item);
         }
@@ -244,5 +240,7 @@ public partial class GreyboxArena : Node3D
         var presentation = new ArenaHud { Name = "Presentation" };
         AddChild(presentation);
         presentation.Configure(_runtime, this);
+        Player.Controls.CanShoot = () => !RoundsEnabled || _runtime.CombatState.ReadEquipment(Player.CombatantId).Loadout.GetItem(EquipmentSlot.Weapon) is not null;
+        ShowStarterSelection();
     }
 }

@@ -134,12 +134,13 @@ public partial class ArenaHud
                     LaunchPrimary();
                 }
             });
+            button.Name = index == 0 ? "PrimaryAttack" : $"LockedSkill{index}";
             var tooltip = index == 0 ? "Basic attack" : "Locked skill slot";
             button.TooltipText = L.Text(tooltip);
             L.OnChanged(button, () => button.TooltipText = L.Text(tooltip));
             button.Disabled = index > 0;
             UiLayout.Place(bar, button, new Rect2(280 + index * 72, 16, 64, 64));
-            UiLayout.Place(button, UiLayout.Icon(index == 0 ? "weapon" : "lock"), new Rect2(12, 12, 40, 40));
+            UiLayout.Place(button, UiLayout.Icon(index == 0 ? "weapon" : "lock"), new Rect2(12, 12, 40, 40)).Name = "Icon";
         }
     }
 

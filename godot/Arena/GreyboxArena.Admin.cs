@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using RollForHonor.Godot.Content.Items;
-using RollForHonor.Infrastructure.Dice;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Targeting;
@@ -65,7 +63,7 @@ public partial class GreyboxArena
         {
             if (_runtime.CombatState.Read(enemy.CombatantId, enemy.CombatantId).Source.IsDefeated && _adminDefeated.Add(enemy.CombatantId))
             {
-                CreateDrop(StarterItemCatalog.RollDrop(enemy.CombatantId, new RandomDiceRoller(_roundRandom)), enemy.Position);
+                CreateMonsterLoot(enemy);
                 enemy.GetRequiredComponent<ActorState>().PhysicsStep(0);
                 enemy.SetPhysicsProcess(false);
                 enemy.CollisionLayer = enemy.CollisionMask = 0;

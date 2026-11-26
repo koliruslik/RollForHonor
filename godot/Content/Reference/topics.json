@@ -1,178 +1,199 @@
 [
   {
-    "id": "combat.attack-roll",
-    "category": "Combat",
-    "title": "Attack rolls and d20",
-    "description": "Attack quality compares the d20 total, including bonuses, against target evasion. A margin of -10 or less is evaded; below 0 is a glancing hit; 0 to 9 is a hit; 10 or more is a critical hit. The attack definition can upgrade or downgrade the result for natural rolls. Recent rolls retain the actual dice and bonus.",
-    "related": [
-      "stat.AttackModifier",
-      "stat.Evasion",
+	"id": "combat.attack-roll",
+	"category": "Combat",
+	"title": "Attack rolls and d20",
+	"description": "Only natural 1 misses. On 2–19, attacks glance for half damage when d20 + accuracy is below 6 + evasion rating / 10. Natural 20 gives full quality. A separate d20 + critical bonus of 20 or more multiplies damage, normally by 2.",
+	"related": [
+	  "stat.AttackModifier",
+	  "stat.Evasion",
       "combat.damage-pipeline"
-    ]
+	]
   },
   {
-    "id": "combat.damage-pipeline",
-    "category": "Combat",
-    "title": "Damage resolution",
-    "description": "An attack rolls its raw damage, adds flat source damage, applies outgoing bonuses and attack quality, then applies target defenses. Armor reduces the combined physical hit. Matching resistances apply afterward. The combat journal links to the stages and typed values actually recorded for that attack.",
-    "related": [
-      "damage.physical",
-      "stat.Armor",
+	"id": "combat.damage-pipeline",
+	"category": "Combat",
+	"title": "Damage resolution",
+	"description": "An attack rolls its raw damage, adds flat source damage, applies outgoing bonuses and attack quality, then applies target defenses. Armor reduces the combined physical hit. Matching resistances apply afterward. The combat journal links to the stages and typed values actually recorded for that attack.",
+	"related": [
+	  "damage.physical",
+	  "stat.Armor",
       "stat.DamageMultiplier"
-    ]
+	]
   },
   {
-    "id": "combat.effects",
-    "category": "Combat",
-    "title": "Effects and periodic damage",
-    "description": "Effects belong to the combat result and are not automatically applied by a damage type. Periodic damage retains the source snapshot captured when the effect was applied; current target defenses are read when resolving a tick. Flat attack damage is not added again to each periodic tick.",
-    "related": [
-      "combat.damage-pipeline",
+	"id": "combat.effects",
+	"category": "Combat",
+	"title": "Effects and periodic damage",
+	"description": "Effects belong to the combat result and are not automatically applied by a damage type. Periodic damage retains the source snapshot captured when the effect was applied; current target defenses are read when resolving a tick. Flat attack damage is not added again to each periodic tick.",
+	"related": [
+	  "combat.damage-pipeline",
       "added.Fire"
-    ]
+	]
   },
   {
-    "id": "combat.targeting",
-    "category": "Combat",
-    "title": "Targets and combat state",
-    "description": "Left-click a living target to select it. Click the same target or the ground to clear selection. The top bar shows the selected target and its health. Minimap markers distinguish living and defeated bodies. Overhead bars can be changed in Settings.",
-    "related": [
+	"id": "combat.targeting",
+	"category": "Combat",
+	"title": "Targets and combat state",
+	"description": "Left-click a living target to select it. Click the same target or the ground to clear selection. The top bar shows the selected target and its health. Minimap markers distinguish living and defeated bodies. Overhead bars can be changed in Settings.",
+	"related": [
       "session.settings"
-    ]
+	]
   },
   {
-    "id": "combat.skills",
-    "category": "Combat",
-    "title": "Attacks, skills and cooldowns",
-    "description": "The current playable attack is a projectile. Accepted attacks pay their cost once and respect cooldowns. The remaining three skill slots are locked placeholders. A broad skill set, melee delivery and skill assignment are not implemented yet.",
-    "related": [
-      "stat.MaxMana",
+	"id": "combat.skills",
+	"category": "Combat",
+	"title": "Attacks, skills and cooldowns",
+	"description": "The current playable attack is a projectile. Accepted attacks pay their cost once and respect cooldowns. The remaining three skill slots are locked placeholders. A broad skill set, melee delivery and skill assignment are not implemented yet.",
+	"related": [
+	  "stat.MaxMana",
       "combat.attack-roll"
-    ]
+	]
   },
   {
-    "id": "items.inventory",
-    "category": "Items",
-    "title": "Spatial inventory",
-    "description": "The bag has 12 columns and 5 rows without scrolling or automatic growth. Each item occupies its base rectangle. Dragging retains the cell you grabbed. Bounds, overlap and room for returning equipment are checked before a UI equipment change. Grid positions last for the current session; saving and item rotation are not implemented.",
-    "related": [
-      "items.equipment",
+	"id": "items.inventory",
+	"category": "Items",
+	"title": "Spatial inventory",
+	"description": "The bag has 12 columns and 5 rows. A 2×3 item needs six free cells in a rectangle. Drag items to rearrange them. Equipping an item frees its bag cells; removing equipment needs enough free space. There is no automatic bag expansion or item rotation.",
+	"related": [
+	  "items.equipment",
       "ui.inspection"
-    ]
+	]
   },
   {
-    "id": "items.equipment",
-    "category": "Items",
-    "title": "Main hand and offhand",
-    "description": "The main-hand weapon and compatible offhand flank body armor. A bow permits a quiver; a one-handed weapon permits a shield. A shield can remain without a main weapon; a quiver cannot. Changing the main weapon returns incompatible offhand equipment and removes its bonuses in the same change. Both rings need different owned item instances.",
-    "related": [
-      "items.inventory",
+	"id": "items.equipment",
+	"category": "Items",
+	"title": "Main hand and offhand",
+	"description": "The main-hand weapon and compatible offhand flank body armor. A bow permits a quiver; a one-handed weapon permits a shield. A shield can remain without a main weapon; a quiver cannot. Changing the main weapon returns incompatible offhand equipment and removes its bonuses in the same change. Both rings need different owned item instances.",
+	"related": [
+	  "items.inventory",
       "stat.Armor"
-    ]
+	]
   },
   {
-    "id": "items.affixes",
-    "category": "Items",
-    "title": "Affixes and implicit properties",
-    "description": "Every base has implicit properties, separate from rolled affixes. Implicit properties do not use affix capacity. Each affix retains its selected tier, d100 quality, actual values and available tier pool. Item cards show affixes normally; Alt adds captured ranges and quality details.",
-    "related": [
-      "items.tiers",
-      "items.quality",
+	"id": "items.affixes",
+	"category": "Items",
+	"title": "Affixes and implicit properties",
+	"description": "Base properties are always on that base. Affixes add rolled bonuses on top, such as +8 health or +10% fire resistance. Base properties do not use affix slots. Hold Alt on an item to see each affix range, quality and tier. The Affixes tab lists every family.",
+	"related": [
+	  "items.tiers",
+	  "items.quality",
       "items.modifiers"
-    ]
+	]
   },
   {
-    "id": "items.tiers",
-    "category": "Items",
-    "title": "Affix tiers",
-    "description": "T1 is the strongest numbered tier. Each affix has its own authored pool: it may end at T16, T15, T4 or another tier. Available tiers are shown from the actual captured pool. Current starter affixes only define T2; complete progression tables are not authored yet. Tier and item rarity are separate.",
-    "related": [
-      "items.quality",
+	"id": "items.tiers",
+	"category": "Items",
+	"title": "Affix tiers",
+	"description": "T7 is the weakest tier and T1 is the strongest. A stronger tier has a higher item-level requirement. Level-1 drops use the weakest available tier. Luck improves the tier roll but cannot bypass the item-level requirement. The Affixes table shows every value range and level requirement.",
+	"related": [
+	  "items.quality",
       "rarity.Rare"
-    ]
+	]
   },
   {
-    "id": "items.quality",
-    "category": "Items",
-    "title": "Affix quality and ranges",
-    "description": "One d100 quality roll is shared by all values of a rolled affix. 1 maps to the selected tier minimum; 100 maps to its maximum, with intermediate values rounded at the authored precision. Advanced details show value [minimum/maximum] quality% tier. Inspecting an item never rerolls it.",
-    "related": [
-      "items.tiers",
+	"id": "items.quality",
+	"category": "Items",
+	"title": "Affix quality and ranges",
+	"description": "After choosing an affix tier, roll d100 and add Luck, up to 100. A result of 1 gives the minimum value; 100 gives the maximum. For example, a 6–10 health affix with quality 100 gives +10 health. Looking at or picking up an item never rerolls its bonuses.",
+	"related": [
+	  "items.tiers",
       "items.affixes"
-    ]
+	]
   },
   {
-    "id": "items.modifiers",
-    "category": "Items",
-    "title": "Flat, Increased and More",
-    "description": "Flat modifiers add amounts before percentage scaling. Increased modifiers add within their pool; More modifiers multiply separately. Global and typed damage increases share one additive pool. Percentage resistance points differ from a relative increase to resistance. Typed flat damage is added to attacks, not repeatedly to periodic ticks.",
-    "related": [
-      "stat.DamageMultiplier",
-      "added.Piercing",
+	"id": "items.modifiers",
+	"category": "Items",
+	"title": "Flat, Increased and More",
+	"description": "Flat adds a number: +5 health turns 100 health into 105. Increased bonuses add together: +10% and +20% make +30%. More bonuses multiply separately. +10 percentage points of fire resistance means 20% becomes 30%; it is not a 10% relative increase.",
+	"related": [
+	  "stat.DamageMultiplier",
+	  "added.Piercing",
       "resistance.Fire"
-    ]
+	]
   },
   {
-    "id": "items.rarity",
-    "category": "Items",
-    "title": "Item rarity and affix limits",
-    "description": "Rarity sets the maximum number of affixes. Fewer affixes do not lower rarity automatically; adding affixes does not automatically upgrade it. Raising rarity is a separate operation whose gameplay recipes and costs remain future work. Each rarity entry shows the current configured capacity.",
-    "related": [
-      "rarity.Common",
-      "rarity.Uncommon",
-      "rarity.Rare",
-      "rarity.Epic",
+	"id": "items.rarity",
+	"category": "Items",
+	"title": "Item rarity and affix limits",
+	"description": "Common items have no affixes. Uncommon can have up to 2, Rare 4, Epic 6 and Legendary 8. Each slot has a separate 55% chance to be filled when the item drops. A Legendary item can therefore have fewer than 8 affixes and still be Legendary.",
+	"related": [
+	  "rarity.Common",
+	  "rarity.Uncommon",
+	  "rarity.Rare",
+	  "rarity.Epic",
       "rarity.Legendary"
-    ]
+	]
   },
   {
-    "id": "ui.inspection",
-    "category": "Interface",
-    "title": "Linked explanations and pins",
-    "description": "Underlined text opens a related explanation. Pin keeps a card after closing its source window. Drag a card header to move it. Escape closes the latest unpinned card; use its close button to remove a pin. Item rarity colors remain separate from the muted colors of damage types.",
-    "related": [
-      "items.affixes",
+	"id": "ui.inspection",
+	"category": "Interface",
+	"title": "Linked explanations and pins",
+	"description": "Underlined text opens a related explanation. Pin keeps a card after closing its source window. Drag a card header to move it. Escape closes the latest unpinned card; use its close button to remove a pin. Item rarity colors remain separate from the muted colors of damage types.",
+	"related": [
+	  "items.affixes",
       "combat.damage-pipeline"
-    ]
+	]
   },
   {
-    "id": "ui.controls",
-    "category": "Interface",
-    "title": "Controls and windows",
-    "description": "Current gameplay bindings appear above Menu. Inventory and Character can stay open independently while the world continues. The reference, pause and settings stop the game while you read or edit. Search captures text input so typing does not toggle other windows.",
-    "related": [
-      "ui.inspection",
+	"id": "ui.controls",
+	"category": "Interface",
+	"title": "Controls and windows",
+	"description": "Current gameplay bindings appear above Menu. Inventory and Character can stay open independently while the world continues. The reference, pause and settings stop the game while you read or edit. Search captures text input so typing does not toggle other windows.",
+	"related": [
+	  "ui.inspection",
       "items.inventory"
-    ]
+	]
   },
   {
-    "id": "session.settings",
-    "category": "Session",
-    "title": "Display, sound and overhead bars",
-    "description": "Settings supports windowed/fullscreen mode, vertical synchronization, master volume and optional overhead bars for enemies and the player. Apply saves presentation preferences independently of a game run. Closing without applying discards edits. Language changes apply immediately and are saved with presentation preferences.",
-    "related": [
+	"id": "session.settings",
+	"category": "Session",
+	"title": "Display, sound and overhead bars",
+	"description": "Settings supports windowed/fullscreen mode, vertical synchronization, master volume and optional overhead bars for enemies and the player. Apply saves presentation preferences independently of a game run. Closing without applying discards edits. Language changes apply immediately and are saved with presentation preferences.",
+	"related": [
       "session.restart"
-    ]
+	]
   },
   {
-    "id": "session.restart",
-    "category": "Session",
-    "title": "Restart and session persistence",
-    "description": "Restart or starting a new game creates a fresh session. Equipped items, grid positions, combat history and pinned cards are not saved between runs. Presentation settings are stored separately.",
-    "related": [
-      "items.inventory",
+	"id": "session.restart",
+	"category": "Session",
+	"title": "Restart and session persistence",
+	"description": "Restart or starting a new game creates a fresh session. Equipped items, grid positions, combat history and pinned cards are not saved between runs. Presentation settings are stored separately.",
+	"related": [
+	  "items.inventory",
       "session.settings"
-    ]
+	]
   },
   {
-    "id": "progression.attributes",
-    "category": "Character stats",
-    "title": "Primary attributes and Luck",
-    "description": "Primary-attribute progression, attribute-to-dice bonuses and Luck-driven item drops are planned and are not active in this playable prototype. The current sheet displays the resolved stats used by combat and movement. The reference does not invent numeric attribute bonuses or a finished progression table.",
-    "related": [
-      "stat.AttackModifier",
-      "items.quality",
+	"id": "progression.attributes",
+	"category": "Character stats",
+	"title": "Primary attributes and Luck",
+	"description": "Strength, Dexterity and Intelligence are equipment requirements, not direct combat bonuses. Luck improves equipment drop chance, rarity, affix tiers, quality and gold quantity. Character level is capped at 10. XP rewards and attribute-point awards are not configured yet.",
+	"related": [
+	  "stat.AttackModifier",
+	  "items.quality",
       "items.tiers"
-    ]
+	]
+  },
+  {
+	"id": "items.loot-luck",
+	"category": "Items",
+	"title": "Luck and equipment drops",
+	"description": "Gold always drops. Luck improves the chance of equipment and shifts the rarity table toward better items. For Sentinel, Luck 100 raises equipment chance from 45% to 69.75%, Rare from 4% to 7.76%, and Legendary from 0.1% to 0.1999%. The monster table shows your captured Luck. Slot and base weights and item-level gates stay unchanged. Opening the reference or picking up loot never rerolls a reward.",
+	"related": [
+	  "stat.Luck",
+	  "items.rarity",
+      "items.tiers"
+	]
+  },
+  {
+	"id": "items.pickup",
+	"category": "Items",
+	"title": "Automatic gold and manual item pickup",
+	"description": "In playable rounds, only gold within 2.5 world units is picked up automatically. Ctrl+G or the Auto gold button in Nearby loot switches this mode on and off for the current run. Items always require G, a click or dragging into the bag. A full bag does not prevent gold collection. Automatic pickup stops while paused, dragging or defeated, and never changes captured rewards.",
+	"related": [
+	  "items.inventory",
+      "items.loot-luck"
+	]
   }
 ]

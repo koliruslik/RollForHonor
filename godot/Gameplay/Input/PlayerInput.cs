@@ -18,6 +18,9 @@ public partial class PlayerInput : EntityComponent
     /// <summary>Gets or sets camera-relative movement axes used when hardware sampling is disabled.</summary>
     public Vector2 MovementIntent { get; set; }
 
+    /// <summary>Gets or sets an optional equipment gate for hardware shooting.</summary>
+    public System.Func<bool> CanShoot { get; set; }
+
     private ActorState _state;
 
     private MouseFacing _facing;
@@ -74,7 +77,13 @@ public partial class PlayerInput : EntityComponent
 
     /// <summary>Queues a screen-space shot to be sampled at the next physics command stage.</summary>
     /// <param name="screen">The viewport-space cursor location at the time of the click.</param>
-    public void ShootAtCursor(Vector2 screen) => _commands.Enqueue(new CursorShot(screen, _facing));
+    public void ShootAtCursor(Vector2 screen)
+    {
+        if (CanShoot?.Invoke() != false)
+        {
+            _commands.Enqueue(new CursorShot(screen, _facing));
+        }
+    }
 
     private sealed record CursorShot(Vector2 Screen, MouseFacing Facing) : IEntityCommand
     {

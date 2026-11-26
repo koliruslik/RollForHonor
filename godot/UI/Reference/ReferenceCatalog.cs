@@ -7,6 +7,7 @@ using RollForHonor.Domain.Combat.Damage.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Content.Items;
+using RollForHonor.Godot.Content.Loot;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Godot.UI.Localization;
@@ -20,15 +21,21 @@ public static class ReferenceCatalog
     /// <param name="items">Optional currently owned items; absent omits session-specific item entries.</param>
     /// <param name="rolls">Optional captured recent-roll history.</param>
     /// <param name="combat">Optional captured action journal, including combat and world actions.</param>
+    /// <param name="luck">Current player Luck for monster reward probabilities; title-screen defaults to zero.</param>
     /// <returns>Stable, unique entries sorted by category and title.</returns>
     /// <exception cref="JsonException">Authored reference content is malformed.</exception>
     /// <exception cref="ArgumentException">A content or item identity is duplicated.</exception>
     /// <exception cref="InvalidOperationException">An authored topic links to a missing entry.</exception>
-    public static IReadOnlyList<ReferenceEntry> Create(IEnumerable<ItemInstance> items = null, InspectionTopic rolls = null, InspectionTopic combat = null)
+    public static IReadOnlyList<ReferenceEntry> Create(IEnumerable<ItemInstance> items = null, InspectionTopic rolls = null, InspectionTopic combat = null, decimal luck = 0)
     {
         var entries = new Dictionary<string, ReferenceEntry>(StringComparer.Ordinal);
         AddRules(entries);
         AddAuthoredTopics(entries);
+
+        foreach (var entry in LootReference.Create(luck))
+        {
+            entries.Add(entry.Id, entry);
+        }
         AddItems(entries, items ?? []);
 
         if (rolls is not null)
@@ -50,7 +57,7 @@ public static class ReferenceCatalog
     private static void AddRules(IDictionary<string, ReferenceEntry> entries)
     {
         var scalarStats = Enum.GetValues<StatType>()
-            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage));
+            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage or StatType.CriticalChance or StatType.Constitution) && DamageDiceStats.Sides(type) == 0);
 
         foreach (var type in scalarStats)
         {
@@ -71,7 +78,7 @@ public static class ReferenceCatalog
 
         foreach (var rarity in Enum.GetValues<ItemRarity>())
         {
-            var topic = new InspectionTopic(L.Text(rarity.ToString()), L.Format($"Configured affix limit: {rarities.GetCapacity(rarity)}.\n\nRarity is explicit. Adding or removing affixes does not change it automatically."), ItemPresentation.RarityColor(rarity));
+            var topic = new InspectionTopic(L.Text(rarity.ToString()), L.Format($"Up to {rarities.GetCapacity(rarity)} affixes.\n\nThe item can have fewer affixes. Adding or removing an affix does not change its rarity."), ItemPresentation.RarityColor(rarity));
             entries.Add($"rarity.{rarity}", new($"rarity.{rarity}", L.Text("Items"), topic));
         }
     }
@@ -111,14 +118,6 @@ public static class ReferenceCatalog
         foreach (var item in items)
         {
             entries.Add($"item.{item.Id}", new($"item.{item.Id}", L.Text("Owned items"), ItemInspectionTopics.Item(item)));
-
-            foreach (var affix in item.Affixes)
-            {
-                var topic = ItemInspectionTopics.Affix(item.Rarity, affix, true);
-                var title = L.Format($"{L.Text(item.Base.Name)} · {topic.Title}");
-                var id = $"affix.{item.Id.Length}:{item.Id}.{affix.Id}";
-                entries.Add(id, new(id, L.Text("Rolled affixes"), new(title, topic.Description, topic.Accent, topic.Links, topic.Facts)));
-            }
         }
     }
 

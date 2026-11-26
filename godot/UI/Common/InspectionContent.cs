@@ -1,4 +1,5 @@
 using Godot;
+using System.Linq;
 using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Common;
@@ -15,7 +16,15 @@ public static class InspectionContent
 
         foreach (var fact in topic.Facts)
         {
-            InspectionText.Write(body, fact.Text + "\n", fact.Color, fact.Affix);
+            if (fact.LinkIndex is { } index && index >= 0 && index < topic.Links.Count)
+            {
+                InspectionText.Link(body, fact.Text, index.ToString(), fact.Color, fact.Affix);
+                body.AddText("\n");
+            }
+            else
+            {
+                InspectionText.Write(body, fact.Text + "\n", fact.Color, fact.Affix);
+            }
         }
 
         if (topic.Facts.Count > 0 && topic.Description.Length > 0)
@@ -25,14 +34,18 @@ public static class InspectionContent
 
         body.AddText(topic.Description);
 
-        if (topic.Links.Count == 0)
+        var related = Enumerable.Range(0, topic.Links.Count)
+            .Where(index => !topic.Facts.Any(fact => fact.LinkIndex == index))
+            .ToArray();
+
+        if (related.Length == 0)
         {
             return;
         }
 
         InspectionText.Write(body, L.Text("\n\nRELATED\n"), HonorTheme.Muted);
 
-        for (var index = 0; index < topic.Links.Count; index++)
+        foreach (var index in related)
         {
             var link = topic.Links[index];
             InspectionText.Link(body, link.Text, index.ToString(), link.Color);

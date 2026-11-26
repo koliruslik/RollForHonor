@@ -55,10 +55,11 @@ internal sealed class ArenaRoundPresenter
         _nextRound.Position = new Vector2(_design.Size.X - 370, 372);
         var available = _arena.RoundsEnabled && alive && !_isBlocked();
         var nearbyDrops = _arena.NearbyDrops();
-        _nearbyLoot.Refresh(nearbyDrops);
+        var nearbyGold = _arena.NearbyGoldDrops();
+        _nearbyLoot.Refresh(nearbyDrops, nearbyGold, _arena.AutoGoldPickupEnabled);
         _nearbyLoot.Position = new Vector2((_design.Size.X - _occupiedWidth() - 320) / 2, 840 - _nearbyLoot.Size.Y);
         _lootPrompt.Position = new Vector2((_design.Size.X - 420) / 2, 850);
-        _nearbyLoot.Visible = available && nearbyDrops.Count > 0;
+        _nearbyLoot.Visible = available && (nearbyDrops.Count > 0 || nearbyGold.Count > 0);
         _capacityNotice.Position = new Vector2((_design.Size.X - 560) / 2, 330);
         _capacityNotice.Visible = available && _runtime.GameTime < _capacityNoticeUntil;
         _roundBanner.Visible = available && _arena.RoundComplete && _dismissedRound != _arena.RoundNumber;
@@ -91,7 +92,8 @@ internal sealed class ArenaRoundPresenter
         _capacityNotice.Hide();
         _nearbyLoot = UiLayout.Place(_design, new NearbyLootPanel { Name = "NearbyLoot" }, new Rect2(750, 530, 420, 320));
         _nearbyLoot.IconKey = item => ItemPresentation.Icon(item, ItemPresentation.Slot(item, _runtime.CombatState.ReadEquipment(_arena.Player.CombatantId).Rules));
-        _nearbyLoot.PickupRequested += id => _arena.PickUpItem(id);
+        _nearbyLoot.AutoGoldToggleRequested += () => _arena.ToggleAutoGoldPickup();
+        _nearbyLoot.PickupRequested += id => _arena.PickUpLoot(id);
         _nearbyLoot.ItemHovered += _hoverItem;
         _roundBanner = UiLayout.Panel(_design, "RoundComplete", new Rect2(650, 138, 620, 172));
         _roundTitle = UiLayout.Place(_roundBanner, UiLayout.Text("", 25, HonorTheme.Brass, true), new Rect2(24, 16, 530, 40));

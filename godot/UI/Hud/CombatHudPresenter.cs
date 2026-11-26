@@ -4,6 +4,7 @@ using System.Linq;
 using Godot;
 using RollForHonor.Domain.Combat.State.Models;
 using RollForHonor.Domain.Stats;
+using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Godot.Arena;
 using RollForHonor.Godot.CombatDemo;
 using RollForHonor.Godot.Gameplay.Combat;
@@ -27,6 +28,7 @@ internal sealed class CombatHudPresenter
     private readonly DiceRollControl _roll;
     private readonly Label _objective;
     private readonly Label _attack;
+    private readonly TextureRect _weaponIcon;
     private readonly Label _enemyName;
     private readonly Label _enemyAmount;
     private readonly Label _enemyState;
@@ -48,6 +50,7 @@ internal sealed class CombatHudPresenter
         _roll = design.GetNode<DiceRollControl>("ActionBar/RollValue");
         _objective = design.GetNode<Label>("Objective/ObjectiveText");
         _attack = design.GetNode<Label>("ActionBar/Recovery");
+        _weaponIcon = design.GetNode<TextureRect>("ActionBar/PrimaryAttack/Icon");
         _enemyName = design.GetNode<Label>("Enemy/TargetName");
         _enemyAmount = design.GetNode<Label>("Enemy/TargetAmount");
         _enemyState = design.GetNode<Label>("Enemy/TargetState");
@@ -86,6 +89,16 @@ internal sealed class CombatHudPresenter
         var stats = state.GetStats(id);
         var launch = state.ReadForStart(id, "arena-shot", Guid.NewGuid());
         var mana = launch.Resources.Single().Amount;
+        var weapon = state.ReadEquipment(id).Loadout.GetItem(EquipmentSlot.Weapon);
+        var iconKey = weapon is null ? "weapon" : ItemPresentation.Icon(weapon, EquipmentSlot.Weapon);
+        var iconPath = $"res://UI/Assets/{iconKey}.svg";
+
+        if (_weaponIcon.Texture?.ResourcePath != iconPath)
+        {
+            _weaponIcon.Texture = GD.Load<Texture2D>(iconPath);
+        }
+
+        _weaponIcon.Modulate = weapon is null ? RollForHonor.Godot.UI.Common.HonorTheme.Parchment : ItemPresentation.RarityColor(weapon.Rarity);
         _health.UpdateValue(read.Source.Health, read.Source.MaxHealth, L.Text("HEALTH"));
         _mana.UpdateValue(mana, stats.Get(new StatKey(StatType.MaxMana)), L.Text("MANA"));
         RefreshTarget();

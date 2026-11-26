@@ -16,7 +16,8 @@ public partial class ArenaHud
     {
         var read = _runtime.CombatState.ReadEquipment(_arena.Player.CombatantId);
 
-        return ReferenceCatalog.Create(read.OwnedItems.Values, _history.CreateDiceHistoryTopic(), _history.CreateActionHistoryTopic());
+        return ReferenceCatalog.Create(read.OwnedItems.Values, _history.CreateDiceHistoryTopic(), _history.CreateActionHistoryTopic(),
+            _runtime.CombatState.GetStats(_arena.Player.CombatantId).Get(new(RollForHonor.Domain.Stats.StatType.Luck)));
     }
 
     private void BuildReference()

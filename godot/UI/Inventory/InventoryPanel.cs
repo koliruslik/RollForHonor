@@ -48,6 +48,7 @@ public partial class InventoryPanel : Control
     private readonly Dictionary<EquipmentSlot, ItemCell> _slots = new();
     private InventoryGridView _bag;
     private Label _count;
+    private Label _gold;
     private Label _hints;
     private Label _status;
     private EquipmentStateRead _state;
@@ -112,6 +113,10 @@ public partial class InventoryPanel : Control
         L.SetText(_status, "");
     }
 
+    /// <summary>Displays the current wallet without treating currency as a bag item.</summary>
+    /// <param name="balance">The authoritative nonnegative gold quantity.</param>
+    public void RefreshGold(long balance) => L.SetText(_gold, L.Format($"Gold: {balance}"));
+
     /// <summary>Shows feedback for a rejected item action above the inventory hints.</summary>
     /// <param name="message">The short action result.</param>
     public void ShowStatus(string message)
@@ -143,6 +148,10 @@ public partial class InventoryPanel : Control
     private void BuildInventory(Control panel)
     {
         _count = UiLayout.Place(panel, UiLayout.Text(L.Text("ITEMS"), 14, HonorTheme.Brass), new Rect2(24, 600, 512, 32));
+        _gold = UiLayout.Place(panel, UiLayout.Text("", 14, HonorTheme.Brass), new Rect2(340, 600, 196, 32));
+        _gold.Name = "GoldBalance";
+        _gold.HorizontalAlignment = HorizontalAlignment.Right;
+        RefreshGold(0);
         _bag = new InventoryGridView
         {
             Name = "Grid",

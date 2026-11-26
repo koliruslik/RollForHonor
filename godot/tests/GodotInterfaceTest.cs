@@ -361,7 +361,7 @@ public sealed class GodotInterfaceTest : TestClass
             properties.GetParsedText().ShouldContain("1d6 + 5");
             properties.GetParsedText().ShouldContain("AFFIXES");
             properties.GetParsedText().ShouldContain("steady hand · T1");
-            properties.GetParsedText().ShouldContain("+2 attack roll");
+            properties.GetParsedText().ShouldContain("+2 accuracy");
             properties.GetParsedText().ShouldContain("barbed shaft · T1");
             properties.GetParsedText().ShouldNotContain("72%");
             properties.GetParsedText().ShouldNotContain("Available tiers:");
@@ -682,6 +682,8 @@ public sealed class GodotInterfaceTest : TestClass
         Runtime.AddChild(arena);
         arena.Player.Controls.HardwareInput = false;
         arena.Opponent.Controls.ThinkingEnabled = false;
+
+        ArenaItemFixtures.UseAuthoredKit(arena);
 
         return arena;
     }

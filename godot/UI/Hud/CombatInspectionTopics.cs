@@ -47,6 +47,7 @@ public static class CombatInspectionTopics
     {
         DamageStepType.WeaponRoll => L.Text("Weapon dice"),
         DamageStepType.AttackerModifier => L.Text("Source modifiers"),
+        DamageStepType.CriticalCheck => L.Text("Critical check"),
         DamageStepType.AttackQuality => L.Text("Attack quality"),
         DamageStepType.ArmorMitigation => L.Text("Armor reduction"),
         DamageStepType.ResistanceMitigation => L.Text("Resistance reduction"),
@@ -62,7 +63,11 @@ public static class CombatInspectionTopics
             .Distinct()
             .Select(type => new InspectionLink(L.Format($"{type} damage"), CombatGlossary.DamageColor(type), () => CombatGlossary.Damage(type)));
 
-        return new(StepName(step.Type), L.Text("Input → output for this recorded stage."), HonorTheme.Secondary, types, TypedFacts(step.Input, step.Output));
+        var description = step.DecisionRoll is { } roll
+            ? L.Format($"Critical d20 {roll.Total} + {step.FlatBonus} · damage ×{step.Multiplier:0.##}")
+            : L.Text("Input → output for this recorded stage.");
+
+        return new(StepName(step.Type), description, HonorTheme.Secondary, types, TypedFacts(step.Input, step.Output));
     }
 
     private static InspectionFact[] TypedFacts(DamagePacket before, DamagePacket after) => before.Components

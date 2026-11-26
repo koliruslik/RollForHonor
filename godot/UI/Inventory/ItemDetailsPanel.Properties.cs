@@ -27,7 +27,7 @@ public partial class ItemDetailsPanel
 
             foreach (var affix in _item.Affixes)
             {
-                Heading($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}");
+                Heading($"{ItemPresentation.AffixName(affix.DefinitionId)} · {affix.TierId}");
                 WriteAffix(affix);
             }
         }
@@ -87,7 +87,7 @@ public partial class ItemDetailsPanel
 
         var id = _inspections.Count.ToString();
         _sources[id] = string.Join("\n\n", contributors
-            .Select(affix => L.Text(affix.DefinitionId.Replace('-', ' ')) + "\n" + FormatAffix(affix)));
+            .Select(affix => ItemPresentation.AffixName(affix.DefinitionId) + "\n" + FormatAffix(affix)));
         _inspections[id] = PropertyTopic(text, key, contributors);
         InspectionText.Link(_properties, text, id, CombatGlossary.StatColor(key), contributors.Count > 0);
         _properties.AddText("\n");

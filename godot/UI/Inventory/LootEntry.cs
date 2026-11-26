@@ -26,16 +26,16 @@ public partial class LootEntry : Button
         var color = ItemPresentation.RarityColor(Item.Rarity);
         var icon = UiLayout.Place(this, UiLayout.Icon(IconKey), new Rect2(6, 5, 24, 24));
         icon.Modulate = color;
-        var label = UiLayout.Place(this, UiLayout.Text(L.Text(Item.Base.Name), 14, color), new Rect2(38, 1, 242, 32));
+        var label = UiLayout.Place(this, UiLayout.Text(ItemPresentation.Name(Item), 14, color), new Rect2(38, 1, 242, 32));
         label.ClipText = true;
-        TooltipText = L.Text(Item.Base.Name);
-        L.OnChanged(this, () => TooltipText = L.Text(Item.Base.Name));
+        TooltipText = ItemPresentation.Name(Item);
+        L.OnChanged(this, () => TooltipText = ItemPresentation.Name(Item));
     }
 
     /// <inheritdoc />
     public override Variant _GetDragData(Vector2 atPosition)
     {
-        var preview = UiLayout.Text(L.Text(Item.Base.Name), 18, ItemPresentation.RarityColor(Item.Rarity));
+        var preview = UiLayout.Text(ItemPresentation.Name(Item), 18, ItemPresentation.RarityColor(Item.Rarity));
         SetDragPreview(preview);
 
         return new global::Godot.Collections.Dictionary { ["rfh-item-id"] = Item.Id, ["rfh-grab-cell"] = Vector2I.Zero };

@@ -4,13 +4,13 @@ using RollForHonor.Godot.Gameplay.Combat;
 
 namespace RollForHonor.Godot.Gameplay.Input;
 
-/// <summary>Projects the cursor onto visible collision surfaces and rotates only the actor's visual yaw.</summary>
+/// <summary>Prioritizes combatants beneath the cursor through camera occluders and rotates only the actor visual yaw.</summary>
 public partial class MouseFacing : EntityComponent
 {
     /// <inheritdoc />
     public override ActorPhysicsStage PhysicsStage => ActorPhysicsStage.Presentation;
 
-    /// <summary>Gets the last valid cursor surface position on terrain, an actor or an obstacle.</summary>
+    /// <summary>Gets the last valid actor-priority cursor surface position.</summary>
     public Vector3 Point { get; private set; }
 
     private const uint TerrainMask = 16;
@@ -35,7 +35,7 @@ public partial class MouseFacing : EntityComponent
         Point = actor.GlobalPosition + Vector3.Forward * 5;
     }
 
-    /// <summary>Queries a screen point during physics and aligns the marker to the closest actor, terrain or obstacle surface.</summary>
+    /// <summary>Queries the cursor during physics, preferring a combatant over camera-occluding scenery.</summary>
     /// <param name="screen">Viewport-space cursor position.</param>
     /// <returns>True when a surface was found; false hides the marker and preserves the previous facing.</returns>
     public bool SampleCursor(Vector2 screen)
@@ -108,6 +108,36 @@ public partial class MouseFacing : EntityComponent
             query.Exclude = [source.GetRid()];
         }
 
-        return _actor.GetWorld3D().DirectSpaceState.IntersectRay(query);
+        var space = _actor.GetWorld3D().DirectSpaceState;
+        var sourceExclusions = query.Exclude.Duplicate();
+        query.CollisionMask = 6;
+
+        while (true)
+        {
+            var actorHit = space.IntersectRay(query);
+
+            if (actorHit.Count == 0)
+            {
+                break;
+            }
+
+            if (actorHit["collider"].AsGodotObject() is ICombatBody)
+            {
+                return actorHit;
+            }
+
+            if (actorHit["collider"].AsGodotObject() is not CollisionObject3D occluder)
+            {
+                break;
+            }
+
+            var exclusions = query.Exclude;
+            exclusions.Add(occluder.GetRid());
+            query.Exclude = exclusions;
+        }
+
+        query.Exclude = sourceExclusions;
+        query.CollisionMask = 22;
+        return space.IntersectRay(query);
     }
 }

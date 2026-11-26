@@ -43,8 +43,8 @@ public sealed class GodotCombatRuntimeTest : TestClass
         first.ResolutionId.ShouldNotBe(second.ResolutionId);
         var firstResolution = ((ResolvedCombat)first.Outcome).Resolution;
         var secondResolution = ((ResolvedCombat)second.Outcome).Resolution;
-        firstResolution.DiceTrace.Rolls.Count.ShouldBe(2);
-        secondResolution.DiceTrace.Rolls.Count.ShouldBe(2);
+        firstResolution.DiceTrace.Rolls.Count.ShouldBe(firstResolution.Result.Target.Outcome == AttackOutcome.Evaded ? 2 : 3);
+        secondResolution.DiceTrace.Rolls.Count.ShouldBe(secondResolution.Result.Target.Outcome == AttackOutcome.Evaded ? 2 : 3);
         var health = secondResolution.Changes.OfType<HealthChanged>().Single();
         bootstrap.CombatState.Read(source.Id, target.Id).Target.Health.ShouldBe(health.CurrentHealth);
         bootstrap.CombatState.ReadForStart(source.Id, definition.Key, Guid.NewGuid()).Resources

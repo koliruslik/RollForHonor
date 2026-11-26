@@ -16,6 +16,7 @@ public static class GameInputBindings
         Add("rfh_menu", Key.Escape);
         Add("rfh_details", Key.Alt);
         Add("rfh_pickup", Key.G);
+        Add("rfh_auto_gold", Key.G, ctrl: true);
         Add("rfh_skill2", Key.Q);
         Add("rfh_skill3", Key.E);
         Add("rfh_skill4", Key.F);
@@ -25,9 +26,9 @@ public static class GameInputBindings
         AddMouse("rfh_zoom_out", MouseButton.WheelDown);
     }
 
-    /// <summary>Reads the current key for an action.</summary>
+    /// <summary>Reads the current key and modifiers for an action.</summary>
     /// <param name="action">A registered action identifier.</param>
-    /// <returns>The key name, or a dash if no key is bound.</returns>
+    /// <returns>The key combination, or a dash if no key is bound.</returns>
     public static string Name(string action)
     {
         var events = InputMap.ActionGetEvents(action);
@@ -39,7 +40,9 @@ public static class GameInputBindings
         {
             var code = key.PhysicalKeycode == Key.None ? key.Keycode : key.PhysicalKeycode;
 
-            return code == Key.Escape ? "Esc" : OS.GetKeycodeString(code);
+            var modifiers = (key.CtrlPressed ? "Ctrl+" : "") + (key.AltPressed ? "Alt+" : "")
+                + (key.ShiftPressed ? "Shift+" : "") + (key.MetaPressed ? "Meta+" : "");
+            return modifiers + (code == Key.Escape ? "Esc" : OS.GetKeycodeString(code));
         }
 
         return events
@@ -63,12 +66,12 @@ public static class GameInputBindings
         }
     }
 
-    private static void Add(string action, Key key)
+    private static void Add(string action, Key key, bool ctrl = false)
     {
         if (!InputMap.HasAction(action))
         {
             InputMap.AddAction(action);
-            InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
+            InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key, CtrlPressed = ctrl });
         }
     }
 }

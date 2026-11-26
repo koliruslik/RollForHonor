@@ -16,7 +16,7 @@ using RollForHonor.Domain.Stats;
 
 namespace RollForHonor.Godot.Content.Items;
 
-/// <summary>Loads an authored starting kit and rolls captured enemy drops from the same initial pool.</summary>
+/// <summary>Loads legacy authored item fixtures for isolated presentation and compatibility tests.</summary>
 public static class StarterItemCatalog
 {
     /// <summary>Creates independent owned instances from editable JSON, retaining actual affix values.</summary>
@@ -36,13 +36,14 @@ public static class StarterItemCatalog
             .ToArray();
     }
 
-    /// <summary>Chooses one authored base and rolls fresh d100 affix qualities once for a defeated enemy.</summary>
+    /// <summary>Chooses one legacy fixture base and rolls fresh affix qualities for compatibility tests.</summary>
     /// <param name="source">The defeated actor's identity, used to keep this drop unique.</param>
-    /// <param name="dice">The selection and quality roller.</param>
+    /// <param name="dice">The base-selection, tier and quality roller.</param>
+    /// <param name="luck">The captured player Luck used only for affix rolls.</param>
     /// <returns>A captured item whose values remain unchanged on inspection or pickup retries.</returns>
     /// <exception cref="ArgumentNullException">A required input is null.</exception>
     /// <exception cref="JsonException">The authored pool is malformed.</exception>
-    public static ItemInstance RollDrop(CombatantId source, IDiceRoller dice)
+    public static ItemInstance RollDrop(CombatantId source, IDiceRoller dice, decimal luck = 0)
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(dice);
@@ -50,17 +51,17 @@ public static class StarterItemCatalog
         var pool = json.RootElement.EnumerateArray().ToArray();
         var selected = dice.Roll(new DiceFormula(1, pool.Length)).Total - 1;
 
-        return CreateItem(pool[selected], source, new ItemFactory(ItemRuleContent.LoadRarityRules(), ItemStatRules.Default), dice);
+        return CreateItem(pool[selected], source, new ItemFactory(ItemRuleContent.LoadRarityRules(), ItemStatRules.Default), dice, luck);
     }
 
-    private static ItemInstance CreateItem(JsonElement entry, CombatantId owner, ItemFactory factory, IDiceRoller dice = null)
+    private static ItemInstance CreateItem(JsonElement entry, CombatantId owner, ItemFactory factory, IDiceRoller dice = null, decimal luck = 0)
     {
         var id = entry.GetProperty("id").GetString();
         var definition = new ItemDefinition(id, entry.GetProperty("name").GetString(),
             ReadTags(entry), entry.GetProperty("modifiers").EnumerateArray()
                 .Select(modifier => new ItemModifier(Key(modifier), Operation(modifier), modifier.GetProperty("value").GetDecimal())), ReadWeapon(entry), ReadFootprint(entry));
         var affixes = entry.GetProperty("affixes").EnumerateArray()
-            .Select(affix => CreateAffix(affix, id, dice));
+            .Select(affix => CreateAffix(affix, id, dice, luck));
 
         return factory.Create($"{owner.Value:N}:{id}", definition,
             Enum.Parse<ItemRarity>(entry.GetProperty("rarity").GetString()), affixes);
@@ -93,7 +94,7 @@ public static class StarterItemCatalog
 
     private static StatOperation Operation(JsonElement modifier) => Enum.Parse<StatOperation>(modifier.GetProperty("operation").GetString());
 
-    private static AffixInstance CreateAffix(JsonElement entry, string itemId, IDiceRoller dice = null)
+    private static AffixInstance CreateAffix(JsonElement entry, string itemId, IDiceRoller dice = null, decimal luck = 0)
     {
         var id = entry.GetProperty("id").GetString();
         var tier = entry.GetProperty("tier").GetString();
@@ -103,7 +104,10 @@ public static class StarterItemCatalog
                 modifier.GetProperty("precision").GetInt32()));
         var definition = new AffixDefinition(id, id, 1, [new AffixTier(tier, 0, ranges)]);
 
-        return new AffixRoller().Roll($"{itemId}:{id}", definition, tier, dice ?? new AuthoredQuality(entry.GetProperty("quality").GetInt32()));
+        var tierRoll = dice?.Roll(new DiceFormula(1, 20));
+
+        return new AffixRoller().Roll($"{itemId}:{id}", definition, tier,
+            dice ?? new AuthoredQuality(entry.GetProperty("quality").GetInt32()), luck, tierRoll);
     }
 
     private sealed class AuthoredQuality(int quality) : IDiceRoller

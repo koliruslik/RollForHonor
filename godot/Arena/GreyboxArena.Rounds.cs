@@ -8,14 +8,12 @@ using RollForHonor.Domain.Stats;
 using RollForHonor.Domain.Items.Inventory.Models;
 using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Combat.State.Models;
-using RollForHonor.Godot.Content.Items;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.Gameplay.Items;
 using RollForHonor.Godot.Gameplay.Projectiles;
 using RollForHonor.Godot.Gameplay.Targeting;
 using RollForHonor.Godot.UI.Hud;
 using RollForHonor.Godot.UI.Localization;
-using RollForHonor.Infrastructure.Dice;
 
 namespace RollForHonor.Godot.Arena;
 
@@ -75,6 +73,7 @@ public partial class GreyboxArena
         }
 
         PlacePendingDrops();
+        PlacePendingGold();
         StepAdminEnemies();
         StepRecovery();
 
@@ -93,7 +92,7 @@ public partial class GreyboxArena
             }
 
             GetNode<ArenaHud>("Presentation").RecordAction(L.Format($"Defeated: {ActorName(enemy)}"));
-            CreateDrop(StarterItemCatalog.RollDrop(enemy.CombatantId, new RandomDiceRoller(_roundRandom)), enemy.Position);
+            CreateMonsterLoot(enemy);
             enemy.GetRequiredComponent<ActorState>().PhysicsStep(0);
             enemy.SetPhysicsProcess(false);
             enemy.CollisionLayer = enemy.CollisionMask = 0;
@@ -111,6 +110,8 @@ public partial class GreyboxArena
             StopProjectiles();
             Player.GetRequiredComponent<CombatAwareness>().Selection.Reset();
         }
+
+        StepAutoGoldPickup();
     }
 
     /// <summary>Queues the next round after unlimited free time, preserving equipment, resources and uncollected loot.</summary>
@@ -140,9 +141,16 @@ public partial class GreyboxArena
     /// <returns>The nearby drop, or null when none is available.</returns>
     public WorldItemDrop NearestDrop() => NearbyDrops().FirstOrDefault();
 
-    /// <summary>Picks the nearby-menu selection, falling back to the nearest item.</summary>
-    /// <returns>True when the selected captured item became owned.</returns>
-    public bool PickUpNearest() => PickUpItem(GetNode<ArenaHud>("Presentation").SelectedLootId ?? NearestDrop()?.Item.Id);
+    /// <summary>Picks the nearby-menu selection, falling back to a reachable item or gold reward.</summary>
+    /// <returns>True when item ownership or gold credit was published.</returns>
+    public bool PickUpNearest() => PickUpLoot(GetNode<ArenaHud>("Presentation").SelectedLootId ?? NearestDrop()?.Item.Id ?? NearbyGoldDrops().FirstOrDefault()?.LootId);
+
+    /// <summary>Routes a nearby-menu selection to captured item or gold collection.</summary>
+    /// <param name="lootId">The selected world-loot identity.</param>
+    /// <returns>True only when a new item acquisition or gold collection succeeded.</returns>
+    public bool PickUpLoot(string lootId) => GoldDrops.Any(drop => drop.LootId == lootId)
+        ? PickUpGold(lootId)
+        : PickUpItem(lootId);
 
     /// <summary>Attempts a specific nearby pickup without consuming or rerolling rejected drops.</summary>
     /// <param name="itemId">The selected world instance.</param>

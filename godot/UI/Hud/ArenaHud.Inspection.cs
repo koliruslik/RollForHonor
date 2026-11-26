@@ -51,6 +51,7 @@ public partial class ArenaHud
             L.Format($"{Binding("rfh_character")}  Character"),
             L.Format($"{Binding("rfh_menu")}  Menu"),
             L.Format($"{Binding("rfh_reference")}  Reference"),
+            L.Format($"{Binding("rfh_auto_gold")}  Auto gold pickup"),
             L.Format($"{Binding("rfh_primary")}  Attack"),
             L.Format($"{Binding("rfh_target")}  Select / clear target")
         ]);

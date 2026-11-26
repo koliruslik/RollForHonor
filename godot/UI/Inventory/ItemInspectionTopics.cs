@@ -30,10 +30,10 @@ public static class ItemInspectionTopics
         var links = item.Base.Modifiers
             .Select(modifier => CombatGlossary.Link(modifier.Key))
             .Concat(item.Affixes
-                .Select(affix => new InspectionLink(L.Format($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}"),
+                .Select(affix => new InspectionLink(L.Format($"{ItemPresentation.AffixName(affix.DefinitionId)} · {affix.TierId}"),
                     ItemPresentation.RarityColor(item.Rarity), () => Affix(item.Rarity, affix, true))));
 
-        return new(L.Text(item.Base.Name),
+        return new(ItemPresentation.Name(item),
             L.Format($"{item.Rarity} · {item.Base.Footprint.Width}×{item.Base.Footprint.Height} cells\n\nCaptured base properties are listed above. Related affixes show their additional rolled values, ranges and tiers."),
             ItemPresentation.RarityColor(item.Rarity), links, facts);
     }
@@ -54,7 +54,7 @@ public static class ItemInspectionTopics
             .Select(modifier => CombatGlossary.Link(modifier.Key))
             .DistinctBy(link => link.Text);
 
-        return new(L.Format($"{L.Text(affix.DefinitionId.Replace('-', ' '))} · {affix.TierId}"), "", ItemPresentation.RarityColor(rarity), links, facts.Concat(tiers));
+        return new(L.Format($"{ItemPresentation.AffixName(affix.DefinitionId)} · {affix.TierId}"), "", ItemPresentation.RarityColor(rarity), links, facts.Concat(tiers));
     }
 
     /// <summary>Formats an actual modifier with optional captured roll details.</summary>
@@ -75,7 +75,7 @@ public static class ItemInspectionTopics
         var range = affix.Ranges[index];
         var scale = modifier.Operation != StatOperation.Flat || modifier.Key.Type == StatType.Resistance ? 100 : 1;
 
-        return L.Format($"{value} [{range.Minimum * scale:0.##}/{range.Maximum * scale:0.##}] {affix.QualityRoll}% {affix.TierId}");
+        return L.Format($"{value} [{range.Minimum * scale:0.##}/{range.Maximum * scale:0.##}] {affix.EffectiveQualityRoll}% {affix.TierId}");
     }
 
     /// <summary>Formats the numbered tier bounds as T1 or T1–Tx.</summary>

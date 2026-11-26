@@ -1,0 +1,8415 @@
+[
+  {
+	"id": "ashen-longbow",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"starter_rarity": "Rare",
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 8.0
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"starter_rarity": "Rare",
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 4.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"starter_rarity": "Uncommon",
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"starter_rarity": "Uncommon",
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 20.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"starter_rarity": "Rare",
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 5.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"starter_rarity": "Rare",
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 5.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"starter_rarity": "Epic",
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 8.0
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"starter_rarity": "Common",
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"starter_rarity": "Common",
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 5.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"starter_rarity": "Uncommon",
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"starter_rarity": "Common",
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"starter_rarity": "Common",
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 1,
+	"band": 1,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 4.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b2",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b2",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 11.6
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 11.6
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b2",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 5.8
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b2",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 11.6
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b2",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 29.0
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b2",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 7.25
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b2",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 7.25
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b2",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 11.6
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 11.6
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b2",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b2",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 7.25
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b2",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b2",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b2",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 11.6
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b2",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 5,
+	"band": 2,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 5.8
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b3",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 2
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b3",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 16.82
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 16.82
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b3",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.41
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b3",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 16.82
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b3",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 42.05
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b3",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 10.5125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b3",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 10.5125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b3",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 16.82
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 16.82
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b3",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 2
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b3",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 10.5125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b3",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b3",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b3",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 16.82
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b3",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 10,
+	"band": 3,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 8.41
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b4",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 2
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b4",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 24.389
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 24.389
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b4",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 12.1945
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b4",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 24.389
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b4",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 60.9725
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b4",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 15.243125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b4",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 15.243125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b4",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 24.389
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 24.389
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b4",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 2
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b4",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 15.243125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b4",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b4",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b4",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 24.389
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b4",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 20,
+	"band": 4,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 12.1945
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b5",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 3
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b5",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 35.36405
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 35.36405
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b5",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 17.682025
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b5",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 35.36405
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b5",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 88.410125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b5",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 22.10253125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b5",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 22.10253125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b5",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 35.36405
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 35.36405
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b5",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 3
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b5",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 22.10253125
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b5",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b5",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b5",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 35.36405
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b5",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 35,
+	"band": 5,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 17.682025
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b6",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 3
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b6",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b6",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 25.638936249999997
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b6",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b6",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 128.19468124999997
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b6",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 32.04867031249999
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b6",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 32.04867031249999
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b6",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b6",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 3
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b6",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 32.04867031249999
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b6",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b6",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b6",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 51.277872499999994
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b6",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 50,
+	"band": 6,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 25.638936249999997
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ashen-longbow-b7",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 4
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "embercoat-b7",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "wayfarer-boots-b7",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 37.17645756249999
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "warden-helm-b7",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "moonstone-pendant-b7",
+	"name": "Copper Amulet",
+	"slot": "amulet",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 185.88228781249995
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідний амулет",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "cinder-band-b7",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 46.47057195312499
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "oathkeeper-ring-b7",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 46.47057195312499
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "pilgrim-coat-b7",
+	"name": "Quilted Jacket",
+	"slot": "body",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxHealth",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  },
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Стьобана куртка",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-bow-b7",
+	"name": "Wooden Bow",
+	"slot": "weapon",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 4
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	},
+	"name_uk": "Дерев’яний лук",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "winter-loop-b7",
+	"name": "Copper Ring",
+	"slot": "ring",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [
+	  {
+		"type": "MaxMana",
+		"operation": "Flat",
+		"value": 46.47057195312499
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"name_uk": "Мідне кільце",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "ranger-quiver-b7",
+	"name": "Leather Quiver",
+	"slot": "offhand",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"name_uk": "Шкіряний сагайдак",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "iron-shield-b7",
+	"name": "Wooden Shield",
+	"slot": "offhand",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"name_uk": "Дерев’яний щит",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-hood-b7",
+	"name": "Iron Helmet",
+	"slot": "helmet",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 74.35291512499998
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Залізний шолом",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "scout-boots-b7",
+	"name": "Leather Boots",
+	"slot": "boots",
+	"item_level": 70,
+	"band": 7,
+	"defense": "armor",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 37.17645756249999
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"name_uk": "Шкіряні чоботи",
+	"catalog_visible": false,
+	"loot_enabled": false,
+	"legacy_alias": true
+  },
+  {
+	"id": "dexterity-weapon-travel",
+	"name": "Wooden Bow",
+	"name_uk": "Дерев’яний лук",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wooden Bow",
+		"uk": "Дерев’яний лук"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wooden Bow",
+		"uk": "Укріплений дерев’яний лук"
+	  },
+	  "Rare": {
+		"en": "Improved Wooden Bow",
+		"uk": "Удосконалений дерев’яний лук"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wooden Bow",
+		"uk": "Майстерний дерев’яний лук"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wooden Bow",
+		"uk": "Довершений дерев’яний лук"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "dexterity-weapon-field",
+	"name": "Hunting Bow",
+	"name_uk": "Мисливський лук",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Hunting Bow",
+		"uk": "Мисливський лук"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Hunting Bow",
+		"uk": "Укріплений мисливський лук"
+	  },
+	  "Rare": {
+		"en": "Improved Hunting Bow",
+		"uk": "Удосконалений мисливський лук"
+	  },
+	  "Epic": {
+		"en": "Masterwork Hunting Bow",
+		"uk": "Майстерний мисливський лук"
+	  },
+	  "Legendary": {
+		"en": "Perfected Hunting Bow",
+		"uk": "Довершений мисливський лук"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "dexterity-weapon-watch",
+	"name": "Longbow",
+	"name_uk": "Довгий лук",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Longbow",
+		"uk": "Довгий лук"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Longbow",
+		"uk": "Укріплений довгий лук"
+	  },
+	  "Rare": {
+		"en": "Improved Longbow",
+		"uk": "Удосконалений довгий лук"
+	  },
+	  "Epic": {
+		"en": "Masterwork Longbow",
+		"uk": "Майстерний довгий лук"
+	  },
+	  "Legendary": {
+		"en": "Perfected Longbow",
+		"uk": "Довершений довгий лук"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "dexterity-weapon-garrison",
+	"name": "Composite Bow",
+	"name_uk": "Складений лук",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Composite Bow",
+		"uk": "Складений лук"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Composite Bow",
+		"uk": "Укріплений складений лук"
+	  },
+	  "Rare": {
+		"en": "Improved Composite Bow",
+		"uk": "Удосконалений складений лук"
+	  },
+	  "Epic": {
+		"en": "Masterwork Composite Bow",
+		"uk": "Майстерний складений лук"
+	  },
+	  "Legendary": {
+		"en": "Perfected Composite Bow",
+		"uk": "Довершений складений лук"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "dexterity-weapon-fortress",
+	"name": "War Bow",
+	"name_uk": "Бойовий лук",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "bow",
+      "two-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "War Bow",
+		"uk": "Бойовий лук"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced War Bow",
+		"uk": "Укріплений бойовий лук"
+	  },
+	  "Rare": {
+		"en": "Improved War Bow",
+		"uk": "Удосконалений бойовий лук"
+	  },
+	  "Epic": {
+		"en": "Masterwork War Bow",
+		"uk": "Майстерний бойовий лук"
+	  },
+	  "Legendary": {
+		"en": "Perfected War Bow",
+		"uk": "Довершений бойовий лук"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "dexterity-body-travel",
+	"name": "Quilted Jacket",
+	"name_uk": "Стьобана куртка",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 50
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Quilted Jacket",
+		"uk": "Стьобана куртка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Quilted Jacket",
+		"uk": "Укріплена стьобана куртка"
+	  },
+	  "Rare": {
+		"en": "Improved Quilted Jacket",
+		"uk": "Удосконалена стьобана куртка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Quilted Jacket",
+		"uk": "Майстерна стьобана куртка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Quilted Jacket",
+		"uk": "Довершена стьобана куртка"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-body-field",
+	"name": "Leather Jacket",
+	"name_uk": "Шкіряна куртка",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Jacket",
+		"uk": "Шкіряна куртка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Jacket",
+		"uk": "Укріплена шкіряна куртка"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Jacket",
+		"uk": "Удосконалена шкіряна куртка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Jacket",
+		"uk": "Майстерна шкіряна куртка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Jacket",
+		"uk": "Довершена шкіряна куртка"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-body-watch",
+	"name": "Leather Vest",
+	"name_uk": "Шкіряний жилет",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Vest",
+		"uk": "Шкіряний жилет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Vest",
+		"uk": "Укріплений шкіряний жилет"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Vest",
+		"uk": "Удосконалений шкіряний жилет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Vest",
+		"uk": "Майстерний шкіряний жилет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Vest",
+		"uk": "Довершений шкіряний жилет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-body-garrison",
+	"name": "Leather Coat",
+	"name_uk": "Шкіряний каптан",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Coat",
+		"uk": "Шкіряний каптан"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Coat",
+		"uk": "Укріплений шкіряний каптан"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Coat",
+		"uk": "Удосконалений шкіряний каптан"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Coat",
+		"uk": "Майстерний шкіряний каптан"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Coat",
+		"uk": "Довершений шкіряний каптан"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-body-fortress",
+	"name": "Leather Armour",
+	"name_uk": "Шкіряний обладунок",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Armour",
+		"uk": "Шкіряний обладунок"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Armour",
+		"uk": "Укріплений шкіряний обладунок"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Armour",
+		"uk": "Удосконалений шкіряний обладунок"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Armour",
+		"uk": "Майстерний шкіряний обладунок"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Armour",
+		"uk": "Довершений шкіряний обладунок"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-helmet-travel",
+	"name": "Cloth Hood",
+	"name_uk": "Тканинний каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 30
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Cloth Hood",
+		"uk": "Тканинний каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Cloth Hood",
+		"uk": "Укріплений тканинний каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Cloth Hood",
+		"uk": "Удосконалений тканинний каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Cloth Hood",
+		"uk": "Майстерний тканинний каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Cloth Hood",
+		"uk": "Довершений тканинний каптур"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-helmet-field",
+	"name": "Leather Hood",
+	"name_uk": "Шкіряний каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Hood",
+		"uk": "Шкіряний каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Hood",
+		"uk": "Укріплений шкіряний каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Hood",
+		"uk": "Удосконалений шкіряний каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Hood",
+		"uk": "Майстерний шкіряний каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Hood",
+		"uk": "Довершений шкіряний каптур"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-helmet-watch",
+	"name": "Hunting Hood",
+	"name_uk": "Мисливський каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Hunting Hood",
+		"uk": "Мисливський каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Hunting Hood",
+		"uk": "Укріплений мисливський каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Hunting Hood",
+		"uk": "Удосконалений мисливський каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Hunting Hood",
+		"uk": "Майстерний мисливський каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Hunting Hood",
+		"uk": "Довершений мисливський каптур"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-helmet-garrison",
+	"name": "Watch Hood",
+	"name_uk": "Вартовий каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Watch Hood",
+		"uk": "Вартовий каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Watch Hood",
+		"uk": "Укріплений вартовий каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Watch Hood",
+		"uk": "Удосконалений вартовий каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Watch Hood",
+		"uk": "Майстерний вартовий каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Watch Hood",
+		"uk": "Довершений вартовий каптур"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-helmet-fortress",
+	"name": "Scout Hood",
+	"name_uk": "Каптур розвідника",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Scout Hood",
+		"uk": "Каптур розвідника"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Scout Hood",
+		"uk": "Укріплений каптур розвідника"
+	  },
+	  "Rare": {
+		"en": "Improved Scout Hood",
+		"uk": "Удосконалений каптур розвідника"
+	  },
+	  "Epic": {
+		"en": "Masterwork Scout Hood",
+		"uk": "Майстерний каптур розвідника"
+	  },
+	  "Legendary": {
+		"en": "Perfected Scout Hood",
+		"uk": "Довершений каптур розвідника"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-boots-travel",
+	"name": "Leather Boots",
+	"name_uk": "Шкіряні чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 20
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Boots",
+		"uk": "Шкіряні чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Boots",
+		"uk": "Укріплені шкіряні чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Boots",
+		"uk": "Удосконалені шкіряні чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Boots",
+		"uk": "Майстерні шкіряні чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Boots",
+		"uk": "Довершені шкіряні чоботи"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-boots-field",
+	"name": "Travel Boots",
+	"name_uk": "Дорожні чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Travel Boots",
+		"uk": "Дорожні чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Travel Boots",
+		"uk": "Укріплені дорожні чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Travel Boots",
+		"uk": "Удосконалені дорожні чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Travel Boots",
+		"uk": "Майстерні дорожні чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Travel Boots",
+		"uk": "Довершені дорожні чоботи"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-boots-watch",
+	"name": "High Boots",
+	"name_uk": "Високі чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "High Boots",
+		"uk": "Високі чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced High Boots",
+		"uk": "Укріплені високі чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved High Boots",
+		"uk": "Удосконалені високі чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork High Boots",
+		"uk": "Майстерні високі чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected High Boots",
+		"uk": "Довершені високі чоботи"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-boots-garrison",
+	"name": "Soldier Boots",
+	"name_uk": "Солдатські чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Soldier Boots",
+		"uk": "Солдатські чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Soldier Boots",
+		"uk": "Укріплені солдатські чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Soldier Boots",
+		"uk": "Удосконалені солдатські чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Soldier Boots",
+		"uk": "Майстерні солдатські чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Soldier Boots",
+		"uk": "Довершені солдатські чоботи"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-boots-fortress",
+	"name": "Ranger Boots",
+	"name_uk": "Чоботи слідопита",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Ranger Boots",
+		"uk": "Чоботи слідопита"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Ranger Boots",
+		"uk": "Укріплені чоботи слідопита"
+	  },
+	  "Rare": {
+		"en": "Improved Ranger Boots",
+		"uk": "Удосконалені чоботи слідопита"
+	  },
+	  "Epic": {
+		"en": "Masterwork Ranger Boots",
+		"uk": "Майстерні чоботи слідопита"
+	  },
+	  "Legendary": {
+		"en": "Perfected Ranger Boots",
+		"uk": "Довершені чоботи слідопита"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-amulet-travel",
+	"name": "Copper Amulet",
+	"name_uk": "Мідний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Copper Amulet",
+		"uk": "Мідний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Copper Amulet",
+		"uk": "Укріплений мідний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Copper Amulet",
+		"uk": "Удосконалений мідний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Copper Amulet",
+		"uk": "Майстерний мідний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Copper Amulet",
+		"uk": "Довершений мідний амулет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-amulet-field",
+	"name": "Bronze Amulet",
+	"name_uk": "Бронзовий амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bronze Amulet",
+		"uk": "Бронзовий амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bronze Amulet",
+		"uk": "Укріплений бронзовий амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Bronze Amulet",
+		"uk": "Удосконалений бронзовий амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bronze Amulet",
+		"uk": "Майстерний бронзовий амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bronze Amulet",
+		"uk": "Довершений бронзовий амулет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-amulet-watch",
+	"name": "Iron Amulet",
+	"name_uk": "Залізний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Amulet",
+		"uk": "Залізний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Amulet",
+		"uk": "Укріплений залізний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Amulet",
+		"uk": "Удосконалений залізний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Amulet",
+		"uk": "Майстерний залізний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Amulet",
+		"uk": "Довершений залізний амулет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-amulet-garrison",
+	"name": "Steel Amulet",
+	"name_uk": "Сталевий амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Amulet",
+		"uk": "Сталевий амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Amulet",
+		"uk": "Укріплений сталевий амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Amulet",
+		"uk": "Удосконалений сталевий амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Amulet",
+		"uk": "Майстерний сталевий амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Amulet",
+		"uk": "Довершений сталевий амулет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-amulet-fortress",
+	"name": "Silver Amulet",
+	"name_uk": "Срібний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Amulet",
+		"uk": "Срібний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Amulet",
+		"uk": "Укріплений срібний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Amulet",
+		"uk": "Удосконалений срібний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Amulet",
+		"uk": "Майстерний срібний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Amulet",
+		"uk": "Довершений срібний амулет"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-ring-travel",
+	"name": "Copper Ring",
+	"name_uk": "Мідне кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Copper Ring",
+		"uk": "Мідне кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Copper Ring",
+		"uk": "Укріплене мідне кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Copper Ring",
+		"uk": "Удосконалене мідне кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Copper Ring",
+		"uk": "Майстерне мідне кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Copper Ring",
+		"uk": "Довершене мідне кільце"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-ring-field",
+	"name": "Bronze Ring",
+	"name_uk": "Бронзове кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bronze Ring",
+		"uk": "Бронзове кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bronze Ring",
+		"uk": "Укріплене бронзове кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Bronze Ring",
+		"uk": "Удосконалене бронзове кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bronze Ring",
+		"uk": "Майстерне бронзове кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bronze Ring",
+		"uk": "Довершене бронзове кільце"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-ring-watch",
+	"name": "Iron Ring",
+	"name_uk": "Залізне кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Ring",
+		"uk": "Залізне кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Ring",
+		"uk": "Укріплене залізне кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Ring",
+		"uk": "Удосконалене залізне кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Ring",
+		"uk": "Майстерне залізне кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Ring",
+		"uk": "Довершене залізне кільце"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-ring-garrison",
+	"name": "Steel Ring",
+	"name_uk": "Сталеве кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Ring",
+		"uk": "Сталеве кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Ring",
+		"uk": "Укріплене сталеве кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Ring",
+		"uk": "Удосконалене сталеве кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Ring",
+		"uk": "Майстерне сталеве кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Ring",
+		"uk": "Довершене сталеве кільце"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-ring-fortress",
+	"name": "Silver Ring",
+	"name_uk": "Срібне кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Ring",
+		"uk": "Срібне кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Ring",
+		"uk": "Укріплене срібне кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Ring",
+		"uk": "Удосконалене срібне кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Ring",
+		"uk": "Майстерне срібне кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Ring",
+		"uk": "Довершене срібне кільце"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-offhand-travel",
+	"name": "Leather Quiver",
+	"name_uk": "Шкіряний сагайдак",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Dexterity",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Leather Quiver",
+		"uk": "Шкіряний сагайдак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Leather Quiver",
+		"uk": "Укріплений шкіряний сагайдак"
+	  },
+	  "Rare": {
+		"en": "Improved Leather Quiver",
+		"uk": "Удосконалений шкіряний сагайдак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Leather Quiver",
+		"uk": "Майстерний шкіряний сагайдак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Leather Quiver",
+		"uk": "Довершений шкіряний сагайдак"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-offhand-field",
+	"name": "Stitched Quiver",
+	"name_uk": "Прошитий сагайдак",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Dexterity",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Stitched Quiver",
+		"uk": "Прошитий сагайдак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Stitched Quiver",
+		"uk": "Укріплений прошитий сагайдак"
+	  },
+	  "Rare": {
+		"en": "Improved Stitched Quiver",
+		"uk": "Удосконалений прошитий сагайдак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Stitched Quiver",
+		"uk": "Майстерний прошитий сагайдак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Stitched Quiver",
+		"uk": "Довершений прошитий сагайдак"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-offhand-watch",
+	"name": "Thick-leather Quiver",
+	"name_uk": "Сагайдак із товстої шкіри",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Dexterity",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Thick-leather Quiver",
+		"uk": "Сагайдак із товстої шкіри"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Thick-leather Quiver",
+		"uk": "Укріплений сагайдак із товстої шкіри"
+	  },
+	  "Rare": {
+		"en": "Improved Thick-leather Quiver",
+		"uk": "Удосконалений сагайдак із товстої шкіри"
+	  },
+	  "Epic": {
+		"en": "Masterwork Thick-leather Quiver",
+		"uk": "Майстерний сагайдак із товстої шкіри"
+	  },
+	  "Legendary": {
+		"en": "Perfected Thick-leather Quiver",
+		"uk": "Довершений сагайдак із товстої шкіри"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-offhand-garrison",
+	"name": "Riveted Quiver",
+	"name_uk": "Клепаний сагайдак",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Dexterity",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Riveted Quiver",
+		"uk": "Клепаний сагайдак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Riveted Quiver",
+		"uk": "Укріплений клепаний сагайдак"
+	  },
+	  "Rare": {
+		"en": "Improved Riveted Quiver",
+		"uk": "Удосконалений клепаний сагайдак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Riveted Quiver",
+		"uk": "Майстерний клепаний сагайдак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Riveted Quiver",
+		"uk": "Довершений клепаний сагайдак"
+	  }
+	}
+  },
+  {
+	"id": "dexterity-offhand-fortress",
+	"name": "Framed Quiver",
+	"name_uk": "Каркасний сагайдак",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Dexterity",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Dexterity",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "quiver"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Framed Quiver",
+		"uk": "Каркасний сагайдак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Framed Quiver",
+		"uk": "Укріплений каркасний сагайдак"
+	  },
+	  "Rare": {
+		"en": "Improved Framed Quiver",
+		"uk": "Удосконалений каркасний сагайдак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Framed Quiver",
+		"uk": "Майстерний каркасний сагайдак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Framed Quiver",
+		"uk": "Довершений каркасний сагайдак"
+	  }
+	}
+  },
+  {
+	"id": "strength-weapon-travel",
+	"name": "Training Sword",
+	"name_uk": "Тренувальний меч",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "sword",
+      "one-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Training Sword",
+		"uk": "Тренувальний меч"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Training Sword",
+		"uk": "Укріплений тренувальний меч"
+	  },
+	  "Rare": {
+		"en": "Improved Training Sword",
+		"uk": "Удосконалений тренувальний меч"
+	  },
+	  "Epic": {
+		"en": "Masterwork Training Sword",
+		"uk": "Майстерний тренувальний меч"
+	  },
+	  "Legendary": {
+		"en": "Perfected Training Sword",
+		"uk": "Довершений тренувальний меч"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "strength-weapon-field",
+	"name": "Iron Sword",
+	"name_uk": "Залізний меч",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "sword",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Sword",
+		"uk": "Залізний меч"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Sword",
+		"uk": "Укріплений залізний меч"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Sword",
+		"uk": "Удосконалений залізний меч"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Sword",
+		"uk": "Майстерний залізний меч"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Sword",
+		"uk": "Довершений залізний меч"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "strength-weapon-watch",
+	"name": "Steel Sword",
+	"name_uk": "Сталевий меч",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "sword",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Sword",
+		"uk": "Сталевий меч"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Sword",
+		"uk": "Укріплений сталевий меч"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Sword",
+		"uk": "Удосконалений сталевий меч"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Sword",
+		"uk": "Майстерний сталевий меч"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Sword",
+		"uk": "Довершений сталевий меч"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "strength-weapon-garrison",
+	"name": "Longsword",
+	"name_uk": "Довгий меч",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "sword",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Longsword",
+		"uk": "Довгий меч"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Longsword",
+		"uk": "Укріплений довгий меч"
+	  },
+	  "Rare": {
+		"en": "Improved Longsword",
+		"uk": "Удосконалений довгий меч"
+	  },
+	  "Epic": {
+		"en": "Masterwork Longsword",
+		"uk": "Майстерний довгий меч"
+	  },
+	  "Legendary": {
+		"en": "Perfected Longsword",
+		"uk": "Довершений довгий меч"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "strength-weapon-fortress",
+	"name": "War Sword",
+	"name_uk": "Бойовий меч",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "sword",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "War Sword",
+		"uk": "Бойовий меч"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced War Sword",
+		"uk": "Укріплений бойовий меч"
+	  },
+	  "Rare": {
+		"en": "Improved War Sword",
+		"uk": "Удосконалений бойовий меч"
+	  },
+	  "Epic": {
+		"en": "Masterwork War Sword",
+		"uk": "Майстерний бойовий меч"
+	  },
+	  "Legendary": {
+		"en": "Perfected War Sword",
+		"uk": "Довершений бойовий меч"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "strength-body-travel",
+	"name": "Iron Cuirass",
+	"name_uk": "Залізна кіраса",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 65
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Cuirass",
+		"uk": "Залізна кіраса"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Cuirass",
+		"uk": "Укріплена залізна кіраса"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Cuirass",
+		"uk": "Удосконалена залізна кіраса"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Cuirass",
+		"uk": "Майстерна залізна кіраса"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Cuirass",
+		"uk": "Довершена залізна кіраса"
+	  }
+	}
+  },
+  {
+	"id": "strength-body-field",
+	"name": "Chainmail",
+	"name_uk": "Кольчуга",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Chainmail",
+		"uk": "Кольчуга"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Chainmail",
+		"uk": "Укріплена кольчуга"
+	  },
+	  "Rare": {
+		"en": "Improved Chainmail",
+		"uk": "Удосконалена кольчуга"
+	  },
+	  "Epic": {
+		"en": "Masterwork Chainmail",
+		"uk": "Майстерна кольчуга"
+	  },
+	  "Legendary": {
+		"en": "Perfected Chainmail",
+		"uk": "Довершена кольчуга"
+	  }
+	}
+  },
+  {
+	"id": "strength-body-watch",
+	"name": "Steel Cuirass",
+	"name_uk": "Сталева кіраса",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Cuirass",
+		"uk": "Сталева кіраса"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Cuirass",
+		"uk": "Укріплена сталева кіраса"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Cuirass",
+		"uk": "Удосконалена сталева кіраса"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Cuirass",
+		"uk": "Майстерна сталева кіраса"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Cuirass",
+		"uk": "Довершена сталева кіраса"
+	  }
+	}
+  },
+  {
+	"id": "strength-body-garrison",
+	"name": "Scale Armour",
+	"name_uk": "Лускатий обладунок",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Scale Armour",
+		"uk": "Лускатий обладунок"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Scale Armour",
+		"uk": "Укріплений лускатий обладунок"
+	  },
+	  "Rare": {
+		"en": "Improved Scale Armour",
+		"uk": "Удосконалений лускатий обладунок"
+	  },
+	  "Epic": {
+		"en": "Masterwork Scale Armour",
+		"uk": "Майстерний лускатий обладунок"
+	  },
+	  "Legendary": {
+		"en": "Perfected Scale Armour",
+		"uk": "Довершений лускатий обладунок"
+	  }
+	}
+  },
+  {
+	"id": "strength-body-fortress",
+	"name": "Plate Armour",
+	"name_uk": "Латний обладунок",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Plate Armour",
+		"uk": "Латний обладунок"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Plate Armour",
+		"uk": "Укріплений латний обладунок"
+	  },
+	  "Rare": {
+		"en": "Improved Plate Armour",
+		"uk": "Удосконалений латний обладунок"
+	  },
+	  "Epic": {
+		"en": "Masterwork Plate Armour",
+		"uk": "Майстерний латний обладунок"
+	  },
+	  "Legendary": {
+		"en": "Perfected Plate Armour",
+		"uk": "Довершений латний обладунок"
+	  }
+	}
+  },
+  {
+	"id": "strength-helmet-travel",
+	"name": "Iron Helmet",
+	"name_uk": "Залізний шолом",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 39
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Helmet",
+		"uk": "Залізний шолом"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Helmet",
+		"uk": "Укріплений залізний шолом"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Helmet",
+		"uk": "Удосконалений залізний шолом"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Helmet",
+		"uk": "Майстерний залізний шолом"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Helmet",
+		"uk": "Довершений залізний шолом"
+	  }
+	}
+  },
+  {
+	"id": "strength-helmet-field",
+	"name": "Steel Helmet",
+	"name_uk": "Сталевий шолом",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Helmet",
+		"uk": "Сталевий шолом"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Helmet",
+		"uk": "Укріплений сталевий шолом"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Helmet",
+		"uk": "Удосконалений сталевий шолом"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Helmet",
+		"uk": "Майстерний сталевий шолом"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Helmet",
+		"uk": "Довершений сталевий шолом"
+	  }
+	}
+  },
+  {
+	"id": "strength-helmet-watch",
+	"name": "Steel Cap",
+	"name_uk": "Сталева каска",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Cap",
+		"uk": "Сталева каска"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Cap",
+		"uk": "Укріплений сталева каска"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Cap",
+		"uk": "Удосконалений сталева каска"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Cap",
+		"uk": "Майстерний сталева каска"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Cap",
+		"uk": "Довершений сталева каска"
+	  }
+	}
+  },
+  {
+	"id": "strength-helmet-garrison",
+	"name": "Guard Helmet",
+	"name_uk": "Вартовий шолом",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Guard Helmet",
+		"uk": "Вартовий шолом"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Guard Helmet",
+		"uk": "Укріплений вартовий шолом"
+	  },
+	  "Rare": {
+		"en": "Improved Guard Helmet",
+		"uk": "Удосконалений вартовий шолом"
+	  },
+	  "Epic": {
+		"en": "Masterwork Guard Helmet",
+		"uk": "Майстерний вартовий шолом"
+	  },
+	  "Legendary": {
+		"en": "Perfected Guard Helmet",
+		"uk": "Довершений вартовий шолом"
+	  }
+	}
+  },
+  {
+	"id": "strength-helmet-fortress",
+	"name": "Closed Helmet",
+	"name_uk": "Закритий шолом",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Closed Helmet",
+		"uk": "Закритий шолом"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Closed Helmet",
+		"uk": "Укріплений закритий шолом"
+	  },
+	  "Rare": {
+		"en": "Improved Closed Helmet",
+		"uk": "Удосконалений закритий шолом"
+	  },
+	  "Epic": {
+		"en": "Masterwork Closed Helmet",
+		"uk": "Майстерний закритий шолом"
+	  },
+	  "Legendary": {
+		"en": "Perfected Closed Helmet",
+		"uk": "Довершений закритий шолом"
+	  }
+	}
+  },
+  {
+	"id": "strength-boots-travel",
+	"name": "Iron-plated Boots",
+	"name_uk": "Чоботи із залізними пластинами",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 26
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron-plated Boots",
+		"uk": "Чоботи із залізними пластинами"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron-plated Boots",
+		"uk": "Укріплені чоботи із залізними пластинами"
+	  },
+	  "Rare": {
+		"en": "Improved Iron-plated Boots",
+		"uk": "Удосконалені чоботи із залізними пластинами"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron-plated Boots",
+		"uk": "Майстерні чоботи із залізними пластинами"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron-plated Boots",
+		"uk": "Довершені чоботи із залізними пластинами"
+	  }
+	}
+  },
+  {
+	"id": "strength-boots-field",
+	"name": "Mail Boots",
+	"name_uk": "Кольчужні чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Mail Boots",
+		"uk": "Кольчужні чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Mail Boots",
+		"uk": "Укріплені кольчужні чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Mail Boots",
+		"uk": "Удосконалені кольчужні чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Mail Boots",
+		"uk": "Майстерні кольчужні чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Mail Boots",
+		"uk": "Довершені кольчужні чоботи"
+	  }
+	}
+  },
+  {
+	"id": "strength-boots-watch",
+	"name": "Steel-plated Boots",
+	"name_uk": "Чоботи зі сталевими пластинами",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel-plated Boots",
+		"uk": "Чоботи зі сталевими пластинами"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel-plated Boots",
+		"uk": "Укріплені чоботи зі сталевими пластинами"
+	  },
+	  "Rare": {
+		"en": "Improved Steel-plated Boots",
+		"uk": "Удосконалені чоботи зі сталевими пластинами"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel-plated Boots",
+		"uk": "Майстерні чоботи зі сталевими пластинами"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel-plated Boots",
+		"uk": "Довершені чоботи зі сталевими пластинами"
+	  }
+	}
+  },
+  {
+	"id": "strength-boots-garrison",
+	"name": "Soldier Greaves",
+	"name_uk": "Солдатські наголінники",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Soldier Greaves",
+		"uk": "Солдатські наголінники"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Soldier Greaves",
+		"uk": "Укріплені солдатські наголінники"
+	  },
+	  "Rare": {
+		"en": "Improved Soldier Greaves",
+		"uk": "Удосконалені солдатські наголінники"
+	  },
+	  "Epic": {
+		"en": "Masterwork Soldier Greaves",
+		"uk": "Майстерні солдатські наголінники"
+	  },
+	  "Legendary": {
+		"en": "Perfected Soldier Greaves",
+		"uk": "Довершені солдатські наголінники"
+	  }
+	}
+  },
+  {
+	"id": "strength-boots-fortress",
+	"name": "Plate Greaves",
+	"name_uk": "Латні наголінники",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Plate Greaves",
+		"uk": "Латні наголінники"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Plate Greaves",
+		"uk": "Укріплені латні наголінники"
+	  },
+	  "Rare": {
+		"en": "Improved Plate Greaves",
+		"uk": "Удосконалені латні наголінники"
+	  },
+	  "Epic": {
+		"en": "Masterwork Plate Greaves",
+		"uk": "Майстерні латні наголінники"
+	  },
+	  "Legendary": {
+		"en": "Perfected Plate Greaves",
+		"uk": "Довершені латні наголінники"
+	  }
+	}
+  },
+  {
+	"id": "strength-amulet-travel",
+	"name": "Stone Amulet",
+	"name_uk": "Кам’яний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Stone Amulet",
+		"uk": "Кам’яний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Stone Amulet",
+		"uk": "Укріплений кам’яний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Stone Amulet",
+		"uk": "Удосконалений кам’яний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Stone Amulet",
+		"uk": "Майстерний кам’яний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Stone Amulet",
+		"uk": "Довершений кам’яний амулет"
+	  }
+	}
+  },
+  {
+	"id": "strength-amulet-field",
+	"name": "Iron Amulet",
+	"name_uk": "Залізний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Amulet",
+		"uk": "Залізний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Amulet",
+		"uk": "Укріплений залізний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Amulet",
+		"uk": "Удосконалений залізний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Amulet",
+		"uk": "Майстерний залізний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Amulet",
+		"uk": "Довершений залізний амулет"
+	  }
+	}
+  },
+  {
+	"id": "strength-amulet-watch",
+	"name": "Steel Amulet",
+	"name_uk": "Сталевий амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Amulet",
+		"uk": "Сталевий амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Amulet",
+		"uk": "Укріплений сталевий амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Amulet",
+		"uk": "Удосконалений сталевий амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Amulet",
+		"uk": "Майстерний сталевий амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Amulet",
+		"uk": "Довершений сталевий амулет"
+	  }
+	}
+  },
+  {
+	"id": "strength-amulet-garrison",
+	"name": "Iron Medallion",
+	"name_uk": "Залізний медальйон",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Medallion",
+		"uk": "Залізний медальйон"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Medallion",
+		"uk": "Укріплений залізний медальйон"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Medallion",
+		"uk": "Удосконалений залізний медальйон"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Medallion",
+		"uk": "Майстерний залізний медальйон"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Medallion",
+		"uk": "Довершений залізний медальйон"
+	  }
+	}
+  },
+  {
+	"id": "strength-amulet-fortress",
+	"name": "Steel Medallion",
+	"name_uk": "Сталевий медальйон",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Medallion",
+		"uk": "Сталевий медальйон"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Medallion",
+		"uk": "Укріплений сталевий медальйон"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Medallion",
+		"uk": "Удосконалений сталевий медальйон"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Medallion",
+		"uk": "Майстерний сталевий медальйон"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Medallion",
+		"uk": "Довершений сталевий медальйон"
+	  }
+	}
+  },
+  {
+	"id": "strength-ring-travel",
+	"name": "Iron Band",
+	"name_uk": "Залізний обідок",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Band",
+		"uk": "Залізний обідок"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Band",
+		"uk": "Укріплений залізний обідок"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Band",
+		"uk": "Удосконалений залізний обідок"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Band",
+		"uk": "Майстерний залізний обідок"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Band",
+		"uk": "Довершений залізний обідок"
+	  }
+	}
+  },
+  {
+	"id": "strength-ring-field",
+	"name": "Steel Band",
+	"name_uk": "Сталевий обідок",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Band",
+		"uk": "Сталевий обідок"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Band",
+		"uk": "Укріплений сталевий обідок"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Band",
+		"uk": "Удосконалений сталевий обідок"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Band",
+		"uk": "Майстерний сталевий обідок"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Band",
+		"uk": "Довершений сталевий обідок"
+	  }
+	}
+  },
+  {
+	"id": "strength-ring-watch",
+	"name": "Iron Signet",
+	"name_uk": "Залізний перстень-печатка",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Signet",
+		"uk": "Залізний перстень-печатка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Signet",
+		"uk": "Укріплений залізний перстень-печатка"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Signet",
+		"uk": "Удосконалений залізний перстень-печатка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Signet",
+		"uk": "Майстерний залізний перстень-печатка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Signet",
+		"uk": "Довершений залізний перстень-печатка"
+	  }
+	}
+  },
+  {
+	"id": "strength-ring-garrison",
+	"name": "Steel Signet",
+	"name_uk": "Сталевий перстень-печатка",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Signet",
+		"uk": "Сталевий перстень-печатка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Signet",
+		"uk": "Укріплений сталевий перстень-печатка"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Signet",
+		"uk": "Удосконалений сталевий перстень-печатка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Signet",
+		"uk": "Майстерний сталевий перстень-печатка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Signet",
+		"uk": "Довершений сталевий перстень-печатка"
+	  }
+	}
+  },
+  {
+	"id": "strength-ring-fortress",
+	"name": "Silver Signet",
+	"name_uk": "Срібний перстень-печатка",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Signet",
+		"uk": "Срібний перстень-печатка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Signet",
+		"uk": "Укріплений срібний перстень-печатка"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Signet",
+		"uk": "Удосконалений срібний перстень-печатка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Signet",
+		"uk": "Майстерний срібний перстень-печатка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Signet",
+		"uk": "Довершений срібний перстень-печатка"
+	  }
+	}
+  },
+  {
+	"id": "strength-offhand-travel",
+	"name": "Wooden Shield",
+	"name_uk": "Дерев’яний щит",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Strength",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Strength",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wooden Shield",
+		"uk": "Дерев’яний щит"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wooden Shield",
+		"uk": "Укріплений дерев’яний щит"
+	  },
+	  "Rare": {
+		"en": "Improved Wooden Shield",
+		"uk": "Удосконалений дерев’яний щит"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wooden Shield",
+		"uk": "Майстерний дерев’яний щит"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wooden Shield",
+		"uk": "Довершений дерев’яний щит"
+	  }
+	}
+  },
+  {
+	"id": "strength-offhand-field",
+	"name": "Bound Shield",
+	"name_uk": "Окований щит",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Strength",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bound Shield",
+		"uk": "Окований щит"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bound Shield",
+		"uk": "Укріплений окований щит"
+	  },
+	  "Rare": {
+		"en": "Improved Bound Shield",
+		"uk": "Удосконалений окований щит"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bound Shield",
+		"uk": "Майстерний окований щит"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bound Shield",
+		"uk": "Довершений окований щит"
+	  }
+	}
+  },
+  {
+	"id": "strength-offhand-watch",
+	"name": "Board Shield",
+	"name_uk": "Дощатий щит",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Strength",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Board Shield",
+		"uk": "Дощатий щит"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Board Shield",
+		"uk": "Укріплений дощатий щит"
+	  },
+	  "Rare": {
+		"en": "Improved Board Shield",
+		"uk": "Удосконалений дощатий щит"
+	  },
+	  "Epic": {
+		"en": "Masterwork Board Shield",
+		"uk": "Майстерний дощатий щит"
+	  },
+	  "Legendary": {
+		"en": "Perfected Board Shield",
+		"uk": "Довершений дощатий щит"
+	  }
+	}
+  },
+  {
+	"id": "strength-offhand-garrison",
+	"name": "Steel-bound Shield",
+	"name_uk": "Щит зі сталевою оковкою",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Strength",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel-bound Shield",
+		"uk": "Щит зі сталевою оковкою"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel-bound Shield",
+		"uk": "Укріплений щит зі сталевою оковкою"
+	  },
+	  "Rare": {
+		"en": "Improved Steel-bound Shield",
+		"uk": "Удосконалений щит зі сталевою оковкою"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel-bound Shield",
+		"uk": "Майстерний щит зі сталевою оковкою"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel-bound Shield",
+		"uk": "Довершений щит зі сталевою оковкою"
+	  }
+	}
+  },
+  {
+	"id": "strength-offhand-fortress",
+	"name": "Steel Shield",
+	"name_uk": "Сталевий щит",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Strength",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Strength",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "shield"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Steel Shield",
+		"uk": "Сталевий щит"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Steel Shield",
+		"uk": "Укріплений сталевий щит"
+	  },
+	  "Rare": {
+		"en": "Improved Steel Shield",
+		"uk": "Удосконалений сталевий щит"
+	  },
+	  "Epic": {
+		"en": "Masterwork Steel Shield",
+		"uk": "Майстерний сталевий щит"
+	  },
+	  "Legendary": {
+		"en": "Perfected Steel Shield",
+		"uk": "Довершений сталевий щит"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-weapon-travel",
+	"name": "Wooden Wand",
+	"name_uk": "Дерев’яна паличка",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "wand",
+      "one-handed"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wooden Wand",
+		"uk": "Дерев’яна паличка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wooden Wand",
+		"uk": "Укріплена дерев’яна паличка"
+	  },
+	  "Rare": {
+		"en": "Improved Wooden Wand",
+		"uk": "Удосконалена дерев’яна паличка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wooden Wand",
+		"uk": "Майстерна дерев’яна паличка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wooden Wand",
+		"uk": "Довершена дерев’яна паличка"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "intelligence-weapon-field",
+	"name": "Bone Wand",
+	"name_uk": "Кістяна паличка",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "wand",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bone Wand",
+		"uk": "Кістяна паличка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bone Wand",
+		"uk": "Укріплена кістяна паличка"
+	  },
+	  "Rare": {
+		"en": "Improved Bone Wand",
+		"uk": "Удосконалена кістяна паличка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bone Wand",
+		"uk": "Майстерна кістяна паличка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bone Wand",
+		"uk": "Довершена кістяна паличка"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "intelligence-weapon-watch",
+	"name": "Bronze Wand",
+	"name_uk": "Бронзова паличка",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "wand",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bronze Wand",
+		"uk": "Бронзова паличка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bronze Wand",
+		"uk": "Укріплена бронзова паличка"
+	  },
+	  "Rare": {
+		"en": "Improved Bronze Wand",
+		"uk": "Удосконалена бронзова паличка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bronze Wand",
+		"uk": "Майстерна бронзова паличка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bronze Wand",
+		"uk": "Довершена бронзова паличка"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "intelligence-weapon-garrison",
+	"name": "Iron Wand",
+	"name_uk": "Залізна паличка",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "wand",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Iron Wand",
+		"uk": "Залізна паличка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Iron Wand",
+		"uk": "Укріплена залізна паличка"
+	  },
+	  "Rare": {
+		"en": "Improved Iron Wand",
+		"uk": "Удосконалена залізна паличка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Iron Wand",
+		"uk": "Майстерна залізна паличка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Iron Wand",
+		"uk": "Довершена залізна паличка"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "intelligence-weapon-fortress",
+	"name": "Silver Wand",
+	"name_uk": "Срібна паличка",
+	"slot": "weapon",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "weapon",
+	  "wand",
+      "one-handed"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Wand",
+		"uk": "Срібна паличка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Wand",
+		"uk": "Укріплена срібна паличка"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Wand",
+		"uk": "Удосконалена срібна паличка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Wand",
+		"uk": "Майстерна срібна паличка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Wand",
+		"uk": "Довершена срібна паличка"
+	  }
+	},
+	"weapon": {
+	  "attacksPerSecond": 4,
+	  "manaCost": 10,
+	  "damage": [
+		{
+		  "count": 1,
+		  "sides": 6,
+		  "flat": 3,
+		  "type": "Piercing"
+		}
+	  ]
+	}
+  },
+  {
+	"id": "intelligence-body-travel",
+	"name": "Linen Robe",
+	"name_uk": "Лляна мантія",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 22.5
+	  },
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 22.5
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Linen Robe",
+		"uk": "Лляна мантія"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Linen Robe",
+		"uk": "Укріплена лляна мантія"
+	  },
+	  "Rare": {
+		"en": "Improved Linen Robe",
+		"uk": "Удосконалена лляна мантія"
+	  },
+	  "Epic": {
+		"en": "Masterwork Linen Robe",
+		"uk": "Майстерна лляна мантія"
+	  },
+	  "Legendary": {
+		"en": "Perfected Linen Robe",
+		"uk": "Довершена лляна мантія"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-body-field",
+	"name": "Wool Robe",
+	"name_uk": "Вовняна мантія",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wool Robe",
+		"uk": "Вовняна мантія"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wool Robe",
+		"uk": "Укріплена вовняна мантія"
+	  },
+	  "Rare": {
+		"en": "Improved Wool Robe",
+		"uk": "Удосконалена вовняна мантія"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wool Robe",
+		"uk": "Майстерна вовняна мантія"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wool Robe",
+		"uk": "Довершена вовняна мантія"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-body-watch",
+	"name": "Cloth Robe",
+	"name_uk": "Суконна мантія",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Cloth Robe",
+		"uk": "Суконна мантія"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Cloth Robe",
+		"uk": "Укріплена суконна мантія"
+	  },
+	  "Rare": {
+		"en": "Improved Cloth Robe",
+		"uk": "Удосконалена суконна мантія"
+	  },
+	  "Epic": {
+		"en": "Masterwork Cloth Robe",
+		"uk": "Майстерна суконна мантія"
+	  },
+	  "Legendary": {
+		"en": "Perfected Cloth Robe",
+		"uk": "Довершена суконна мантія"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-body-garrison",
+	"name": "Silk Robe",
+	"name_uk": "Шовкова мантія",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silk Robe",
+		"uk": "Шовкова мантія"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silk Robe",
+		"uk": "Укріплена шовкова мантія"
+	  },
+	  "Rare": {
+		"en": "Improved Silk Robe",
+		"uk": "Удосконалена шовкова мантія"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silk Robe",
+		"uk": "Майстерна шовкова мантія"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silk Robe",
+		"uk": "Довершена шовкова мантія"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-body-fortress",
+	"name": "Layered Robe",
+	"name_uk": "Багатошарова мантія",
+	"slot": "body",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "body-armor"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Layered Robe",
+		"uk": "Багатошарова мантія"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Layered Robe",
+		"uk": "Укріплена багатошарова мантія"
+	  },
+	  "Rare": {
+		"en": "Improved Layered Robe",
+		"uk": "Удосконалена багатошарова мантія"
+	  },
+	  "Epic": {
+		"en": "Masterwork Layered Robe",
+		"uk": "Майстерна багатошарова мантія"
+	  },
+	  "Legendary": {
+		"en": "Perfected Layered Robe",
+		"uk": "Довершена багатошарова мантія"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-helmet-travel",
+	"name": "Linen Cap",
+	"name_uk": "Лляний ковпак",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 13.5
+	  },
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 13.5
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Linen Cap",
+		"uk": "Лляний ковпак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Linen Cap",
+		"uk": "Укріплений лляний ковпак"
+	  },
+	  "Rare": {
+		"en": "Improved Linen Cap",
+		"uk": "Удосконалений лляний ковпак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Linen Cap",
+		"uk": "Майстерний лляний ковпак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Linen Cap",
+		"uk": "Довершений лляний ковпак"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-helmet-field",
+	"name": "Wool Cap",
+	"name_uk": "Вовняний ковпак",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wool Cap",
+		"uk": "Вовняний ковпак"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wool Cap",
+		"uk": "Укріплений вовняний ковпак"
+	  },
+	  "Rare": {
+		"en": "Improved Wool Cap",
+		"uk": "Удосконалений вовняний ковпак"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wool Cap",
+		"uk": "Майстерний вовняний ковпак"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wool Cap",
+		"uk": "Довершений вовняний ковпак"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-helmet-watch",
+	"name": "Cloth Cowl",
+	"name_uk": "Суконний каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Cloth Cowl",
+		"uk": "Суконний каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Cloth Cowl",
+		"uk": "Укріплений суконний каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Cloth Cowl",
+		"uk": "Удосконалений суконний каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Cloth Cowl",
+		"uk": "Майстерний суконний каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Cloth Cowl",
+		"uk": "Довершений суконний каптур"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-helmet-garrison",
+	"name": "Silk Cowl",
+	"name_uk": "Шовковий каптур",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silk Cowl",
+		"uk": "Шовковий каптур"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silk Cowl",
+		"uk": "Укріплений шовковий каптур"
+	  },
+	  "Rare": {
+		"en": "Improved Silk Cowl",
+		"uk": "Удосконалений шовковий каптур"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silk Cowl",
+		"uk": "Майстерний шовковий каптур"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silk Cowl",
+		"uk": "Довершений шовковий каптур"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-helmet-fortress",
+	"name": "Lined Cowl",
+	"name_uk": "Каптур із підкладкою",
+	"slot": "helmet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "helmet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Lined Cowl",
+		"uk": "Каптур із підкладкою"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Lined Cowl",
+		"uk": "Укріплений каптур із підкладкою"
+	  },
+	  "Rare": {
+		"en": "Improved Lined Cowl",
+		"uk": "Удосконалений каптур із підкладкою"
+	  },
+	  "Epic": {
+		"en": "Masterwork Lined Cowl",
+		"uk": "Майстерний каптур із підкладкою"
+	  },
+	  "Legendary": {
+		"en": "Perfected Lined Cowl",
+		"uk": "Довершений каптур із підкладкою"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-boots-travel",
+	"name": "Linen Shoes",
+	"name_uk": "Лляні черевики",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [
+	  {
+		"type": "Armor",
+		"operation": "Flat",
+		"value": 9
+	  },
+	  {
+		"type": "Evasion",
+		"operation": "Flat",
+		"value": 9
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Linen Shoes",
+		"uk": "Лляні черевики"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Linen Shoes",
+		"uk": "Укріплені лляні черевики"
+	  },
+	  "Rare": {
+		"en": "Improved Linen Shoes",
+		"uk": "Удосконалені лляні черевики"
+	  },
+	  "Epic": {
+		"en": "Masterwork Linen Shoes",
+		"uk": "Майстерні лляні черевики"
+	  },
+	  "Legendary": {
+		"en": "Perfected Linen Shoes",
+		"uk": "Довершені лляні черевики"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-boots-field",
+	"name": "Felt Shoes",
+	"name_uk": "Повстяні черевики",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Felt Shoes",
+		"uk": "Повстяні черевики"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Felt Shoes",
+		"uk": "Укріплені повстяні черевики"
+	  },
+	  "Rare": {
+		"en": "Improved Felt Shoes",
+		"uk": "Удосконалені повстяні черевики"
+	  },
+	  "Epic": {
+		"en": "Masterwork Felt Shoes",
+		"uk": "Майстерні повстяні черевики"
+	  },
+	  "Legendary": {
+		"en": "Perfected Felt Shoes",
+		"uk": "Довершені повстяні черевики"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-boots-watch",
+	"name": "Cloth Boots",
+	"name_uk": "Суконні чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Cloth Boots",
+		"uk": "Суконні чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Cloth Boots",
+		"uk": "Укріплені суконні чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Cloth Boots",
+		"uk": "Удосконалені суконні чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Cloth Boots",
+		"uk": "Майстерні суконні чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Cloth Boots",
+		"uk": "Довершені суконні чоботи"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-boots-garrison",
+	"name": "Lined Shoes",
+	"name_uk": "Черевики з підкладкою",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Lined Shoes",
+		"uk": "Черевики з підкладкою"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Lined Shoes",
+		"uk": "Укріплені черевики з підкладкою"
+	  },
+	  "Rare": {
+		"en": "Improved Lined Shoes",
+		"uk": "Удосконалені черевики з підкладкою"
+	  },
+	  "Epic": {
+		"en": "Masterwork Lined Shoes",
+		"uk": "Майстерні черевики з підкладкою"
+	  },
+	  "Legendary": {
+		"en": "Perfected Lined Shoes",
+		"uk": "Довершені черевики з підкладкою"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-boots-fortress",
+	"name": "Soft Boots",
+	"name_uk": "М’які чоботи",
+	"slot": "boots",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "boots"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 2
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Soft Boots",
+		"uk": "М’які чоботи"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Soft Boots",
+		"uk": "Укріплені м’які чоботи"
+	  },
+	  "Rare": {
+		"en": "Improved Soft Boots",
+		"uk": "Удосконалені м’які чоботи"
+	  },
+	  "Epic": {
+		"en": "Masterwork Soft Boots",
+		"uk": "Майстерні м’які чоботи"
+	  },
+	  "Legendary": {
+		"en": "Perfected Soft Boots",
+		"uk": "Довершені м’які чоботи"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-amulet-travel",
+	"name": "Glass Amulet",
+	"name_uk": "Скляний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Glass Amulet",
+		"uk": "Скляний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Glass Amulet",
+		"uk": "Укріплений скляний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Glass Amulet",
+		"uk": "Удосконалений скляний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Glass Amulet",
+		"uk": "Майстерний скляний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Glass Amulet",
+		"uk": "Довершений скляний амулет"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-amulet-field",
+	"name": "Bone Amulet",
+	"name_uk": "Кістяний амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bone Amulet",
+		"uk": "Кістяний амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bone Amulet",
+		"uk": "Укріплений кістяний амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Bone Amulet",
+		"uk": "Удосконалений кістяний амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bone Amulet",
+		"uk": "Майстерний кістяний амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bone Amulet",
+		"uk": "Довершений кістяний амулет"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-amulet-watch",
+	"name": "Quartz Amulet",
+	"name_uk": "Кварцовий амулет",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Quartz Amulet",
+		"uk": "Кварцовий амулет"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Quartz Amulet",
+		"uk": "Укріплений кварцовий амулет"
+	  },
+	  "Rare": {
+		"en": "Improved Quartz Amulet",
+		"uk": "Удосконалений кварцовий амулет"
+	  },
+	  "Epic": {
+		"en": "Masterwork Quartz Amulet",
+		"uk": "Майстерний кварцовий амулет"
+	  },
+	  "Legendary": {
+		"en": "Perfected Quartz Amulet",
+		"uk": "Довершений кварцовий амулет"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-amulet-garrison",
+	"name": "Crystal Pendant",
+	"name_uk": "Кришталевий кулон",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Crystal Pendant",
+		"uk": "Кришталевий кулон"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Crystal Pendant",
+		"uk": "Укріплений кришталевий кулон"
+	  },
+	  "Rare": {
+		"en": "Improved Crystal Pendant",
+		"uk": "Удосконалений кришталевий кулон"
+	  },
+	  "Epic": {
+		"en": "Masterwork Crystal Pendant",
+		"uk": "Майстерний кришталевий кулон"
+	  },
+	  "Legendary": {
+		"en": "Perfected Crystal Pendant",
+		"uk": "Довершений кришталевий кулон"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-amulet-fortress",
+	"name": "Silver Pendant",
+	"name_uk": "Срібний кулон",
+	"slot": "amulet",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "amulet"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Pendant",
+		"uk": "Срібний кулон"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Pendant",
+		"uk": "Укріплений срібний кулон"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Pendant",
+		"uk": "Удосконалений срібний кулон"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Pendant",
+		"uk": "Майстерний срібний кулон"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Pendant",
+		"uk": "Довершений срібний кулон"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-ring-travel",
+	"name": "Tin Ring",
+	"name_uk": "Олов’яне кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Tin Ring",
+		"uk": "Олов’яне кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Tin Ring",
+		"uk": "Укріплене олов’яне кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Tin Ring",
+		"uk": "Удосконалене олов’яне кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Tin Ring",
+		"uk": "Майстерне олов’яне кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Tin Ring",
+		"uk": "Довершене олов’яне кільце"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-ring-field",
+	"name": "Bone Ring",
+	"name_uk": "Кістяне кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bone Ring",
+		"uk": "Кістяне кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bone Ring",
+		"uk": "Укріплене кістяне кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Bone Ring",
+		"uk": "Удосконалене кістяне кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bone Ring",
+		"uk": "Майстерне кістяне кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bone Ring",
+		"uk": "Довершене кістяне кільце"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-ring-watch",
+	"name": "Quartz Ring",
+	"name_uk": "Кварцове кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Quartz Ring",
+		"uk": "Кварцове кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Quartz Ring",
+		"uk": "Укріплене кварцове кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Quartz Ring",
+		"uk": "Удосконалене кварцове кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Quartz Ring",
+		"uk": "Майстерне кварцове кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Quartz Ring",
+		"uk": "Довершене кварцове кільце"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-ring-garrison",
+	"name": "Crystal Ring",
+	"name_uk": "Кришталеве кільце",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Crystal Ring",
+		"uk": "Кришталеве кільце"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Crystal Ring",
+		"uk": "Укріплене кришталеве кільце"
+	  },
+	  "Rare": {
+		"en": "Improved Crystal Ring",
+		"uk": "Удосконалене кришталеве кільце"
+	  },
+	  "Epic": {
+		"en": "Masterwork Crystal Ring",
+		"uk": "Майстерне кришталеве кільце"
+	  },
+	  "Legendary": {
+		"en": "Perfected Crystal Ring",
+		"uk": "Довершене кришталеве кільце"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-ring-fortress",
+	"name": "Silver Seal",
+	"name_uk": "Срібна печатка",
+	"slot": "ring",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+      "ring"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 1,
+	  "height": 1
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Silver Seal",
+		"uk": "Срібна печатка"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Silver Seal",
+		"uk": "Укріплений срібна печатка"
+	  },
+	  "Rare": {
+		"en": "Improved Silver Seal",
+		"uk": "Удосконалений срібна печатка"
+	  },
+	  "Epic": {
+		"en": "Masterwork Silver Seal",
+		"uk": "Майстерний срібна печатка"
+	  },
+	  "Legendary": {
+		"en": "Perfected Silver Seal",
+		"uk": "Довершений срібна печатка"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-offhand-travel",
+	"name": "Wooden Focus",
+	"name_uk": "Дерев’яний фокус",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 1,
+	"family": "Travel",
+	"branch": "Intelligence",
+	"band": 1,
+	"required_level": 0,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": 0,
+	"released": true,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "focus"
+	],
+	"modifiers": [
+	  {
+		"type": "AttackModifier",
+		"operation": "Flat",
+		"value": 1
+	  }
+	],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": true,
+	"rarity_names": {
+	  "Common": {
+		"en": "Wooden Focus",
+		"uk": "Дерев’яний фокус"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Wooden Focus",
+		"uk": "Укріплений дерев’яний фокус"
+	  },
+	  "Rare": {
+		"en": "Improved Wooden Focus",
+		"uk": "Удосконалений дерев’яний фокус"
+	  },
+	  "Epic": {
+		"en": "Masterwork Wooden Focus",
+		"uk": "Майстерний дерев’яний фокус"
+	  },
+	  "Legendary": {
+		"en": "Perfected Wooden Focus",
+		"uk": "Довершений дерев’яний фокус"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-offhand-field",
+	"name": "Bone Focus",
+	"name_uk": "Кістяний фокус",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 2,
+	"family": "Field",
+	"branch": "Intelligence",
+	"band": 2,
+	"required_level": 3,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "focus"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bone Focus",
+		"uk": "Кістяний фокус"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bone Focus",
+		"uk": "Укріплений кістяний фокус"
+	  },
+	  "Rare": {
+		"en": "Improved Bone Focus",
+		"uk": "Удосконалений кістяний фокус"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bone Focus",
+		"uk": "Майстерний кістяний фокус"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bone Focus",
+		"uk": "Довершений кістяний фокус"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-offhand-watch",
+	"name": "Bronze Focus",
+	"name_uk": "Бронзовий фокус",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 3,
+	"family": "Watch",
+	"branch": "Intelligence",
+	"band": 3,
+	"required_level": 5,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "focus"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Bronze Focus",
+		"uk": "Бронзовий фокус"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Bronze Focus",
+		"uk": "Укріплений бронзовий фокус"
+	  },
+	  "Rare": {
+		"en": "Improved Bronze Focus",
+		"uk": "Удосконалений бронзовий фокус"
+	  },
+	  "Epic": {
+		"en": "Masterwork Bronze Focus",
+		"uk": "Майстерний бронзовий фокус"
+	  },
+	  "Legendary": {
+		"en": "Perfected Bronze Focus",
+		"uk": "Довершений бронзовий фокус"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-offhand-garrison",
+	"name": "Quartz Focus",
+	"name_uk": "Кварцовий фокус",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 4,
+	"family": "Garrison",
+	"branch": "Intelligence",
+	"band": 4,
+	"required_level": 7,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "focus"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Quartz Focus",
+		"uk": "Кварцовий фокус"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Quartz Focus",
+		"uk": "Укріплений кварцовий фокус"
+	  },
+	  "Rare": {
+		"en": "Improved Quartz Focus",
+		"uk": "Удосконалений кварцовий фокус"
+	  },
+	  "Epic": {
+		"en": "Masterwork Quartz Focus",
+		"uk": "Майстерний кварцовий фокус"
+	  },
+	  "Legendary": {
+		"en": "Perfected Quartz Focus",
+		"uk": "Довершений кварцовий фокус"
+	  }
+	}
+  },
+  {
+	"id": "intelligence-offhand-fortress",
+	"name": "Crystal Focus",
+	"name_uk": "Кришталевий фокус",
+	"slot": "offhand",
+	"item_level": 1,
+	"generation": 5,
+	"family": "Fortress",
+	"branch": "Intelligence",
+	"band": 5,
+	"required_level": 9,
+	"required_attribute": "Intelligence",
+	"required_attribute_value": null,
+	"released": false,
+	"defense": "rating",
+	"weight": 1,
+	"tags": [
+	  "offhand",
+      "focus"
+	],
+	"modifiers": [],
+	"inventorySize": {
+	  "width": 2,
+	  "height": 3
+	},
+	"catalog_visible": true,
+	"loot_enabled": false,
+	"rarity_names": {
+	  "Common": {
+		"en": "Crystal Focus",
+		"uk": "Кришталевий фокус"
+	  },
+	  "Uncommon": {
+		"en": "Reinforced Crystal Focus",
+		"uk": "Укріплений кришталевий фокус"
+	  },
+	  "Rare": {
+		"en": "Improved Crystal Focus",
+		"uk": "Удосконалений кришталевий фокус"
+	  },
+	  "Epic": {
+		"en": "Masterwork Crystal Focus",
+		"uk": "Майстерний кришталевий фокус"
+	  },
+	  "Legendary": {
+		"en": "Perfected Crystal Focus",
+		"uk": "Довершений кришталевий фокус"
+	  }
+	}
+  }
+]
