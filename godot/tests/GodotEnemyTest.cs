@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Chickensoft.GoDotTest;
 using Godot;
 using RollForHonor.Application.Combat.Models;
+using RollForHonor.Application.Combat.Services;
+using RollForHonor.Domain.Combat.Damage.Configuration;
+using RollForHonor.Domain.Dice.Models;
+using RollForHonor.Domain.Dice.Services;
+using RollForHonor.Domain.Resources.Services;
 using RollForHonor.Godot.Arena;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Gameplay.Actors;
@@ -137,6 +142,15 @@ public sealed class GodotEnemyTest : TestClass
         arena.Opponent.Controls.ThinkingEnabled = false;
         RemoveDefenses(arena.Opponent);
         Runtime.CombatState.UpdateCombatant(new(arena.Opponent.CombatantId, 1, 40, 0, 0, [], []));
+        var impacts = new CombatImpactService(Runtime.CombatState, new CombatSnapshotBuilder(),
+            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2), ratingRules: true),
+            () => new MaximumDice());
+        var attacks = new AttackInitiationService(Runtime.CombatState,
+            new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
+            impacts, () => Runtime.GameTime);
+        var projectile = arena.Player.GetRequiredComponent<ProjectileAttack>();
+        projectile.Configure(attacks, Runtime.CombatState, projectile.AttackProvider(),
+            GD.Load<PackedScene>("res://Gameplay/Projectiles/AirborneProjectile.tscn"));
 
         try
         {
@@ -214,4 +228,22 @@ public sealed class GodotEnemyTest : TestClass
             await TestScene.ToSignal(TestScene.GetTree(), SceneTree.SignalName.PhysicsFrame);
         }
     }
+
+    private sealed class MaximumDice : IDiceRoller
+    {
+        /// <inheritdoc />
+        public DiceTrace Trace => new(_rolls);
+
+        private readonly List<DiceRoll> _rolls = [];
+
+        /// <inheritdoc />
+        public DiceRoll Roll(DiceFormula formula)
+        {
+            var results = Enumerable.Repeat(formula.Sides, formula.Count).ToArray();
+            var roll = new DiceRoll(formula, results, results.Sum());
+            _rolls.Add(roll);
+            return roll;
+        }
+    }
+
 }
