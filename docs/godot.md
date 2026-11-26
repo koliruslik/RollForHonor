@@ -145,11 +145,13 @@ the natural roll of the latest newly committed impact.
 `AirborneProjectile` fixes its three-dimensional direction at launch and flies
 straight without gravity, homing or per-frame ground-height correction. The
 launch point is 1 m above the actor's feet, without a forward spawn offset that
-could skip a nearby wall. Attack aiming raycasts actors, terrain and obstacles,
-excluding the source. A target uses its fixture body center (0.9 m above its
+could skip a nearby wall. Attack aiming first searches layers 2–3 for combat bodies, excluding the source
+and skipping non-combat scenery on the shared enemy/obstacle layer, so scenery
+between the camera and an enemy cannot replace its aim height. With no actor
+under the cursor, it raycasts actors, terrain and obstacles together. A target uses its fixture body center (0.9 m above its
 feet); empty terrain uses the observed surface plus 1 m; an obstacle uses its
 actual surface point. The actor's visual still rotates only in yaw.
-The visible cursor marker uses that same closest-surface ray (excluding the
+The visible cursor marker uses the same actor-priority query (excluding the
 player), sits slightly outside the surface and aligns its disc to the hit normal.
 It therefore appears on target bodies and vertical walls as well as the ground.
 
@@ -158,7 +160,7 @@ reports that contact through the existing Application/journal path. A shot can
 pass above descending terrain, hit a higher/lower target when the line is clear,
 or strike a slope/cliff that obstructs it. Expiry still ends an unobstructed
 shot after its lifetime. Terrain uses physics layer 5 (mask 16), obstacles layer
-3 (mask 4), actors layer 2 (mask 2); the projectile collision mask is 22.
+3 (mask 4), player/training targets layer 2 (mask 2), enemies layer 3 (mask 4); the projectile collision mask is 22.
 
 ## Ranged enemy
 

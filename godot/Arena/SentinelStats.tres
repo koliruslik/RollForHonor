@@ -6,6 +6,6 @@
 script = ExtResource("1")
 MaxHealth = 40
 MaxMana = 0
-Armor = 2
-Evasion = 10
+Armor = 12
+Evasion = 40
 MovementSpeed = 3.0

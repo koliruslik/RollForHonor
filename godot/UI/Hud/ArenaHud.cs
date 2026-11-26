@@ -90,7 +90,7 @@ public partial class ArenaHud : CanvasLayer
     /// <inheritdoc />
     public override void _Input(InputEvent @event)
     {
-        if (_runtime is null)
+        if (_runtime is null || _arena.NeedsStarterWeapon)
         {
             return;
         }
@@ -111,7 +111,16 @@ public partial class ArenaHud : CanvasLayer
             return;
         }
 
-        if (key.PhysicalKeycode == Key.F3)
+        if (key.IsActionPressed("rfh_auto_gold", false, true))
+        {
+            if (GetTree().Paused || GetViewport().GuiIsDragging())
+            {
+                return;
+            }
+
+            _arena.ToggleAutoGoldPickup();
+        }
+        else if (key.PhysicalKeycode == Key.F3)
         {
             if (_admin.Visible)
             {

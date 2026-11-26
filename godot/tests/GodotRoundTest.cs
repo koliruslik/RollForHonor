@@ -74,16 +74,18 @@ public sealed class GodotRoundTest : TestClass
 
             arena.DefeatedCount.ShouldBe(9);
             arena.RoundComplete.ShouldBeFalse();
-            arena.Drops.Count.ShouldBe(9);
+            arena.GoldDrops.Count.ShouldBe(9);
+            arena.Drops.Count.ShouldBeInRange(0, 9);
             Defeat(arena, arena.Enemies.Last().CombatantId);
             await Frames(3);
             arena.RoundComplete.ShouldBeTrue();
-            arena.Drops.Count.ShouldBe(10);
+            arena.GoldDrops.Count.ShouldBe(10);
+            arena.Drops.Count.ShouldBeInRange(0, 10);
             arena.Drops
                 .Select(drop => drop.Item.Id)
                 .Distinct()
                 .Count()
-                .ShouldBe(10);
+                .ShouldBe(arena.Drops.Count);
             var items = arena.Drops
                 .Select(drop => drop.Item)
                 .ToArray();
@@ -114,7 +116,7 @@ public sealed class GodotRoundTest : TestClass
     }
 
     /// <summary>Full bags leave loot in the world; equipping an item frees space and permits exactly one pickup.</summary>
-    /// <returns>Completes after a real drop has been created by a defeated actor.</returns>
+    /// <returns>Completes after an explicit equipment fixture is placed on actual arena ground.</returns>
     [Test]
     public async Task FullInventoryRetainsLootUntilSpaceIsFreed()
     {
@@ -124,8 +126,8 @@ public sealed class GodotRoundTest : TestClass
         {
             await Frames(3);
             StopThinking(arena);
-            Defeat(arena, arena.Opponent.CombatantId);
-            await Frames(2);
+            var fixture = RollForHonor.Godot.Content.Items.StarterItemCatalog.Create(new(Guid.NewGuid())).First();
+            arena.PlaceAdminItem(fixture);
             var drop = arena.Drops.Single();
             var item = drop.Item;
             var hud = arena.GetNode<ArenaHud>("Presentation");
@@ -162,9 +164,9 @@ public sealed class GodotRoundTest : TestClass
         }
     }
 
-    /// <summary>Five actual primary values occupy three columns and two rows and survive a language change.</summary>
+    /// <summary>Four actual primary values occupy two columns and two rows and survive a language change.</summary>
     [Test]
-    public void PrimaryAttributesUseFiveRealValuesInATwoRowGrid()
+    public void PrimaryAttributesUseFourRealValuesInATwoRowGrid()
     {
         var previous = TranslationServer.GetLocale();
         var panel = new CharacterPanel();
@@ -177,14 +179,14 @@ public sealed class GodotRoundTest : TestClass
             var stats = new StatCalculator().Calculate(profile);
             var id = new RollForHonor.Domain.Combat.State.Models.CombatantId(Guid.NewGuid());
             panel.Refresh(stats, profile.BaseValues, new(id, 100, 100, 0, 0, [], []), 0);
-            var types = new[] { StatType.Strength, StatType.Dexterity, StatType.Constitution, StatType.Intelligence, StatType.Luck };
+            var types = new[] { StatType.Strength, StatType.Dexterity, StatType.Intelligence, StatType.Luck };
 
             for (var index = 0; index < types.Length; index++)
             {
                 var tile = panel.GetNode<PrimaryAttributeDie>($"Character/{types[index]}");
-                tile.GetNode<Label>("Value").Text.ShouldBe((index + 2).ToString());
-                tile.Position.X.ShouldBe(index < 3 ? 20 + index * 108 : 74 + (index - 3) * 108);
-                tile.Position.Y.ShouldBe(index < 3 ? 96 : 174);
+                tile.GetNode<Label>("Value").Text.ShouldBe(new[] { 2, 3, 5, 6 }[index].ToString());
+                tile.Position.X.ShouldBe(60 + index % 2 * 120);
+                tile.Position.Y.ShouldBe(88 + index / 2 * 100);
             }
 
             RollForHonor.Godot.UI.Common.InspectionTopic inspected = null;
@@ -418,9 +420,26 @@ public sealed class GodotRoundTest : TestClass
             admin.GetNode<SpinBox>("Panel/Tabs/Stats/Value").Value = 27.5;
             admin.GetNode<Button>("Panel/Tabs/Stats/Apply").EmitSignal(Button.SignalName.Pressed);
             state.GetStats(arena.Player.CombatantId).Get(new(StatType.ManaRecovery)).ShouldBe(27.5m);
-            var count = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Count + arena.Drops.Count;
-            admin.GetNode<Button>("Panel/Tabs/Items/Create").EmitSignal(Button.SignalName.Pressed);
-            (state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Count + arena.Drops.Count).ShouldBe(count + 1);
+            var rarityPicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/Rarity");
+            rarityPicker.ItemCount.ShouldBe(5);
+            var basePicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/Item");
+            basePicker.Select(1);
+
+            foreach (var rarity in Enum.GetValues<ItemRarity>())
+            {
+                var before = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Keys
+                    .Concat(arena.Drops.Select(drop => drop.Item.Id))
+                    .ToHashSet();
+                rarityPicker.Select((int)rarity);
+                rarityPicker.EmitSignal(OptionButton.SignalName.ItemSelected, (int)rarity);
+                basePicker.Selected.ShouldBe(1);
+                admin.GetNode<Button>("Panel/Tabs/Items/Create").EmitSignal(Button.SignalName.Pressed);
+                var created = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Values
+                    .Concat(arena.Drops.Select(drop => drop.Item))
+                    .Single(item => !before.Contains(item.Id));
+                created.Rarity.ShouldBe(rarity);
+                created.Base.Id.ShouldBe("dexterity-body-travel");
+            }
             admin.GetNode<Button>("Panel/Tabs/World/Spawn").EmitSignal(Button.SignalName.Pressed);
             await Frames(2);
             arena.AdminEnemies.Count.ShouldBe(1);
@@ -690,7 +709,9 @@ public sealed class GodotRoundTest : TestClass
         var runtime = TestScene.GetTree().Root.GetChildren().OfType<GameBootstrap>().Single();
         var arena = GD.Load<PackedScene>("res://Arena/RoundArena.tscn").Instantiate<GreyboxArena>();
         arena.SpawnSeed = seed;
+        arena.AutoGoldPickupEnabled = false;
         runtime.AddChild(arena);
+        ArenaItemFixtures.UseAuthoredKit(arena);
         arena.Player.Controls.HardwareInput = false;
         arena.Opponent.Controls.ThinkingEnabled = false;
 

@@ -17,9 +17,10 @@ public sealed class StatBlock
 
     /// <summary>Reads one value without modifying the set.</summary>
     /// <param name="key">The scalar or qualified attribute.</param>
-    /// <returns>The stored value, or 1 for maximum HP/damage/critical coefficients and 0 otherwise.</returns>
+    /// <returns>The stored value, or 1 for maximum HP, damage/critical and attack-speed coefficients and 0 otherwise.</returns>
     public decimal Get(StatKey key) => _values.GetValueOrDefault(key,
-        key.Type is StatType.MaxHealth or StatType.DamageMultiplier or StatType.CriticalMultiplier ? 1 : 0);
+        key.Type == StatType.CriticalMultiplier ? 2 : key.Type == StatType.CharacterLevel ? 1 :
+        key.Type is StatType.MaxHealth or StatType.DamageMultiplier or StatType.CriticalMultiplier or StatType.AttackSpeed ? 1 : 0);
 
     /// <summary>Creates a new base-value set with one entry replaced, preserving this instance.</summary>
     /// <param name="key">The attribute to replace.</param>

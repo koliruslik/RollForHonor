@@ -18,7 +18,8 @@ An unsuccessful calculation/projection publishes nothing. Old snapshots remain
 immutable and existing optimistic version checks reject stale proposals.
 
 `CombatStatProjector` maps resolved values to concrete combat inputs. HP maxima,
-armor, evasion and d20 bonuses are floored to integers with checked conversion.
+armor and d20 bonuses are floored after aggregation with checked conversion.
+Evasion also retains its decimal rating for the glancing threshold.
 `CombatantSnapshot` retains typed defenses and carries a small `CombatOffense`
 view for extra attack modifier, typed flat attack damage and outgoing coefficients. It contains no
 universal stat dictionary, character definition or equipment references.
@@ -40,14 +41,19 @@ remainder while hurt, and full/defeated actors do not bank recovery.
 ## Calculation
 
 The supported attributes are MaxHealth, MaxMana, Armor, Evasion, MovementSpeed,
-AttackModifier, CriticalChance, CriticalMultiplier, typed Resistance and global
-or typed DamageMultiplier, plus typed AddedDamage, HealthRecovery and ManaRecovery. Strength, Dexterity, Constitution, Intelligence and
-Luck are also represented as allocated primary points and shown in the character
-panel. They default to zero; progression and derivation of HP, damage, defenses
-or loot from these points are not configured. Item bonuses to these five
-attributes accept Flat only. Fractions use 0.2 for 20%; an outgoing coefficient
-of 1 is neutral. Missing maxima HP and damage/critical coefficients default to
-1; other values default to 0.
+AttackModifier, CriticalRollBonus, CriticalChance, CriticalMultiplier, CharacterLevel, typed Resistance and global
+or typed DamageMultiplier, plus typed AddedDamage, extra damage dice, AttackSpeed,
+HealthRecovery and ManaRecovery. Strength, Dexterity, Intelligence and Luck are the
+four visible primary attributes, initially zero. Constitution remains a legacy
+identifier, excluded from current content and UI. STR/DEX/INT gate equipment
+against non-equipment stats; they do not derive combat bonuses. Luck affects
+equipment occurrence/rarity and captured gold/affix rolls as described in [rewards](rewards.md).
+
+Character level defaults to 1 and is restricted to 1–10. Items cannot modify it.
+Level changes give no automatic HP, mana, regeneration, damage or healing. XP,
+point awards and the level-up interface are not configured. Base CriticalMultiplier
+defaults to 2; global/typed damage coefficients default to 1. Missing other stats
+default to zero, except maximum HP, which defaults to 1.
 
 Ordinary attributes use:
 
@@ -74,20 +80,22 @@ attack-specific modifier. After raw dice, `SourceDamageStep` adds projected type
 once, then applies each typed source coefficient, rounding component damage upward, then hit quality and
 defenses run normally. Breakdown entries report the actual combined coefficient
 with a `CharacterStats:<type>` origin; they do not invent item-level attribution.
-Neutral coefficients leave existing damage and dice counts unchanged.
+Neutral coefficients do not add damage dice. A separate critical check adds its own d20 after quality.
 
 Godot's periodic pipeline uses the same source scaling step against the effect's
 captured source snapshot; AddedDamage is not added to periodic ticks. Target
 defenses remain fresh. Stats updates do not
 rewrite a captured source or reroll historical results.
 
-CriticalChance and CriticalMultiplier are stored/calculated only. Current
-critical outcomes still follow d20 quality and existing quality coefficients;
-no second random critical roll is enabled. A future crit policy needs a separate
-gameplay decision. [Item/affix models](items.md) can produce sourced modifier
-inputs. The [equipment core](equipment.md) recomposes occupied slots atomically.
-The [game interface](interface.md) displays live stats and equipment changes.
-Automatic active-effect modifier collection and game save/load are not implemented yet.
+The game uses `CriticalRollBonus` on a separate d20: `d20 + bonus >= 20`.
+The base multiplier is ×2, after quality and before defenses. Natural 20 on the
+primary attack roll is full quality and does not guarantee a crit. The actual
+critical die, bonus and multiplier are retained in the breakdown and inspection.
+`CriticalChance` remains a legacy stored value. Critical-roll item modifiers are
+restricted to amulets/rings (+0…3 per modifier). The prepared critical affix
+families remain disabled until separately enabled; no crit bonus is granted at start.
+[Equipment](equipment.md) recomposes occupied slots atomically. Automatic
+active-effect modifier collection and game save/load are not implemented yet.
 
 ## Editable content
 
@@ -101,9 +109,52 @@ through the adapter to apply changes during a session.
 
 Both actors have an `ActorStats` capability. It reads resolved values and supplies
 movement speed to the existing motor before input/movement run; it does not own
-HP or modifier arithmetic. Initial values preserve the previous game balance:
-player 100 HP, 500 mana, armor 2, evasion 12, speed 6; Sentinel 40 HP, armor 2,
-evasion 10, speed 3. Attack definitions retain their own dice, flat damage, costs
+HP or modifier arithmetic. Player: 100 HP, 500 mana, armor 0, evasion 0, speed 6.
+Sentinel: 40 HP, armor rating 12, evasion rating 40, speed 3. The Sentinel armor
+was migrated from 2 at coefficient 5 to 12 at coefficient 30; evasion 40 retains
+the old threshold 10 through `6 + rating/10`. Attack definitions retain their own dice, flat damage, costs
 and cooldowns. The player's equipped weapon overrides intrinsic dice, costs and
 attack frequency through a launch-time provider. Their existing +8/+5 d20 modifiers remain attack-specific; both
 base source bonuses start at 0.
+
+## Approved equipment generations
+
+There are 105 named bases: three branches × seven slots × five generations.
+Only generation 1 is released. Body/head/boots give STR armor 65/39/26,
+DEX evasion 50/30/20, or INT armor and evasion 22.5/13.5/9 each. Sum before
+flooring armor; preserve decimal evasion for hit-quality comparisons. Totals are
+130 armor, 100 evasion, or 45 of each. No energy shield or blocking was added.
+
+Flat armor affix values were explicitly migrated ×6 and flat evasion affix values
+×10 in live JSON; percentage modifiers were unchanged. Existing captured instances
+are not rewritten. Higher-generation defense values, requirements, XP, point awards
+and the separate display-ilvl formula remain unapproved and inactive.
+
+## Effective health display
+
+`EffectiveHealthCalculator` estimates full-health EHP by enumerating all 20 natural
+d20 faces through the actual rating quality, component rounding and defense services.
+EHP is `MaxHealth × unprotected expected loss / defended expected loss`.
+The unprotected comparison has no armor, evasion or resistances. Zero expected
+loss is represented by null and displayed as ∞.
+
+The character sheet's `EHP` row shows the arithmetic mean of seven individual
+damage-type EHP values with equal weight. If a type is immune, its EHP and this
+arithmetic mean are infinite. The click-only card shows all seven types and all
+21 unordered type pairs. Each pair is a genuine 50/50 mixed packet: 5 + 5 damage,
+not the mean of its two single-type EHP values. All reference hits have 10 total
+damage and a d20 bonus of +4. Combined entries are excluded from the headline
+average so no type is counted twice. Click a category to inspect its component
+resistances, armor and evasion through nested cards. The row has no hover tooltip.
+
+At 100 HP, the STR/DEX/INT reference sets produce headline means of 118.4/135.7/
+121.6 respectively; individual physical values differ from unarmored nonphysical
+values. Criticals, recovery, periodic damage and attack frequency are excluded.
+Armor depends on hit size. Reading EHP consumes no dice and changes no state;
+wounded current HP does not lower this full-health comparison.
+
+The character sheet displays the critical coefficient as `Critical damage bonus`:
+`(coefficient - 1) × 100%`. Thus the base coefficient 2 appears as +100%, and 2.5
+as +150%. The combat coefficient remains unchanged. Evasion, accuracy, critical
+roll bonus and critical damage bonus are clickable and link to related hit-quality
+and defense explanations. Item modifier labels use the same terminology.

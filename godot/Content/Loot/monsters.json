@@ -1,0 +1,72 @@
+[
+  {
+	"id": "sentinel",
+	"name_en": "Sentinel",
+	"name_uk": "Вартовий",
+	"item_level": 1,
+	"gold": {
+	  "minimum": 6,
+	  "maximum": 14
+	},
+	"equipment_outcomes": [
+	  {
+		"rarity": "none",
+		"weight": 550
+	  },
+	  {
+		"rarity": "Common",
+		"weight": 250
+	  },
+	  {
+		"rarity": "Uncommon",
+		"weight": 150
+	  },
+	  {
+		"rarity": "Rare",
+		"weight": 40
+	  },
+	  {
+		"rarity": "Epic",
+		"weight": 9
+	  },
+	  {
+		"rarity": "Legendary",
+		"weight": 1
+	  }
+	],
+	"slots": [
+	  {
+		"slot": "weapon",
+		"weight": 25
+	  },
+	  {
+		"slot": "body",
+		"weight": 20
+	  },
+	  {
+		"slot": "helmet",
+		"weight": 15
+	  },
+	  {
+		"slot": "boots",
+		"weight": 15
+	  },
+	  {
+		"slot": "offhand",
+		"weight": 13
+	  },
+	  {
+		"slot": "amulet",
+		"weight": 5
+	  },
+	  {
+		"slot": "ring",
+		"weight": 7
+	  }
+	],
+	"occupied_slot_percent": 55,
+	"stats_resource": "res://Arena/SentinelStats.tres",
+	"equipment_luck_scale": 100,
+	"equipment_roll_sides": 1000000
+  }
+]

@@ -9,7 +9,9 @@ namespace RollForHonor.Godot.UI.Reference;
 /// <param name="Id">The stable reference identity.</param>
 /// <param name="Category">The displayed group.</param>
 /// <param name="Topic">The captured explanation shared with normal inspection cards.</param>
-public sealed record ReferenceEntry(string Id, string Category, InspectionTopic Topic)
+/// <param name="Table">Optional structured table shown instead of a long article.</param>
+/// <param name="CapturedLuck">Nonnegative player Luck captured for a monster reward table.</param>
+public sealed record ReferenceEntry(string Id, string Category, InspectionTopic Topic, ReferenceTable Table = null, decimal CapturedLuck = 0)
 {
     /// <summary>Gets the captured category in the current interface language.</summary>
     public string Category => L.Refresh(_category);

@@ -60,7 +60,8 @@ public sealed record InspectionLink(string Text, Color Color, Func<InspectionTop
 /// <param name="Text">Plain text for the captured value.</param>
 /// <param name="Color">The semantic color.</param>
 /// <param name="Affix">Whether the value is italicized as an affix contribution.</param>
-public sealed record InspectionFact(string Text, Color Color, bool Affix = false)
+/// <param name="LinkIndex">Optional index into the owning topic links, rendered on this value instead of in Related.</param>
+public sealed record InspectionFact(string Text, Color Color, bool Affix = false, int? LinkIndex = null)
 {
     /// <summary>Gets the retained value in the current language without changing its numbers.</summary>
     public string Text => L.Refresh(_text);

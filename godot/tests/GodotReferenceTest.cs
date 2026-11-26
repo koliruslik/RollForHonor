@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Chickensoft.GoDotTest;
 using Godot;
 using RollForHonor.Domain.Stats;
@@ -7,6 +8,7 @@ using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Hud;
 using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Godot.UI.Menu;
+using RollForHonor.Godot.UI.Localization;
 using RollForHonor.Godot.UI.Reference;
 using Shouldly;
 
@@ -36,14 +38,11 @@ public sealed class GodotReferenceTest : TestClass
                 .Distinct()
                 .Count().ShouldBe(entries.Count);
             entries.Single(entry => entry.Id == "stat.Armor").Topic.Description.ShouldBe(CombatGlossary.Armor().Description);
-            entries.Single(entry => entry.Id == "stat.CriticalChance").Topic.Description.ShouldContain("not rolled");
-            entries.Count(entry => entry.Category == "Owned items").ShouldBe(before.OwnedItems.Count);
-            entries.Count(entry => entry.Category == "Rolled affixes").ShouldBe(before.OwnedItems.Values.Sum(item => item.Affixes.Count));
-            var item = before.OwnedItems.Values.Single(item => item.Base.Id == "ashen-longbow");
-            var actual = ItemInspectionTopics.Affix(item.Rarity, item.Affixes[0], true);
-            var indexed = entries.Single(entry => entry.Id == $"affix.{item.Id.Length}:{item.Id}.{item.Affixes[0].Id}");
-            indexed.Topic.Facts.ShouldBe(actual.Facts);
-            indexed.Topic.Facts[0].Text.ShouldContain("72%");
+            entries.Any(entry => entry.Id == "stat.CriticalChance").ShouldBeFalse();
+            entries.Count(entry => entry.Category == L.Text("Owned items")).ShouldBe(before.OwnedItems.Count);
+            entries.Any(entry => entry.Id.StartsWith("affix.", System.StringComparison.Ordinal)).ShouldBeFalse();
+            entries.Single(entry => entry.Id == "loot.affixes").Table.Rows.Count.ShouldBe(58);
+            entries.Single(entry => entry.Id == "loot.bases").Table.Rows.Count.ShouldBe(525);
             state.ReadEquipment(arena.Player.CombatantId).Version.ShouldBe(before.Version);
 
             foreach (var entry in entries)
@@ -71,12 +70,13 @@ public sealed class GodotReferenceTest : TestClass
         {
             var entries = ReferenceCatalog.Create();
             panel.Open(entries);
+            panel.SelectSection("rules");
             var search = panel.GetNode<LineEdit>("Book/Search");
             var category = panel.GetNode<OptionButton>("Book/Category");
             var list = (VBoxContainer)panel.FindChild("Entries", true, false);
             Search(panel, "FIRE resistance");
-            list.GetChildCount().ShouldBe(entries.Count(entry => entry.Matches("FIRE resistance")));
-            var index = Enumerable.Range(0, category.ItemCount).Single(value => category.GetItemText(value) == "Resistances");
+            list.GetChildCount().ShouldBe(entries.Count(entry => !entry.Id.StartsWith("loot.", System.StringComparison.Ordinal) && entry.Matches("FIRE resistance")));
+            var index = Enumerable.Range(0, category.ItemCount).Single(value => category.GetItemText(value) == L.Text("Resistances"));
             category.Select(index);
             category.EmitSignal(OptionButton.SignalName.ItemSelected, index);
             list.GetChildCount().ShouldBe(1);
@@ -84,7 +84,7 @@ public sealed class GodotReferenceTest : TestClass
             Search(panel, "nothing-matches-this-query");
             list.GetChildCount().ShouldBe(0);
             panel.GetNode<Button>("Book/Inspect").Disabled.ShouldBeTrue();
-            panel.GetNode<RichTextLabel>("Book/Article").GetParsedText().ShouldContain("Try another search");
+            panel.GetNode<RichTextLabel>("Book/Article").GetParsedText().ShouldContain(L.Text("Try another search in this section."));
             search.Text = "";
             panel.Open(entries);
             list.GetChildCount().ShouldBe(7);
@@ -92,6 +92,105 @@ public sealed class GodotReferenceTest : TestClass
         finally
         {
             panel.Free();
+        }
+    }
+
+    /// <summary>Bestiary navigation and slot-filtered tables replace a global article list without changing gameplay state.</summary>
+    [Test]
+    public void BestiaryAndTablesStayInTheirOwnSections()
+    {
+        var panel = new ReferencePanel();
+        TestScene.AddChild(panel);
+
+        try
+        {
+            panel.Open(ReferenceCatalog.Create());
+            var list = (VBoxContainer)panel.FindChild("Entries", true, false);
+            list.GetChildCount().ShouldBe(2);
+            list.GetChildren().OfType<Button>()
+                .All(button => button.GetMeta("reference_id").AsString().StartsWith("loot.monster.", System.StringComparison.Ordinal)).ShouldBeTrue();
+            panel.GetNode<RichTextLabel>("Book/Article").GetParsedText().ShouldContain("40");
+            panel.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(106);
+            panel.SelectSection("affixes");
+            var category = panel.GetNode<OptionButton>("Book/Category");
+            var helmet = Enumerable.Range(0, category.ItemCount).Single(index => category.GetItemText(index) == L.Text("Helmet"));
+            category.Select(helmet);
+            category.EmitSignal(OptionButton.SignalName.ItemSelected, helmet);
+            Search(panel, "maximum health");
+            panel.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(1);
+            panel.SelectSection("items");
+            panel.GetNode<LineEdit>("Book/Search").Text.ShouldBe("");
+            panel.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(525);
+            category.Selected.ShouldBe(0);
+        }
+        finally
+        {
+            panel.Free();
+        }
+    }
+
+    /// <summary>Item cells open inline stat cards with nested explanations and tiers change retained ranges.</summary>
+    /// <returns>Completes after an optional rendered item-card capture.</returns>
+    [Test]
+    public async Task ItemPropertiesAndAffixTiersAreInteractive()
+    {
+        var arena = CreateArena();
+
+        try
+        {
+            var hud = arena.GetNode<ArenaHud>("Presentation");
+            hud.ToggleReference();
+            var panel = hud.GetNode<ReferencePanel>("Root/Design/Reference");
+            panel.SelectSection("items");
+            var data = LootReference.Create().Single(entry => entry.Id == "loot.bases").Table;
+            data.Columns.Count.ShouldBe(4);
+            data.Rows.Take(21).All(row => row.Id.EndsWith(".Common", System.StringComparison.Ordinal)).ShouldBeTrue();
+            data.Rows.Skip(21).Take(21).All(row => row.Id.EndsWith(".Uncommon", System.StringComparison.Ordinal)).ShouldBeTrue();
+            data.Rows.Skip(105).First().Id.ShouldEndWith(".Common");
+            var table = panel.GetNode<ReferenceTableView>("Book/Table");
+            var first = table.GetNode<VBoxContainer>("RowsScroll/Rows").GetChild<PanelContainer>(0);
+            first.GetChild<HBoxContainer>(0).GetChild<Button>(3).EmitSignal(BaseButton.SignalName.Pressed);
+            var stack = hud.GetNode<InspectionStack>("Root/Design/Inspections");
+            stack.Count.ShouldBe(1);
+            stack.GetNode<RichTextLabel>("Level0/Card/Body").EmitSignal(RichTextLabel.SignalName.MetaClicked, "1");
+            stack.Count.ShouldBe(2);
+            stack.GetNode<RichTextLabel>("Level1/Card/Body").EmitSignal(RichTextLabel.SignalName.MetaClicked, "0");
+            stack.Count.ShouldBe(3);
+            var armorRow = table.GetNode<VBoxContainer>("RowsScroll/Rows").GetChildren()
+                .OfType<PanelContainer>()
+                .Single(row => row.GetMeta("reference_row_id").AsString() == "strength-body-travel.Common");
+            armorRow.GetChild<HBoxContainer>(0).GetChild<Button>(0).EmitSignal(BaseButton.SignalName.Pressed);
+            var itemBody = stack.GetNode<RichTextLabel>("Level0/Card/Body");
+            itemBody.GetParsedText().ShouldContain("65");
+            itemBody.GetParsedText().ShouldContain("ilvl 1");
+            itemBody.GetParsedText().ShouldNotContain(L.Text("RELATED"));
+            var capture = OS.GetEnvironment("RFH_INLINE_CARD_CAPTURE");
+
+            if (!string.IsNullOrWhiteSpace(capture))
+            {
+                await TestScene.ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+                TestScene.GetViewport().GetTexture().GetImage().SavePng(capture).ShouldBe(Error.Ok);
+            }
+
+            itemBody.EmitSignal(RichTextLabel.SignalName.MetaClicked, "2");
+            stack.Count.ShouldBe(2);
+            stack.GetNode<RichTextLabel>("Level1/Card/Body").GetParsedText().ShouldContain(CombatGlossary.Armor().Description);
+            panel.SelectSection("affixes");
+            Search(panel, "Maximum Health");
+            var tier = panel.GetNode<OptionButton>("Book/Tier");
+            tier.Visible.ShouldBeTrue();
+            tier.ItemCount.ShouldBe(7);
+            var range = table.GetNode<VBoxContainer>("RowsScroll/Rows").GetChild<PanelContainer>(0).GetChild<HBoxContainer>(0).GetChild<Button>(2);
+            range.Text.ShouldBe("6–10");
+            tier.Select(1);
+            tier.EmitSignal(OptionButton.SignalName.ItemSelected, 1);
+            table.VisibleRowCount.ShouldBe(1);
+            range = table.GetNode<VBoxContainer>("RowsScroll/Rows").GetChild<PanelContainer>(0).GetChild<HBoxContainer>(0).GetChild<Button>(2);
+            range.Text.ShouldBe("11–16");
+        }
+        finally
+        {
+            arena.Free();
         }
     }
 
@@ -209,10 +308,6 @@ public sealed class GodotReferenceTest : TestClass
 
     private static void Select(ReferencePanel panel, string id)
     {
-        var list = (VBoxContainer)panel.FindChild("Entries", true, false);
-        list.GetChildren()
-            .OfType<Button>()
-            .Single(button => button.GetMeta("reference_id").AsString() == id)
-            .EmitSignal(BaseButton.SignalName.Pressed);
+        panel.ShowEntry(id);
     }
 }

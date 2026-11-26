@@ -93,7 +93,7 @@ public sealed class GodotCombatSceneTest : TestClass
         finally { scene.Free(); }
     }
 
-    /// <summary>Configured vampirism heals only the actual three HP lost by an overkilled enemy.</summary>
+    /// <summary>Configured vampirism heals from actual overkill loss and gives no healing on a natural-one miss.</summary>
     /// <returns>Completes after the actual projectile contacts the enemy and the returned health changes are checked.</returns>
     [Test]
     public async Task VampirismHealsFromActualDamageAndIsExplainedInJournal()
@@ -112,12 +112,18 @@ public sealed class GodotCombatSceneTest : TestClass
             scene.Fire();
             await WaitForContact(scene);
             var read = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId);
-            read.Source.Health.ShouldBe(52);
-            read.Target.Health.ShouldBe(0);
+            var resolution = ((ResolvedCombat)scene.LastContact.Impact.Outcome).Resolution;
+            var missed = resolution.Result.Target.AttackRoll.Roll.Results.Single() == 1;
+            read.Source.Health.ShouldBe(missed ? 50 : 52);
+            read.Target.Health.ShouldBe(missed ? 3 : 0);
             Balance(scene).ShouldBe(90m);
-            var journal = scene.GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal").GetParsedText();
-            journal.ShouldContain("actual opponent HP lost 3");
-            journal.ShouldContain("50 → 52");
+
+            if (!missed)
+            {
+                var journal = scene.GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal").GetParsedText();
+                journal.ShouldContain("actual opponent HP lost 3");
+                journal.ShouldContain("50 → 52");
+            }
         }
         finally { scene.Free(); }
     }

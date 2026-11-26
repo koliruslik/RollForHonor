@@ -29,6 +29,7 @@ public partial class GreyboxArena
     {
         var occupied = Drops
             .Select(drop => drop.Position)
+            .Concat(GoldDrops.Select(drop => drop.Position))
             .ToArray();
         using var shape = new SphereShape3D { Radius = 0.4f };
 

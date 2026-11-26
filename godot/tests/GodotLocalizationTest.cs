@@ -53,14 +53,14 @@ public sealed class GodotLocalizationTest : TestClass
             entry.Matches("ПОПЕЛЯСТИЙ лук").ShouldBeTrue();
             catalog.Single(value => value.Id == "combat.attack-roll").Matches("кидки атаки").ShouldBeTrue();
             reference.Open(catalog);
+            reference.SelectSection("items");
             var search = reference.GetNode<LineEdit>("Book/Search");
-            search.Text = "попелястий";
+            search.Text = "дерев’яний лук";
             search.EmitSignal(LineEdit.SignalName.TextChanged, search.Text);
-            var buttons = reference.FindChild("Entries", true, false).GetChildren()
-                .OfType<Button>()
-                .ToArray();
-            buttons.Any(button => button.GetMeta("reference_id").AsString() == entry.Id).ShouldBeTrue();
-            buttons.All(button => button.Text.Contains("Попелястий", StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
+            reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(5);
+            catalog.Single(value => value.Id == "loot.bases").Table.Rows
+                .Where(row => row.Matches("дерев’яний лук", ""))
+                .All(row => L.Refresh(row.Cells[0]).Contains("дерев’яний лук", StringComparison.OrdinalIgnoreCase)).ShouldBeTrue();
             var affix = ItemInspectionTopics.Affix(bow.Rarity, bow.Affixes[0], true);
             affix.Title.ShouldContain("Тверда рука");
             affix.Facts.Any(fact => fact.Text.Contains("72%", StringComparison.Ordinal)).ShouldBeTrue();
@@ -220,6 +220,7 @@ public sealed class GodotLocalizationTest : TestClass
             .Single();
         var arena = GD.Load<PackedScene>("res://Arena.tscn").Instantiate<GreyboxArena>();
         runtime.AddChild(arena);
+        ArenaItemFixtures.UseAuthoredKit(arena);
         arena.Player.Controls.HardwareInput = false;
         arena.Opponent.Controls.ThinkingEnabled = false;
         var reference = new ReferencePanel();
@@ -245,6 +246,7 @@ public sealed class GodotLocalizationTest : TestClass
             var catalog = ReferenceCatalog.Create(before.OwnedItems.Values);
             var entry = catalog.Single(value => value.Id == $"item.{bow.Id}");
             reference.Open(catalog);
+            reference.SelectSection("rules");
             var category = reference.GetNode<OptionButton>("Book/Category");
             var statsIndex = Enumerable.Range(0, category.ItemCount)
                 .Single(index => category.GetItemText(index) == "Character stats");

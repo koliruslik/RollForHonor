@@ -18,7 +18,7 @@ public sealed class EquipmentRules
         new(EquipmentSlot.RingLeft, "ring"),
         new(EquipmentSlot.RingRight, "ring"),
         new(EquipmentSlot.OffHand, "offhand")
-    ], [new("quiver", "bow"), new("shield", "one-handed", true)]);
+    ], [new("quiver", "bow"), new("shield", "one-handed", true), new("focus", "wand")]);
 
     private readonly ImmutableDictionary<EquipmentSlot, string> _requiredTags;
     private readonly ImmutableArray<EquipmentPairRule> _handPairs;

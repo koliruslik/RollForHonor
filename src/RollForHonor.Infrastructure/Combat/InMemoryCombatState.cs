@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using RollForHonor.Application.Rewards;
 using RollForHonor.Application.Combat.Models;
 using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
@@ -15,14 +16,14 @@ using RollForHonor.Domain.Stats;
 
 namespace RollForHonor.Infrastructure.Combat;
 
-/// <summary>Owns versioned combat views, equipment, resources, cooldowns and receipts for one in-memory session.</summary>
+/// <summary>Owns versioned combat, equipment, resources, captured gold, wallets and receipts for one in-memory session.</summary>
 /// <remarks>
 /// Combat, initiation and equipment ports share one conservative session version. Reads and publication are synchronized;
 /// changes are prepared in immutable collections and published with one state replacement.
 /// Item acquisition publishes version-checked ownership after Application validates bag capacity; administrative grants bypass capacity. Transfers and persistence are not implemented.
 /// Nothing is persisted, and a new adapter starts a separate session.
 /// </remarks>
-public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter, IItemReleaseStateAdapter, IManaRecoveryStateAdapter, IHealthRecoveryStateAdapter
+public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter, IItemReleaseStateAdapter, IManaRecoveryStateAdapter, IHealthRecoveryStateAdapter, IGoldPickupStateAdapter
 {
     private readonly object _gate = new();
     private SessionData _data = new();
@@ -292,13 +293,16 @@ public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackIn
 
     private static CombatantSnapshot Copy(CombatantSnapshot actor, int health,
         IReadOnlyList<Domain.Combat.Effects.Models.CombatEffectSnapshot> effects) =>
-        new(actor.Id, health, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, effects, actor.Offense);
+        new(actor.Id, health, actor.MaxHealth, actor.Armor, actor.Evasion, actor.Resistances, effects, actor.Offense, actor.EvasionRating);
 
     private sealed record StartReceipt(CombatantId SourceId, string Key, Guid AttackId);
 
     private sealed record SessionData
     {
         internal long Version { get; init; }
+        internal ImmutableDictionary<CombatantId, long> GoldBalances { get; init; } = ImmutableDictionary<CombatantId, long>.Empty;
+        internal ImmutableDictionary<CombatantId, GoldReward> GoldRewards { get; init; } = ImmutableDictionary<CombatantId, GoldReward>.Empty;
+        internal ImmutableHashSet<CombatantId> CollectedGold { get; init; } = ImmutableHashSet<CombatantId>.Empty;
         internal ImmutableDictionary<CombatantId, StatProfile> Profiles { get; init; } = ImmutableDictionary<CombatantId, StatProfile>.Empty;
         internal ImmutableDictionary<CombatantId, EquipmentInventory> Equipment { get; init; } = ImmutableDictionary<CombatantId, EquipmentInventory>.Empty;
         internal ImmutableDictionary<CombatantId, StatBlock> Stats { get; init; } = ImmutableDictionary<CombatantId, StatBlock>.Empty;

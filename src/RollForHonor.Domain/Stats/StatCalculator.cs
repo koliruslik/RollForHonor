@@ -9,23 +9,35 @@ public sealed class StatCalculator
     /// <param name="profile">The immutable base definition and active modifiers.</param>
     /// <returns>A complete immutable set; typed outgoing coefficients already combine global and typed modifiers.</returns>
     /// <exception cref="ArgumentNullException">The profile is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Base character level is outside 1–10.</exception>
     /// <exception cref="OverflowException">Decimal arithmetic exceeds its representable range.</exception>
     public StatBlock Calculate(StatProfile profile)
     {
         ArgumentNullException.ThrowIfNull(profile);
 
+        var level = profile.BaseValues.Get(new(StatType.CharacterLevel));
+
+        if (level < 1 || level > 10)
+        {
+            throw new ArgumentOutOfRangeException(nameof(profile), "Character level must be within one through ten.");
+        }
+
         var keys = Enum.GetValues<StatType>()
-            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage))
+            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage) && DamageDiceStats.Sides(type) == 0)
             .Select(type => new StatKey(type))
             .Concat(Enum.GetValues<DamageType>()
                 .SelectMany(damage => new[] { new StatKey(StatType.Resistance, damage), new StatKey(StatType.DamageMultiplier, damage), new StatKey(StatType.AddedDamage, damage) }));
+
+        keys = keys.Concat(DamageDiceStats.Types
+            .SelectMany(type => Enum.GetValues<DamageType>()
+                .Select(damage => new StatKey(type, damage))));
 
         return new StatBlock(keys.Select(key => new KeyValuePair<StatKey, decimal>(key, CalculateValue(profile, key))));
     }
 
     private static decimal CalculateValue(StatProfile profile, StatKey key)
     {
-        var global = new StatKey(key.Type, key.Type is StatType.Resistance or StatType.AddedDamage ? key.DamageKind : null);
+        var global = new StatKey(key.Type, key.Type is StatType.Resistance or StatType.AddedDamage || DamageDiceStats.Sides(key.Type) > 0 ? key.DamageKind : null);
         var combineDamage = key.Type == StatType.DamageMultiplier && key.DamageKind is not null;
         var entries = profile.Modifiers
             .Where(modifier => modifier.Key == key || combineDamage && modifier.Key == global)
@@ -56,6 +68,7 @@ public sealed class StatCalculator
 
         return key.Type switch
         {
+            StatType.CharacterLevel => Math.Clamp(decimal.Floor(result), 1, 10),
             StatType.Resistance => Math.Min(1, result),
             StatType.CriticalChance => Math.Clamp(result, 0, 1),
             StatType.MaxHealth => Math.Max(1, result),

@@ -45,6 +45,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore RollForHonor.sln
 
+      - name: Verify live loot reference
+        run: python3 tools/export_loot_tables.py --check
+
       - name: Build solution
         run: dotnet build RollForHonor.sln --configuration Debug --no-restore
 

@@ -101,7 +101,7 @@ internal sealed class InventoryWindowController
         {
             if (recordAction)
             {
-                _recordAction(L.Format($"Picked up: {L.Text(item.Base.Name)}"));
+                _recordAction(L.Format($"Picked up: {ItemPresentation.Name(item)}"));
             }
 
             Invalidate();
@@ -127,6 +127,7 @@ internal sealed class InventoryWindowController
 
         _inventoryVersion = read.Version;
         _inventory.Refresh(read);
+        _inventory.RefreshGold(_runtime.CombatState.ReadGoldWallet(_arena.Player.CombatantId).Balance);
 
         if (_selected is not null)
         {
@@ -295,7 +296,7 @@ internal sealed class InventoryWindowController
 
         if (result == EquipmentChangeStatus.Applied)
         {
-            _recordAction(equipped ? L.Format($"Removed: {L.Text(item.Base.Name)}") : L.Format($"Equipped: {L.Text(item.Base.Name)}"));
+            _recordAction(equipped ? L.Format($"Removed: {ItemPresentation.Name(item)}") : L.Format($"Equipped: {ItemPresentation.Name(item)}"));
         }
 
         Refresh();
@@ -317,6 +318,7 @@ internal sealed class InventoryWindowController
             EquipmentChangeStatus.InventoryFull => L.Text("Inventory full. Make room before changing equipment."),
             EquipmentChangeStatus.AlreadyEquippedElsewhere => L.Text("Remove the item from its current slot first."),
             EquipmentChangeStatus.IncompatibleSlot => L.Text("Requires a compatible main hand or equipment slot."),
+            EquipmentChangeStatus.RequirementsNotMet => L.Text("This item requires a higher level or more allocated attributes."),
             EquipmentChangeStatus.VersionConflict => L.Text("Your equipment changed. Select the item again."),
             _ => L.Text("This item cannot be equipped in that slot.")
         };

@@ -48,12 +48,36 @@ public enum StatType
     /// <summary>Allocated Intelligence points; derived magic rules are not configured.</summary>
     Intelligence,
 
-    /// <summary>Allocated Luck points; loot and dice scaling are not configured.</summary>
+    /// <summary>Allocated Luck points used by captured affix-tier, quality and gold-amount rolls.</summary>
     Luck,
 
     /// <summary>Flat health points recovered per game second.</summary>
     HealthRecovery,
 
     /// <summary>Flat mana points recovered per game second.</summary>
-    ManaRecovery
+    ManaRecovery,
+
+    /// <summary>Multiplicative attack cadence coefficient, independent of movement speed.</summary>
+    AttackSpeed,
+
+    /// <summary>Number of extra typed d4 rolled on an attack impact.</summary>
+    AddedDamageD4,
+
+    /// <summary>Number of extra typed d6 rolled on an attack impact.</summary>
+    AddedDamageD6,
+
+    /// <summary>Number of extra typed d8 rolled on an attack impact.</summary>
+    AddedDamageD8,
+
+    /// <summary>Number of extra typed d10 rolled on an attack impact.</summary>
+    AddedDamageD10,
+
+    /// <summary>Number of extra typed d12 rolled on an attack impact.</summary>
+    AddedDamageD12,
+
+    /// <summary>Bonus on the separate critical d20; independent of attack accuracy.</summary>
+    CriticalRollBonus,
+
+    /// <summary>Character equipment level, capped at ten without automatic stat growth.</summary>
+    CharacterLevel
 }

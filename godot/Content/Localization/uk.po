@@ -1046,7 +1046,7 @@ msgid "Archer"
 msgstr "Стрілець"
 
 msgid "Training target"
-msgstr "Тренувальна мішень"
+msgstr "Тренувальна ціль"
 
 msgid "Arena [F2]"
 msgstr "Арена [F2]"
@@ -1428,3 +1428,2313 @@ msgstr "Не вдалося викинути предмет. Перевірте 
 
 msgid "Item created; waiting for free ground nearby."
 msgstr "Предмет створено; очікуємо вільного місця на землі поруч."
+
+msgid "Gold: {0}"
+msgstr "Золото: {0}"
+
+msgid "Picked up gold: {0}"
+msgstr "Підібрано золото: {0}"
+
+msgid "G · Click · Drag items into bag"
+msgstr "G · Клік · Перетягніть предмет у сумку"
+
+msgid "Loot tables"
+msgstr "Таблиці здобичі"
+
+msgid "Item bases"
+msgstr "Бази предметів"
+
+msgid "Affix catalog"
+msgstr "Каталог афіксів"
+
+msgid "Loot generation"
+msgstr "Генерація здобичі"
+
+msgid "Attack speed"
+msgstr "Швидкість атаки"
+
+msgid "attack speed"
+msgstr "Швидкість атаки"
+
+msgid "Prepared; excluded from generation until its combat mechanic is implemented."
+msgstr "Підготовлений; не генерується до реалізації відповідної бойової механіки."
+
+msgid "Maximum Health"
+msgstr "Максимальне здоров’я"
+
+msgid "health"
+msgstr "Максимальне здоров’я"
+
+msgid "Maximum Mana"
+msgstr "Максимальна мана"
+
+msgid "mana"
+msgstr "Максимальна мана"
+
+msgid "Increased Health"
+msgstr "Збільшення здоров’я"
+
+msgid "health percent"
+msgstr "Збільшення здоров’я"
+
+msgid "Increased Mana"
+msgstr "Збільшення мани"
+
+msgid "mana percent"
+msgstr "Збільшення мани"
+
+msgid "Armour"
+msgstr "Броня"
+
+msgid "Increased Armour"
+msgstr "Збільшення броні"
+
+msgid "armor percent"
+msgstr "Збільшення броні"
+
+msgid "Increased Evasion"
+msgstr "Збільшення ухилення"
+
+msgid "evasion percent"
+msgstr "Збільшення ухилення"
+
+msgid "Movement Speed"
+msgstr "Швидкість пересування"
+
+msgid "movement"
+msgstr "Швидкість пересування"
+
+msgid "Attack Speed"
+msgstr "Швидкість атаки"
+
+msgid "Added Piercing Damage"
+msgstr "Додаткова колюча шкода"
+
+msgid "added piercing"
+msgstr "Додаткова колюча шкода"
+
+msgid "Increased Piercing Damage"
+msgstr "Збільшення колючої шкоди"
+
+msgid "increased piercing"
+msgstr "Збільшення колючої шкоди"
+
+msgid "Extra Piercing Damage Dice"
+msgstr "Додаткові кубики колючої шкоди"
+
+msgid "dice piercing"
+msgstr "Додаткові кубики колючої шкоди"
+
+msgid "Added Bludgeoning Damage"
+msgstr "Додаткова дробильна шкода"
+
+msgid "added bludgeoning"
+msgstr "Додаткова дробильна шкода"
+
+msgid "Increased Bludgeoning Damage"
+msgstr "Збільшення дробильної шкоди"
+
+msgid "increased bludgeoning"
+msgstr "Збільшення дробильної шкоди"
+
+msgid "Extra Bludgeoning Damage Dice"
+msgstr "Додаткові кубики дробильної шкоди"
+
+msgid "dice bludgeoning"
+msgstr "Додаткові кубики дробильної шкоди"
+
+msgid "Added Slashing Damage"
+msgstr "Додаткова рубана шкода"
+
+msgid "added slashing"
+msgstr "Додаткова рубана шкода"
+
+msgid "Increased Slashing Damage"
+msgstr "Збільшення рубаної шкоди"
+
+msgid "increased slashing"
+msgstr "Збільшення рубаної шкоди"
+
+msgid "Extra Slashing Damage Dice"
+msgstr "Додаткові кубики рубаної шкоди"
+
+msgid "dice slashing"
+msgstr "Додаткові кубики рубаної шкоди"
+
+msgid "Added Fire Damage"
+msgstr "Додаткова вогняна шкода"
+
+msgid "added fire"
+msgstr "Додаткова вогняна шкода"
+
+msgid "Increased Fire Damage"
+msgstr "Збільшення вогняної шкоди"
+
+msgid "increased fire"
+msgstr "Збільшення вогняної шкоди"
+
+msgid "Extra Fire Damage Dice"
+msgstr "Додаткові кубики вогняної шкоди"
+
+msgid "dice fire"
+msgstr "Додаткові кубики вогняної шкоди"
+
+msgid "Added Cold Damage"
+msgstr "Додаткова холодова шкода"
+
+msgid "added cold"
+msgstr "Додаткова холодова шкода"
+
+msgid "Increased Cold Damage"
+msgstr "Збільшення холодової шкоди"
+
+msgid "increased cold"
+msgstr "Збільшення холодової шкоди"
+
+msgid "Extra Cold Damage Dice"
+msgstr "Додаткові кубики холодової шкоди"
+
+msgid "dice cold"
+msgstr "Додаткові кубики холодової шкоди"
+
+msgid "Added Lightning Damage"
+msgstr "Додаткова електрична шкода"
+
+msgid "added lightning"
+msgstr "Додаткова електрична шкода"
+
+msgid "Increased Lightning Damage"
+msgstr "Збільшення електричної шкоди"
+
+msgid "increased lightning"
+msgstr "Збільшення електричної шкоди"
+
+msgid "Extra Lightning Damage Dice"
+msgstr "Додаткові кубики електричної шкоди"
+
+msgid "dice lightning"
+msgstr "Додаткові кубики електричної шкоди"
+
+msgid "Added Poison Damage"
+msgstr "Додаткова отруйна шкода"
+
+msgid "added poison"
+msgstr "Додаткова отруйна шкода"
+
+msgid "Increased Poison Damage"
+msgstr "Збільшення отруйної шкоди"
+
+msgid "increased poison"
+msgstr "Збільшення отруйної шкоди"
+
+msgid "Extra Poison Damage Dice"
+msgstr "Додаткові кубики отруйної шкоди"
+
+msgid "dice poison"
+msgstr "Додаткові кубики отруйної шкоди"
+
+msgid "Added Physical Damage"
+msgstr "Додаткова фізична шкода"
+
+msgid "added physical"
+msgstr "Додаткова фізична шкода"
+
+msgid "Increased Physical Damage"
+msgstr "Збільшення фізичної шкоди"
+
+msgid "increased physical"
+msgstr "Збільшення фізичної шкоди"
+
+msgid "Added Elemental Damage"
+msgstr "Додаткова стихійна шкода"
+
+msgid "added elemental"
+msgstr "Додаткова стихійна шкода"
+
+msgid "Increased Elemental Damage"
+msgstr "Збільшення стихійної шкоди"
+
+msgid "increased elemental"
+msgstr "Збільшення стихійної шкоди"
+
+msgid "Increased Damage"
+msgstr "Збільшення всієї шкоди"
+
+msgid "global damage"
+msgstr "Збільшення всієї шкоди"
+
+msgid "Life Leech"
+msgstr "Викрадення здоров’я"
+
+msgid "life leech"
+msgstr "Викрадення здоров’я"
+
+msgid "Mana Leech"
+msgstr "Викрадення мани"
+
+msgid "mana leech"
+msgstr "Викрадення мани"
+
+msgid "strength"
+msgstr "Сила"
+
+msgid "dexterity"
+msgstr "Спритність"
+
+msgid "intelligence"
+msgstr "Інтелект"
+
+msgid "luck"
+msgstr "Удача"
+
+msgid "All Attributes"
+msgstr "Усі атрибути"
+
+msgid "all attributes"
+msgstr "Усі атрибути"
+
+msgid "Piercing Resistance"
+msgstr "Опір колючій шкоді"
+
+msgid "resist piercing"
+msgstr "Опір колючій шкоді"
+
+msgid "Bludgeoning Resistance"
+msgstr "Опір дробильній шкоді"
+
+msgid "resist bludgeoning"
+msgstr "Опір дробильній шкоді"
+
+msgid "Slashing Resistance"
+msgstr "Опір рубаній шкоді"
+
+msgid "resist slashing"
+msgstr "Опір рубаній шкоді"
+
+msgid "Fire Resistance"
+msgstr "Опір вогняній шкоді"
+
+msgid "resist fire"
+msgstr "Опір вогняній шкоді"
+
+msgid "Cold Resistance"
+msgstr "Опір холодовій шкоді"
+
+msgid "resist cold"
+msgstr "Опір холодовій шкоді"
+
+msgid "Lightning Resistance"
+msgstr "Опір електричній шкоді"
+
+msgid "resist lightning"
+msgstr "Опір електричній шкоді"
+
+msgid "Poison Resistance"
+msgstr "Опір отруйній шкоді"
+
+msgid "resist poison"
+msgstr "Опір отруйній шкоді"
+
+msgid "All Physical Resistances"
+msgstr "Опір усій фізичній шкоді"
+
+msgid "resist physical"
+msgstr "Опір усій фізичній шкоді"
+
+msgid "All Elemental Resistances"
+msgstr "Опір усій стихійній шкоді"
+
+msgid "resist elemental"
+msgstr "Опір усій стихійній шкоді"
+
+msgid "All Resistances"
+msgstr "Усі опори"
+
+msgid "resist all"
+msgstr "Усі опори"
+
+msgid "Health Regeneration"
+msgstr "Відновлення здоров’я"
+
+msgid "hp regen"
+msgstr "Відновлення здоров’я"
+
+msgid "Mana Regeneration"
+msgstr "Відновлення мани"
+
+msgid "mana regen"
+msgstr "Відновлення мани"
+
+msgid "Accuracy"
+msgstr "Точність"
+
+msgid "accuracy"
+msgstr "Точність"
+
+msgid "Critical Roll Bonus"
+msgstr "Бонус критичного кидка"
+
+msgid "critical bonus"
+msgstr "Бонус критичного кидка"
+
+msgid "Critical Damage Multiplier"
+msgstr "Множник критичної шкоди"
+
+msgid "critical multiplier"
+msgstr "Множник критичної шкоди"
+
+msgid "Gold and equipment roll independently. Gold is collected from the ground. Each equipment group grants at most one item; rarity, slot and base are separate choices. Each rarity affix slot has an independent 55% occupancy chance. Families are weighted without replacement.\n\nLuck affects affix tiers, quality and gold quantity. Occurrence and rarity keep the fixed probabilities shown here. T1 is strongest; T7 is weakest. High-level bases are available in admin tools, but Sentinel drops only item level 1. Training targets grant no loot."
+msgstr "Золото й екіпіровка розігруються незалежно. Золото потрібно підбирати із землі. Група екіпіровки дає щонайбільше один предмет; рідкість, слот і база обираються окремо. Кожне місце під афікс заповнюється незалежно із шансом 55%. Сімейства обираються за вагами без повторень.\n\nУдача впливає на тир, якість афіксів і кількість золота. Шанси випадіння та рідкості фіксовані й наведені в таблиці. T1 — найсильніший, T7 — найслабший. Бази високого рівня доступні в адмінінструментах; Вартовий дає лише предмети 1 рівня. Тренувальні цілі не дають здобичі."
+
+msgid "Item level: {0}\nGold: 100%, {1}–{2}\nQuantity: min + floor((max − min) × (min(100, d100 + Luck) − 1) / 99)\n\nEquipment per kill:\n{3}\n\nSlot conditional on equipment:\n{4}\n\nBases within the selected slot have equal weights. Sandbox Sentinel uses this same profile."
+msgstr "Рівень предмета: {0}\nЗолото: 100%, {1}–{2}\nКількість: min + floor((max − min) × (min(100, d100 + Удача) − 1) / 99)\n\nЕкіпіровка за вбивство:\n{3}\n\nСлот за умови випадіння екіпіровки:\n{4}\n\nБази всередині обраного слота мають однакові ваги. Вартовий з адмінінструментів використовує цей самий профіль."
+
+msgid "{0}\nSlot: {1}\nMinimum item level: {2}\nWeight within eligible slot pool: {3}\n\n{4}{5}"
+msgstr "{0}\nСлот: {1}\nМінімальний рівень предмета: {2}\nВага серед доступних баз слота: {3}\n\n{4}{5}"
+
+msgid "{0}\n{1}\nSlots: {2}\nFamily weight: {3}\nCategory: {4}\n\n{5}\n\nT1 is strongest. Family weights are independent of tier and quality rolls."
+msgstr "{0}\n{1}\nСлоти: {2}\nВага сімейства: {3}\nКатегорія: {4}\n\n{5}\n\nT1 — найсильніший. Ваги сімейств не залежать від кидків тиру та якості."
+
+msgid "Multiplies the equipped weapon attack cadence. Increased bonuses add together; mana cost per attack stays the same."
+msgstr "Множить частоту атак спорядженої зброї. Бонуси Increased додаються; витрата мани за одну атаку не змінюється."
+
+msgid "Monsters"
+msgstr "Моби"
+
+msgid "Rules"
+msgstr "Правила"
+
+msgid "Journal"
+msgstr "Журнал"
+
+msgid "All affixes"
+msgstr "Усі афікси"
+
+msgid "Wooden Bow"
+msgstr "Дерев’яний лук"
+
+msgid "Quilted Jacket"
+msgstr "Стьобана куртка"
+
+msgid "Iron Helmet"
+msgstr "Залізний шолом"
+
+msgid "Leather Boots"
+msgstr "Шкіряні чоботи"
+
+msgid "Copper Amulet"
+msgstr "Мідний амулет"
+
+msgid "Copper Ring"
+msgstr "Мідне кільце"
+
+msgid "Leather Quiver"
+msgstr "Шкіряний сагайдак"
+
+msgid "Wooden Shield"
+msgstr "Дерев’яний щит"
+
+msgid "All rows"
+msgstr "Усі рядки"
+
+msgid "All topics in this section"
+msgstr "Усі теми розділу"
+
+msgid "Search this table…"
+msgstr "Пошук у таблиці…"
+
+msgid "Search this section…"
+msgstr "Пошук у розділі…"
+
+msgid "{0} entries"
+msgstr "Записів: {0}"
+
+msgid "Choose a section. Search within it. Select a monster or a table row for details."
+msgstr "Оберіть розділ. Шукайте усередині нього. Натисніть на моба або рядок таблиці, щоб переглянути подробиці."
+
+msgid "Try another search in this section."
+msgstr "Зміни запит або фільтр у цьому розділі."
+
+msgid "No matching rows. Clear the search or choose another filter."
+msgstr "Немає відповідних рядків. Очисть пошук або зміни фільтр."
+
+msgid "Drop"
+msgstr "Здобич"
+
+msgid "Per kill"
+msgstr "За вбивство"
+
+msgid "Amount"
+msgstr "Кількість"
+
+msgid "Affixes"
+msgstr "Афікси"
+
+msgid "Affix"
+msgstr "Афікс"
+
+msgid "Base"
+msgstr "База"
+
+msgid "Slot"
+msgstr "Слот"
+
+msgid "Slots"
+msgstr "Слоти"
+
+msgid "Item level"
+msgstr "Рівень предмета"
+
+msgid "Base properties"
+msgstr "Властивості бази"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Drops"
+msgstr "Випадає"
+
+msgid "Not yet"
+msgstr "Поки ні"
+
+msgid "No equipment"
+msgstr "Без екіпіровки"
+
+msgid "Item level {0}"
+msgstr "Рівень предмета {0}"
+
+msgid "{0} · Item level {1}"
+msgstr "{0} · Рівень предмета {1}"
+
+msgid "Lv {0}"
+msgstr "Рів. {0}"
+
+msgid "{0} attacks/s · {1} mana/attack"
+msgstr "{0} атак/с · {1} мани за атаку"
+
+msgid "A stationary practice target. It does not attack and drops no gold or equipment."
+msgstr "Нерухома ціль для перевірки атак. Не атакує та не залишає золота чи екіпіровки."
+
+msgid "The base name stays the same at every rarity. Item level and base properties are listed separately. Select a row to inspect its properties."
+msgstr "Назва бази однакова для всіх рідкостей. Рівень предмета та його властивості вказані окремо. Натисніть назву, щоб переглянути властивості."
+
+msgid "Filter by equipment slot or search by name. Each tier cell shows its value and the minimum item level. T7 is weakest; T1 is strongest. Gray rows do not drop yet."
+msgstr "Фільтруй за слотом екіпіровки або шукай за назвою. У кожній клітинці — значення бонусу та потрібний рівень предмета. T7 — найслабший, T1 — найсильніший. Сірі афікси поки не випадають."
+
+msgid "Health {0:0} · Armor {1:0} · Evasion {2:0} · Speed {3:0.##}\nItem level {4}"
+msgstr "Здоров’я {0:0} · Броня {1:0} · Ухилення {2:0} · Швидкість {3:0.##}\nРівень предметів {4}"
+
+msgid "Arrow: {0} · Attack roll +{1} · Every {2:0.##} s"
+msgstr "Стріла: {0} · Бонус атаки +{1} · Раз на {2:0.##} с"
+
+msgid "Approaches until in range, then fires arrows. Gold always drops; equipment has a {0:0.##}% chance. Drop chances below are per kill. Sandbox Sentinel uses the same loot."
+msgstr "Наближається на відстань пострілу, потім стріляє. Золото випадає завжди, екіпіровка — з шансом {0:0.##}%. Нижче вказано шанс за одне вбивство. Вартовий з адмінменю має таку саму здобич."
+
+msgid "Item level {0}\n\n{1}"
+msgstr "Рівень предмета {0}\n\n{1}"
+
+msgid "Up to {0} affixes.\n\nThe item can have fewer affixes. Adding or removing an affix does not change its rarity."
+msgstr "До {0} афіксів.\n\nНа предметі їх може бути менше. Додавання або видалення афікса не змінює рідкість предмета."
+
+msgid "The bag has 12 columns and 5 rows. A 2×3 item needs six free cells in a rectangle. Drag items to rearrange them. Equipping an item frees its bag cells; removing equipment needs enough free space. There is no automatic bag expansion or item rotation."
+msgstr "Сумка має 12 стовпців і 5 рядків. Для предмета 2×3 потрібні шість вільних клітинок прямокутником. Перетягуй предмети, щоб змінити їхнє розміщення. Спорядження звільняє клітинки сумки; для зняття екіпіровки потрібне вільне місце. Розширення сумки та повороту предметів поки немає."
+
+msgid "Base properties are always on that base. Affixes add rolled bonuses on top, such as +8 health or +10% fire resistance. Base properties do not use affix slots. Hold Alt on an item to see each affix range, quality and tier. The Affixes tab lists every family."
+msgstr "Властивості бази є на кожному такому предметі. Афікси додають випадкові бонуси, наприклад +8 здоров’я або +10% опору вогню. Властивості бази не займають місць під афікси. Затисни Alt на предметі, щоб побачити діапазон, якість і тир кожного афікса. У вкладці «Афікси» є повна таблиця."
+
+msgid "T7 is the weakest tier and T1 is the strongest. A stronger tier has a higher item-level requirement. Level-1 drops use the weakest available tier. Luck improves the tier roll but cannot bypass the item-level requirement. The Affixes table shows every value range and level requirement."
+msgstr "T7 — найслабший тир, T1 — найсильніший. Для сильнішого тиру потрібен вищий рівень предмета. На предметах 1 рівня доступний найслабший тир. Удача покращує кидок тиру, але не скасовує вимогу до рівня. У таблиці афіксів наведені всі діапазони та вимоги."
+
+msgid "After choosing an affix tier, roll d100 and add Luck, up to 100. A result of 1 gives the minimum value; 100 gives the maximum. For example, a 6–10 health affix with quality 100 gives +10 health. Looking at or picking up an item never rerolls its bonuses."
+msgstr "Після вибору тиру кидається d100 і додається Удача, щонайбільше до 100. Результат 1 дає мінімальне значення, 100 — максимальне. Наприклад, афікс здоров’я з діапазоном 6–10 і якістю 100 дає +10 здоров’я. Перегляд і підбір предмета не змінюють його бонусів."
+
+msgid "Flat adds a number: +5 health turns 100 health into 105. Increased bonuses add together: +10% and +20% make +30%. More bonuses multiply separately. +10 percentage points of fire resistance means 20% becomes 30%; it is not a 10% relative increase."
+msgstr "Flat додає число: +5 здоров’я перетворює 100 на 105. Бонуси Increased додаються: +10% і +20% разом дають +30%. Бонуси More множаться окремо. +10 відсоткових пунктів опору вогню перетворює 20% на 30%; це не відносне збільшення на 10%."
+
+msgid "Common items have no affixes. Uncommon can have up to 2, Rare 4, Epic 6 and Legendary 8. Each slot has a separate 55% chance to be filled when the item drops. A Legendary item can therefore have fewer than 8 affixes and still be Legendary."
+msgstr "Звичайні предмети не мають афіксів. Незвичайні можуть мати до 2, рідкісні — до 4, епічні — до 6, легендарні — до 8. Кожне місце під афікс має окремий шанс 55% заповнитися при випадінні предмета. Тому легендарний предмет може мати менше ніж 8 афіксів."
+
+msgid "Strength, Dexterity, Constitution, Intelligence and Luck appear on the character sheet. Luck already improves affix tier rolls, affix quality and gold quantity. The other four attributes do not yet add derived combat bonuses. Experience, level-ups and spending attribute points are planned."
+msgstr "У вікні персонажа є Сила, Спритність, Статура, Інтелект і Удача. Удача вже покращує кидки тиру й якості афіксів та кількість золота. Інші чотири характеристики поки не дають похідних бойових бонусів. Досвід, підвищення рівня та розподіл очок заплановані."
+
+msgid "All equipment"
+msgstr "Уся екіпіровка"
+
+msgid "Armor, offhand, jewelry"
+msgstr "Броня, друга рука, прикраси"
+
+msgid "Weapon, offhand, jewelry"
+msgstr "Зброя, друга рука, прикраси"
+
+msgid "Armor and offhand"
+msgstr "Броня та друга рука"
+
+msgid "Gold"
+msgstr "Золото"
+
+msgid "Rarity"
+msgstr "Рідкість"
+
+msgid "Ring"
+msgstr "Перстень"
+
+msgid "{0}\nLv {1}"
+msgstr "{0}\nРів. {1}"
+
+msgid "Any base"
+msgstr "Будь-яка база"
+
+msgid "/s"
+msgstr "/с"
+
+msgid "Approaches until in range, then fires arrows. Gold always drops; equipment has a {0:0.##}% chance. Table chances are per kill."
+msgstr "Наближається на відстань пострілу й стріляє. Золото випадає завжди, екіпіровка — з шансом {0:0.##}%. У таблиці — шанси за одне вбивство."
+
+msgid "Choose your starting weapon"
+msgstr "Оберіть стартову зброю"
+
+msgid "Choose one Common weapon. No class is locked. For now, all three fire the same arrow and use the same mana and cooldown."
+msgstr "Оберіть одну звичайну зброю. Це не прив’язує персонажа до класу. Поки всі три варіанти стріляють однаковою стрілою та мають однакову витрату мани й перезаряджання."
+
+msgid "This item requires a higher level or more allocated attributes."
+msgstr "Для цього предмета потрібен вищий рівень або більше вкладених очок характеристики."
+
+msgid "Names and colors show rarity. Choose a rarity, branch or equipment slot in the filter. First-generation items can drop; later generations wait for approved balance."
+msgstr "Назва й колір показують рідкість. Оберіть рідкість, гілку або слот у фільтрі. Випадають предмети першого покоління; баланс наступних поколінь ще не задано."
+
+msgid "Branch"
+msgstr "Гілка"
+
+msgid "Generation"
+msgstr "Покоління"
+
+msgid "Required level"
+msgstr "Потрібний рівень"
+
+msgid "Balance pending"
+msgstr "Баланс ще не задано"
+
+msgid "Level {0:0} / 10"
+msgstr "Рівень {0:0} / 10"
+
+msgid "CriticalRollBonus"
+msgstr "Бонус критичного кидка"
+
+msgid "CharacterLevel"
+msgstr "Рівень персонажа"
+
+msgid "Independent d20 critical"
+msgstr "Окремий критичний d20"
+
+msgid "CriticalCheck"
+msgstr "Критичний кидок"
+
+msgid "This base does not drop yet. Its higher-generation balance and requirements are not approved."
+msgstr "Ця база поки не випадає. Її баланс і вимоги для наступного покоління ще не затверджені."
+
+msgid "Required level {0} · {1} {2}\nAffix level {3}"
+msgstr "Потрібний рівень {0} · {1} {2}\nРівень для афіксів {3}"
+
+msgid "Only natural 1 misses. On 2–19, attacks glance for half damage when d20 + accuracy is below 6 + evasion rating / 10. Natural 20 gives full quality. A separate d20 + critical bonus of 20 or more multiplies damage, normally by 2."
+msgstr "Лише натуральна 1 означає промах. На 2–19 удар дотичний і завдає половину шкоди, якщо d20 + точність менше за 6 + рейтинг ухилення / 10. Натуральна 20 дає повну якість удару. Окремий d20 із бонусом криту від 20 множить шкоду, зазвичай на 2."
+
+msgid "Reinforced Wooden Bow"
+msgstr "Укріплений дерев’яний лук"
+
+msgid "Improved Wooden Bow"
+msgstr "Удосконалений дерев’яний лук"
+
+msgid "Masterwork Wooden Bow"
+msgstr "Майстерний дерев’яний лук"
+
+msgid "Perfected Wooden Bow"
+msgstr "Довершений дерев’яний лук"
+
+msgid "Hunting Bow"
+msgstr "Мисливський лук"
+
+msgid "Reinforced Hunting Bow"
+msgstr "Укріплений мисливський лук"
+
+msgid "Improved Hunting Bow"
+msgstr "Удосконалений мисливський лук"
+
+msgid "Masterwork Hunting Bow"
+msgstr "Майстерний мисливський лук"
+
+msgid "Perfected Hunting Bow"
+msgstr "Довершений мисливський лук"
+
+msgid "Longbow"
+msgstr "Довгий лук"
+
+msgid "Reinforced Longbow"
+msgstr "Укріплений довгий лук"
+
+msgid "Improved Longbow"
+msgstr "Удосконалений довгий лук"
+
+msgid "Masterwork Longbow"
+msgstr "Майстерний довгий лук"
+
+msgid "Perfected Longbow"
+msgstr "Довершений довгий лук"
+
+msgid "Composite Bow"
+msgstr "Складений лук"
+
+msgid "Reinforced Composite Bow"
+msgstr "Укріплений складений лук"
+
+msgid "Improved Composite Bow"
+msgstr "Удосконалений складений лук"
+
+msgid "Masterwork Composite Bow"
+msgstr "Майстерний складений лук"
+
+msgid "Perfected Composite Bow"
+msgstr "Довершений складений лук"
+
+msgid "War Bow"
+msgstr "Бойовий лук"
+
+msgid "Reinforced War Bow"
+msgstr "Укріплений бойовий лук"
+
+msgid "Improved War Bow"
+msgstr "Удосконалений бойовий лук"
+
+msgid "Masterwork War Bow"
+msgstr "Майстерний бойовий лук"
+
+msgid "Perfected War Bow"
+msgstr "Довершений бойовий лук"
+
+msgid "Reinforced Quilted Jacket"
+msgstr "Укріплена стьобана куртка"
+
+msgid "Improved Quilted Jacket"
+msgstr "Удосконалена стьобана куртка"
+
+msgid "Masterwork Quilted Jacket"
+msgstr "Майстерна стьобана куртка"
+
+msgid "Perfected Quilted Jacket"
+msgstr "Довершена стьобана куртка"
+
+msgid "Leather Jacket"
+msgstr "Шкіряна куртка"
+
+msgid "Reinforced Leather Jacket"
+msgstr "Укріплена шкіряна куртка"
+
+msgid "Improved Leather Jacket"
+msgstr "Удосконалена шкіряна куртка"
+
+msgid "Masterwork Leather Jacket"
+msgstr "Майстерна шкіряна куртка"
+
+msgid "Perfected Leather Jacket"
+msgstr "Довершена шкіряна куртка"
+
+msgid "Leather Vest"
+msgstr "Шкіряний жилет"
+
+msgid "Reinforced Leather Vest"
+msgstr "Укріплений шкіряний жилет"
+
+msgid "Improved Leather Vest"
+msgstr "Удосконалений шкіряний жилет"
+
+msgid "Masterwork Leather Vest"
+msgstr "Майстерний шкіряний жилет"
+
+msgid "Perfected Leather Vest"
+msgstr "Довершений шкіряний жилет"
+
+msgid "Leather Coat"
+msgstr "Шкіряний каптан"
+
+msgid "Reinforced Leather Coat"
+msgstr "Укріплений шкіряний каптан"
+
+msgid "Improved Leather Coat"
+msgstr "Удосконалений шкіряний каптан"
+
+msgid "Masterwork Leather Coat"
+msgstr "Майстерний шкіряний каптан"
+
+msgid "Perfected Leather Coat"
+msgstr "Довершений шкіряний каптан"
+
+msgid "Leather Armour"
+msgstr "Шкіряний обладунок"
+
+msgid "Reinforced Leather Armour"
+msgstr "Укріплений шкіряний обладунок"
+
+msgid "Improved Leather Armour"
+msgstr "Удосконалений шкіряний обладунок"
+
+msgid "Masterwork Leather Armour"
+msgstr "Майстерний шкіряний обладунок"
+
+msgid "Perfected Leather Armour"
+msgstr "Довершений шкіряний обладунок"
+
+msgid "Cloth Hood"
+msgstr "Тканинний каптур"
+
+msgid "Reinforced Cloth Hood"
+msgstr "Укріплений тканинний каптур"
+
+msgid "Improved Cloth Hood"
+msgstr "Удосконалений тканинний каптур"
+
+msgid "Masterwork Cloth Hood"
+msgstr "Майстерний тканинний каптур"
+
+msgid "Perfected Cloth Hood"
+msgstr "Довершений тканинний каптур"
+
+msgid "Leather Hood"
+msgstr "Шкіряний каптур"
+
+msgid "Reinforced Leather Hood"
+msgstr "Укріплений шкіряний каптур"
+
+msgid "Improved Leather Hood"
+msgstr "Удосконалений шкіряний каптур"
+
+msgid "Masterwork Leather Hood"
+msgstr "Майстерний шкіряний каптур"
+
+msgid "Perfected Leather Hood"
+msgstr "Довершений шкіряний каптур"
+
+msgid "Hunting Hood"
+msgstr "Мисливський каптур"
+
+msgid "Reinforced Hunting Hood"
+msgstr "Укріплений мисливський каптур"
+
+msgid "Improved Hunting Hood"
+msgstr "Удосконалений мисливський каптур"
+
+msgid "Masterwork Hunting Hood"
+msgstr "Майстерний мисливський каптур"
+
+msgid "Perfected Hunting Hood"
+msgstr "Довершений мисливський каптур"
+
+msgid "Watch Hood"
+msgstr "Вартовий каптур"
+
+msgid "Reinforced Watch Hood"
+msgstr "Укріплений вартовий каптур"
+
+msgid "Improved Watch Hood"
+msgstr "Удосконалений вартовий каптур"
+
+msgid "Masterwork Watch Hood"
+msgstr "Майстерний вартовий каптур"
+
+msgid "Perfected Watch Hood"
+msgstr "Довершений вартовий каптур"
+
+msgid "Scout Hood"
+msgstr "Каптур розвідника"
+
+msgid "Reinforced Scout Hood"
+msgstr "Укріплений каптур розвідника"
+
+msgid "Improved Scout Hood"
+msgstr "Удосконалений каптур розвідника"
+
+msgid "Masterwork Scout Hood"
+msgstr "Майстерний каптур розвідника"
+
+msgid "Perfected Scout Hood"
+msgstr "Довершений каптур розвідника"
+
+msgid "Reinforced Leather Boots"
+msgstr "Укріплені шкіряні чоботи"
+
+msgid "Improved Leather Boots"
+msgstr "Удосконалені шкіряні чоботи"
+
+msgid "Masterwork Leather Boots"
+msgstr "Майстерні шкіряні чоботи"
+
+msgid "Perfected Leather Boots"
+msgstr "Довершені шкіряні чоботи"
+
+msgid "Travel Boots"
+msgstr "Дорожні чоботи"
+
+msgid "Reinforced Travel Boots"
+msgstr "Укріплені дорожні чоботи"
+
+msgid "Improved Travel Boots"
+msgstr "Удосконалені дорожні чоботи"
+
+msgid "Masterwork Travel Boots"
+msgstr "Майстерні дорожні чоботи"
+
+msgid "Perfected Travel Boots"
+msgstr "Довершені дорожні чоботи"
+
+msgid "High Boots"
+msgstr "Високі чоботи"
+
+msgid "Reinforced High Boots"
+msgstr "Укріплені високі чоботи"
+
+msgid "Improved High Boots"
+msgstr "Удосконалені високі чоботи"
+
+msgid "Masterwork High Boots"
+msgstr "Майстерні високі чоботи"
+
+msgid "Perfected High Boots"
+msgstr "Довершені високі чоботи"
+
+msgid "Soldier Boots"
+msgstr "Солдатські чоботи"
+
+msgid "Reinforced Soldier Boots"
+msgstr "Укріплені солдатські чоботи"
+
+msgid "Improved Soldier Boots"
+msgstr "Удосконалені солдатські чоботи"
+
+msgid "Masterwork Soldier Boots"
+msgstr "Майстерні солдатські чоботи"
+
+msgid "Perfected Soldier Boots"
+msgstr "Довершені солдатські чоботи"
+
+msgid "Ranger Boots"
+msgstr "Чоботи слідопита"
+
+msgid "Reinforced Ranger Boots"
+msgstr "Укріплені чоботи слідопита"
+
+msgid "Improved Ranger Boots"
+msgstr "Удосконалені чоботи слідопита"
+
+msgid "Masterwork Ranger Boots"
+msgstr "Майстерні чоботи слідопита"
+
+msgid "Perfected Ranger Boots"
+msgstr "Довершені чоботи слідопита"
+
+msgid "Reinforced Copper Amulet"
+msgstr "Укріплений мідний амулет"
+
+msgid "Improved Copper Amulet"
+msgstr "Удосконалений мідний амулет"
+
+msgid "Masterwork Copper Amulet"
+msgstr "Майстерний мідний амулет"
+
+msgid "Perfected Copper Amulet"
+msgstr "Довершений мідний амулет"
+
+msgid "Bronze Amulet"
+msgstr "Бронзовий амулет"
+
+msgid "Reinforced Bronze Amulet"
+msgstr "Укріплений бронзовий амулет"
+
+msgid "Improved Bronze Amulet"
+msgstr "Удосконалений бронзовий амулет"
+
+msgid "Masterwork Bronze Amulet"
+msgstr "Майстерний бронзовий амулет"
+
+msgid "Perfected Bronze Amulet"
+msgstr "Довершений бронзовий амулет"
+
+msgid "Iron Amulet"
+msgstr "Залізний амулет"
+
+msgid "Reinforced Iron Amulet"
+msgstr "Укріплений залізний амулет"
+
+msgid "Improved Iron Amulet"
+msgstr "Удосконалений залізний амулет"
+
+msgid "Masterwork Iron Amulet"
+msgstr "Майстерний залізний амулет"
+
+msgid "Perfected Iron Amulet"
+msgstr "Довершений залізний амулет"
+
+msgid "Steel Amulet"
+msgstr "Сталевий амулет"
+
+msgid "Reinforced Steel Amulet"
+msgstr "Укріплений сталевий амулет"
+
+msgid "Improved Steel Amulet"
+msgstr "Удосконалений сталевий амулет"
+
+msgid "Masterwork Steel Amulet"
+msgstr "Майстерний сталевий амулет"
+
+msgid "Perfected Steel Amulet"
+msgstr "Довершений сталевий амулет"
+
+msgid "Silver Amulet"
+msgstr "Срібний амулет"
+
+msgid "Reinforced Silver Amulet"
+msgstr "Укріплений срібний амулет"
+
+msgid "Improved Silver Amulet"
+msgstr "Удосконалений срібний амулет"
+
+msgid "Masterwork Silver Amulet"
+msgstr "Майстерний срібний амулет"
+
+msgid "Perfected Silver Amulet"
+msgstr "Довершений срібний амулет"
+
+msgid "Reinforced Copper Ring"
+msgstr "Укріплене мідне кільце"
+
+msgid "Improved Copper Ring"
+msgstr "Удосконалене мідне кільце"
+
+msgid "Masterwork Copper Ring"
+msgstr "Майстерне мідне кільце"
+
+msgid "Perfected Copper Ring"
+msgstr "Довершене мідне кільце"
+
+msgid "Bronze Ring"
+msgstr "Бронзове кільце"
+
+msgid "Reinforced Bronze Ring"
+msgstr "Укріплене бронзове кільце"
+
+msgid "Improved Bronze Ring"
+msgstr "Удосконалене бронзове кільце"
+
+msgid "Masterwork Bronze Ring"
+msgstr "Майстерне бронзове кільце"
+
+msgid "Perfected Bronze Ring"
+msgstr "Довершене бронзове кільце"
+
+msgid "Iron Ring"
+msgstr "Залізне кільце"
+
+msgid "Reinforced Iron Ring"
+msgstr "Укріплене залізне кільце"
+
+msgid "Improved Iron Ring"
+msgstr "Удосконалене залізне кільце"
+
+msgid "Masterwork Iron Ring"
+msgstr "Майстерне залізне кільце"
+
+msgid "Perfected Iron Ring"
+msgstr "Довершене залізне кільце"
+
+msgid "Steel Ring"
+msgstr "Сталеве кільце"
+
+msgid "Reinforced Steel Ring"
+msgstr "Укріплене сталеве кільце"
+
+msgid "Improved Steel Ring"
+msgstr "Удосконалене сталеве кільце"
+
+msgid "Masterwork Steel Ring"
+msgstr "Майстерне сталеве кільце"
+
+msgid "Perfected Steel Ring"
+msgstr "Довершене сталеве кільце"
+
+msgid "Silver Ring"
+msgstr "Срібне кільце"
+
+msgid "Reinforced Silver Ring"
+msgstr "Укріплене срібне кільце"
+
+msgid "Improved Silver Ring"
+msgstr "Удосконалене срібне кільце"
+
+msgid "Masterwork Silver Ring"
+msgstr "Майстерне срібне кільце"
+
+msgid "Perfected Silver Ring"
+msgstr "Довершене срібне кільце"
+
+msgid "Reinforced Leather Quiver"
+msgstr "Укріплений шкіряний сагайдак"
+
+msgid "Improved Leather Quiver"
+msgstr "Удосконалений шкіряний сагайдак"
+
+msgid "Masterwork Leather Quiver"
+msgstr "Майстерний шкіряний сагайдак"
+
+msgid "Perfected Leather Quiver"
+msgstr "Довершений шкіряний сагайдак"
+
+msgid "Stitched Quiver"
+msgstr "Прошитий сагайдак"
+
+msgid "Reinforced Stitched Quiver"
+msgstr "Укріплений прошитий сагайдак"
+
+msgid "Improved Stitched Quiver"
+msgstr "Удосконалений прошитий сагайдак"
+
+msgid "Masterwork Stitched Quiver"
+msgstr "Майстерний прошитий сагайдак"
+
+msgid "Perfected Stitched Quiver"
+msgstr "Довершений прошитий сагайдак"
+
+msgid "Thick-leather Quiver"
+msgstr "Сагайдак із товстої шкіри"
+
+msgid "Reinforced Thick-leather Quiver"
+msgstr "Укріплений сагайдак із товстої шкіри"
+
+msgid "Improved Thick-leather Quiver"
+msgstr "Удосконалений сагайдак із товстої шкіри"
+
+msgid "Masterwork Thick-leather Quiver"
+msgstr "Майстерний сагайдак із товстої шкіри"
+
+msgid "Perfected Thick-leather Quiver"
+msgstr "Довершений сагайдак із товстої шкіри"
+
+msgid "Riveted Quiver"
+msgstr "Клепаний сагайдак"
+
+msgid "Reinforced Riveted Quiver"
+msgstr "Укріплений клепаний сагайдак"
+
+msgid "Improved Riveted Quiver"
+msgstr "Удосконалений клепаний сагайдак"
+
+msgid "Masterwork Riveted Quiver"
+msgstr "Майстерний клепаний сагайдак"
+
+msgid "Perfected Riveted Quiver"
+msgstr "Довершений клепаний сагайдак"
+
+msgid "Framed Quiver"
+msgstr "Каркасний сагайдак"
+
+msgid "Reinforced Framed Quiver"
+msgstr "Укріплений каркасний сагайдак"
+
+msgid "Improved Framed Quiver"
+msgstr "Удосконалений каркасний сагайдак"
+
+msgid "Masterwork Framed Quiver"
+msgstr "Майстерний каркасний сагайдак"
+
+msgid "Perfected Framed Quiver"
+msgstr "Довершений каркасний сагайдак"
+
+msgid "Training Sword"
+msgstr "Тренувальний меч"
+
+msgid "Reinforced Training Sword"
+msgstr "Укріплений тренувальний меч"
+
+msgid "Improved Training Sword"
+msgstr "Удосконалений тренувальний меч"
+
+msgid "Masterwork Training Sword"
+msgstr "Майстерний тренувальний меч"
+
+msgid "Perfected Training Sword"
+msgstr "Довершений тренувальний меч"
+
+msgid "Iron Sword"
+msgstr "Залізний меч"
+
+msgid "Reinforced Iron Sword"
+msgstr "Укріплений залізний меч"
+
+msgid "Improved Iron Sword"
+msgstr "Удосконалений залізний меч"
+
+msgid "Masterwork Iron Sword"
+msgstr "Майстерний залізний меч"
+
+msgid "Perfected Iron Sword"
+msgstr "Довершений залізний меч"
+
+msgid "Steel Sword"
+msgstr "Сталевий меч"
+
+msgid "Reinforced Steel Sword"
+msgstr "Укріплений сталевий меч"
+
+msgid "Improved Steel Sword"
+msgstr "Удосконалений сталевий меч"
+
+msgid "Masterwork Steel Sword"
+msgstr "Майстерний сталевий меч"
+
+msgid "Perfected Steel Sword"
+msgstr "Довершений сталевий меч"
+
+msgid "Longsword"
+msgstr "Довгий меч"
+
+msgid "Reinforced Longsword"
+msgstr "Укріплений довгий меч"
+
+msgid "Improved Longsword"
+msgstr "Удосконалений довгий меч"
+
+msgid "Masterwork Longsword"
+msgstr "Майстерний довгий меч"
+
+msgid "Perfected Longsword"
+msgstr "Довершений довгий меч"
+
+msgid "War Sword"
+msgstr "Бойовий меч"
+
+msgid "Reinforced War Sword"
+msgstr "Укріплений бойовий меч"
+
+msgid "Improved War Sword"
+msgstr "Удосконалений бойовий меч"
+
+msgid "Masterwork War Sword"
+msgstr "Майстерний бойовий меч"
+
+msgid "Perfected War Sword"
+msgstr "Довершений бойовий меч"
+
+msgid "Iron Cuirass"
+msgstr "Залізна кіраса"
+
+msgid "Reinforced Iron Cuirass"
+msgstr "Укріплена залізна кіраса"
+
+msgid "Improved Iron Cuirass"
+msgstr "Удосконалена залізна кіраса"
+
+msgid "Masterwork Iron Cuirass"
+msgstr "Майстерна залізна кіраса"
+
+msgid "Perfected Iron Cuirass"
+msgstr "Довершена залізна кіраса"
+
+msgid "Chainmail"
+msgstr "Кольчуга"
+
+msgid "Reinforced Chainmail"
+msgstr "Укріплена кольчуга"
+
+msgid "Improved Chainmail"
+msgstr "Удосконалена кольчуга"
+
+msgid "Masterwork Chainmail"
+msgstr "Майстерна кольчуга"
+
+msgid "Perfected Chainmail"
+msgstr "Довершена кольчуга"
+
+msgid "Steel Cuirass"
+msgstr "Сталева кіраса"
+
+msgid "Reinforced Steel Cuirass"
+msgstr "Укріплена сталева кіраса"
+
+msgid "Improved Steel Cuirass"
+msgstr "Удосконалена сталева кіраса"
+
+msgid "Masterwork Steel Cuirass"
+msgstr "Майстерна сталева кіраса"
+
+msgid "Perfected Steel Cuirass"
+msgstr "Довершена сталева кіраса"
+
+msgid "Scale Armour"
+msgstr "Лускатий обладунок"
+
+msgid "Reinforced Scale Armour"
+msgstr "Укріплений лускатий обладунок"
+
+msgid "Improved Scale Armour"
+msgstr "Удосконалений лускатий обладунок"
+
+msgid "Masterwork Scale Armour"
+msgstr "Майстерний лускатий обладунок"
+
+msgid "Perfected Scale Armour"
+msgstr "Довершений лускатий обладунок"
+
+msgid "Plate Armour"
+msgstr "Латний обладунок"
+
+msgid "Reinforced Plate Armour"
+msgstr "Укріплений латний обладунок"
+
+msgid "Improved Plate Armour"
+msgstr "Удосконалений латний обладунок"
+
+msgid "Masterwork Plate Armour"
+msgstr "Майстерний латний обладунок"
+
+msgid "Perfected Plate Armour"
+msgstr "Довершений латний обладунок"
+
+msgid "Reinforced Iron Helmet"
+msgstr "Укріплений залізний шолом"
+
+msgid "Improved Iron Helmet"
+msgstr "Удосконалений залізний шолом"
+
+msgid "Masterwork Iron Helmet"
+msgstr "Майстерний залізний шолом"
+
+msgid "Perfected Iron Helmet"
+msgstr "Довершений залізний шолом"
+
+msgid "Steel Helmet"
+msgstr "Сталевий шолом"
+
+msgid "Reinforced Steel Helmet"
+msgstr "Укріплений сталевий шолом"
+
+msgid "Improved Steel Helmet"
+msgstr "Удосконалений сталевий шолом"
+
+msgid "Masterwork Steel Helmet"
+msgstr "Майстерний сталевий шолом"
+
+msgid "Perfected Steel Helmet"
+msgstr "Довершений сталевий шолом"
+
+msgid "Steel Cap"
+msgstr "Сталева каска"
+
+msgid "Reinforced Steel Cap"
+msgstr "Укріплений сталева каска"
+
+msgid "Improved Steel Cap"
+msgstr "Удосконалений сталева каска"
+
+msgid "Masterwork Steel Cap"
+msgstr "Майстерний сталева каска"
+
+msgid "Perfected Steel Cap"
+msgstr "Довершений сталева каска"
+
+msgid "Guard Helmet"
+msgstr "Вартовий шолом"
+
+msgid "Reinforced Guard Helmet"
+msgstr "Укріплений вартовий шолом"
+
+msgid "Improved Guard Helmet"
+msgstr "Удосконалений вартовий шолом"
+
+msgid "Masterwork Guard Helmet"
+msgstr "Майстерний вартовий шолом"
+
+msgid "Perfected Guard Helmet"
+msgstr "Довершений вартовий шолом"
+
+msgid "Closed Helmet"
+msgstr "Закритий шолом"
+
+msgid "Reinforced Closed Helmet"
+msgstr "Укріплений закритий шолом"
+
+msgid "Improved Closed Helmet"
+msgstr "Удосконалений закритий шолом"
+
+msgid "Masterwork Closed Helmet"
+msgstr "Майстерний закритий шолом"
+
+msgid "Perfected Closed Helmet"
+msgstr "Довершений закритий шолом"
+
+msgid "Iron-plated Boots"
+msgstr "Чоботи із залізними пластинами"
+
+msgid "Reinforced Iron-plated Boots"
+msgstr "Укріплені чоботи із залізними пластинами"
+
+msgid "Improved Iron-plated Boots"
+msgstr "Удосконалені чоботи із залізними пластинами"
+
+msgid "Masterwork Iron-plated Boots"
+msgstr "Майстерні чоботи із залізними пластинами"
+
+msgid "Perfected Iron-plated Boots"
+msgstr "Довершені чоботи із залізними пластинами"
+
+msgid "Mail Boots"
+msgstr "Кольчужні чоботи"
+
+msgid "Reinforced Mail Boots"
+msgstr "Укріплені кольчужні чоботи"
+
+msgid "Improved Mail Boots"
+msgstr "Удосконалені кольчужні чоботи"
+
+msgid "Masterwork Mail Boots"
+msgstr "Майстерні кольчужні чоботи"
+
+msgid "Perfected Mail Boots"
+msgstr "Довершені кольчужні чоботи"
+
+msgid "Steel-plated Boots"
+msgstr "Чоботи зі сталевими пластинами"
+
+msgid "Reinforced Steel-plated Boots"
+msgstr "Укріплені чоботи зі сталевими пластинами"
+
+msgid "Improved Steel-plated Boots"
+msgstr "Удосконалені чоботи зі сталевими пластинами"
+
+msgid "Masterwork Steel-plated Boots"
+msgstr "Майстерні чоботи зі сталевими пластинами"
+
+msgid "Perfected Steel-plated Boots"
+msgstr "Довершені чоботи зі сталевими пластинами"
+
+msgid "Soldier Greaves"
+msgstr "Солдатські наголінники"
+
+msgid "Reinforced Soldier Greaves"
+msgstr "Укріплені солдатські наголінники"
+
+msgid "Improved Soldier Greaves"
+msgstr "Удосконалені солдатські наголінники"
+
+msgid "Masterwork Soldier Greaves"
+msgstr "Майстерні солдатські наголінники"
+
+msgid "Perfected Soldier Greaves"
+msgstr "Довершені солдатські наголінники"
+
+msgid "Plate Greaves"
+msgstr "Латні наголінники"
+
+msgid "Reinforced Plate Greaves"
+msgstr "Укріплені латні наголінники"
+
+msgid "Improved Plate Greaves"
+msgstr "Удосконалені латні наголінники"
+
+msgid "Masterwork Plate Greaves"
+msgstr "Майстерні латні наголінники"
+
+msgid "Perfected Plate Greaves"
+msgstr "Довершені латні наголінники"
+
+msgid "Stone Amulet"
+msgstr "Кам’яний амулет"
+
+msgid "Reinforced Stone Amulet"
+msgstr "Укріплений кам’яний амулет"
+
+msgid "Improved Stone Amulet"
+msgstr "Удосконалений кам’яний амулет"
+
+msgid "Masterwork Stone Amulet"
+msgstr "Майстерний кам’яний амулет"
+
+msgid "Perfected Stone Amulet"
+msgstr "Довершений кам’яний амулет"
+
+msgid "Iron Medallion"
+msgstr "Залізний медальйон"
+
+msgid "Reinforced Iron Medallion"
+msgstr "Укріплений залізний медальйон"
+
+msgid "Improved Iron Medallion"
+msgstr "Удосконалений залізний медальйон"
+
+msgid "Masterwork Iron Medallion"
+msgstr "Майстерний залізний медальйон"
+
+msgid "Perfected Iron Medallion"
+msgstr "Довершений залізний медальйон"
+
+msgid "Steel Medallion"
+msgstr "Сталевий медальйон"
+
+msgid "Reinforced Steel Medallion"
+msgstr "Укріплений сталевий медальйон"
+
+msgid "Improved Steel Medallion"
+msgstr "Удосконалений сталевий медальйон"
+
+msgid "Masterwork Steel Medallion"
+msgstr "Майстерний сталевий медальйон"
+
+msgid "Perfected Steel Medallion"
+msgstr "Довершений сталевий медальйон"
+
+msgid "Iron Band"
+msgstr "Залізний обідок"
+
+msgid "Reinforced Iron Band"
+msgstr "Укріплений залізний обідок"
+
+msgid "Improved Iron Band"
+msgstr "Удосконалений залізний обідок"
+
+msgid "Masterwork Iron Band"
+msgstr "Майстерний залізний обідок"
+
+msgid "Perfected Iron Band"
+msgstr "Довершений залізний обідок"
+
+msgid "Steel Band"
+msgstr "Сталевий обідок"
+
+msgid "Reinforced Steel Band"
+msgstr "Укріплений сталевий обідок"
+
+msgid "Improved Steel Band"
+msgstr "Удосконалений сталевий обідок"
+
+msgid "Masterwork Steel Band"
+msgstr "Майстерний сталевий обідок"
+
+msgid "Perfected Steel Band"
+msgstr "Довершений сталевий обідок"
+
+msgid "Iron Signet"
+msgstr "Залізний перстень-печатка"
+
+msgid "Reinforced Iron Signet"
+msgstr "Укріплений залізний перстень-печатка"
+
+msgid "Improved Iron Signet"
+msgstr "Удосконалений залізний перстень-печатка"
+
+msgid "Masterwork Iron Signet"
+msgstr "Майстерний залізний перстень-печатка"
+
+msgid "Perfected Iron Signet"
+msgstr "Довершений залізний перстень-печатка"
+
+msgid "Steel Signet"
+msgstr "Сталевий перстень-печатка"
+
+msgid "Reinforced Steel Signet"
+msgstr "Укріплений сталевий перстень-печатка"
+
+msgid "Improved Steel Signet"
+msgstr "Удосконалений сталевий перстень-печатка"
+
+msgid "Masterwork Steel Signet"
+msgstr "Майстерний сталевий перстень-печатка"
+
+msgid "Perfected Steel Signet"
+msgstr "Довершений сталевий перстень-печатка"
+
+msgid "Silver Signet"
+msgstr "Срібний перстень-печатка"
+
+msgid "Reinforced Silver Signet"
+msgstr "Укріплений срібний перстень-печатка"
+
+msgid "Improved Silver Signet"
+msgstr "Удосконалений срібний перстень-печатка"
+
+msgid "Masterwork Silver Signet"
+msgstr "Майстерний срібний перстень-печатка"
+
+msgid "Perfected Silver Signet"
+msgstr "Довершений срібний перстень-печатка"
+
+msgid "Reinforced Wooden Shield"
+msgstr "Укріплений дерев’яний щит"
+
+msgid "Improved Wooden Shield"
+msgstr "Удосконалений дерев’яний щит"
+
+msgid "Masterwork Wooden Shield"
+msgstr "Майстерний дерев’яний щит"
+
+msgid "Perfected Wooden Shield"
+msgstr "Довершений дерев’яний щит"
+
+msgid "Bound Shield"
+msgstr "Окований щит"
+
+msgid "Reinforced Bound Shield"
+msgstr "Укріплений окований щит"
+
+msgid "Improved Bound Shield"
+msgstr "Удосконалений окований щит"
+
+msgid "Masterwork Bound Shield"
+msgstr "Майстерний окований щит"
+
+msgid "Perfected Bound Shield"
+msgstr "Довершений окований щит"
+
+msgid "Board Shield"
+msgstr "Дощатий щит"
+
+msgid "Reinforced Board Shield"
+msgstr "Укріплений дощатий щит"
+
+msgid "Improved Board Shield"
+msgstr "Удосконалений дощатий щит"
+
+msgid "Masterwork Board Shield"
+msgstr "Майстерний дощатий щит"
+
+msgid "Perfected Board Shield"
+msgstr "Довершений дощатий щит"
+
+msgid "Steel-bound Shield"
+msgstr "Щит зі сталевою оковкою"
+
+msgid "Reinforced Steel-bound Shield"
+msgstr "Укріплений щит зі сталевою оковкою"
+
+msgid "Improved Steel-bound Shield"
+msgstr "Удосконалений щит зі сталевою оковкою"
+
+msgid "Masterwork Steel-bound Shield"
+msgstr "Майстерний щит зі сталевою оковкою"
+
+msgid "Perfected Steel-bound Shield"
+msgstr "Довершений щит зі сталевою оковкою"
+
+msgid "Steel Shield"
+msgstr "Сталевий щит"
+
+msgid "Reinforced Steel Shield"
+msgstr "Укріплений сталевий щит"
+
+msgid "Improved Steel Shield"
+msgstr "Удосконалений сталевий щит"
+
+msgid "Masterwork Steel Shield"
+msgstr "Майстерний сталевий щит"
+
+msgid "Perfected Steel Shield"
+msgstr "Довершений сталевий щит"
+
+msgid "Wooden Wand"
+msgstr "Дерев’яна паличка"
+
+msgid "Reinforced Wooden Wand"
+msgstr "Укріплена дерев’яна паличка"
+
+msgid "Improved Wooden Wand"
+msgstr "Удосконалена дерев’яна паличка"
+
+msgid "Masterwork Wooden Wand"
+msgstr "Майстерна дерев’яна паличка"
+
+msgid "Perfected Wooden Wand"
+msgstr "Довершена дерев’яна паличка"
+
+msgid "Bone Wand"
+msgstr "Кістяна паличка"
+
+msgid "Reinforced Bone Wand"
+msgstr "Укріплена кістяна паличка"
+
+msgid "Improved Bone Wand"
+msgstr "Удосконалена кістяна паличка"
+
+msgid "Masterwork Bone Wand"
+msgstr "Майстерна кістяна паличка"
+
+msgid "Perfected Bone Wand"
+msgstr "Довершена кістяна паличка"
+
+msgid "Bronze Wand"
+msgstr "Бронзова паличка"
+
+msgid "Reinforced Bronze Wand"
+msgstr "Укріплена бронзова паличка"
+
+msgid "Improved Bronze Wand"
+msgstr "Удосконалена бронзова паличка"
+
+msgid "Masterwork Bronze Wand"
+msgstr "Майстерна бронзова паличка"
+
+msgid "Perfected Bronze Wand"
+msgstr "Довершена бронзова паличка"
+
+msgid "Iron Wand"
+msgstr "Залізна паличка"
+
+msgid "Reinforced Iron Wand"
+msgstr "Укріплена залізна паличка"
+
+msgid "Improved Iron Wand"
+msgstr "Удосконалена залізна паличка"
+
+msgid "Masterwork Iron Wand"
+msgstr "Майстерна залізна паличка"
+
+msgid "Perfected Iron Wand"
+msgstr "Довершена залізна паличка"
+
+msgid "Silver Wand"
+msgstr "Срібна паличка"
+
+msgid "Reinforced Silver Wand"
+msgstr "Укріплена срібна паличка"
+
+msgid "Improved Silver Wand"
+msgstr "Удосконалена срібна паличка"
+
+msgid "Masterwork Silver Wand"
+msgstr "Майстерна срібна паличка"
+
+msgid "Perfected Silver Wand"
+msgstr "Довершена срібна паличка"
+
+msgid "Linen Robe"
+msgstr "Лляна мантія"
+
+msgid "Reinforced Linen Robe"
+msgstr "Укріплена лляна мантія"
+
+msgid "Improved Linen Robe"
+msgstr "Удосконалена лляна мантія"
+
+msgid "Masterwork Linen Robe"
+msgstr "Майстерна лляна мантія"
+
+msgid "Perfected Linen Robe"
+msgstr "Довершена лляна мантія"
+
+msgid "Wool Robe"
+msgstr "Вовняна мантія"
+
+msgid "Reinforced Wool Robe"
+msgstr "Укріплена вовняна мантія"
+
+msgid "Improved Wool Robe"
+msgstr "Удосконалена вовняна мантія"
+
+msgid "Masterwork Wool Robe"
+msgstr "Майстерна вовняна мантія"
+
+msgid "Perfected Wool Robe"
+msgstr "Довершена вовняна мантія"
+
+msgid "Cloth Robe"
+msgstr "Суконна мантія"
+
+msgid "Reinforced Cloth Robe"
+msgstr "Укріплена суконна мантія"
+
+msgid "Improved Cloth Robe"
+msgstr "Удосконалена суконна мантія"
+
+msgid "Masterwork Cloth Robe"
+msgstr "Майстерна суконна мантія"
+
+msgid "Perfected Cloth Robe"
+msgstr "Довершена суконна мантія"
+
+msgid "Silk Robe"
+msgstr "Шовкова мантія"
+
+msgid "Reinforced Silk Robe"
+msgstr "Укріплена шовкова мантія"
+
+msgid "Improved Silk Robe"
+msgstr "Удосконалена шовкова мантія"
+
+msgid "Masterwork Silk Robe"
+msgstr "Майстерна шовкова мантія"
+
+msgid "Perfected Silk Robe"
+msgstr "Довершена шовкова мантія"
+
+msgid "Layered Robe"
+msgstr "Багатошарова мантія"
+
+msgid "Reinforced Layered Robe"
+msgstr "Укріплена багатошарова мантія"
+
+msgid "Improved Layered Robe"
+msgstr "Удосконалена багатошарова мантія"
+
+msgid "Masterwork Layered Robe"
+msgstr "Майстерна багатошарова мантія"
+
+msgid "Perfected Layered Robe"
+msgstr "Довершена багатошарова мантія"
+
+msgid "Linen Cap"
+msgstr "Лляний ковпак"
+
+msgid "Reinforced Linen Cap"
+msgstr "Укріплений лляний ковпак"
+
+msgid "Improved Linen Cap"
+msgstr "Удосконалений лляний ковпак"
+
+msgid "Masterwork Linen Cap"
+msgstr "Майстерний лляний ковпак"
+
+msgid "Perfected Linen Cap"
+msgstr "Довершений лляний ковпак"
+
+msgid "Wool Cap"
+msgstr "Вовняний ковпак"
+
+msgid "Reinforced Wool Cap"
+msgstr "Укріплений вовняний ковпак"
+
+msgid "Improved Wool Cap"
+msgstr "Удосконалений вовняний ковпак"
+
+msgid "Masterwork Wool Cap"
+msgstr "Майстерний вовняний ковпак"
+
+msgid "Perfected Wool Cap"
+msgstr "Довершений вовняний ковпак"
+
+msgid "Cloth Cowl"
+msgstr "Суконний каптур"
+
+msgid "Reinforced Cloth Cowl"
+msgstr "Укріплений суконний каптур"
+
+msgid "Improved Cloth Cowl"
+msgstr "Удосконалений суконний каптур"
+
+msgid "Masterwork Cloth Cowl"
+msgstr "Майстерний суконний каптур"
+
+msgid "Perfected Cloth Cowl"
+msgstr "Довершений суконний каптур"
+
+msgid "Silk Cowl"
+msgstr "Шовковий каптур"
+
+msgid "Reinforced Silk Cowl"
+msgstr "Укріплений шовковий каптур"
+
+msgid "Improved Silk Cowl"
+msgstr "Удосконалений шовковий каптур"
+
+msgid "Masterwork Silk Cowl"
+msgstr "Майстерний шовковий каптур"
+
+msgid "Perfected Silk Cowl"
+msgstr "Довершений шовковий каптур"
+
+msgid "Lined Cowl"
+msgstr "Каптур із підкладкою"
+
+msgid "Reinforced Lined Cowl"
+msgstr "Укріплений каптур із підкладкою"
+
+msgid "Improved Lined Cowl"
+msgstr "Удосконалений каптур із підкладкою"
+
+msgid "Masterwork Lined Cowl"
+msgstr "Майстерний каптур із підкладкою"
+
+msgid "Perfected Lined Cowl"
+msgstr "Довершений каптур із підкладкою"
+
+msgid "Linen Shoes"
+msgstr "Лляні черевики"
+
+msgid "Reinforced Linen Shoes"
+msgstr "Укріплені лляні черевики"
+
+msgid "Improved Linen Shoes"
+msgstr "Удосконалені лляні черевики"
+
+msgid "Masterwork Linen Shoes"
+msgstr "Майстерні лляні черевики"
+
+msgid "Perfected Linen Shoes"
+msgstr "Довершені лляні черевики"
+
+msgid "Felt Shoes"
+msgstr "Повстяні черевики"
+
+msgid "Reinforced Felt Shoes"
+msgstr "Укріплені повстяні черевики"
+
+msgid "Improved Felt Shoes"
+msgstr "Удосконалені повстяні черевики"
+
+msgid "Masterwork Felt Shoes"
+msgstr "Майстерні повстяні черевики"
+
+msgid "Perfected Felt Shoes"
+msgstr "Довершені повстяні черевики"
+
+msgid "Cloth Boots"
+msgstr "Суконні чоботи"
+
+msgid "Reinforced Cloth Boots"
+msgstr "Укріплені суконні чоботи"
+
+msgid "Improved Cloth Boots"
+msgstr "Удосконалені суконні чоботи"
+
+msgid "Masterwork Cloth Boots"
+msgstr "Майстерні суконні чоботи"
+
+msgid "Perfected Cloth Boots"
+msgstr "Довершені суконні чоботи"
+
+msgid "Lined Shoes"
+msgstr "Черевики з підкладкою"
+
+msgid "Reinforced Lined Shoes"
+msgstr "Укріплені черевики з підкладкою"
+
+msgid "Improved Lined Shoes"
+msgstr "Удосконалені черевики з підкладкою"
+
+msgid "Masterwork Lined Shoes"
+msgstr "Майстерні черевики з підкладкою"
+
+msgid "Perfected Lined Shoes"
+msgstr "Довершені черевики з підкладкою"
+
+msgid "Soft Boots"
+msgstr "М’які чоботи"
+
+msgid "Reinforced Soft Boots"
+msgstr "Укріплені м’які чоботи"
+
+msgid "Improved Soft Boots"
+msgstr "Удосконалені м’які чоботи"
+
+msgid "Masterwork Soft Boots"
+msgstr "Майстерні м’які чоботи"
+
+msgid "Perfected Soft Boots"
+msgstr "Довершені м’які чоботи"
+
+msgid "Glass Amulet"
+msgstr "Скляний амулет"
+
+msgid "Reinforced Glass Amulet"
+msgstr "Укріплений скляний амулет"
+
+msgid "Improved Glass Amulet"
+msgstr "Удосконалений скляний амулет"
+
+msgid "Masterwork Glass Amulet"
+msgstr "Майстерний скляний амулет"
+
+msgid "Perfected Glass Amulet"
+msgstr "Довершений скляний амулет"
+
+msgid "Bone Amulet"
+msgstr "Кістяний амулет"
+
+msgid "Reinforced Bone Amulet"
+msgstr "Укріплений кістяний амулет"
+
+msgid "Improved Bone Amulet"
+msgstr "Удосконалений кістяний амулет"
+
+msgid "Masterwork Bone Amulet"
+msgstr "Майстерний кістяний амулет"
+
+msgid "Perfected Bone Amulet"
+msgstr "Довершений кістяний амулет"
+
+msgid "Quartz Amulet"
+msgstr "Кварцовий амулет"
+
+msgid "Reinforced Quartz Amulet"
+msgstr "Укріплений кварцовий амулет"
+
+msgid "Improved Quartz Amulet"
+msgstr "Удосконалений кварцовий амулет"
+
+msgid "Masterwork Quartz Amulet"
+msgstr "Майстерний кварцовий амулет"
+
+msgid "Perfected Quartz Amulet"
+msgstr "Довершений кварцовий амулет"
+
+msgid "Crystal Pendant"
+msgstr "Кришталевий кулон"
+
+msgid "Reinforced Crystal Pendant"
+msgstr "Укріплений кришталевий кулон"
+
+msgid "Improved Crystal Pendant"
+msgstr "Удосконалений кришталевий кулон"
+
+msgid "Masterwork Crystal Pendant"
+msgstr "Майстерний кришталевий кулон"
+
+msgid "Perfected Crystal Pendant"
+msgstr "Довершений кришталевий кулон"
+
+msgid "Silver Pendant"
+msgstr "Срібний кулон"
+
+msgid "Reinforced Silver Pendant"
+msgstr "Укріплений срібний кулон"
+
+msgid "Improved Silver Pendant"
+msgstr "Удосконалений срібний кулон"
+
+msgid "Masterwork Silver Pendant"
+msgstr "Майстерний срібний кулон"
+
+msgid "Perfected Silver Pendant"
+msgstr "Довершений срібний кулон"
+
+msgid "Tin Ring"
+msgstr "Олов’яне кільце"
+
+msgid "Reinforced Tin Ring"
+msgstr "Укріплене олов’яне кільце"
+
+msgid "Improved Tin Ring"
+msgstr "Удосконалене олов’яне кільце"
+
+msgid "Masterwork Tin Ring"
+msgstr "Майстерне олов’яне кільце"
+
+msgid "Perfected Tin Ring"
+msgstr "Довершене олов’яне кільце"
+
+msgid "Bone Ring"
+msgstr "Кістяне кільце"
+
+msgid "Reinforced Bone Ring"
+msgstr "Укріплене кістяне кільце"
+
+msgid "Improved Bone Ring"
+msgstr "Удосконалене кістяне кільце"
+
+msgid "Masterwork Bone Ring"
+msgstr "Майстерне кістяне кільце"
+
+msgid "Perfected Bone Ring"
+msgstr "Довершене кістяне кільце"
+
+msgid "Quartz Ring"
+msgstr "Кварцове кільце"
+
+msgid "Reinforced Quartz Ring"
+msgstr "Укріплене кварцове кільце"
+
+msgid "Improved Quartz Ring"
+msgstr "Удосконалене кварцове кільце"
+
+msgid "Masterwork Quartz Ring"
+msgstr "Майстерне кварцове кільце"
+
+msgid "Perfected Quartz Ring"
+msgstr "Довершене кварцове кільце"
+
+msgid "Crystal Ring"
+msgstr "Кришталеве кільце"
+
+msgid "Reinforced Crystal Ring"
+msgstr "Укріплене кришталеве кільце"
+
+msgid "Improved Crystal Ring"
+msgstr "Удосконалене кришталеве кільце"
+
+msgid "Masterwork Crystal Ring"
+msgstr "Майстерне кришталеве кільце"
+
+msgid "Perfected Crystal Ring"
+msgstr "Довершене кришталеве кільце"
+
+msgid "Silver Seal"
+msgstr "Срібна печатка"
+
+msgid "Reinforced Silver Seal"
+msgstr "Укріплений срібна печатка"
+
+msgid "Improved Silver Seal"
+msgstr "Удосконалений срібна печатка"
+
+msgid "Masterwork Silver Seal"
+msgstr "Майстерний срібна печатка"
+
+msgid "Perfected Silver Seal"
+msgstr "Довершений срібна печатка"
+
+msgid "Wooden Focus"
+msgstr "Дерев’яний фокус"
+
+msgid "Reinforced Wooden Focus"
+msgstr "Укріплений дерев’яний фокус"
+
+msgid "Improved Wooden Focus"
+msgstr "Удосконалений дерев’яний фокус"
+
+msgid "Masterwork Wooden Focus"
+msgstr "Майстерний дерев’яний фокус"
+
+msgid "Perfected Wooden Focus"
+msgstr "Довершений дерев’яний фокус"
+
+msgid "Bone Focus"
+msgstr "Кістяний фокус"
+
+msgid "Reinforced Bone Focus"
+msgstr "Укріплений кістяний фокус"
+
+msgid "Improved Bone Focus"
+msgstr "Удосконалений кістяний фокус"
+
+msgid "Masterwork Bone Focus"
+msgstr "Майстерний кістяний фокус"
+
+msgid "Perfected Bone Focus"
+msgstr "Довершений кістяний фокус"
+
+msgid "Bronze Focus"
+msgstr "Бронзовий фокус"
+
+msgid "Reinforced Bronze Focus"
+msgstr "Укріплений бронзовий фокус"
+
+msgid "Improved Bronze Focus"
+msgstr "Удосконалений бронзовий фокус"
+
+msgid "Masterwork Bronze Focus"
+msgstr "Майстерний бронзовий фокус"
+
+msgid "Perfected Bronze Focus"
+msgstr "Довершений бронзовий фокус"
+
+msgid "Quartz Focus"
+msgstr "Кварцовий фокус"
+
+msgid "Reinforced Quartz Focus"
+msgstr "Укріплений кварцовий фокус"
+
+msgid "Improved Quartz Focus"
+msgstr "Удосконалений кварцовий фокус"
+
+msgid "Masterwork Quartz Focus"
+msgstr "Майстерний кварцовий фокус"
+
+msgid "Perfected Quartz Focus"
+msgstr "Довершений кварцовий фокус"
+
+msgid "Crystal Focus"
+msgstr "Кришталевий фокус"
+
+msgid "Reinforced Crystal Focus"
+msgstr "Укріплений кришталевий фокус"
+
+msgid "Improved Crystal Focus"
+msgstr "Удосконалений кришталевий фокус"
+
+msgid "Masterwork Crystal Focus"
+msgstr "Майстерний кришталевий фокус"
+
+msgid "Perfected Crystal Focus"
+msgstr "Довершений кришталевий фокус"
+
+msgid "Strength, Dexterity and Intelligence are equipment requirements, not direct combat bonuses. Luck improves affix tiers, quality and gold quantity. Character level is capped at 10. XP rewards and attribute-point awards are not configured yet."
+msgstr "Сила, спритність та інтелект потрібні для спорядження відповідних предметів, але самі не підвищують бойові показники. Удача покращує тіри та якість афіксів і кількість золота. Максимальний рівень — 10. Досвід і очки характеристик за рівень ще не налаштовані."
+
+msgid "Critical roll bonus"
+msgstr "Бонус критичного кидка"
+
+msgid "Added to a separate critical d20. A result of 20 or more is critical. +3 makes natural 17–20 critical. This bonus does not improve the primary attack roll."
+msgstr "Додається до окремого критичного d20. Результат 20 або більше дає критичний удар. Із бонусом +3 критичними стають природні 17–20. Цей бонус не покращує основний кидок атаки."
+
+msgid "The current level cap is 10. Level changes do not automatically raise health, mana or combat stats and do not heal. XP and attribute-point awards are not configured yet."
+msgstr "Максимальний рівень — 10. Зміна рівня сама не підвищує здоров’я, ману чи бойові показники й не лікує. Досвід та очки характеристик за рівень ще не налаштовані."
+
+msgid "Required to equip Strength-branch items. Allocated Strength does not directly increase physical damage."
+msgstr "Потрібна для спорядження предметів гілки сили. Вкладені очки сили самі не збільшують фізичну шкоду."
+
+msgid "Required to equip Dexterity-branch items. Allocated Dexterity does not directly add evasion or attack speed."
+msgstr "Потрібна для спорядження предметів гілки спритності. Вкладені очки спритності самі не додають ухилення чи швидкості атаки."
+
+msgid "Required to equip Intelligence-branch items. Allocated Intelligence does not directly add mana or magic damage."
+msgstr "Потрібен для спорядження предметів гілки інтелекту. Вкладені очки інтелекту самі не додають мани чи магічної шкоди."
+
+msgid "Multiplies damage after primary hit quality on a successful independent critical roll. The base coefficient is 2. Armor and resistances apply afterward."
+msgstr "Множить шкоду після визначення якості влучання, якщо окремий критичний кидок успішний. Базовий множник — 2. Броня та опори діють після нього."
+
+msgid "An evasion rating increases glancing hits: on natural 2–19 compare d20 + accuracy with 6 + rating / 10. Glancing hits deal half damage. Only natural 1 fully misses; natural 20 has full quality."
+msgstr "Рейтинг ухилення збільшує кількість ковзних ударів: за природних 2–19 порівнюється d20 + точність із 6 + рейтинг / 10. Ковзний удар завдає половину шкоди. Повний промах — лише природна 1; природна 20 дає повноцінне влучання."
+
+msgid "Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."
+msgstr "Зменшує лише фізичну шкоду влучання. Частка зменшення: броня / (броня + 30 × фізична шкода). Від потужніших ударів броня захищає пропорційно слабше.\n\nПісля броні діють опори відповідним типам. Броня не зменшує вогонь, холод, блискавку чи отруту."
+
+msgid "Required level {0} · {1} {2}\nAffix level {3}\n\n{4}"
+msgstr "Потрібний рівень {0} · {1} {2}\nРівень для афіксів {3}\n\n{4}"
+
+msgid "Critical check"
+msgstr "Критичний кидок"
+
+msgid "Critical d20 {0} + {1} · damage ×{2:0.##}"
+msgstr "Критичний d20 {0} + {1} · шкода ×{2:0.##}"
+
+msgid "Equipment requirements not met."
+msgstr "Не виконані вимоги до спорядження."
+
+msgid "Item lvl"
+msgstr "ilvl"
+
+msgid "Requirements"
+msgstr "Вимоги"
+
+msgid "Properties"
+msgstr "Властивості"
+
+msgid "Value range"
+msgstr "Діапазон значень"
+
+msgid "Tier T{0}"
+msgstr "Тір T{0}"
+
+msgid "Select an affix tier to view its value ranges."
+msgstr "Оберіть тір, щоб переглянути діапазони значень афіксів."
+
+msgid "\nClick for details and related explanations."
+msgstr "\nНатисніть, щоб відкрити подробиці та пов’язані пояснення."
+
+msgid "Equipment checks your character level and allocated Strength, Dexterity or Intelligence. Item bonuses cannot satisfy their own requirements."
+msgstr "Для спорядження перевіряються рівень персонажа та вкладені очки сили, спритності або інтелекту. Бонуси самого предмета не враховуються під час перевірки його вимог."
+
+msgid "These are the item's base values, before rolled affixes. Select a property cell to inspect damage, defenses, speed and mana cost."
+msgstr "Це базові показники предмета до додавання афіксів. Натисніть на клітинку властивостей, щоб переглянути пояснення шкоди, захисту, швидкості та витрати мани."
+
+msgid "T{0} · {1}\nItem level {2}"
+msgstr "T{0} · {1}\nilvl {2}"
+
+msgid "This family has no value range for the selected tier."
+msgstr "Для цього афікса немає значень у вибраному тірі."
+
+msgid "Item level determines which affix tiers an item can roll. It is separate from the character level required to equip it. T7 is the weakest tier and T1 is the strongest."
+msgstr "Рівень предмета (ilvl) визначає доступні тіри афіксів. Це окремий показник, а не потрібний для спорядження рівень персонажа. T7 — найслабший тір, T1 — найсильніший."
+
+msgid "Lv {0} · {1} {2}"
+msgstr "Рів. {0} · {1} {2}"
+
+msgid "Requirements have not been approved yet."
+msgstr "Вимоги ще не затверджені."
+
+msgid "{0:0.##} atk/s · {1:0.##} mana/s"
+msgstr "{0:0.##} ат./с · {1:0.##} мани/с"
+
+msgid "{0:0.##} mana per attack. The displayed mana per second assumes continuous attacks at the base attack rate."
+msgstr "{0:0.##} мани за атаку. Витрата мани за секунду розрахована для безперервних атак із базовою швидкістю зброї."
+
+msgid "Mana cost"
+msgstr "Витрата мани"
+
+msgid "Luck improves equipment drop chance and rarity. Sentinel equipment chance is 45% at Luck 0, 48.19% at 10, 59.21% at 50 and 69.75% at 100. Luck also adds up to +5 to affix tier rolls and boosts quality and gold d100 results up to 100. Slot, base, family and occupancy weights stay unchanged; item-level gates still apply."
+msgstr "Удача підвищує шанс випадіння спорядження та його рідкість. Для Вартового шанс предмета становить 45% за удачі 0, 48.19% за 10, 59.21% за 50 та 69.75% за 100. Удача також додає до +5 до кидка тіру афіксів і підвищує результати d100 якості та золота до 100. Ваги слотів, баз, афіксів і заповнення не змінюються; обмеження ilvl залишаються."
+
+msgid "Luck {0:0.##} · Equipment {1:0.##}%"
+msgstr "Удача {0:0.##} · Спорядження {1:0.##}%"
+
+msgid "Luck and equipment drops"
+msgstr "Удача й випадіння спорядження"
+
+msgid "Gold always drops. Luck improves the chance of equipment and shifts the rarity table toward better items. For Sentinel, Luck 100 raises equipment chance from 45% to 69.75%, Rare from 4% to 7.76%, and Legendary from 0.1% to 0.1999%. The monster table shows your captured Luck. Slot and base weights and item-level gates stay unchanged. Opening the reference or picking up loot never rerolls a reward."
+msgstr "Золото випадає завжди. Удача підвищує шанс спорядження та зміщує розподіл рідкості на користь кращих предметів. Для Вартового удача 100 підвищує шанс предмета з 45% до 69.75%, рідкісного — з 4% до 7.76%, легендарного — з 0.1% до 0.1999%. Таблиця моба враховує Вашу зафіксовану удачу. Ваги слотів і баз та обмеження ilvl не змінюються. Перегляд довідника й підбір здобичі не перекидають результат."
+
+msgid "Strength, Dexterity and Intelligence are equipment requirements, not direct combat bonuses. Luck improves equipment drop chance, rarity, affix tiers, quality and gold quantity. Character level is capped at 10. XP rewards and attribute-point awards are not configured yet."
+msgstr "Сила, спритність та інтелект потрібні для спорядження відповідних предметів, але самі не підвищують бойові показники. Удача покращує шанс випадіння, рідкість, тіри та якість афіксів і кількість золота. Максимальний рівень — 10. Досвід і очки характеристик за рівень ще не налаштовані."
+
+msgid "Automatic and manual pickup"
+msgstr "Автоматичний і ручний підбір"
+
+msgid "In playable rounds, gold and items within 2.5 world units are picked up automatically. Gold needs no bag space. Items that do not fit stay on the ground; smaller items can still be picked up. Items you deliberately drop stay on the ground until you collect them manually with G, a click or dragging. Automatic pickup stops while paused, dragging or defeated. It never changes a captured item or gold amount."
+msgstr "У бойових раундах золото й предмети в радіусі 2.5 одиниці підбираються автоматично. Золото не займає місця в сумці. Предмети, які не вміщуються, залишаються на землі; менші предмети все одно можна підібрати. Речі, які Ви навмисно викинули, залишаються на землі до ручного підбору клавішею G, натисканням або перетягуванням. Автопідбір зупиняється під час паузи, перетягування та після загибелі. Він не змінює збережених властивостей предмета чи суми золота."
+
+msgid "Automatic gold pickup enabled."
+msgstr "Автопідбір золота увімкнено."
+
+msgid "Automatic gold pickup disabled."
+msgstr "Автопідбір золота вимкнено."
+
+msgid "Auto gold: On"
+msgstr "Автозолото: увімк."
+
+msgid "Auto gold: Off"
+msgstr "Автозолото: вимк."
+
+msgid "{0} · Toggle automatic gold pickup"
+msgstr "{0} · Увімкнути або вимкнути автопідбір золота"
+
+msgid "{0}  Auto gold pickup"
+msgstr "{0}  Автопідбір золота"
+
+msgid "Automatic gold and manual item pickup"
+msgstr "Автопідбір золота і ручний підбір предметів"
+
+msgid "In playable rounds, only gold within 2.5 world units is picked up automatically. Ctrl+G or the Auto gold button in Nearby loot switches this mode on and off for the current run. Items always require G, a click or dragging into the bag. A full bag does not prevent gold collection. Automatic pickup stops while paused, dragging or defeated, and never changes captured rewards."
+msgstr "У бойових раундах автоматично підбирається лише золото в радіусі 2.5 одиниці. Ctrl+G або кнопка «Автозолото» у вікні здобичі вмикає та вимикає цей режим у поточній грі. Предмети завжди підбираються вручну: клавішею G, натисканням або перетягуванням у сумку. Повна сумка не заважає підбору золота. Автопідбір зупиняється під час паузи, перетягування та після загибелі й не змінює збереженої здобичі."
+
+msgid "EHP · piercing 10"
+msgstr "EHP · колючий 10"
+
+msgid "Effective health (EHP)"
+msgstr "Ефективне здоров’я (EHP)"
+
+msgid "Full-health estimate against a 10-point hit of each listed damage type, with accuracy +4. Each d20 face uses the actual hit quality, armor and typed resistance before averaging. Normalized so an unprotected character's EHP equals maximum health. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection varies with hit size; this is a reference comparison, not guaranteed survival."
+msgstr "Оцінка для повного здоров’я проти удару на 10 одиниць кожного вказаного типу з точністю +4. Для кожної грані d20 враховуються якість влучання, броня та опір, після чого обчислюється середня втрата здоров’я. Без захисту EHP дорівнює максимуму здоров’я. Крити, відновлення, періодична шкода та частота атак не враховуються. Захист броні залежить від сили удару: ця оцінка допомагає порівнювати спорядження, але не гарантує виживання."
+
+msgid "By damage type"
+msgstr "За типом шкоди"
+
+msgid "Combined damage · 50/50"
+msgstr "Комбінована шкода · 50/50"
+
+msgid "Critical damage bonus"
+msgstr "Бонус критичної шкоди"
+
+msgid "critical damage bonus"
+msgstr "бонус критичної шкоди"
+
+msgid "Hit quality"
+msgstr "Якість влучання"
+
+msgid "One hit: 5 damage of each type, 10 total. Each component keeps its own resistance and rounding; armor reduces the combined physical portion. This value is calculated from the mixed hit, not by averaging the two separate EHP values."
+msgstr "Один удар: по 5 шкоди двох типів, разом 10. Для кожного типу враховуються його опір та округлення; броня зменшує сумарну фізичну частину. Значення розраховується для змішаного удару, а не як середнє двох окремих EHP."
+
+msgid "The character sheet shows the arithmetic average of the seven individual damage types, with equal weight. Combined categories are separate 50/50 hits and do not count again in this average. All estimates use full health, 10 total incoming damage and a d20 bonus of +4. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection changes with hit size. An immune category is shown as infinity; an average containing infinity is also infinite."
+msgstr "У характеристиках показано середнє арифметичне EHP семи окремих типів шкоди з однаковою вагою. Комбіновані категорії — це окремі удари 50/50; вони не враховуються в середньому повторно. Усі оцінки розраховано для повного здоров’я, удару на 10 сумарної шкоди та бонусу d20 +4. Крити, відновлення, періодична шкода й частота атак не враховуються. Захист броні залежить від сили удару. За повної невразливості показано ∞; середнє, що містить ∞, теж дорівнює ∞."
+
+msgid "Accuracy improves the primary d20 roll, not damage. The character contribution is rounded down to an integer bonus and added to the attack's own bonus. Natural 1 still misses; natural 20 still has full hit quality."
+msgstr "Точність покращує основний кидок d20, але не шкоду. Внесок персонажа округлюється вниз до цілого бонусу й додається до власного бонусу атаки. Натуральна 1 залишається промахом, натуральна 20 — повним влучанням."
+
+msgid "Evasion raises the glancing threshold: 6 + evasion / 10. On natural 2–19, a lower d20 + attack bonus deals half damage; otherwise it deals full damage. Evasion 100 gives threshold 16: against a +4 roll, natural 2–11 glance and 12–20 hit fully. Only natural 1 fully misses. Fractional evasion counts."
+msgstr "Ухилення підвищує поріг дотичного влучання: 6 + ухилення / 10. На натуральних 2–19 менший результат d20 + бонус атаки завдає половину шкоди, інакше — повну. Ухилення 100 дає поріг 16: проти бонусу +4 натуральні 2–11 дають дотичне влучання, а 12–20 — повне. Лише натуральна 1 є повним промахом. Дробове ухилення враховується."
+
+msgid "Natural 1: miss, zero damage. Natural 20: full quality. On 2–19, d20 + attack bonus below 6 + evasion / 10 gives a glancing hit at 50% damage; otherwise 100%. Each component rounds up after quality. A separate critical roll can then increase damage before armor and resistances."
+msgstr "Натуральна 1 — промах без шкоди. Натуральна 20 — повне влучання. На 2–19 результат d20 + бонус атаки нижче за 6 + ухилення / 10 дає дотичне влучання з 50% шкоди, інакше — 100%. Після цього кожен компонент округлюється вгору. Окремий критичний кидок може збільшити шкоду до застосування броні та опорів."
+
+msgid "Additional damage on a successful independent critical roll. +100% means double damage; +150% means 2.5 times damage. The displayed bonus is (critical multiplier - 1) × 100%. It applies after primary hit quality and before armor and resistances; it does not increase critical chance."
+msgstr "Додаткова шкода за успішного окремого критичного кидка. +100% означає подвійну шкоду, +150% — у 2.5 раза більшу. Показаний бонус = (критичний множник − 1) × 100%. Він застосовується після визначення якості влучання, до броні й опорів, та не збільшує шанс криту."

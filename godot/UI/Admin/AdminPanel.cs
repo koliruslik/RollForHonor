@@ -1,14 +1,15 @@
-using System;
 using System.Linq;
+using System;
 using Godot;
 using RollForHonor.Domain.Combat.Damage.Models;
-using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Items.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Arena;
-using RollForHonor.Godot.Content.Items;
+using RollForHonor.Godot.Content.Loot;
 using RollForHonor.Godot.Gameplay.Actors;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Hud;
+using RollForHonor.Godot.UI.Inventory;
 using RollForHonor.Godot.UI.Localization;
 
 namespace RollForHonor.Godot.UI.Admin;
@@ -24,6 +25,7 @@ public partial class AdminPanel : Control
     private OptionButton _actors;
     private OptionButton _stats;
     private OptionButton _items;
+    private OptionButton _rarities;
     private SpinBox _value;
     private Label _resolved;
     private Label _status;
@@ -69,16 +71,18 @@ public partial class AdminPanel : Control
             _actors.AddItem(_arena.ActorName(actor));
         }
 
-        var catalog = StarterItemCatalog.Create(new CombatantId(Guid.NewGuid()));
-        _itemChoices = catalog
-            .Select(item => item.Base.Id)
+        var catalog = GameLootCatalog.Bases
+            .Where(entry => entry.GetProperty("catalog_visible").GetBoolean() && entry.GetProperty("released").GetBoolean())
             .ToArray();
-        _items.Clear();
-
-        foreach (var item in catalog)
+        _itemChoices = catalog
+            .Select(item => item.GetProperty("id").GetString())
+            .ToArray();
+        foreach (var rarity in Enum.GetValues<ItemRarity>())
         {
-            _items.AddItem(L.Text(item.Base.Name));
+            _rarities.SetItemText((int)rarity, L.Text(rarity.ToString()));
         }
+
+        RefreshItemChoices();
 
         Show();
         ReadStat();
@@ -109,9 +113,38 @@ public partial class AdminPanel : Control
     private void BuildItems(Control page)
     {
         _items = UiLayout.Place(page, new OptionButton { Name = "Item" }, new Rect2(12, 14, 500, 40));
-        UiLayout.Place(page, UiLayout.Button(L.Text("Create item"), CreateItem), new Rect2(12, 72, 500, 42)).Name = "Create";
-        var note = UiLayout.Place(page, UiLayout.Text(L.Text("Choose any item from the current catalog. A full bag leaves the created item at your feet."), 15, HonorTheme.Muted), new Rect2(12, 132, 500, 70));
+        UiLayout.Place(page, UiLayout.Text(L.Text("Rarity"), 17), new Rect2(12, 68, 150, 38));
+        _rarities = UiLayout.Place(page, new OptionButton { Name = "Rarity" }, new Rect2(180, 68, 332, 38));
+
+        foreach (var rarity in Enum.GetValues<ItemRarity>())
+        {
+            _rarities.AddItem(L.Text(rarity.ToString()), (int)rarity);
+        }
+
+        _rarities.ItemSelected += _ => RefreshItemChoices();
+        UiLayout.Place(page, UiLayout.Button(L.Text("Create item"), CreateItem), new Rect2(12, 122, 500, 42)).Name = "Create";
+        var note = UiLayout.Place(page, UiLayout.Text(L.Text("Choose any item from the current catalog. A full bag leaves the created item at your feet."), 15, HonorTheme.Muted), new Rect2(12, 178, 500, 56));
         note.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+    }
+
+    private void RefreshItemChoices()
+    {
+        var selected = _items.Selected;
+        var rarity = (ItemRarity)_rarities.GetSelectedId();
+        _items.Clear();
+        _items.AddThemeColorOverride("font_color", ItemPresentation.RarityColor(rarity));
+        _rarities.AddThemeColorOverride("font_color", ItemPresentation.RarityColor(rarity));
+
+        foreach (var id in _itemChoices)
+        {
+            var entry = GameLootCatalog.Bases.Single(value => value.GetProperty("id").GetString() == id);
+            _items.AddItem(L.Format($"{ItemPresentation.Name(id, entry.GetProperty("name").GetString(), rarity)} · ilvl {entry.GetProperty("item_level").GetInt32()}"));
+        }
+
+        if (_itemChoices.Length > 0)
+        {
+            _items.Select(Math.Clamp(selected, 0, _itemChoices.Length - 1));
+        }
     }
 
     private void BuildStats(Control page)
@@ -120,7 +153,7 @@ public partial class AdminPanel : Control
         _actors.ItemSelected += _ => ReadStat();
         _stats = UiLayout.Place(page, new OptionButton { Name = "Stat" }, new Rect2(12, 54, 500, 36));
         _statChoices = Enum.GetValues<StatType>()
-            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage))
+            .Where(type => type is not (StatType.Resistance or StatType.AddedDamage or StatType.Constitution) && DamageDiceStats.Sides(type) == 0)
             .Select(type => new StatKey(type))
             .Concat(Enum.GetValues<DamageType>()
                 .SelectMany(type => new[] { new StatKey(StatType.Resistance, type), new StatKey(StatType.AddedDamage, type), new StatKey(StatType.DamageMultiplier, type) }))
@@ -171,14 +204,15 @@ public partial class AdminPanel : Control
 
     private void CreateItem()
     {
-        var item = StarterItemCatalog.Create(new CombatantId(Guid.NewGuid()))
-            .First(value => value.Base.Id == _itemChoices[_items.Selected]);
+        var item = GameLootCatalog.CreateItem(_itemChoices[_items.Selected], Guid.NewGuid().ToString("N"), (ItemRarity)_rarities.GetSelectedId(),
+            new RollForHonor.Infrastructure.Dice.RandomDiceRoller(new Random()),
+            _runtime.CombatState.GetStats(_arena.Player.CombatantId).Get(new(StatType.Luck)));
         var hud = _arena.GetNode<ArenaHud>("Presentation");
         var acquired = hud.AcquireItem(item, recordAction: false) == RollForHonor.Application.Items.ItemAcquisitionStatus.Acquired;
 
         var placed = !acquired && _arena.PlaceAdminItem(item);
 
-        hud.RecordAction(L.Format($"Admin: created {L.Text(item.Base.Name)}."));
+        hud.RecordAction(L.Format($"Admin: created {ItemPresentation.Name(item)}."));
         SetStatus(acquired ? L.Text("Item created in inventory.") : placed ? L.Text("Item created on the ground.")
             : L.Text("Item created; waiting for free ground nearby."));
     }

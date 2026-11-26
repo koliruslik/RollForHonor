@@ -297,7 +297,7 @@ public sealed class GodotArenaTest : TestClass
         {
             arena.Player.Position = new Vector3(0, 20, 0);
             arena.Player.Velocity = new Vector3(6, -2, 0);
-            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 2, 12, [], []));
+            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 0, 0, [], []));
             arena.Player.Controls.MovementIntent = Vector2.Right;
             await Frames(4);
 
@@ -547,13 +547,13 @@ public sealed class GodotArenaTest : TestClass
         {
             var modes = arena.Player.GetRequiredComponent<ActorState>();
             arena.Player.Controls.MovementIntent = Vector2.Right;
-            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 2, 12, [], []));
+            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 0, 0, [], []));
             await Frames(4);
 
             modes.IsDefeated.ShouldBeTrue();
             modes.AllowsMovement.ShouldBeFalse();
 
-            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 100, 100, 2, 12, [], []));
+            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 100, 100, 0, 0, [], []));
             await Frames(30);
 
             modes.IsDefeated.ShouldBeFalse();
@@ -662,6 +662,53 @@ public sealed class GodotArenaTest : TestClass
             visual.Rotation.Z.ShouldBe(0);
             arena.Player.GetRequiredComponent<MouseFacing>().TryGetAttackPoint(screen, out var attackPoint).ShouldBeTrue();
             attackPoint.DistanceTo(point).ShouldBeLessThan(0.001f);
+        }
+        finally
+        {
+            arena.Free();
+        }
+    }
+
+    /// <summary>A wall between the camera and enemy does not raise the attack point above the enemy.</summary>
+    /// <returns>Completes after a real projectile reaches the camera-occluded combatant.</returns>
+    [Test]
+    public async Task CameraOccluderPreservesEnemyAimHeight()
+    {
+        var arena = Create();
+
+        try
+        {
+            arena.Player.GlobalPosition = new(-5, 0.05f, 4);
+            arena.Opponent.GlobalPosition = new(-11, 0.05f, 4);
+            arena.CameraRig.SetProcess(false);
+            arena.CameraRig.GlobalPosition = arena.Player.GlobalPosition;
+            await Frames(6);
+            var camera = arena.CameraRig.Camera;
+            var target = arena.Opponent.AimPoint;
+            var screen = camera.UnprojectPosition(target);
+            var origin = camera.ProjectRayOrigin(screen);
+            var wall = new StaticBody3D { CollisionLayer = 4, CollisionMask = 0 };
+            wall.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = new(2, 2, 2) } });
+            arena.AddChild(wall);
+            wall.GlobalPosition = origin.Lerp(target, 0.5f);
+            await Frames(3);
+            var query = PhysicsRayQueryParameters3D.Create(origin, origin + camera.ProjectRayNormal(screen) * 500, 22);
+            query.Exclude = [arena.Player.GetRid()];
+            arena.Player.GetWorld3D().DirectSpaceState.IntersectRay(query)["collider"].AsGodotObject().ShouldBeSameAs(wall);
+            var facing = arena.Player.GetRequiredComponent<MouseFacing>();
+            facing.TryGetAttackPoint(screen, out var aim).ShouldBeTrue();
+            aim.DistanceTo(target).ShouldBeLessThan(0.001f);
+            var committed = false;
+            var attack = arena.Player.GetRequiredComponent<ProjectileAttack>();
+            attack.ContactCompleted += (contact, _, _) => committed |= contact.Impact?.IsCommitted == true;
+            attack.RequestAttack(aim).Attack.ShouldNotBeNull();
+
+            for (var frame = 0; frame < 90 && !committed; frame++)
+            {
+                await Frames(1);
+            }
+
+            committed.ShouldBeTrue();
         }
         finally
         {

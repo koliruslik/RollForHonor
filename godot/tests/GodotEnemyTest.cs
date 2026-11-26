@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 using Chickensoft.GoDotTest;
 using Godot;
 using RollForHonor.Application.Combat.Models;
+using RollForHonor.Application.Combat.Services;
+using RollForHonor.Domain.Combat.Damage.Configuration;
+using RollForHonor.Domain.Dice.Models;
+using RollForHonor.Domain.Dice.Services;
+using RollForHonor.Domain.Resources.Services;
 using RollForHonor.Godot.Arena;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Godot.Gameplay.Actors;
@@ -64,14 +69,28 @@ public sealed class GodotEnemyTest : TestClass
         var arena = Create(new(-10, 0.05f, 32), new(-16, 0.05f, 32));
         var launches = new List<TimeSpan>();
         var committed = 0;
+        var damageTaken = 0;
         var combat = arena.Opponent.GetRequiredComponent<ProjectileAttack>();
         combat.LaunchCompleted += result =>
         {
             result.Status.ShouldBe(AttackStartStatus.Started);
             launches.Add(Runtime.GameTime);
         };
-        combat.ContactCompleted += (contact, _, _) => committed += contact.Impact?.IsCommitted == true ? 1 : 0;
+        combat.ContactCompleted += (contact, _, _) =>
+        {
+            if (contact.Impact?.IsCommitted == true)
+            {
+                committed++;
+                var result = ((RollForHonor.Domain.Combat.Resolution.Models.ResolvedCombat)contact.Impact.Outcome).Resolution.Result;
+                result.SourceId.ShouldBe(arena.Opponent.CombatantId);
+                result.Target.TargetId.ShouldBe(arena.Player.CombatantId);
+                damageTaken += result.Target.DamageResolution.AfterDefenses.Damage.Components.Sum(component => component.Amount);
+            }
+        };
         RemoveDefenses(arena.Player);
+        var profile = Runtime.CombatState.GetStatProfile(arena.Player.CombatantId);
+        Runtime.CombatState.UpdateStats(arena.Player.CombatantId,
+            new(profile.BaseValues.With(new(StatType.HealthRecovery), 0), profile.Modifiers));
 
         try
         {
@@ -81,7 +100,7 @@ public sealed class GodotEnemyTest : TestClass
             launches.Count.ShouldBeInRange(2, 3);
             (launches[1] - launches[0]).ShouldBeGreaterThanOrEqualTo(TimeSpan.FromSeconds(1.5));
             committed.ShouldBeGreaterThan(0);
-            player.Health.ShouldBeLessThan(100);
+            player.Health.ShouldBe(100 - damageTaken);
             arena.Opponent.GetRequiredComponent<MovementMotor>().HorizontalSpeed.ShouldBeLessThan(0.01f);
             Runtime.CombatState.ReadForStart(arena.Player.CombatantId, "arena-shot", Guid.NewGuid()).Resources.Single().Amount.ShouldBe(500m);
             arena.GetNode<RichTextLabel>("HUD/Journal/Rows/Text").Text.ShouldContain("Sentinel");
@@ -123,6 +142,15 @@ public sealed class GodotEnemyTest : TestClass
         arena.Opponent.Controls.ThinkingEnabled = false;
         RemoveDefenses(arena.Opponent);
         Runtime.CombatState.UpdateCombatant(new(arena.Opponent.CombatantId, 1, 40, 0, 0, [], []));
+        var impacts = new CombatImpactService(Runtime.CombatState, new CombatSnapshotBuilder(),
+            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2), ratingRules: true),
+            () => new MaximumDice());
+        var attacks = new AttackInitiationService(Runtime.CombatState,
+            new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
+            impacts, () => Runtime.GameTime);
+        var projectile = arena.Player.GetRequiredComponent<ProjectileAttack>();
+        projectile.Configure(attacks, Runtime.CombatState, projectile.AttackProvider(),
+            GD.Load<PackedScene>("res://Gameplay/Projectiles/AirborneProjectile.tscn"));
 
         try
         {
@@ -160,7 +188,7 @@ public sealed class GodotEnemyTest : TestClass
         {
             await Frames(25);
             arena.Opponent.GetRequiredComponent<MovementMotor>().HorizontalSpeed.ShouldBeGreaterThan(1);
-            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 2, 12, [], []));
+            Runtime.CombatState.UpdateCombatant(new(arena.Player.CombatantId, 0, 100, 0, 0, [], []));
             await Frames(3);
 
             arena.Opponent.Controls.HasVisibleTarget.ShouldBeFalse();
@@ -200,4 +228,22 @@ public sealed class GodotEnemyTest : TestClass
             await TestScene.ToSignal(TestScene.GetTree(), SceneTree.SignalName.PhysicsFrame);
         }
     }
+
+    private sealed class MaximumDice : IDiceRoller
+    {
+        /// <inheritdoc />
+        public DiceTrace Trace => new(_rolls);
+
+        private readonly List<DiceRoll> _rolls = [];
+
+        /// <inheritdoc />
+        public DiceRoll Roll(DiceFormula formula)
+        {
+            var results = Enumerable.Repeat(formula.Sides, formula.Count).ToArray();
+            var roll = new DiceRoll(formula, results, results.Sum());
+            _rolls.Add(roll);
+            return roll;
+        }
+    }
+
 }

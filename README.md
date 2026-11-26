@@ -11,28 +11,35 @@ d20 attacks, typed damage, defenses and effects.
 - WASD movement, mouse-facing, a following top-down camera and aimed projectiles.
 - Rounds of ten randomly placed ranged enemies, appearing in successive pairs,
   with a completion banner and unlimited free time before starting the next round.
-- One persistent item drop per defeated enemy; nearby loot supports G, mouse pickup
-  and dragging into an open bag. Drop bag items with the card button or by
+- Guaranteed world gold and optional equipment from accepted Sentinel tables; nearby gold is picked up automatically within 2.5 units (Ctrl+G toggles it). Items use manual pickup.
+  G, mouse pickup and dragging into an open bag remain available. Drop bag items with the card button or by
   dragging them onto uncovered world space.
+- Natural-one misses, rating-based glancing hits and armor, and a separate critical d20 (20+ succeeds, base ×2).
 - Flat health/mana recovery stats, initially 2 HP/s and 10 mana/s for the player.
 - An action journal for combat, defeats, pickups, equipment and sandbox changes.
+- Session-local gold wallets, world pickup, and captured Luck for gold and generated affixes.
 - Compact F3 admin tools for current monster/item catalogs and actor base stats.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
-- Five primary attributes in a staggered 3+2 grid of clickable d20 tiles: Strength, Dexterity, Constitution, Intelligence and Luck.
+- Four primary attributes in a 2×2 grid of clickable d20 tiles: Strength, Dexterity, Intelligence and Luck; level cap 10.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
+- Captured Luck bonuses for affix-tier d20 rolls and capped d100 quality/gold amounts; existing rolls remain immutable.
 - Main-hand/offhand equipment with owned items, atomic stat updates and capacity-checked, version-checked equip/unequip operations.
 - Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
 - Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
-- A searchable game reference sharing those explanations, with owned-item, affix and recent-combat snapshots.
+- Character-sheet EHP averaged across seven damage types, with click-only details for each type and all 21 mixed pairs.
+- A searchable game reference with a bestiary, colored loot tables, 105 named bases across three branches and five generations (21 first-generation bases live), all 58 affix families and recent combat.
 - Ukrainian/English interface with saved live language switching, localized item/affix names and searchable reference.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
 
 This is an early prototype. Training targets are stationary; the enemy uses
-direct pursuit without pathfinding. Twelve authored starter items support the current
-equipment flow and supply the initial loot pool. Procedural maps and game save/load are not implemented.
+direct pursuit without pathfinding. Each run starts with one chosen Common bow, sword or wand.
+All three temporarily use the same bow projectile, mana and cadence. Procedural maps and game save/load are not implemented.
+
+Browse [live loot, per-monster rewards and all affix tiers](docs/loot-tables.md),
+or open Reference in the game and choose Monsters, Items or Affixes.
 
 ## Run the prototype
 
@@ -64,6 +71,7 @@ or restarting creates a fresh session and resets its state.
 | Mouse wheel | Zoom |
 | F3 | Toggle live admin tools |
 | G | Pick up the selected nearby item within 2.5 world units |
+| Ctrl+G | Toggle automatic gold pickup |
 | I / C | Toggle inventory / character stats independently; gameplay continues |
 | H / Reference | Open the searchable game reference; gameplay pauses |
 | Escape | Close an overlay or open pause/settings/navigation |
@@ -73,7 +81,7 @@ or restarting creates a fresh session and resets its state.
 After the tenth defeat, explore and collect loot for as long as you like.
 Choose Next round to start another five pairs; health, mana, equipment and
 uncollected loot carry over. Primary attributes currently default to zero;
-progression and derived attribute formulas are not implemented.
+XP and point awards remain unconfigured. STR/DEX/INT are equipment requirements, not direct combat bonuses.
 
 The laboratory provides stat editors and attack/tick buttons. See the
 [scene guide](docs/godot.md) for its controls and fixture limitations.

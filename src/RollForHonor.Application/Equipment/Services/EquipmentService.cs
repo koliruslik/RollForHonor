@@ -49,6 +49,11 @@ public sealed class EquipmentService
             return EquipmentChangeStatus.ItemNotOwned;
         }
 
+        if (!item.Base.Requirements.IsMet(new RollForHonor.Domain.Stats.StatCalculator().Calculate(state.NonEquipmentProfile)))
+        {
+            return EquipmentChangeStatus.RequirementsNotMet;
+        }
+
         if (!state.Rules.CanEquip(state.Loadout, item, slot))
         {
             return EquipmentChangeStatus.IncompatibleSlot;
@@ -129,7 +134,7 @@ public sealed class EquipmentService
 
         return status switch
         {
-            EquipmentChangeStatus.Applied or EquipmentChangeStatus.Unchanged or EquipmentChangeStatus.VersionConflict => status,
+            EquipmentChangeStatus.Applied or EquipmentChangeStatus.Unchanged or EquipmentChangeStatus.VersionConflict or EquipmentChangeStatus.RequirementsNotMet => status,
             _ => throw new InvalidOperationException("The equipment adapter returned an invalid commit status.")
         };
     }

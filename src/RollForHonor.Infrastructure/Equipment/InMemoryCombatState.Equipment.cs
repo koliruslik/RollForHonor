@@ -76,6 +76,13 @@ public sealed partial class InMemoryCombatState
             var equipment = _data.Equipment[proposal.OwnerId];
             ValidateLoadout(equipment, proposal.Loadout);
 
+            var allocated = new StatCalculator().Calculate(equipment.NonEquipmentProfile);
+
+            if (proposal.Loadout.Slots.Values.Any(item => !item.Base.Requirements.IsMet(allocated)))
+            {
+                return EquipmentChangeStatus.RequirementsNotMet;
+            }
+
             if (SameLoadout(equipment.Loadout, proposal.Loadout))
             {
                 return EquipmentChangeStatus.Unchanged;
@@ -90,6 +97,8 @@ public sealed partial class InMemoryCombatState
     /// <summary>Replaces only non-equipment inputs and atomically recomposes all currently equipped item contributions.</summary>
     /// <param name="ownerId">The registered stat-managed actor.</param>
     /// <param name="profile">Base values and other-source modifiers, excluding equipment contributions.</param>
+    /// <exception cref="ArgumentException">The resulting profile would invalidate equipped requirements.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Base character level is outside 1–10.</exception>
     /// <remarks>Read these inputs through ReadEquipment.NonEquipmentProfile, not the composed GetStatProfile result. Current HP/mana clamp downward only.</remarks>
     /// <exception cref="ArgumentNullException">An input is null.</exception>
     /// <exception cref="KeyNotFoundException">The actor is not stat-managed.</exception>
@@ -129,6 +138,13 @@ public sealed partial class InMemoryCombatState
     private static SessionData ApplyEquipmentStats(SessionData data, CombatantId ownerId,
         StatProfile nonEquipmentProfile, EquipmentLoadout loadout)
     {
+        var allocated = new StatCalculator().Calculate(nonEquipmentProfile);
+
+        if (loadout.Slots.Values.Any(item => !item.Base.Requirements.IsMet(allocated)))
+        {
+            throw new ArgumentException("Changing allocated stats would invalidate equipment.", nameof(nonEquipmentProfile));
+        }
+
         var profile = new EquipmentStatComposer().Compose(nonEquipmentProfile, loadout);
         var stats = new StatCalculator().Calculate(profile);
         var actor = new CombatStatProjector().Project(data.Actors[ownerId], stats);

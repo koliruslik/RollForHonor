@@ -41,6 +41,12 @@ public static class CombatGlossary
     /// <returns>A linked explanation; reserved mechanics are identified explicitly.</returns>
     public static InspectionTopic Stat(StatKey key)
     {
+        if (DamageDiceStats.Sides(key.Type) is var sides && sides > 0)
+        {
+            return new($"Extra d{sides} {key.DamageKind} damage",
+                "Rolls these additional typed dice once per attack impact, before source multipliers, quality and defenses. Periodic ticks do not add them.", StatColor(key));
+        }
+
         if (key.DamageKind is { } type)
         {
             if (key.Type == StatType.AddedDamage)
@@ -55,26 +61,53 @@ public static class CombatGlossary
 
         return key.Type switch
         {
-            StatType.Strength => new(L.Text("Strength"), L.Text("Planned role: physical damage. These allocated points do not increase damage yet; the conversion formula is not configured."), HonorTheme.Brass),
-            StatType.Dexterity => new(L.Text("Dexterity"), L.Text("Planned role: attack speed and movement speed. These allocated points do not change speed yet; the conversion formulas are not configured."), HonorTheme.Brass),
+            StatType.CriticalRollBonus => new(L.Text("Critical roll bonus"), L.Text("Added to a separate critical d20. A result of 20 or more is critical. +3 makes natural 17–20 critical. This bonus does not improve the primary attack roll."), HonorTheme.Brass, [new(L.Text("Critical damage bonus"), HonorTheme.Brass, CriticalDamage), new(L.Text("Hit quality"), HonorTheme.Parchment, HitQuality)]),
+            StatType.CharacterLevel => new(L.Text("Level"), L.Text("The current level cap is 10. Level changes do not automatically raise health, mana or combat stats and do not heal. XP and attribute-point awards are not configured yet."), HonorTheme.Brass),
+            StatType.Strength => new(L.Text("Strength"), L.Text("Required to equip Strength-branch items. Allocated Strength does not directly increase physical damage."), HonorTheme.Brass),
+            StatType.Dexterity => new(L.Text("Dexterity"), L.Text("Required to equip Dexterity-branch items. Allocated Dexterity does not directly add evasion or attack speed."), HonorTheme.Brass),
             StatType.Constitution => new(L.Text("Constitution"), L.Text("Planned role: maximum health and resistances. These allocated points do not change defenses yet; the conversion formulas are not configured."), HonorTheme.Brass),
-            StatType.Intelligence => new(L.Text("Intelligence"), L.Text("Planned role: magic damage and mana. These allocated points do not change damage or resources yet; the conversion formulas are not configured."), HonorTheme.Brass),
-            StatType.Luck => new(L.Text("Luck"), L.Text("Planned role: loot, gold and affix generation rolls. These allocated points do not affect the current drops yet; Luck formulas and monster drop tables are planned."), HonorTheme.Brass),
+            StatType.Intelligence => new(L.Text("Intelligence"), L.Text("Required to equip Intelligence-branch items. Allocated Intelligence does not directly add mana or magic damage."), HonorTheme.Brass),
+            StatType.Luck => new(L.Text("Luck"), L.Text("Luck improves equipment drop chance and rarity. Sentinel equipment chance is 45% at Luck 0, 48.19% at 10, 59.21% at 50 and 69.75% at 100. Luck also adds up to +5 to affix tier rolls and boosts quality and gold d100 results up to 100. Slot, base, family and occupancy weights stay unchanged; item-level gates still apply."), HonorTheme.Brass),
             StatType.HealthRecovery => new(L.Text("Health recovery"), L.Text("Health points recovered per game second, up to maximum health. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."), HonorTheme.Secondary),
             StatType.ManaRecovery => new(L.Text("Mana recovery"), L.Text("Mana points recovered per game second, up to maximum mana. Recovery stops on pause and after defeat. This is a flat rate, not a percentage."), HonorTheme.Secondary),
             StatType.Armor => Armor(),
             StatType.DamageMultiplier => new(L.Text("All damage"), L.Text("Increases outgoing damage of every type. Increased bonuses add together; More bonuses multiply separately."), HonorTheme.Parchment,
                 [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]),
-            StatType.AttackModifier => new(L.Text("Attack roll bonus"), L.Text("Added to the attack's d20 roll. It affects attack quality and is not a flat damage bonus."), HonorTheme.Parchment),
+            StatType.AttackModifier => Accuracy(),
             StatType.MaxHealth => new(L.Text("Maximum health"), L.Text("The character's health limit. Raising the limit does not heal the character; lowering it clamps current health."), HonorTheme.Parchment),
             StatType.MaxMana => new(L.Text("Maximum mana"), L.Text("The character's mana limit. Raising the limit does not refill mana; lowering it clamps the current balance."), HonorTheme.Parchment),
+            StatType.AttackSpeed => new(L.Text("Attack speed"), L.Text("Multiplies the equipped weapon attack cadence. Increased bonuses add together; mana cost per attack stays the same."), HonorTheme.Parchment),
             StatType.MovementSpeed => new(L.Text("Movement speed"), L.Text("Character movement speed. The character sheet shows its percentage change from the unmodified starting speed."), HonorTheme.Parchment),
             StatType.CriticalChance => new(L.Text("Critical chance"), L.Text("Reserved stat. The current attack rules use d20 quality; this independent chance is not rolled by combat yet."), HonorTheme.Parchment),
-            StatType.CriticalMultiplier => new(L.Text("Critical multiplier"), L.Text("Reserved stat. Current critical damage uses the attack-quality coefficients rather than this independent multiplier."), HonorTheme.Parchment),
-            StatType.Evasion => new(L.Text("Evasion"), L.Text("A defensive stat used when resolving attack quality against the attack roll."), HonorTheme.Parchment),
+            StatType.CriticalMultiplier => CriticalDamage(),
+            StatType.Evasion => Evasion(),
             _ => new(key.Type.ToString(), L.Text("This property contributes to the character's resolved statistics."), HonorTheme.Parchment)
         };
     }
+
+    /// <summary>Explains how current accuracy contributes to the primary attack roll.</summary>
+    /// <returns>A card linked to evasion and hit quality.</returns>
+    public static InspectionTopic Accuracy() => new(L.Text("Accuracy"),
+        L.Text("Accuracy improves the primary d20 roll, not damage. The character contribution is rounded down to an integer bonus and added to the attack's own bonus. Natural 1 still misses; natural 20 still has full hit quality."),
+        HonorTheme.Parchment, [new(L.Text("Evasion"), HonorTheme.Parchment, Evasion), new(L.Text("Hit quality"), HonorTheme.Parchment, HitQuality)]);
+
+    /// <summary>Explains the fractional evasion rating and its comparison to incoming accuracy.</summary>
+    /// <returns>A card linked to accuracy, hit quality and armor.</returns>
+    public static InspectionTopic Evasion() => new(L.Text("Evasion"),
+        L.Text("Evasion raises the glancing threshold: 6 + evasion / 10. On natural 2–19, a lower d20 + attack bonus deals half damage; otherwise it deals full damage. Evasion 100 gives threshold 16: against a +4 roll, natural 2–11 glance and 12–20 hit fully. Only natural 1 fully misses. Fractional evasion counts."),
+        HonorTheme.Parchment, [new(L.Text("Accuracy"), HonorTheme.Parchment, Accuracy), new(L.Text("Hit quality"), HonorTheme.Parchment, HitQuality), new(L.Text("Armor"), HonorTheme.Secondary, Armor)]);
+
+    /// <summary>Explains primary hit quality separately from the independent critical check.</summary>
+    /// <returns>A card linked to the defenses applied after quality.</returns>
+    public static InspectionTopic HitQuality() => new(L.Text("Hit quality"),
+        L.Text("Natural 1: miss, zero damage. Natural 20: full quality. On 2–19, d20 + attack bonus below 6 + evasion / 10 gives a glancing hit at 50% damage; otherwise 100%. Each component rounds up after quality. A separate critical roll can then increase damage before armor and resistances."),
+        HonorTheme.Parchment, [new(L.Text("Armor"), HonorTheme.Secondary, Armor), new(L.Text("Critical damage bonus"), HonorTheme.Brass, CriticalDamage)]);
+
+    /// <summary>Displays the critical coefficient as additional damage above an ordinary hit.</summary>
+    /// <returns>A card linked to the independent critical roll and defenses.</returns>
+    public static InspectionTopic CriticalDamage() => new(L.Text("Critical damage bonus"),
+        L.Text("Additional damage on a successful independent critical roll. +100% means double damage; +150% means 2.5 times damage. The displayed bonus is (critical multiplier - 1) × 100%. It applies after primary hit quality and before armor and resistances; it does not increase critical chance."),
+        HonorTheme.Brass, [Link(new(StatType.CriticalRollBonus)), new(L.Text("Hit quality"), HonorTheme.Parchment, HitQuality), new(L.Text("Armor"), HonorTheme.Secondary, Armor)]);
 
     /// <summary>Explains a damage type without importing status rules from other games.</summary>
     /// <param name="type">The damage category.</param>
@@ -110,7 +143,7 @@ public static class CombatGlossary
     /// <summary>Explains the armor formula used by the current combat pipeline.</summary>
     /// <returns>An armor explanation linked to physical types.</returns>
     public static InspectionTopic Armor() => new(L.Text("Armor"),
-        L.Text("Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."),
+        L.Text("Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."),
         HonorTheme.Secondary, [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]);
 
     /// <summary>Explains the shared physical classification.</summary>

@@ -66,9 +66,9 @@ public partial class ActorStatDefinition : Resource
     [Export]
     public float CriticalChance { get; set; }
 
-    /// <summary>Gets or sets the reserved independent critical multiplier.</summary>
+    /// <summary>Gets or sets the damage coefficient used by a successful independent critical check.</summary>
     [Export]
-    public float CriticalMultiplier { get; set; } = 1;
+    public float CriticalMultiplier { get; set; } = 2;
 
     /// <summary>Gets or sets base fractional resistance by damage type, where 0.25 means 25%.</summary>
     [Export]

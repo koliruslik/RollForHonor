@@ -1,0 +1,3625 @@
+[
+  {
+	"id": "health",
+	"name_en": "Maximum Health",
+	"name_uk": "Максимальне здоров’я",
+	"effect": "hp",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 100,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 6,
+		"maximum": 10,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 11,
+		"maximum": 16,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 17,
+		"maximum": 24,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 25,
+		"maximum": 35,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 36,
+		"maximum": 50,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 51,
+		"maximum": 70,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 71,
+		"maximum": 95,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "mana",
+	"name_en": "Maximum Mana",
+	"name_uk": "Максимальна мана",
+	"effect": "mana",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 100,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 15,
+		"maximum": 25,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 26,
+		"maximum": 40,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 41,
+		"maximum": 60,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 61,
+		"maximum": 85,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 86,
+		"maximum": 120,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 121,
+		"maximum": 170,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 171,
+		"maximum": 240,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "health-percent",
+	"name_en": "Increased Health",
+	"name_uk": "Збільшення здоров’я",
+	"effect": "hp_percent",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.11,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.12,
+		"maximum": 0.14,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.15,
+		"maximum": 0.18,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.19,
+		"maximum": 0.22,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.23,
+		"maximum": 0.27,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "mana-percent",
+	"name_en": "Increased Mana",
+	"name_uk": "Збільшення мани",
+	"effect": "mana_percent",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.11,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.12,
+		"maximum": 0.14,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.15,
+		"maximum": 0.18,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.19,
+		"maximum": 0.22,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.23,
+		"maximum": 0.27,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "armor",
+	"name_en": "Armour",
+	"name_uk": "Броня",
+	"effect": "armor",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+      "offhand"
+	],
+	"weight": 100,
+	"min_tier": 1,
+	"unit": "rating",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 24,
+		"maximum": 48,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 54,
+		"maximum": 84,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 90,
+		"maximum": 138,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 144,
+		"maximum": 210,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 216,
+		"maximum": 312,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 318,
+		"maximum": 468,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 474,
+		"maximum": 690,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true,
+	"migrated_from_legacy_scale": 6
+  },
+  {
+	"id": "armor-percent",
+	"name_en": "Increased Armour",
+	"name_uk": "Збільшення броні",
+	"effect": "armor_percent",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+      "amulet"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.1,
+		"maximum": 0.15,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.16,
+		"maximum": 0.22,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.23,
+		"maximum": 0.31,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.32,
+		"maximum": 0.43,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.44,
+		"maximum": 0.58,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.59,
+		"maximum": 0.77,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.78,
+		"maximum": 1.0,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "evasion",
+	"name_en": "Evasion",
+	"name_uk": "Ухилення",
+	"effect": "evasion",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+      "offhand"
+	],
+	"weight": 80,
+	"min_tier": 1,
+	"unit": "rating",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 10,
+		"maximum": 10,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 10,
+		"maximum": 20,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 20,
+		"maximum": 20,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 20,
+		"maximum": 30,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 30,
+		"maximum": 30,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 30,
+		"maximum": 40,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 40,
+		"maximum": 40,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true,
+	"migrated_from_legacy_scale": 10
+  },
+  {
+	"id": "evasion-percent",
+	"name_en": "Increased Evasion",
+	"name_uk": "Збільшення ухилення",
+	"effect": "evasion_percent",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+      "offhand"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.1,
+		"maximum": 0.15,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.16,
+		"maximum": 0.22,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.23,
+		"maximum": 0.3,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.31,
+		"maximum": 0.38,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.39,
+		"maximum": 0.47,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.48,
+		"maximum": 0.57,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.58,
+		"maximum": 0.68,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "movement",
+	"name_en": "Movement Speed",
+	"name_uk": "Швидкість пересування",
+	"effect": "movement",
+	"slots": [
+      "boots"
+	],
+	"weight": 50,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.11,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.12,
+		"maximum": 0.15,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.16,
+		"maximum": 0.19,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.2,
+		"maximum": 0.23,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.24,
+		"maximum": 0.28,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "attack-speed",
+	"name_en": "Attack Speed",
+	"name_uk": "Швидкість атаки",
+	"effect": "attack_speed",
+	"slots": [
+	  "weapon",
+      "offhand"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.11,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.12,
+		"maximum": 0.15,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.16,
+		"maximum": 0.19,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.2,
+		"maximum": 0.24,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.25,
+		"maximum": 0.3,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "added-piercing",
+	"name_en": "Added Piercing Damage",
+	"name_uk": "Додаткова колюча шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Piercing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-piercing",
+	"name_en": "Increased Piercing Damage",
+	"name_uk": "Збільшення колючої шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Piercing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-piercing",
+	"name_en": "Extra Piercing Damage Dice",
+	"name_uk": "Додаткові кубики колючої шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Piercing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-bludgeoning",
+	"name_en": "Added Bludgeoning Damage",
+	"name_uk": "Додаткова дробильна шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Bludgeoning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-bludgeoning",
+	"name_en": "Increased Bludgeoning Damage",
+	"name_uk": "Збільшення дробильної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Bludgeoning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-bludgeoning",
+	"name_en": "Extra Bludgeoning Damage Dice",
+	"name_uk": "Додаткові кубики дробильної шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Bludgeoning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-slashing",
+	"name_en": "Added Slashing Damage",
+	"name_uk": "Додаткова рубана шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-slashing",
+	"name_en": "Increased Slashing Damage",
+	"name_uk": "Збільшення рубаної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-slashing",
+	"name_en": "Extra Slashing Damage Dice",
+	"name_uk": "Додаткові кубики рубаної шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-fire",
+	"name_en": "Added Fire Damage",
+	"name_uk": "Додаткова вогняна шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Fire"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-fire",
+	"name_en": "Increased Fire Damage",
+	"name_uk": "Збільшення вогняної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Fire"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-fire",
+	"name_en": "Extra Fire Damage Dice",
+	"name_uk": "Додаткові кубики вогняної шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Fire"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-cold",
+	"name_en": "Added Cold Damage",
+	"name_uk": "Додаткова холодова шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Cold"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-cold",
+	"name_en": "Increased Cold Damage",
+	"name_uk": "Збільшення холодової шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Cold"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-cold",
+	"name_en": "Extra Cold Damage Dice",
+	"name_uk": "Додаткові кубики холодової шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Cold"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-lightning",
+	"name_en": "Added Lightning Damage",
+	"name_uk": "Додаткова електрична шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-lightning",
+	"name_en": "Increased Lightning Damage",
+	"name_uk": "Збільшення електричної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-lightning",
+	"name_en": "Extra Lightning Damage Dice",
+	"name_uk": "Додаткові кубики електричної шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-poison",
+	"name_en": "Added Poison Damage",
+	"name_uk": "Додаткова отруйна шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6,
+		"maximum": 8,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 10,
+		"maximum": 14,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-poison",
+	"name_en": "Increased Poison Damage",
+	"name_uk": "Збільшення отруйної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 35,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.49,
+		"maximum": 0.62,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dice-poison",
+	"name_en": "Extra Poison Damage Dice",
+	"name_uk": "Додаткові кубики отруйної шкоди",
+	"effect": "dice",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 1,
+	"unit": "dice",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 6,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 1,
+		"maximum": 8,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1,
+		"maximum": 10,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 2,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 2,
+		"maximum": 12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-physical",
+	"name_en": "Added Physical Damage",
+	"name_uk": "Додаткова фізична шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 5,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Piercing",
+	  "Bludgeoning",
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-physical",
+	"name_en": "Increased Physical Damage",
+	"name_uk": "Збільшення фізичної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Piercing",
+	  "Bludgeoning",
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "added-elemental",
+	"name_en": "Added Elemental Damage",
+	"name_uk": "Додаткова стихійна шкода",
+	"effect": "added",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "flat",
+	"precision": 0,
+	"category": "prefix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 4,
+		"maximum": 6,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 5,
+		"maximum": 8,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 7,
+		"maximum": 10,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Fire",
+	  "Cold",
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "increased-elemental",
+	"name_en": "Increased Elemental Damage",
+	"name_uk": "Збільшення стихійної шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.05,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.13,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.14,
+		"maximum": 0.19,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.2,
+		"maximum": 0.27,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.28,
+		"maximum": 0.36,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.37,
+		"maximum": 0.48,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Fire",
+	  "Cold",
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "global-damage",
+	"name_en": "Increased Damage",
+	"name_uk": "Збільшення всієї шкоди",
+	"effect": "increased",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 8,
+	"min_tier": 5,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.08,
+		"maximum": 0.12,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.13,
+		"maximum": 0.18,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.19,
+		"maximum": 0.25,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Piercing",
+	  "Bludgeoning",
+	  "Slashing",
+	  "Fire",
+	  "Cold",
+	  "Lightning",
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "life-leech",
+	"name_en": "Life Leech",
+	"name_uk": "Викрадення здоров’я",
+	"effect": "life_leech",
+	"slots": [
+	  "weapon",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 10,
+	"min_tier": 4,
+	"unit": "fraction",
+	"precision": 4,
+	"category": "prefix",
+	"tiers": {
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.005,
+		"maximum": 0.008,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.009,
+		"maximum": 0.013,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.014,
+		"maximum": 0.02,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.021,
+		"maximum": 0.03,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": false
+  },
+  {
+	"id": "mana-leech",
+	"name_en": "Mana Leech",
+	"name_uk": "Викрадення мани",
+	"effect": "mana_leech",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 4,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "prefix",
+	"tiers": {
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.01,
+		"maximum": 0.02,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.02,
+		"maximum": 0.03,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.05,
+		"maximum": 0.07,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": false
+  },
+  {
+	"id": "strength",
+	"name_en": "Strength",
+	"name_uk": "Сила",
+	"effect": "attribute",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "body",
+	  "helmet",
+	  "boots",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 5,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 7,
+		"maximum": 9,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 10,
+		"maximum": 12,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 13,
+		"maximum": 16,
+		"tier_id": "T1"
+	  }
+	},
+	"attributes": [
+      "Strength"
+	],
+	"enabled": true
+  },
+  {
+	"id": "dexterity",
+	"name_en": "Dexterity",
+	"name_uk": "Спритність",
+	"effect": "attribute",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "body",
+	  "helmet",
+	  "boots",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 5,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 7,
+		"maximum": 9,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 10,
+		"maximum": 12,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 13,
+		"maximum": 16,
+		"tier_id": "T1"
+	  }
+	},
+	"attributes": [
+      "Dexterity"
+	],
+	"enabled": true
+  },
+  {
+	"id": "intelligence",
+	"name_en": "Intelligence",
+	"name_uk": "Інтелект",
+	"effect": "attribute",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "body",
+	  "helmet",
+	  "boots",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 5,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 7,
+		"maximum": 9,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 10,
+		"maximum": 12,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 13,
+		"maximum": 16,
+		"tier_id": "T1"
+	  }
+	},
+	"attributes": [
+      "Intelligence"
+	],
+	"enabled": true
+  },
+  {
+	"id": "luck",
+	"name_en": "Luck",
+	"name_uk": "Удача",
+	"effect": "attribute",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "body",
+	  "helmet",
+	  "boots",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 10,
+	"min_tier": 1,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 5,
+		"maximum": 6,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 7,
+		"maximum": 9,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 10,
+		"maximum": 12,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 13,
+		"maximum": 16,
+		"tier_id": "T1"
+	  }
+	},
+	"attributes": [
+      "Luck"
+	],
+	"enabled": true
+  },
+  {
+	"id": "all-attributes",
+	"name_en": "All Attributes",
+	"name_uk": "Усі атрибути",
+	"effect": "attribute",
+	"slots": [
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 8,
+	"min_tier": 5,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 3,
+		"maximum": 4,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 5,
+		"maximum": 6,
+		"tier_id": "T1"
+	  }
+	},
+	"attributes": [
+	  "Strength",
+	  "Dexterity",
+	  "Intelligence",
+      "Luck"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-piercing",
+	"name_en": "Piercing Resistance",
+	"name_uk": "Опір колючій шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Piercing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-bludgeoning",
+	"name_en": "Bludgeoning Resistance",
+	"name_uk": "Опір дробильній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Bludgeoning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-slashing",
+	"name_en": "Slashing Resistance",
+	"name_uk": "Опір рубаній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-fire",
+	"name_en": "Fire Resistance",
+	"name_uk": "Опір вогняній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Fire"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-cold",
+	"name_en": "Cold Resistance",
+	"name_uk": "Опір холодовій шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Cold"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-lightning",
+	"name_en": "Lightning Resistance",
+	"name_uk": "Опір електричній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-poison",
+	"name_en": "Poison Resistance",
+	"name_uk": "Опір отруйній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 60,
+	"min_tier": 1,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.22,
+		"maximum": 0.27,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.28,
+		"maximum": 0.35,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-physical",
+	"name_en": "All Physical Resistances",
+	"name_uk": "Опір усій фізичній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.02,
+		"maximum": 0.03,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.04,
+		"maximum": 0.05,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Piercing",
+	  "Bludgeoning",
+      "Slashing"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-elemental",
+	"name_en": "All Elemental Resistances",
+	"name_uk": "Опір усій стихійній шкоді",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 25,
+	"min_tier": 2,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.02,
+		"maximum": 0.03,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.04,
+		"maximum": 0.05,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.13,
+		"maximum": 0.16,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.17,
+		"maximum": 0.21,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Fire",
+	  "Cold",
+      "Lightning"
+	],
+	"enabled": true
+  },
+  {
+	"id": "resist-all",
+	"name_en": "All Resistances",
+	"name_uk": "Усі опори",
+	"effect": "resistance",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 8,
+	"min_tier": 5,
+	"unit": "fraction",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.03,
+		"maximum": 0.05,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.06,
+		"maximum": 0.08,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.09,
+		"maximum": 0.12,
+		"tier_id": "T1"
+	  }
+	},
+	"types": [
+	  "Piercing",
+	  "Bludgeoning",
+	  "Slashing",
+	  "Fire",
+	  "Cold",
+	  "Lightning",
+      "Poison"
+	],
+	"enabled": true
+  },
+  {
+	"id": "hp-regen",
+	"name_en": "Health Regeneration",
+	"name_uk": "Відновлення здоров’я",
+	"effect": "hp_regen",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 80,
+	"min_tier": 1,
+	"unit": "per_second",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.2,
+		"maximum": 0.4,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.4,
+		"maximum": 0.7,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.7,
+		"maximum": 1.1,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 1.1,
+		"maximum": 1.7,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 1.7,
+		"maximum": 2.5,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2.5,
+		"maximum": 3.6,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 3.6,
+		"maximum": 5.0,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "mana-regen",
+	"name_en": "Mana Regeneration",
+	"name_uk": "Відновлення мани",
+	"effect": "mana_regen",
+	"slots": [
+	  "body",
+	  "helmet",
+	  "boots",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 80,
+	"min_tier": 1,
+	"unit": "per_second",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 1,
+		"maximum": 2,
+		"tier_id": "T7"
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 2,
+		"maximum": 3,
+		"tier_id": "T6"
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 3,
+		"maximum": 4.5,
+		"tier_id": "T5"
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 4.5,
+		"maximum": 6.5,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 6.5,
+		"maximum": 9,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 9,
+		"maximum": 12,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 12,
+		"maximum": 16,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "accuracy",
+	"name_en": "Accuracy",
+	"name_uk": "Точність",
+	"effect": "accuracy",
+	"slots": [
+	  "weapon",
+	  "offhand",
+      "amulet"
+	],
+	"weight": 8,
+	"min_tier": 5,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 3,
+		"maximum": 3,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": true
+  },
+  {
+	"id": "critical-bonus",
+	"name_en": "Critical Roll Bonus",
+	"name_uk": "Бонус критичного кидка",
+	"effect": "critical_bonus",
+	"slots": [
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 6,
+	"min_tier": 5,
+	"unit": "flat",
+	"precision": 0,
+	"category": "suffix",
+	"tiers": {
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 1,
+		"maximum": 1,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 2,
+		"maximum": 2,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 3,
+		"maximum": 3,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": false
+  },
+  {
+	"id": "critical-multiplier",
+	"name_en": "Critical Damage Multiplier",
+	"name_uk": "Множник критичної шкоди",
+	"effect": "critical_multiplier",
+	"slots": [
+	  "weapon",
+	  "offhand",
+	  "amulet",
+	  "ring1",
+      "ring2"
+	],
+	"weight": 15,
+	"min_tier": 4,
+	"unit": "multiplier",
+	"precision": 2,
+	"category": "suffix",
+	"tiers": {
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.1,
+		"maximum": 0.15,
+		"tier_id": "T4"
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.16,
+		"maximum": 0.22,
+		"tier_id": "T3"
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.23,
+		"maximum": 0.3,
+		"tier_id": "T2"
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.31,
+		"maximum": 0.4,
+		"tier_id": "T1"
+	  }
+	},
+	"enabled": false
+  }
+]

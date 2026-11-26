@@ -14,11 +14,15 @@ public sealed class ItemInstance
     /// <summary>Gets the explicit capacity category; removing affixes does not lower it.</summary>
     public ItemRarity Rarity { get; }
 
+    /// <summary>Gets the immutable level used for affix gates, independent of display score and equip requirements.</summary>
+    public int GenerationLevel { get; }
+
     /// <summary>Gets the occupied affix slots and their stored values.</summary>
     public IReadOnlyList<AffixInstance> Affixes { get; }
 
-    internal ItemInstance(string id, ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes)
+    internal ItemInstance(string id, ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes, int generationLevel = 1)
     {
+        GenerationLevel = generationLevel;
         Id = id;
         Base = definition;
         Rarity = rarity;

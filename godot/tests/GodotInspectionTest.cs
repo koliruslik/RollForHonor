@@ -220,6 +220,8 @@ public sealed class GodotInspectionTest : TestClass
         arena.Player.Controls.HardwareInput = false;
         arena.Opponent.Controls.ThinkingEnabled = false;
 
+        ArenaItemFixtures.UseAuthoredKit(arena);
+
         return arena;
     }
 

@@ -37,9 +37,15 @@ public sealed class GodotMeleeSceneTest : TestClass
             for (var frame = 0; frame < 20 && scene.CommittedImpacts < 2; frame++) await PhysicsFrame();
             scene.CommittedImpacts.ShouldBe(2);
             start.Attack.IsActive.ShouldBeTrue();
-            Runtime.CombatState.Read(scene.Source.CombatantId, extra.CombatantId).Target.Health.ShouldBeLessThan(100);
+            var extraHealth = Runtime.CombatState.Read(scene.Source.CombatantId, extra.CombatantId).Target.Health;
+            extraHealth.ShouldBeInRange(0, 100);
             var first = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId).Target.Health;
-            first.ShouldBeLessThan(50);
+            first.ShouldBeInRange(0, 50);
+            var result = ((RollForHonor.Domain.Combat.Resolution.Models.ResolvedCombat)scene.LastContact.Impact.Outcome).Resolution.Result;
+            result.SourceId.ShouldBe(scene.Source.CombatantId);
+            var initialHealth = result.Target.TargetId == extra.CombatantId ? 100 : 50;
+            var damage = result.Target.DamageResolution.AfterDefenses.Damage.Components.Sum(component => component.Amount);
+            Runtime.CombatState.Read(scene.Source.CombatantId, result.Target.TargetId).Target.Health.ShouldBe(Math.Max(0, initialHealth - damage));
             scene.Target.Position += Vector3.Forward * 10;
             for (var frame = 0; frame < 4; frame++) await PhysicsFrame();
             scene.Target.Position -= Vector3.Forward * 10;

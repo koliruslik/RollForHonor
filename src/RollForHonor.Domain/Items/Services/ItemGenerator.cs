@@ -5,6 +5,7 @@ using RollForHonor.Domain.Items.Affixes.Models;
 using RollForHonor.Domain.Items.Affixes.Services;
 using RollForHonor.Domain.Items.Configuration;
 using RollForHonor.Domain.Items.Models;
+using RollForHonor.Domain.Rewards;
 
 namespace RollForHonor.Domain.Items.Services;
 
@@ -55,7 +56,7 @@ public sealed class ItemGenerator
         ArgumentNullException.ThrowIfNull(dice);
 
         var definition = _catalog.GetItem(request.BaseId);
-        var emptyItem = _factory.Create(request.InstanceId, definition, request.Rarity);
+        var emptyItem = _factory.Create(request.InstanceId, definition, request.Rarity, generationLevel: request.ItemLevel);
         ValidateCapacity(request);
 
         if (request.AffixCount == 0)
@@ -63,11 +64,57 @@ public sealed class ItemGenerator
             return emptyItem;
         }
 
-        var candidates = GetCandidates(definition, request.AvailablePower);
+        var candidates = GetCandidates(definition, request.AvailablePower, request.ItemLevel);
         ValidatePool(candidates, request.AffixCount);
         var affixes = GenerateAffixes(request, candidates, dice);
 
-        return _factory.Create(request.InstanceId, definition, request.Rarity, affixes);
+        return _factory.Create(request.InstanceId, definition, request.Rarity, affixes, request.ItemLevel);
+    }
+
+    /// <summary>Generates affixes with independent tier d20 and quality d100 rolls under the agreed Luck policy.</summary>
+    /// <param name="request">Explicit base, rarity, count, item level and tier-power cap.</param>
+    /// <param name="luck">Captured character Luck; negative values behave as zero.</param>
+    /// <param name="dice">The caller-owned random source.</param>
+    /// <returns>A new immutable item with retained natural/effective rolls and Luck context.</returns>
+    /// <remarks>Uses the highest gated threshold reached by each d20; the constructor tier policy applies only to Generate.</remarks>
+    /// <exception cref="ArgumentNullException">An input is null.</exception>
+    /// <exception cref="ArgumentException">Capacity or item content violates the factory rules.</exception>
+    /// <exception cref="KeyNotFoundException">The base is absent from the catalog.</exception>
+    /// <exception cref="InvalidOperationException">The gated pool is insufficient or a family has no baseline tier for a natural 1; no dice are consumed.</exception>
+    /// <exception cref="OverflowException">Family weights or value interpolation cannot be represented.</exception>
+    public ItemInstance GenerateWithLuck(ItemGenerationRequest request, decimal luck, IDiceRoller dice)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(dice);
+        var definition = _catalog.GetItem(request.BaseId);
+        var empty = _factory.Create(request.InstanceId, definition, request.Rarity, generationLevel: request.ItemLevel);
+        ValidateCapacity(request);
+
+        if (request.AffixCount == 0)
+        {
+            return empty;
+        }
+
+        var candidates = GetCandidates(definition, request.AvailablePower, request.ItemLevel);
+        ValidatePool(candidates, request.AffixCount);
+        ValidateBaselineTiers(candidates, request);
+        var context = new GenerationLuck(luck);
+        var result = new List<AffixInstance>(request.AffixCount);
+
+        for (var index = 0; index < request.AffixCount; index++)
+        {
+            var affix = SelectAffix(candidates, dice);
+            var tierRoll = dice.Roll(new DiceFormula(1, 20));
+            var power = Math.Min(request.AvailablePower, tierRoll.Total + context.AffixTierBonus);
+            var tier = HighestEligibleTier(affix, power, request.ItemLevel);
+            var id = $"{request.InstanceId}:{index.ToString(CultureInfo.InvariantCulture)}";
+            result.Add(_affixRoller.Roll(id, affix, tier.Id, dice, context.Value, tierRoll));
+            candidates = candidates
+                .Where(candidate => candidate.FamilyId != affix.FamilyId)
+                .ToArray();
+        }
+
+        return _factory.Create(request.InstanceId, definition, request.Rarity, result, request.ItemLevel);
     }
 
     private void ValidateCapacity(ItemGenerationRequest request)
@@ -78,9 +125,9 @@ public sealed class ItemGenerator
         }
     }
 
-    private AffixDefinition[] GetCandidates(ItemDefinition definition, int power) => _catalog.Affixes
+    private AffixDefinition[] GetCandidates(ItemDefinition definition, int power, int itemLevel) => _catalog.Affixes
         .Where(affix => affix.RequiredItemTags.IsSubsetOf(definition.Tags))
-        .Where(affix => affix.Tiers.Any(tier => tier.RequiredPower <= power))
+        .Where(affix => affix.Tiers.Any(tier => tier.RequiredPower <= power && tier.RequiredItemLevel <= itemLevel))
         .ToArray();
 
     private static void ValidatePool(AffixDefinition[] candidates, int count)
@@ -104,7 +151,7 @@ public sealed class ItemGenerator
         for (var index = 0; index < request.AffixCount; index++)
         {
             var definition = SelectAffix(candidates, dice);
-            var tier = SelectTier(definition, request.AvailablePower, dice);
+            var tier = SelectTier(definition, request.AvailablePower, request.ItemLevel, dice);
             var id = $"{request.InstanceId}:{index.ToString(CultureInfo.InvariantCulture)}";
             result.Add(_affixRoller.Roll(id, definition, tier.Id, dice));
 
@@ -134,10 +181,10 @@ public sealed class ItemGenerator
         throw new InvalidOperationException("Weighted selection requires a nonempty valid pool.");
     }
 
-    private AffixTier SelectTier(AffixDefinition definition, int power, IDiceRoller dice)
+    private AffixTier SelectTier(AffixDefinition definition, int power, int itemLevel, IDiceRoller dice)
     {
         var tiers = definition.Tiers
-            .Where(tier => tier.RequiredPower <= power)
+            .Where(tier => tier.RequiredPower <= power && tier.RequiredItemLevel <= itemLevel)
             .OrderByDescending(tier => tier.RequiredPower)
             .ThenBy(tier => tier.Id, StringComparer.Ordinal)
             .ToArray();
@@ -145,6 +192,21 @@ public sealed class ItemGenerator
 
         return tiers[index];
     }
+
+    private static void ValidateBaselineTiers(AffixDefinition[] candidates, ItemGenerationRequest request)
+    {
+        if (candidates.Any(affix => !affix.Tiers.Any(tier => tier.RequiredPower <= Math.Min(1, request.AvailablePower)
+            && tier.RequiredItemLevel <= request.ItemLevel)))
+        {
+            throw new InvalidOperationException("Each gated affix family needs a tier covering a natural 1 before Luck generation.");
+        }
+    }
+
+    private static AffixTier HighestEligibleTier(AffixDefinition affix, int power, int itemLevel) => affix.Tiers
+        .Where(tier => tier.RequiredPower <= power && tier.RequiredItemLevel <= itemLevel)
+        .OrderByDescending(tier => tier.RequiredPower)
+        .ThenBy(tier => tier.Id, StringComparer.Ordinal)
+        .First();
 
     private static int RollIndex(int count, IDiceRoller dice) => count == 1 ? 0 : dice.Roll(new DiceFormula(1, count)).Total - 1;
 }

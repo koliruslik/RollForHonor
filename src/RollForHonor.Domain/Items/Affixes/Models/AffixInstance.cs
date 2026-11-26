@@ -20,8 +20,14 @@ public sealed class AffixInstance
     /// <summary>Gets the selected tier identifier.</summary>
     public string TierId { get; }
 
-    /// <summary>Gets the d100 quality result, from 1 through 100.</summary>
+    /// <summary>Gets the natural d100 quality result, from 1 through 100.</summary>
     public int QualityRoll { get; }
+
+    /// <summary>Gets the effective quality used for these captured values.</summary>
+    public decimal EffectiveQualityRoll => RollContext.EffectiveQualityRoll;
+
+    /// <summary>Gets the retained Luck snapshot, natural dice and effective roll results.</summary>
+    public AffixRollContext RollContext { get; }
 
     /// <summary>Gets the actual rolled modifier values; changing content does not change these entries.</summary>
     public IReadOnlyList<ItemModifier> Modifiers { get; }
@@ -33,7 +39,7 @@ public sealed class AffixInstance
     public IReadOnlyList<string> AvailableTierIds { get; }
 
     internal AffixInstance(string id, AffixDefinition definition, string tierId, int qualityRoll,
-        IEnumerable<ItemModifier> modifiers)
+        IEnumerable<ItemModifier> modifiers, AffixRollContext rollContext)
     {
         Id = id;
         DefinitionId = definition.Id;
@@ -41,6 +47,7 @@ public sealed class AffixInstance
         RequiredItemTags = definition.RequiredItemTags;
         TierId = tierId;
         QualityRoll = qualityRoll;
+        RollContext = rollContext;
         Modifiers = Array.AsReadOnly(modifiers.ToArray());
         Ranges = definition.Tiers.Single(tier => tier.Id == tierId).Modifiers;
         AvailableTierIds = Array.AsReadOnly(definition.Tiers
