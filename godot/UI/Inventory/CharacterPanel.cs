@@ -78,7 +78,9 @@ public partial class CharacterPanel : Control
 
         foreach (var pair in _values)
         {
-            pair.Value.Text = Format(pair.Key, stats.Get(pair.Key), baseStats);
+            var status = StatusEffectPresentation.ForStat(pair.Key.Type);
+            var value = status?.Stats.Chance == pair.Key.Type && stats.Get(new(status.Stats.Guaranteed)) > 0 ? 1 : stats.Get(pair.Key);
+            pair.Value.Text = Format(pair.Key, value, baseStats);
             pair.Value.GetParent<Control>().Visible = (pair.Key.Type != StatType.AddedDamage && DamageDiceStats.Sides(pair.Key.Type) == 0) || stats.Get(pair.Key) != 0;
         }
     }
@@ -172,8 +174,14 @@ public partial class CharacterPanel : Control
         AddStat(rows, L.Text("Critical roll bonus"), new(StatType.CriticalRollBonus));
         AddStat(rows, L.Text("Critical damage bonus"), new(StatType.CriticalMultiplier));
         AddStat(rows, L.Text("Attack speed"), new(StatType.AttackSpeed));
+        AddStat(rows, L.Text("Chance to Poison on Hit"), new(StatType.PoisonChance));
+        AddStat(rows, L.Text("Poison damage per tick"), new(StatType.PoisonDice));
+        AddStat(rows, L.Text("Chance to Ignite on Hit"), new(StatType.IgniteChance));
+        AddStat(rows, L.Text("Ignite damage per tick"), new(StatType.IgniteDice));
+        AddStat(rows, L.Text("Chance to Bleed on Hit"), new(StatType.BleedChance));
+        AddStat(rows, L.Text("Bleed damage per tick"), new(StatType.BleedDice));
 
-        foreach (var type in Enum.GetValues<DamageType>())
+        foreach (var type in DamageTypes.HitTypes)
         {
             foreach (var diceType in DamageDiceStats.Types)
             {
@@ -193,7 +201,7 @@ public partial class CharacterPanel : Control
     {
         Section(rows, L.Text("RESISTANCES"));
 
-        foreach (var type in Enum.GetValues<DamageType>())
+        foreach (var type in DamageTypes.HitTypes)
         {
             AddStat(rows, L.Text(type.ToString()), new StatKey(StatType.Resistance, type));
         }
@@ -202,6 +210,8 @@ public partial class CharacterPanel : Control
     private static string Format(StatKey key, decimal value, StatBlock baseStats) => key.Type switch
     {
         StatType.HealthRecovery or StatType.ManaRecovery => value.ToString("0.##", CultureInfo.InvariantCulture) + L.Text(" /s"),
+        StatType.PoisonDice or StatType.IgniteDice or StatType.BleedDice => StatusEffectPresentation.Damage(StatusEffectPresentation.ForStat(key.Type), value),
+        StatType.PoisonChance or StatType.IgniteChance or StatType.BleedChance => (value * 100).ToString("0.#", CultureInfo.InvariantCulture) + "%",
         StatType.Resistance => (value * 100).ToString("0.#", CultureInfo.InvariantCulture) + "%",
         StatType.MovementSpeed => FormatMovementBonus(value, baseStats.Get(key)),
         StatType.AttackSpeed or StatType.DamageMultiplier or StatType.CriticalMultiplier => ((value - 1) * 100).ToString("+0.##;-0.##;0", CultureInfo.InvariantCulture) + "%",
@@ -232,7 +242,7 @@ public partial class CharacterPanel : Control
     private Label Row(VBoxContainer rows, string name, StatKey? key = null)
     {
         var row = new HBoxContainer { CustomMinimumSize = new Vector2(0, 28) };
-        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type is StatType.Armor or StatType.Evasion or StatType.AttackModifier or StatType.CriticalRollBonus or StatType.CriticalMultiplier or StatType.HealthRecovery or StatType.ManaRecovery);
+        var linked = key is { } stat && (stat.DamageKind is not null || stat.Type is StatType.Armor or StatType.Evasion or StatType.AttackModifier or StatType.CriticalRollBonus or StatType.CriticalMultiplier or StatType.HealthRecovery or StatType.ManaRecovery or StatType.PoisonChance or StatType.PoisonDice or StatType.IgniteChance or StatType.IgniteDice or StatType.BleedChance or StatType.BleedDice);
         var heading = linked
             ? new RichTextLabel { FitContent = true, ScrollActive = false, MetaUnderlined = true, SizeFlagsHorizontal = SizeFlags.ExpandFill, MouseFilter = MouseFilterEnum.Stop }
             : (Control)new Label { Text = name, SizeFlagsHorizontal = SizeFlags.ExpandFill, ClipText = true };

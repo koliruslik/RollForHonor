@@ -67,7 +67,7 @@ public static class ReferenceCatalog
 
         entries.Add("damage.physical", new("damage.physical", L.Text("Damage"), CombatGlossary.Physical()));
 
-        foreach (var type in Enum.GetValues<DamageType>())
+        foreach (var type in DamageTypes.HitTypes)
         {
             entries.Add($"damage.{type}", new($"damage.{type}", L.Text("Damage"), CombatGlossary.Damage(type)));
             entries.Add($"resistance.{type}", new($"resistance.{type}", L.Text("Resistances"), CombatGlossary.Resistance(type)));

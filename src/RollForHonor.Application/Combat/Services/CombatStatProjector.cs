@@ -19,23 +19,24 @@ public sealed class CombatStatProjector
         ArgumentNullException.ThrowIfNull(current);
         ArgumentNullException.ThrowIfNull(stats);
         var maxHealth = checked((int)decimal.Floor(stats.Get(new(StatType.MaxHealth))));
-        var resistances = Enum.GetValues<DamageType>()
+        var resistances = DamageTypes.HitTypes
             .Select(type => new ResistanceValue(type, stats.Get(new(StatType.Resistance, type))))
             .Where(value => value.Value != 0)
             .ToArray();
         var offense = new CombatOffense(
             checked((int)decimal.Floor(stats.Get(new(StatType.AttackModifier)))),
-            Enum.GetValues<DamageType>()
+            DamageTypes.HitTypes
                 .Select(type => new KeyValuePair<DamageType, decimal>(type, stats.Get(new(StatType.DamageMultiplier, type)))),
-            Enum.GetValues<DamageType>()
+            DamageTypes.HitTypes
                 .Select(type => new DamageAmount(type, checked((int)decimal.Floor(stats.Get(new(StatType.AddedDamage, type)))))),
             DamageDiceStats.Types
-                .SelectMany(type => Enum.GetValues<DamageType>()
+                .SelectMany(type => DamageTypes.HitTypes
                     .Select(damage => (Type: damage, Sides: DamageDiceStats.Sides(type), Count: checked((int)decimal.Floor(stats.Get(new(type, damage)))))))
                 .Where(value => value.Count > 0)
                 .Select(value => new DamageComponent(new DiceFormula(value.Count, value.Sides), 0, value.Type)),
             checked((int)decimal.Floor(stats.Get(new(StatType.CriticalRollBonus)))),
-            stats.Get(new(StatType.CriticalMultiplier)));
+            stats.Get(new(StatType.CriticalMultiplier)),
+            stats.Get(new(StatType.PoisonChance)), checked((int)decimal.Floor(stats.Get(new(StatType.PoisonDice)))), stats);
 
         return new CombatantSnapshot(current.Id, Math.Min(current.Health, maxHealth), maxHealth,
             checked((int)decimal.Floor(stats.Get(new(StatType.Armor)))),

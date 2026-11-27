@@ -42,7 +42,8 @@ public sealed class SourceDamageStep : ICombatStep
 
         foreach (var type in types)
         {
-            var multiplier = context.Request.StateSnapshot.Source.Offense.DamageMultiplier(type);
+            var multiplier = type == DamageType.Pure
+                || context.Request.TickEffect?.Definition is RollForHonor.Domain.Combat.Effects.Models.PeriodicDamageEffectDefinition { ScaleWithSource: false } ? 1 : context.Request.StateSnapshot.Source.Offense.DamageMultiplier(type);
 
             if (multiplier == 1)
             {

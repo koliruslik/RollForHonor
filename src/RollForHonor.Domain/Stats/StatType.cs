@@ -79,5 +79,68 @@ public enum StatType
     CriticalRollBonus,
 
     /// <summary>Character equipment level, capped at ten without automatic stat growth.</summary>
-    CharacterLevel
+    CharacterLevel,
+
+    /// <summary>Fractional chance to apply one poison stack on a successful hit.</summary>
+    PoisonChance,
+
+    /// <summary>Number of d4 in each new poison stack; captured independently at application.</summary>
+    PoisonDice,
+
+    /// <summary>Coefficient multiplying poison configured status duration; neutral one.</summary>
+    PoisonDurationMultiplier,
+
+    /// <summary>Coefficient multiplying poison captured tick damage; neutral one.</summary>
+    PoisonDamageMultiplier,
+
+    /// <summary>Coefficient multiplying poison configured tick frequency; neutral one.</summary>
+    PoisonTickRateMultiplier,
+
+    /// <summary>Coefficient multiplying poison configured movement slow; neutral one.</summary>
+    PoisonSlowMultiplier,
+
+    /// <summary>Reference-speed chance to apply ignite on a successful hit.</summary>
+    IgniteChance,
+
+    /// <summary>Number of dice captured by a new ignite application.</summary>
+    IgniteDice,
+
+    /// <summary>Coefficient multiplying ignite configured status duration; neutral one.</summary>
+    IgniteDurationMultiplier,
+
+    /// <summary>Coefficient multiplying ignite captured tick damage; neutral one.</summary>
+    IgniteDamageMultiplier,
+
+    /// <summary>Coefficient multiplying ignite configured tick frequency; neutral one.</summary>
+    IgniteTickRateMultiplier,
+
+    /// <summary>Coefficient multiplying ignite configured movement slow; neutral one.</summary>
+    IgniteSlowMultiplier,
+
+    /// <summary>Reference-speed chance to apply bleed on a successful hit.</summary>
+    BleedChance,
+
+    /// <summary>Number of dice captured by a new bleed application.</summary>
+    BleedDice,
+
+    /// <summary>Coefficient multiplying bleed configured status duration; neutral one.</summary>
+    BleedDurationMultiplier,
+
+    /// <summary>Coefficient multiplying bleed captured tick damage; neutral one.</summary>
+    BleedDamageMultiplier,
+
+    /// <summary>Coefficient multiplying bleed configured tick frequency; neutral one.</summary>
+    BleedTickRateMultiplier,
+
+    /// <summary>Coefficient multiplying bleed configured movement slow; neutral one.</summary>
+    BleedSlowMultiplier,
+
+    /// <summary>Positive values guarantee poison on successful hits independently of attack cadence.</summary>
+    PoisonGuaranteed,
+
+    /// <summary>Positive values guarantee ignite on successful hits independently of attack cadence.</summary>
+    IgniteGuaranteed,
+
+    /// <summary>Positive values guarantee bleed on successful hits independently of attack cadence.</summary>
+    BleedGuaranteed
 }

@@ -35,5 +35,6 @@ public static class DemoEffectCatalog
     /// <summary>Looks up a display name without making unregistered definitions look known.</summary>
     /// <param name="id">The definition identity recorded by combat.</param>
     /// <returns>The fixture name or the original identity.</returns>
-    public static string Name(EffectDefinitionId id) => id == Burning.Id ? L.Text("Burning") : id == Bleeding.Id ? L.Text("Bleeding") : id.ToString();
+    public static string Name(EffectDefinitionId id) => id == RollForHonor.Domain.Combat.Effects.Models.StatusEffectIds.Ignite ? L.Text("Ignited")
+        : id == RollForHonor.Domain.Combat.Effects.Models.StatusEffectIds.Bleed ? L.Text("Bleeding") : id == RollForHonor.Domain.Combat.Effects.Models.StatusEffectIds.Poison ? L.Text("Poisoned") : id == Burning.Id ? L.Text("Burning") : id == Bleeding.Id ? L.Text("Bleeding") : id.ToString();
 }

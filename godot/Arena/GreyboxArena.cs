@@ -37,6 +37,9 @@ public partial class GreyboxArena : Node3D
     /// <summary>Raised for observed attack contacts so presentation can retain actual results.</summary>
     public event Action<string, AttackContactResult, CombatStateRead, string> ContactObserved;
 
+    /// <summary>Raised once for each committed hit or periodic resolution available to world presentation.</summary>
+    public event Action<CombatResolution> CombatResolved;
+
     private GameBootstrap _runtime;
 
     private Label _status;
@@ -192,6 +195,15 @@ public partial class GreyboxArena : Node3D
         if (contact.Impact is not { IsCommitted: true, Outcome: ResolvedCombat result })
         {
             return;
+        }
+
+        CombatResolved?.Invoke(result.Resolution);
+        _runtime.PeriodicEffects.Observe(result.Resolution, _runtime.GameTime);
+        foreach (var effect in result.Resolution.Result.Target.Effects
+            .Where(effect => Content.Combat.StatusEffectContent.Rules.Any(rule => rule.Id == effect.Definition.Id)))
+        {
+            var status = DemoEffectCatalog.Name(effect.Definition.Id);
+            GetNode<ArenaHud>("Presentation").RecordAction(L.Format($"{status} applied or refreshed on {targetName}"));
         }
 
         foreach (var actor in new DynamicEntity[] { Player }

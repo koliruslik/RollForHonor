@@ -41,7 +41,7 @@ public sealed class GodotReferenceTest : TestClass
             entries.Any(entry => entry.Id == "stat.CriticalChance").ShouldBeFalse();
             entries.Count(entry => entry.Category == L.Text("Owned items")).ShouldBe(before.OwnedItems.Count);
             entries.Any(entry => entry.Id.StartsWith("affix.", System.StringComparison.Ordinal)).ShouldBeFalse();
-            entries.Single(entry => entry.Id == "loot.affixes").Table.Rows.Count.ShouldBe(58);
+            entries.Single(entry => entry.Id == "loot.affixes").Table.Rows.Count.ShouldBe(57);
             entries.Single(entry => entry.Id == "loot.bases").Table.Rows.Count.ShouldBe(525);
             state.ReadEquipment(arena.Player.CombatantId).Version.ShouldBe(before.Version);
 
@@ -87,7 +87,7 @@ public sealed class GodotReferenceTest : TestClass
             panel.GetNode<RichTextLabel>("Book/Article").GetParsedText().ShouldContain(L.Text("Try another search in this section."));
             search.Text = "";
             panel.Open(entries);
-            list.GetChildCount().ShouldBe(7);
+            list.GetChildCount().ShouldBe(6);
         }
         finally
         {

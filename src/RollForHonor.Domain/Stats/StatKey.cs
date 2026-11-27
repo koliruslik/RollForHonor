@@ -18,6 +18,11 @@ public readonly record struct StatKey
     /// <exception cref="ArgumentOutOfRangeException">An enum value is undefined.</exception>
     public StatKey(StatType type, DamageType? damageKind = null)
     {
+        if (damageKind == DamageType.Pure)
+        {
+            throw new ArgumentException("Pure periodic damage has no equipment or resistance stats.", nameof(damageKind));
+        }
+
         if (!Enum.IsDefined(type) || damageKind is { } damage && !Enum.IsDefined(damage))
         {
             throw new ArgumentOutOfRangeException(nameof(type));

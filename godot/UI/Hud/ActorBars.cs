@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using RollForHonor.Godot.Arena;
+using RollForHonor.Godot.Content.Combat;
 using RollForHonor.Godot.Gameplay.Combat;
 using RollForHonor.Godot.Gameplay.Targeting;
 using RollForHonor.Godot.UI.Common;
@@ -53,6 +54,33 @@ public partial class ActorBars : Control
             if (player ? Preferences.PlayerHealthBar : Preferences.EnemyHealthBars)
             {
                 Bar(point, state.Health, state.MaxHealth, player ? new Color("7f9c80") : new Color("b46d61"));
+
+                if (!player)
+                {
+                    var index = 0;
+
+                    foreach (var rule in StatusEffectContent.Rules)
+                    {
+                        var count = state.Effects.Count(effect => effect.Definition.Id == rule.Id);
+
+                        if (count == 0)
+                        {
+                            continue;
+                        }
+
+                        var position = point + new Vector2(36 + index++ * 24, -6);
+                        DrawRect(new Rect2(position, new Vector2(20, 20)), HonorTheme.Ink);
+                        DrawTextureRect(StatusEffectPresentation.Icon(rule), new Rect2(position, new Vector2(20, 20)), false);
+
+                        if (count > 1)
+                        {
+                            DrawStringOutline(ThemeDB.FallbackFont, position + new Vector2(10, 21), count.ToString(),
+                                fontSize: 11, size: 3, modulate: Colors.Black);
+                            DrawString(ThemeDB.FallbackFont, position + new Vector2(10, 21), count.ToString(),
+                                fontSize: 11, modulate: HonorTheme.Parchment);
+                        }
+                    }
+                }
             }
 
             if (player && Preferences.PlayerManaBar)

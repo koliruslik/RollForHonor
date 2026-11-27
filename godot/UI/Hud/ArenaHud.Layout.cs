@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using RollForHonor.Godot.UI.Common;
 using RollForHonor.Godot.UI.Inventory;
@@ -22,6 +23,7 @@ public partial class ArenaHud
         BuildEnemyBar();
         BuildMap();
         BuildActionBar();
+        _design.AddChild(new FloatingCombatText { Name = "DamageNumbers" });
         _actorBars = UiLayout.Place(_design, new ActorBars { Name = "ActorBars" }, new Rect2(0, 0, 1920, 1080));
         _history = UiLayout.Place(_design, new ActionJournalPanel { Name = "History" }, new Rect2(24, 680, 400, 230));
         _history.InspectionRequested += OpenInspection;
@@ -35,8 +37,8 @@ public partial class ArenaHud
         _inventoryGroup = UiLayout.Place(_design, new Control { Name = "InventoryOverlay", Visible = false, MouseFilter = Control.MouseFilterEnum.Ignore }, new Rect2(0, 0, 1920, 1080));
         _character = UiLayout.Place(_inventoryGroup, new CharacterPanel { Name = "Character" }, new Rect2(0, 0, 360, 1080));
         _inventory = UiLayout.Place(_inventoryGroup, new InventoryPanel { Name = "Inventory" }, new Rect2(1360, 0, 560, 1080));
-        _comparison = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "Comparison" }, new Rect2(696, 16, 320, 620));
-        _details = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "ItemDetails" }, new Rect2(1028, 16, 320, 620));
+        _comparison = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "Comparison" }, new Rect2(536, 16, ItemDetailsPanel.CardWidth, 620));
+        _details = UiLayout.Place(_inventoryGroup, new ItemDetailsPanel { Name = "ItemDetails" }, new Rect2(948, 16, ItemDetailsPanel.CardWidth, 620));
         _items = new InventoryWindowController(_inventory, _character, _details, _comparison,
             UpdateOverlay, ClearItemInspection, ShowCapacityWarning, RefreshHud, _history.RecordAction);
         _inventory.ItemHovered += HoverItem;
@@ -71,7 +73,7 @@ public partial class ArenaHud
 
     private void BuildEnemyBar()
     {
-        var panel = UiLayout.Panel(_design, "Enemy", new Rect2(670, 25, 580, 91));
+        var panel = UiLayout.Panel(_design, "Enemy", new Rect2(670, 25, 580, 80));
         _enemyName = UiLayout.Place(panel, UiLayout.Text("", 24, heading: true), new Rect2(23, 10, 350, 38));
         _enemyName.Name = "TargetName";
         _enemyState = UiLayout.Place(panel, UiLayout.Text(L.Text("COURTYARD GUARD"), 13, HonorTheme.Muted), new Rect2(355, 12, 210, 34));
@@ -82,6 +84,8 @@ public partial class ArenaHud
         _enemyHealth.Name = "TargetHealth";
         _enemyHealth.AddThemeStyleboxOverride("background", HonorTheme.Panel(new Color("29322e"), HonorTheme.Border, 0));
         _enemyHealth.AddThemeStyleboxOverride("fill", HonorTheme.Panel(new Color("a85e52"), new Color("a85e52"), 0));
+        var statuses = UiLayout.Place(panel, new TargetStatusIcons { Name = "Statuses" }, new Rect2(23, 80, 534, 38));
+        statuses.InspectionRequested += OpenInspection;
     }
 
     private void BuildMap()
@@ -148,7 +152,7 @@ public partial class ArenaHud
     {
         _textTip = new FloatingTip { Name = "TextTooltip" };
         _design.AddChild(_textTip);
-        _itemTip = UiLayout.Place(_design, new ItemDetailsPanel { Name = "ItemTooltip" }, new Rect2(0, 0, 320, 620));
+        _itemTip = UiLayout.Place(_design, new ItemDetailsPanel { Name = "ItemTooltip" }, new Rect2(0, 0, ItemDetailsPanel.CardWidth, 620));
         _itemTip.UseAsHover();
         _itemTip.InspectionRequested += OpenInspection;
         _inspector = new InspectionStack { Name = "Inspections" };
@@ -178,8 +182,7 @@ public partial class ArenaHud
         var width = _design.Size.X;
         _inventoryGroup.Size = _design.Size;
         _inventory.Position = new Vector2(width - 560, 0);
-        _details.Position = new Vector2(width - 892, 16);
-        _comparison.Position = new Vector2(width - 1224, 16);
+        LayoutItemCards();
         _pause.Position = new Vector2((width - 620) / 2, 238);
         _reference.Position = new Vector2((width - 1000) / 2, 90);
         _pauseShade.Size = _design.Size;
@@ -194,6 +197,16 @@ public partial class ArenaHud
         _design.GetNode<Label>("North").Position = new Vector2(width - 162, 8);
         _design.GetNode<Button>("MenuButton").Position = new Vector2(width - 227, 974);
         _design.GetNode<Panel>("Objective").Position = new Vector2(width - 370, 248);
+    }
+
+    private void LayoutItemCards()
+    {
+        var count = _comparison.Visible ? 2 : 1;
+        var available = Math.Max(1, _design.Size.X - 560 - 12 * (count + 1));
+        var scale = Math.Min(1, available / (ItemDetailsPanel.CardWidth * count));
+        _details.Scale = _comparison.Scale = Vector2.One * scale;
+        _details.Position = new Vector2(_design.Size.X - 572 - ItemDetailsPanel.CardWidth * scale, 16);
+        _comparison.Position = new Vector2(_details.Position.X - 12 - ItemDetailsPanel.CardWidth * scale, 16);
     }
 
     private void CloseCharacter()

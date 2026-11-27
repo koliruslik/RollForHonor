@@ -1,0 +1,42 @@
+{
+  "reference_attacks_per_second": 1,
+  "chance_roll_sides": 1000000,
+  "effects": [
+    {
+      "kind": "Poison",
+      "id": "d0500000-0000-0000-0000-000000000003",
+      "dice_sides": 4,
+      "flat_damage_per_die": 0,
+      "damage_type": "Pure",
+      "duration_seconds": 5,
+      "tick_interval_seconds": 1,
+      "refresh_duration_only": false,
+      "scale_with_source": false,
+      "movement_slow": 0
+    },
+    {
+      "kind": "Ignite",
+      "id": "d0500000-0000-0000-0000-000000000004",
+      "dice_sides": 4,
+      "flat_damage_per_die": 0,
+      "damage_type": "Fire",
+      "duration_seconds": 5,
+      "tick_interval_seconds": 1,
+      "refresh_duration_only": true,
+      "scale_with_source": true,
+      "movement_slow": 0
+    },
+    {
+      "kind": "Bleed",
+      "id": "d0500000-0000-0000-0000-000000000005",
+      "dice_sides": 4,
+      "flat_damage_per_die": -1,
+      "damage_type": "Pure",
+      "duration_seconds": 10,
+      "tick_interval_seconds": 1,
+      "refresh_duration_only": true,
+      "scale_with_source": false,
+      "movement_slow": 0.1
+    }
+  ]
+}

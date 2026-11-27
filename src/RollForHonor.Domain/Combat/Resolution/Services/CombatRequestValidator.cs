@@ -54,6 +54,11 @@ public sealed class CombatRequestValidator : ICombatRequestValidator
                 "An attack roll must use exactly 1d20.");
         }
 
+        if (attack.Damage.Any(component => component.Type == RollForHonor.Domain.Combat.Damage.Models.DamageType.Pure))
+        {
+            return new CombatRejection(CombatRejectionReason.InvalidAttack, "Pure damage is reserved for periodic effects.");
+        }
+
         if (attack.Effects.Count == 0 && attack.Damage.Count == 0)
         {
             return new CombatRejection(CombatRejectionReason.InvalidAttack,

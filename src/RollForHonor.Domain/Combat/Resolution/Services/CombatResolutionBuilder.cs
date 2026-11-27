@@ -123,6 +123,7 @@ public sealed class CombatResolutionBuilder
             {
                 EffectApplied applied => applied.CombatantId,
                 EffectRemoved removed => removed.CombatantId,
+                EffectDurationRefreshed refreshed => refreshed.CombatantId,
                 HealthChanged or CombatantDefeated => throw new InvalidOperationException(
                     "Only result finalization may propose health and defeat changes."),
                 _ => throw new InvalidOperationException("Unsupported combat state change.")

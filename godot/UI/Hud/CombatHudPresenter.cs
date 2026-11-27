@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using RollForHonor.Domain.Combat.State.Models;
+using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Stats;
 using RollForHonor.Domain.Items.Equipment.Models;
 using RollForHonor.Godot.Arena;
@@ -22,6 +23,7 @@ internal sealed class CombatHudPresenter
     private readonly CharacterPanel _character;
     private readonly ActionJournalPanel _history;
     private readonly ActorBars _actorBars;
+    private readonly FloatingCombatText _damageNumbers;
     private readonly ArenaMinimap _map;
     private readonly ResourceOrb _health;
     private readonly ResourceOrb _mana;
@@ -33,6 +35,7 @@ internal sealed class CombatHudPresenter
     private readonly Label _enemyAmount;
     private readonly Label _enemyState;
     private readonly ProgressBar _enemyHealth;
+    private readonly TargetStatusIcons _enemyStatuses;
     private readonly Dictionary<CombatantId, Node3D> _bodies = new();
 
     internal CombatHudPresenter(GameBootstrap runtime, GreyboxArena arena, Control design,
@@ -44,6 +47,8 @@ internal sealed class CombatHudPresenter
         _character = character;
         _history = history;
         _actorBars = design.GetNode<ActorBars>("ActorBars");
+        _damageNumbers = design.GetNode<FloatingCombatText>("DamageNumbers");
+        _damageNumbers.Camera = arena.CameraRig.Camera;
         _map = design.GetNode<ArenaMinimap>("Minimap");
         _health = design.GetNode<ResourceOrb>("Health");
         _mana = design.GetNode<ResourceOrb>("Mana");
@@ -55,9 +60,11 @@ internal sealed class CombatHudPresenter
         _enemyAmount = design.GetNode<Label>("Enemy/TargetAmount");
         _enemyState = design.GetNode<Label>("Enemy/TargetState");
         _enemyHealth = design.GetNode<ProgressBar>("Enemy/TargetHealth");
+        _enemyStatuses = design.GetNode<TargetStatusIcons>("Enemy/Statuses");
         _map.IsAlive = body => !runtime.CombatState.Read(arena.Player.CombatantId, ((ICombatBody)body).CombatantId).Target.IsDefeated;
         _map.IsSelected = body => arena.Player.GetRequiredComponent<CombatAwareness>().Selection.TargetId == ((ICombatBody)body).CombatantId;
         arena.ContactObserved += history.Record;
+        arena.CombatResolved += ShowDamage;
     }
 
     internal void RefreshParticipants()
@@ -130,7 +137,22 @@ internal sealed class CombatHudPresenter
         _arena.Player.GetRequiredComponent<ProjectileAttack>().RequestAttack(point);
     }
 
-    internal void Dispose() => _arena.ContactObserved -= _history.Record;
+    internal void Dispose()
+    {
+        _arena.ContactObserved -= _history.Record;
+        _arena.CombatResolved -= ShowDamage;
+    }
+
+    private void ShowDamage(CombatResolution resolution)
+    {
+        var target = resolution.Result.Target.TargetId;
+
+        if (target != _arena.Player.CombatantId && _bodies.TryGetValue(target, out var body)
+            && GodotObject.IsInstanceValid(body))
+        {
+            _damageNumbers.ShowResult(body.GlobalPosition + Vector3.Up * 1.8f, resolution.Result.Target);
+        }
+    }
 
     private void RefreshTarget()
     {
@@ -141,6 +163,7 @@ internal sealed class CombatHudPresenter
 
         if (!panel.Visible)
         {
+            _enemyStatuses.Refresh([]);
             return;
         }
 
@@ -149,6 +172,8 @@ internal sealed class CombatHudPresenter
         _enemyHealth.MaxValue = target.MaxHealth;
         _enemyHealth.Value = target.Health;
         _enemyAmount.Text = $"{target.Health} / {target.MaxHealth}";
+        _enemyStatuses.Refresh(target.Effects);
+        panel.Size = new Vector2(panel.Size.X, _enemyStatuses.HasActiveStatuses ? 122 : 80);
         L.SetText(_enemyState, selection.IsInCombat ? L.Text("IN COMBAT") : L.Text("SELECTED"));
     }
 }

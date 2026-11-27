@@ -12,6 +12,9 @@ namespace RollForHonor.Godot.UI.Inventory;
 /// <summary>Fits intrinsic properties, affix contributions and optional range/quality details into a content-sized card.</summary>
 public partial class ItemDetailsPanel : Control
 {
+    /// <summary>Shared card width used by pinned, comparison and hover layouts.</summary>
+    public const float CardWidth = 400;
+
     /// <summary>Raised when this pinned card is dismissed.</summary>
     public event Action Closed;
 
@@ -58,19 +61,19 @@ public partial class ItemDetailsPanel : Control
         });
 
         MouseFilter = MouseFilterEnum.Stop;
-        _panel = UiLayout.Panel(this, "Card", new Rect2(0, 0, 320, 680));
+        _panel = UiLayout.Panel(this, "Card", new Rect2(0, 0, 400, 680));
         Size = _panel.Size;
-        _header = UiLayout.Panel(_panel, "Header", new Rect2(2, 2, 316, 160));
-        _caption = UiLayout.Place(_header, UiLayout.Text(L.Text("SELECTED ITEM"), 12, HonorTheme.Muted), new Rect2(16, 8, 240, 28));
-        _close = UiLayout.Place(_header, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(262, 8, 40, 40));
+        _header = UiLayout.Panel(_panel, "Header", new Rect2(2, 2, 396, 160));
+        _caption = UiLayout.Place(_header, UiLayout.Text(L.Text("SELECTED ITEM"), 12, HonorTheme.Muted), new Rect2(16, 8, 320, 28));
+        _close = UiLayout.Place(_header, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(342, 8, 40, 40));
         _icon = UiLayout.Place(_header, UiLayout.Icon("bag"), new Rect2(16, 44, 48, 48));
-        _rarity = UiLayout.Place(_header, UiLayout.Text("", 14), new Rect2(80, 44, 220, 48));
+        _rarity = UiLayout.Place(_header, UiLayout.Text("", 14), new Rect2(80, 44, 300, 48));
         _rarity.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        _name = UiLayout.Place(_header, UiLayout.Text("", 24, heading: true), new Rect2(16, 96, 284, 56));
+        _name = UiLayout.Place(_header, UiLayout.Text("", 21, heading: true), new Rect2(16, 96, 364, 56));
         _name.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        _properties = UiLayout.Place(_panel, new RichTextLabel { Name = "Properties", MouseFilter = MouseFilterEnum.Stop, BbcodeEnabled = true, MetaUnderlined = true }, new Rect2(20, 180, 280, 344));
-        _properties.AddThemeFontSizeOverride("normal_font_size", 16);
-        _properties.AddThemeConstantOverride("line_separation", 2);
+        _properties = UiLayout.Place(_panel, new RichTextLabel { Name = "Properties", MouseFilter = MouseFilterEnum.Stop, BbcodeEnabled = true, MetaUnderlined = true }, new Rect2(20, 180, 360, 344));
+        _properties.AddThemeFontSizeOverride("normal_font_size", 15);
+        _properties.AddThemeConstantOverride("line_separation", 1);
         _properties.MetaHoverStarted += key => AffixHovered?.Invoke(_sources.GetValueOrDefault(key.AsString(), ""));
         _properties.MetaHoverEnded += _ => AffixHovered?.Invoke("");
         _properties.MetaClicked += key =>
@@ -80,12 +83,12 @@ public partial class ItemDetailsPanel : Control
                 InspectionRequested?.Invoke(topic);
             }
         };
-        _action = UiLayout.Place(_panel, UiLayout.Button(L.Text("Equip"), () => _activate?.Invoke(), true), new Rect2(20, 536, 280, 48));
+        _action = UiLayout.Place(_panel, UiLayout.Button(L.Text("Equip"), () => _activate?.Invoke(), true), new Rect2(20, 536, 360, 48));
         _action.Name = "Action";
-        _discard = UiLayout.Place(_panel, UiLayout.Button(L.Text("Drop item"), () => DropRequested?.Invoke()), new Rect2(20, 590, 280, 44));
+        _discard = UiLayout.Place(_panel, UiLayout.Button(L.Text("Drop item"), () => DropRequested?.Invoke()), new Rect2(20, 590, 360, 44));
         _discard.Name = "Discard";
         _discard.Hide();
-        _status = UiLayout.Place(_panel, UiLayout.Text(L.Text("Hold Alt for ranges and available tiers"), 12, new Color(HonorTheme.Muted, 0.55f)), new Rect2(20, 604, 280, 52));
+        _status = UiLayout.Place(_panel, UiLayout.Text(L.Text("Hold Alt for ranges and current tier"), 12, new Color(HonorTheme.Muted, 0.55f)), new Rect2(20, 604, 360, 52));
         _status.Name = "Status";
         _status.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         _status.VerticalAlignment = VerticalAlignment.Top;
@@ -156,7 +159,7 @@ public partial class ItemDetailsPanel : Control
         RefreshLayout();
     }
 
-    /// <summary>Controls whether affixes additionally show captured quality, intervals and available tiers.</summary>
+    /// <summary>Controls whether affixes show captured quality, ranges and their current tier.</summary>
     /// <param name="detailed">True while the details modifier is held.</param>
     public void SetDetailed(bool detailed)
     {
@@ -203,7 +206,7 @@ public partial class ItemDetailsPanel : Control
         var footerHeight = 16 + actionHeight + (_action.Visible ? 20 : 0) + (_discard.Visible ? 52 : 0) + statusHeight + 24;
         var contentLimit = Mathf.Max(24, AvailableHeight() - 180 - footerHeight);
         var contentHeight = Mathf.Clamp(_properties.GetContentHeight() + 4, 24, contentLimit);
-        _properties.Size = new Vector2(280, contentHeight);
+        _properties.Size = new Vector2(360, contentHeight);
         LayoutFooter(180 + contentHeight + 16, actionHeight, statusHeight);
     }
 
@@ -220,25 +223,25 @@ public partial class ItemDetailsPanel : Control
         if (_action.Visible)
         {
             _action.Position = new Vector2(20, top);
-            _action.Size = new Vector2(280, actionHeight);
+            _action.Size = new Vector2(360, actionHeight);
             top += actionHeight + 20;
         }
 
         if (_discard.Visible)
         {
             _discard.Position = new Vector2(20, top);
-            _discard.Size = new Vector2(280, 44);
+            _discard.Size = new Vector2(360, 44);
             top += 52;
         }
 
         _status.Position = new Vector2(20, top);
-        _status.Size = new Vector2(280, statusHeight);
-        Size = _panel.Size = new Vector2(320, top + statusHeight + 24);
+        _status.Size = new Vector2(360, statusHeight);
+        Size = _panel.Size = new Vector2(400, top + statusHeight + 24);
     }
 
     private void ResetStatus()
     {
-        L.SetText(_status, L.Format($"{GameInputBindings.Name("rfh_details")}  Ranges / inspect\nUnderlined: details · Italic: affix"));
+        L.SetText(_status, L.Format($"{GameInputBindings.Name("rfh_details")}  Ranges / current tier"));
         _status.AddThemeFontSizeOverride("font_size", 12);
         _status.AddThemeColorOverride("font_color", new Color(HonorTheme.Muted, 0.55f));
     }

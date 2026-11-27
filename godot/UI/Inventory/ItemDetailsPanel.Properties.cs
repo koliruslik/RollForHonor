@@ -27,7 +27,6 @@ public partial class ItemDetailsPanel
 
             foreach (var affix in _item.Affixes)
             {
-                Heading($"{ItemPresentation.AffixName(affix.DefinitionId)} · {affix.TierId}");
                 WriteAffix(affix);
             }
         }
@@ -114,13 +113,11 @@ public partial class ItemDetailsPanel
         var values = string.Join("\n", affix.Modifiers
             .Select((modifier, index) => FormatAffixModifier(affix, modifier, index)));
 
-        return _detailed ? values + L.Text("\nAvailable tiers: ") + FormatAvailableTiers(affix) : values;
+        return values;
     }
 
     private string FormatAffixModifier(AffixInstance affix, ItemModifier modifier, int index) =>
         ItemInspectionTopics.FormatModifier(affix, modifier, index, _detailed);
-
-    private static string FormatAvailableTiers(AffixInstance affix) => ItemInspectionTopics.FormatAvailableTiers(affix);
 
     private void WriteModifiers()
     {
@@ -146,7 +143,7 @@ public partial class ItemDetailsPanel
             var amount = group.Key.Operation == StatOperation.More
                 ? group.Aggregate(1m, (value, modifier) => value * (1 + modifier.Amount)) - 1
                 : group.Sum(modifier => modifier.Amount);
-            WriteProperty(ItemPresentation.Modifier(new ItemModifier(group.Key.Key, group.Key.Operation, amount)), affixes, group.Key.Key);
+            WriteProperty(ItemPresentation.CompactModifier(new ItemModifier(group.Key.Key, group.Key.Operation, amount)), affixes, group.Key.Key);
         }
     }
 
@@ -154,18 +151,13 @@ public partial class ItemDetailsPanel
     {
         var topic = AffixTopic(affix);
 
-        for (var index = 0; index < affix.Modifiers.Count; index++)
+        for (var index = 0; index < (ItemInspectionTopics.GroupLabel(affix) is null ? affix.Modifiers.Count : 1); index++)
         {
             var id = $"affix-{_inspections.Count}";
             var modifier = affix.Modifiers[index];
             _inspections[id] = topic;
             InspectionText.Link(_properties, FormatAffixModifier(affix, modifier, index), id, CombatGlossary.StatColor(modifier.Key), true);
             _properties.AddText("\n");
-        }
-
-        if (_detailed)
-        {
-            InspectionText.Write(_properties, L.Text("Available tiers: ") + FormatAvailableTiers(affix) + "\n", HonorTheme.Muted);
         }
     }
 }

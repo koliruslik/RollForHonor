@@ -18,7 +18,7 @@ internal static class EffectiveHealthPresentation
 
     internal static (string Average, InspectionTopic Topic) Build(CombatantSnapshot actor)
     {
-        var types = Enum.GetValues<DamageType>();
+        var types = DamageTypes.HitTypes.ToArray();
         var values = types.Select(type => Calculator.Calculate(actor, type)).ToArray();
         var average = values.Any(value => value is null) ? null : values.Average();
         var links = types.Select(type => CombatGlossary.Link(new(StatType.Resistance, type))).ToList();
@@ -48,7 +48,7 @@ internal static class EffectiveHealthPresentation
             }
         }
 
-        var description = L.Text("The character sheet shows the arithmetic average of the seven individual damage types, with equal weight. Combined categories are separate 50/50 hits and do not count again in this average. All estimates use full health, 10 total incoming damage and a d20 bonus of +4. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection changes with hit size. An immune category is shown as infinity; an average containing infinity is also infinite.");
+        var description = L.Text("The character sheet shows the arithmetic average of the six individual damage types, with equal weight. Combined categories are separate 50/50 hits and do not count again in this average. All estimates use full health, 10 total incoming damage and a d20 bonus of +4. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection changes with hit size. An immune category is shown as infinity; an average containing infinity is also infinite.");
         return (Format(average), new(L.Text("Effective health (EHP)"), description, HonorTheme.Brass, links, facts));
     }
 

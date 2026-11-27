@@ -66,7 +66,7 @@ public sealed class StatCalculatorTests
         Assert.Equal(1m, stats.Get(new(StatType.CriticalChance)));
         Assert.Equal(0m, stats.Get(new(StatType.Armor)));
         Assert.Equal(1m, stats.Get(new(StatType.MaxHealth)));
-        Assert.Equal(1m, stats.Get(new(StatType.DamageMultiplier, DamageType.Poison)));
+        Assert.Equal(1m, stats.Get(new(StatType.DamageMultiplier, DamageType.Lightning)));
     }
 
     /// <summary>Input lists are copied and invalid keys, operations and duplicate base entries fail explicitly.</summary>

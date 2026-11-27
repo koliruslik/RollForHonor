@@ -511,8 +511,8 @@ msgstr "Броня не зменшує шкоду цього типу."
 msgid "Reduces incoming {0} damage. 25% resistance leaves 75% of that damage before rounding. Negative resistance increases it. Resistance is capped at 100%.\n\n{1}"
 msgstr "Зменшує вхідну шкоду відповідного типу ({0}). Опір 25% залишає 75% шкоди до округлення. Від’ємний опір збільшує її. Максимальний опір — 100%.\n\n{1}"
 
-msgid "Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."
-msgstr "Зменшує лише фізичну шкоду ударів. Частка зменшення: броня / (броня + 5 × фізична шкода удару). Що сильніший удар, то менша частка захисту.\n\nПісля цього діють опори за типами. Броня не зменшує вогняну, холодову, блискавичну чи отруйну шкоду."
+msgid "Reduces physical hit damage only. The reduction is armor / (armor + 5 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold or lightning damage."
+msgstr "Зменшує лише фізичну шкоду ударів. Частка зменшення: броня / (броня + 5 × фізична шкода удару). Що сильніший удар, то менша частка захисту.\n\nПісля цього діють опори за типами. Броня не зменшує вогняну, холодову чи блискавичну шкоду."
 
 msgid "Piercing, bludgeoning and slashing are physical damage. Armor is applied to their combined hit, followed by each type's resistance."
 msgstr "Колюча, дробильна та рубальна шкода є фізичною. Броня діє на їхню суму в ударі, після чого застосовується опір кожному типу."
@@ -3586,8 +3586,8 @@ msgstr "Множить шкоду після визначення якості �
 msgid "An evasion rating increases glancing hits: on natural 2–19 compare d20 + accuracy with 6 + rating / 10. Glancing hits deal half damage. Only natural 1 fully misses; natural 20 has full quality."
 msgstr "Рейтинг ухилення збільшує кількість ковзних ударів: за природних 2–19 порівнюється d20 + точність із 6 + рейтинг / 10. Ковзний удар завдає половину шкоди. Повний промах — лише природна 1; природна 20 дає повноцінне влучання."
 
-msgid "Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."
-msgstr "Зменшує лише фізичну шкоду влучання. Частка зменшення: броня / (броня + 30 × фізична шкода). Від потужніших ударів броня захищає пропорційно слабше.\n\nПісля броні діють опори відповідним типам. Броня не зменшує вогонь, холод, блискавку чи отруту."
+msgid "Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold or lightning damage."
+msgstr "Зменшує лише фізичну шкоду влучання. Частка зменшення: броня / (броня + 30 × фізична шкода). Від потужніших ударів броня захищає пропорційно слабше.\n\nПісля броні діють опори відповідним типам. Броня не зменшує вогонь, холод чи блискавку."
 
 msgid "Required level {0} · {1} {2}\nAffix level {3}\n\n{4}"
 msgstr "Потрібний рівень {0} · {1} {2}\nРівень для афіксів {3}\n\n{4}"
@@ -3724,8 +3724,8 @@ msgstr "Якість влучання"
 msgid "One hit: 5 damage of each type, 10 total. Each component keeps its own resistance and rounding; armor reduces the combined physical portion. This value is calculated from the mixed hit, not by averaging the two separate EHP values."
 msgstr "Один удар: по 5 шкоди двох типів, разом 10. Для кожного типу враховуються його опір та округлення; броня зменшує сумарну фізичну частину. Значення розраховується для змішаного удару, а не як середнє двох окремих EHP."
 
-msgid "The character sheet shows the arithmetic average of the seven individual damage types, with equal weight. Combined categories are separate 50/50 hits and do not count again in this average. All estimates use full health, 10 total incoming damage and a d20 bonus of +4. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection changes with hit size. An immune category is shown as infinity; an average containing infinity is also infinite."
-msgstr "У характеристиках показано середнє арифметичне EHP семи окремих типів шкоди з однаковою вагою. Комбіновані категорії — це окремі удари 50/50; вони не враховуються в середньому повторно. Усі оцінки розраховано для повного здоров’я, удару на 10 сумарної шкоди та бонусу d20 +4. Крити, відновлення, періодична шкода й частота атак не враховуються. Захист броні залежить від сили удару. За повної невразливості показано ∞; середнє, що містить ∞, теж дорівнює ∞."
+msgid "The character sheet shows the arithmetic average of the six individual damage types, with equal weight. Combined categories are separate 50/50 hits and do not count again in this average. All estimates use full health, 10 total incoming damage and a d20 bonus of +4. Criticals, recovery, periodic damage and attack frequency are excluded. Armor protection changes with hit size. An immune category is shown as infinity; an average containing infinity is also infinite."
+msgstr "У характеристиках показано середнє арифметичне EHP шести окремих типів шкоди з однаковою вагою. Комбіновані категорії — це окремі удари 50/50; вони не враховуються в середньому повторно. Усі оцінки розраховано для повного здоров’я, удару на 10 сумарної шкоди та бонусу d20 +4. Крити, відновлення, періодична шкода й частота атак не враховуються. Захист броні залежить від сили удару. За повної невразливості показано ∞; середнє, що містить ∞, теж дорівнює ∞."
 
 msgid "Accuracy improves the primary d20 roll, not damage. The character contribution is rounded down to an integer bonus and added to the attack's own bonus. Natural 1 still misses; natural 20 still has full hit quality."
 msgstr "Точність покращує основний кидок d20, але не шкоду. Внесок персонажа округлюється вниз до цілого бонусу й додається до власного бонусу атаки. Натуральна 1 залишається промахом, натуральна 20 — повним влучанням."
@@ -3738,3 +3738,198 @@ msgstr "Натуральна 1 — промах без шкоди. Натура�
 
 msgid "Additional damage on a successful independent critical roll. +100% means double damage; +150% means 2.5 times damage. The displayed bonus is (critical multiplier - 1) × 100%. It applies after primary hit quality and before armor and resistances; it does not increase critical chance."
 msgstr "Додаткова шкода за успішного окремого критичного кидка. +100% означає подвійну шкоду, +150% — у 2.5 раза більшу. Показаний бонус = (критичний множник − 1) × 100%. Він застосовується після визначення якості влучання, до броні й опорів, та не збільшує шанс криту."
+
+msgid "Chance to Poison on Hit"
+msgstr "Шанс отруїти при влучанні"
+
+msgid "chance to poison on hit"
+msgstr "шанс отруїти при влучанні"
+
+msgid "Poisoned"
+msgstr "Отруєння"
+
+msgid "Pure"
+msgstr "Чиста шкода"
+
+msgid "Poison damage per tick"
+msgstr "Шкода отруєння за спрацювання"
+
+msgid "{0:0}d4 poison damage per second for 5 seconds"
+msgstr "{0:0}d4 шкоди отруєння щосекунди протягом 5 секунд"
+
+msgid "5 ticks, 1/s"
+msgstr "5 спрацювань, 1/с"
+
+msgid "Poison: {0} takes {1} damage"
+msgstr "Отруєння: {0} отримує {1} шкоди"
+
+msgid "Poisoned: {0}"
+msgstr "Отруєння: {0}"
+
+msgid "Poison applied to {0}"
+msgstr "Накладено отруєння на {0}"
+
+msgid "Successful hits roll the equipped weapon’s poison chance. Each application adds an independent stack: five pure-damage ticks, one per second, beginning after one second. Stacks have no count cap. Armor, resistances, criticals and outgoing damage bonuses do not change poison ticks. Higher affix tiers increase chance and eventually damage per stack."
+msgstr "Успішні влучання перевіряють шанс отруїти зі спорядженої зброї. Кожне накладання додає незалежний стак: п’ять спрацювань чистої шкоди, раз на секунду, перший — через секунду. Кількість стаків необмежена. Броня, опори, критичні удари й бонуси вихідної шкоди не змінюють спрацювання отруєння. Вищі тіри афікса підвищують шанс, а згодом і шкоду стака."
+
+msgid "{0} · {1}\nItem level {2}"
+msgstr "{0} · {1}\nРівень предмета {2}"
+
+msgid "Chance to Ignite on Hit"
+msgstr "Шанс горіння при влучанні"
+
+msgid "Chance to Bleed on Hit"
+msgstr "Шанс спричинити кровотечу при влучанні"
+
+msgid "chance to ignite on hit"
+msgstr "шанс горіння при влучанні"
+
+msgid "chance to bleed on hit"
+msgstr "шанс спричинити кровотечу при влучанні"
+
+msgid "Ignited"
+msgstr "Горіння"
+
+msgid "Ignite damage per tick"
+msgstr "Шкода горіння за спрацювання"
+
+msgid "Bleed damage per tick"
+msgstr "Шкода кровотечі за спрацювання"
+
+msgid "{0} {1} per tick; {2:0.##} s"
+msgstr "{0} {1} за спрацювання; {2:0.##} с"
+
+msgid "{0}: {1} takes {2} damage"
+msgstr "{0}: {1} отримує {2} шкоди"
+
+msgid "{0} applied or refreshed on {1}"
+msgstr "{0}: накладено або оновлено на {1}"
+
+msgid "  Refresh duration of {0}"
+msgstr "  Оновити тривалість {0}"
+
+msgid "Base duration: {0:0.##} s; tick interval: {1:0.##} s. First tick occurs after one interval."
+msgstr "Базова тривалість: {0:0.##} с; інтервал спрацювань: {1:0.##} с. Перше спрацювання відбувається через один інтервал."
+
+msgid "Chance values use {0:0.##} attacks/s as reference. Per-hit chance = base chance × reference speed / accepted attack speed, capped at 100%."
+msgstr "Шанси наведено для еталонної швидкості {0:0.##} атак/с. Шанс за влучання = базовий шанс × еталонна швидкість / фактична швидкість атаки, максимум 100%."
+
+msgid "Reapplication refreshes only remaining time. Captured damage, slowing and tick cadence remain unchanged."
+msgstr "Повторне накладання оновлює лише залишок часу. Збережені шкода, уповільнення та ритм спрацювань не змінюються."
+
+msgid "Each application adds an independent stack with its own timer; stacks have no count cap."
+msgstr "Кожне накладання додає незалежний стак із власним таймером; кількість стаків необмежена."
+
+msgid "Captured global and fire damage bonuses increase ticks; fire resistance reduces them. Armor and criticals do not affect ticks."
+msgstr "Збережені бонуси загальної та вогняної шкоди посилюють спрацювання; опір вогню зменшує їхню шкоду. Броня й крити не впливають на спрацювання."
+
+msgid "Armor, resistances, criticals and ordinary hit-damage bonuses do not affect ticks. Dedicated status modifiers can improve damage, duration and frequency."
+msgstr "Броня, опори, крити та звичайні бонуси шкоди влучань не впливають на спрацювання. Окремі модифікатори стану можуть посилювати шкоду, тривалість і частоту."
+
+msgid "Base movement slow: {0:0.##}%."
+msgstr "Базове уповільнення пересування: {0:0.##}%."
+
+msgid "{0} · {1} · {2:0.##} s / {3:0.##} s"
+msgstr "{0} · {1} · {2:0.##} с / {3:0.##} с"
+
+msgid "T7 is the weakest tier and T1 is the strongest for every affix family. A stronger tier has a higher item-level requirement. Level-1 drops use the weakest available tier. Luck improves the tier roll but cannot bypass the item-level requirement. The Affixes table shows every value range and level requirement."
+msgstr "У всіх сімейств афіксів T7 — найслабший тір, а T1 — найсильніший. Сильніший тір потребує вищого рівня предмета. Здобич першого рівня використовує найслабший доступний тір. Удача покращує кидок тіру, але не обходить вимогу рівня предмета. Таблиця афіксів показує всі значення й вимоги рівнів."
+
+msgid "Edit item"
+msgstr "Редагувати предмет"
+
+msgid "Miss"
+msgstr "Промах"
+
+msgid "{0} (guaranteed)"
+msgstr "{0} (гарантовано)"
+
+msgid "Guarantees this status on every successful hit, independently of attack speed. Misses do not apply it. Administrative T0 only; it cannot drop."
+msgstr "Гарантовано накладає цей стан при кожному успішному влучанні незалежно від швидкості атаки. Промахи не накладають стан. Лише адміністративний T0; не випадає у здобичі."
+
+msgid "{0} ×{1} — Details"
+msgstr "{0} ×{1} — Докладніше"
+
+msgid "Active stacks: {0}"
+msgstr "Активних стаків: {0}"
+
+msgid "{0} × {1}"
+msgstr "{0} × {1}"
+
+msgid "{0} / {1:0.##} s; captured duration {2:0.##} s"
+msgstr "{0} / {1:0.##} с; збережена тривалість {2:0.##} с"
+
+msgid "Status damage multiplier: ×{0:0.##}"
+msgstr "Множник шкоди стану: ×{0:0.##}"
+
+msgid "Movement slow: {0:0.##}%"
+msgstr "Уповільнення руху: {0:0.##}%"
+
+msgid "Drop an inventory item here to edit it."
+msgstr "Перетягніть сюди предмет із сумки або спорядження."
+
+msgid "Choose a base, rarity and affixes."
+msgstr "Оберіть основу, рідкість та афікси."
+
+msgid "Quality %"
+msgstr "Якість, %"
+
+msgid "Tier"
+msgstr "Тір"
+
+msgid "Save item"
+msgstr "Зберегти предмет"
+
+msgid "Select an owned item…"
+msgstr "Оберіть свій предмет…"
+
+msgid "Item changed or is no longer owned. Reload it before saving."
+msgstr "Предмет змінено або вилучено. Завантажте його знову."
+
+msgid "Item saved. Equipped stats updated."
+msgstr "Предмет збережено. Характеристики оновлено."
+
+msgid "Choose compatible, distinct affixes within the rarity limit and item level."
+msgstr "Оберіть сумісні афікси без повторів у межах ліміту рідкості та рівня предмета."
+
+msgid "Admin: edited {0}."
+msgstr "Адмін: змінено {0}."
+
+msgid "Sandbox changes apply immediately. The world keeps running."
+msgstr "Зміни діють одразу. Гра триває."
+
+msgid "Hold Alt for ranges and current tier"
+msgstr "Утримуйте Alt: діапазони й поточний тір"
+
+msgid "{0}  Ranges / current tier"
+msgstr "{0} — діапазони й поточний тір"
+
+msgid "poison chance"
+msgstr "шанс отруєння"
+
+msgid "ignite chance"
+msgstr "шанс горіння"
+
+msgid "bleed chance"
+msgstr "шанс кровотечі"
+
+msgid "{0}: {1} / {2:0.##} s · {3:0.##} s"
+msgstr "{0}: {1} / {2:0.##} с · {3:0.##} с"
+
+msgid "×{0:0.##} {1}"
+msgstr "×{0:0.##} {1}"
+
+msgid "physical damage"
+msgstr "фізична шкода"
+
+msgid "elemental damage"
+msgstr "стихійна шкода"
+
+msgid "physical resistance"
+msgstr "фізичні опори"
+
+msgid "elemental resistance"
+msgstr "стихійні опори"
+
+msgid "all resistances"
+msgstr "усі опори"

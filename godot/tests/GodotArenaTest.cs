@@ -242,6 +242,8 @@ public sealed class GodotArenaTest : TestClass
 
             committed.ShouldBeTrue();
             Balance(arena).ShouldBe(490m);
+            arena.GetNode<RollForHonor.Godot.UI.Hud.ArenaHud>("Presentation").FindChild("DamageNumbers", true, false)
+                .GetChildCount().ShouldBeGreaterThan(0);
         }
         finally
         {

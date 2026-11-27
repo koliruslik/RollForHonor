@@ -17,14 +17,18 @@ namespace RollForHonor.Application.Combat.Services;
 public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
 {
     private readonly CombatPipeline _pipeline;
+    private readonly OnHitStatusRule[] _statusRules;
 
     /// <summary>Creates reusable stateless calculation steps with explicit hit-quality coefficients.</summary>
     /// <param name="multipliers">Nonnegative quality coefficients; the composition root chooses the balance values.</param>
     /// <param name="ratingRules">Whether to use rating armor, natural-one misses and independent criticals.</param>
+    /// <param name="statusRules">Optional explicit production status content; omitted disables on-hit status generation.</param>
     /// <exception cref="ArgumentNullException">The coefficients are null.</exception>
-    public BasicAttackPipelineFactory(DamageMultipliers multipliers, bool ratingRules = false)
+    public BasicAttackPipelineFactory(DamageMultipliers multipliers, bool ratingRules = false, IEnumerable<OnHitStatusRule>? statusRules = null)
     {
         ArgumentNullException.ThrowIfNull(multipliers);
+        _statusRules = statusRules?.ToArray() ?? [];
+        _ = new ApplyOnHitStatusesStep(_statusRules, null);
         var steps = new List<ICombatStep>
         {
             new AttackRollStep(new AttackRollResolver()),
@@ -51,11 +55,13 @@ public sealed class BasicAttackPipelineFactory : ICombatPipelineFactory
     {
         ArgumentNullException.ThrowIfNull(attack);
         ArgumentNullException.ThrowIfNull(snapshot);
+        var pipeline = _statusRules.Length == 0 ? _pipeline : new CombatPipeline(
+            [_pipeline, new ApplyOnHitStatusesStep(_statusRules, attack.AttacksPerSecond)]);
         var behaviors = attack.Attack.Behaviors;
-        if (behaviors.Count == 0) return _pipeline;
+        if (behaviors.Count == 0) return pipeline;
         if (behaviors.Count != 1 || behaviors[0] is not LifestealDefinition lifesteal)
             throw new InvalidOperationException("The basic factory supports one lifesteal behavior; stacking/unknown behaviors require explicit composition.");
-        return new CombatPipeline([_pipeline,
+        return new CombatPipeline([pipeline,
             new ApplyEffectsStep([new LifestealEffect(lifesteal, new HealthStateProjector())], "AfterTargetHealthEffects")]);
     }
 }

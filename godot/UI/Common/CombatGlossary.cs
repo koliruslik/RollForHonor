@@ -22,7 +22,7 @@ public static class CombatGlossary
         DamageType.Fire => "be9e90",
         DamageType.Cold => "9eafb5",
         DamageType.Lightning => "b9b092",
-        DamageType.Poison => "a4ad96",
+        DamageType.Pure => "a4ad96",
         _ => throw new ArgumentOutOfRangeException(nameof(type))
     });
 
@@ -57,6 +57,18 @@ public static class CombatGlossary
             }
 
             return key.Type == StatType.Resistance ? Resistance(type) : Damage(type);
+        }
+
+        var status = StatusEffectPresentation.ForStat(key.Type);
+
+        if (status is not null)
+        {
+            if (key.Type == status.Stats.Guaranteed)
+            {
+                return new(RollForHonor.Godot.CombatDemo.DemoEffectCatalog.Name(status.Id), L.Text("Guarantees this status on every successful hit, independently of attack speed. Misses do not apply it. Administrative T0 only; it cannot drop."), HonorTheme.Secondary);
+            }
+
+            return StatusEffectPresentation.Topic(status);
         }
 
         return key.Type switch
@@ -143,7 +155,7 @@ public static class CombatGlossary
     /// <summary>Explains the armor formula used by the current combat pipeline.</summary>
     /// <returns>An armor explanation linked to physical types.</returns>
     public static InspectionTopic Armor() => new(L.Text("Armor"),
-        L.Text("Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold, lightning or poison damage."),
+        L.Text("Reduces physical hit damage only. The reduction is armor / (armor + 30 × physical hit damage). Larger hits receive less proportional protection.\n\nTyped resistances apply afterward. Armor does not reduce fire, cold or lightning damage."),
         HonorTheme.Secondary, [new(L.Text("Physical damage"), HonorTheme.Secondary, Physical)]);
 
     /// <summary>Explains the shared physical classification.</summary>

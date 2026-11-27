@@ -23,7 +23,7 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
     /// Typed damage after both stages. Resistance values are fractional reductions:
     /// 0.25 reduces damage by 25%, zero leaves it unchanged, and -0.25 increases it
     /// by 25%. Missing resistances count as zero. Each stage rounds each affected
-    /// component upward. Empty and zero damage do not invoke the armor formula.
+    /// component upward. Pure periodic components bypass both defenses. Empty and zero damage do not invoke the armor formula.
     /// Positive physical input retains at least one physical damage after resistances.
     /// If both defenses erase it, a finalization step restores one point to the first
     /// originally positive physical component, preserving component order and types.
@@ -125,7 +125,7 @@ public class DefenseResolver(IArmorFormula formula) : IDefenseResolver
         var components = damage.Components
             .Select(component =>
             {
-                var resistance = resistances
+                var resistance = component.Type == DamageType.Pure ? 0 : resistances
                     .SingleOrDefault(r => r.Type == component.Type)
                     ?.Value ?? 0m;
 

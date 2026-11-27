@@ -17,35 +17,48 @@ namespace RollForHonor.Godot.UI.Admin;
 /// <summary>Compact live sandbox tools for current catalogs and canonical actor stat inputs.</summary>
 public partial class AdminPanel : Control
 {
+    /// <summary>Shared width of the expanded item editor panel.</summary>
+    public const int PanelWidth = 740;
+
     /// <summary>Raised when the panel is closed.</summary>
     public event Action Closed;
 
     private GameBootstrap _runtime;
     private GreyboxArena _arena;
+    private Control _inventoryWindow;
     private OptionButton _actors;
     private OptionButton _stats;
-    private OptionButton _items;
-    private OptionButton _rarities;
+    private AdminItemEditor _creator;
+    private AdminItemEditor _editor;
     private SpinBox _value;
     private Label _resolved;
     private Label _status;
     private DynamicEntity[] _actorChoices = [];
     private StatKey[] _statChoices = [];
-    private string[] _itemChoices = [];
 
     /// <inheritdoc />
     public override void _Ready()
     {
-        var panel = UiLayout.Panel(this, "Panel", new Rect2(0, 0, 580, 440));
+        var panel = UiLayout.Panel(this, "Panel", new Rect2(0, 0, PanelWidth, 740));
         UiLayout.Place(panel, UiLayout.Text(L.Text("Admin tools"), 25, HonorTheme.Brass, true), new Rect2(20, 10, 470, 42));
-        UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(520, 12, 40, 40));
-        var tabs = UiLayout.Place(panel, new TabContainer { Name = "Tabs" }, new Rect2(18, 64, 544, 278));
-        BuildWorld(Tab(tabs, L.Text("World")));
-        BuildItems(Tab(tabs, L.Text("Items")));
-        BuildStats(Tab(tabs, L.Text("Stats")));
-        _status = UiLayout.Place(panel, UiLayout.Text("", 15, HonorTheme.Brass), new Rect2(20, 350, 540, 70));
+        UiLayout.Place(panel, UiLayout.CloseButton(() => Closed?.Invoke()), new Rect2(680, 12, 40, 40));
+        var tabs = UiLayout.Place(panel, new TabContainer { Name = "Tabs" }, new Rect2(18, 64, 704, 592));
+        BuildWorld(Tab(tabs, "World"));
+        BuildItems(Tab(tabs, "Items"));
+        BuildEditor(Tab(tabs, "Edit item"));
+        BuildStats(Tab(tabs, "Stats"));
+        _status = UiLayout.Place(panel, UiLayout.Text("", 15, HonorTheme.Brass), new Rect2(20, 668, 700, 56));
         _status.AutowrapMode = TextServer.AutowrapMode.WordSmart;
         Hide();
+    }
+
+    /// <inheritdoc />
+    public override void _Process(double delta)
+    {
+        if (Visible && _runtime is not null)
+        {
+            ArrangePanel();
+        }
     }
 
     /// <summary>Connects the current sandbox session without introducing a second source of gameplay state.</summary>
@@ -55,6 +68,9 @@ public partial class AdminPanel : Control
     {
         _runtime = runtime;
         _arena = arena;
+        _inventoryWindow = arena.GetNode<ArenaHud>("Presentation").FindChild("Inventory", true, false) as Control;
+        _creator.Configure(runtime, arena);
+        _editor.Configure(runtime, arena);
     }
 
     /// <summary>Refreshes current actor/catalog choices and opens the live tools.</summary>
@@ -71,28 +87,31 @@ public partial class AdminPanel : Control
             _actors.AddItem(_arena.ActorName(actor));
         }
 
-        var catalog = GameLootCatalog.Bases
-            .Where(entry => entry.GetProperty("catalog_visible").GetBoolean() && entry.GetProperty("released").GetBoolean())
-            .ToArray();
-        _itemChoices = catalog
-            .Select(item => item.GetProperty("id").GetString())
-            .ToArray();
-        foreach (var rarity in Enum.GetValues<ItemRarity>())
-        {
-            _rarities.SetItemText((int)rarity, L.Text(rarity.ToString()));
-        }
+        _creator.Open();
+        _editor.Open();
 
-        RefreshItemChoices();
-
+        ArrangePanel();
         Show();
         ReadStat();
+    }
+
+    private void ArrangePanel()
+    {
+        var parent = GetParent<Control>();
+        var bagWidth = _inventoryWindow?.IsVisibleInTree() == true ? 560f : 0;
+        var available = Mathf.Max(320, parent.Size.X - bagWidth - 36);
+        var scale = Mathf.Min(1, Mathf.Min(available / PanelWidth, Mathf.Max(320, parent.Size.Y - 48) / 740));
+        Scale = Vector2.One * scale;
+        Position = new Vector2(bagWidth > 0 ? Mathf.Max(12, parent.Size.X - bagWidth - PanelWidth * scale - 24)
+            : Mathf.Max(12, (parent.Size.X - PanelWidth * scale) / 2),
+            Mathf.Min(160, Mathf.Max(12, parent.Size.Y - 740 * scale - 24)));
     }
 
     private static Control Tab(TabContainer tabs, string title)
     {
         var page = new Control { Name = title };
         tabs.AddChild(page);
-        L.OnChanged(page, () => tabs.SetTabTitle(page.GetIndex(), L.Refresh(title)));
+        L.OnChanged(page, () => tabs.SetTabTitle(page.GetIndex(), L.Text(title)));
 
         return page;
     }
@@ -106,45 +125,20 @@ public partial class AdminPanel : Control
         {
             SetStatus(_arena.QueueAdminEnemy() ? L.Text("Spawn queued. Sandbox enemies do not count toward the round.") : L.Text("Cannot spawn after player defeat."));
         }), new Rect2(180, 64, 330, 42)).Name = "Spawn";
-        var note = UiLayout.Place(page, UiLayout.Text(L.Text("Gold tools will be available when the wallet is implemented. The world keeps running."), 15, HonorTheme.Muted), new Rect2(12, 128, 500, 74));
+        var note = UiLayout.Place(page, UiLayout.Text(L.Text("Sandbox changes apply immediately. The world keeps running."), 15, HonorTheme.Muted), new Rect2(12, 128, 500, 74));
         note.AutowrapMode = TextServer.AutowrapMode.WordSmart;
     }
 
     private void BuildItems(Control page)
     {
-        _items = UiLayout.Place(page, new OptionButton { Name = "Item" }, new Rect2(12, 14, 500, 40));
-        UiLayout.Place(page, UiLayout.Text(L.Text("Rarity"), 17), new Rect2(12, 68, 150, 38));
-        _rarities = UiLayout.Place(page, new OptionButton { Name = "Rarity" }, new Rect2(180, 68, 332, 38));
-
-        foreach (var rarity in Enum.GetValues<ItemRarity>())
-        {
-            _rarities.AddItem(L.Text(rarity.ToString()), (int)rarity);
-        }
-
-        _rarities.ItemSelected += _ => RefreshItemChoices();
-        UiLayout.Place(page, UiLayout.Button(L.Text("Create item"), CreateItem), new Rect2(12, 122, 500, 42)).Name = "Create";
-        var note = UiLayout.Place(page, UiLayout.Text(L.Text("Choose any item from the current catalog. A full bag leaves the created item at your feet."), 15, HonorTheme.Muted), new Rect2(12, 178, 500, 56));
-        note.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        _creator = UiLayout.Place(page, new AdminItemEditor { Name = "ItemBuilder" }, new Rect2(12, 10, 680, 560));
+        _creator.StatusChanged += SetStatus;
     }
 
-    private void RefreshItemChoices()
+    private void BuildEditor(Control page)
     {
-        var selected = _items.Selected;
-        var rarity = (ItemRarity)_rarities.GetSelectedId();
-        _items.Clear();
-        _items.AddThemeColorOverride("font_color", ItemPresentation.RarityColor(rarity));
-        _rarities.AddThemeColorOverride("font_color", ItemPresentation.RarityColor(rarity));
-
-        foreach (var id in _itemChoices)
-        {
-            var entry = GameLootCatalog.Bases.Single(value => value.GetProperty("id").GetString() == id);
-            _items.AddItem(L.Format($"{ItemPresentation.Name(id, entry.GetProperty("name").GetString(), rarity)} · ilvl {entry.GetProperty("item_level").GetInt32()}"));
-        }
-
-        if (_itemChoices.Length > 0)
-        {
-            _items.Select(Math.Clamp(selected, 0, _itemChoices.Length - 1));
-        }
+        _editor = UiLayout.Place(page, new AdminItemEditor { Name = "ItemEditor", EditExisting = true }, new Rect2(12, 10, 680, 560));
+        _editor.StatusChanged += SetStatus;
     }
 
     private void BuildStats(Control page)
@@ -155,7 +149,7 @@ public partial class AdminPanel : Control
         _statChoices = Enum.GetValues<StatType>()
             .Where(type => type is not (StatType.Resistance or StatType.AddedDamage or StatType.Constitution) && DamageDiceStats.Sides(type) == 0)
             .Select(type => new StatKey(type))
-            .Concat(Enum.GetValues<DamageType>()
+            .Concat(DamageTypes.HitTypes
                 .SelectMany(type => new[] { new StatKey(StatType.Resistance, type), new StatKey(StatType.AddedDamage, type), new StatKey(StatType.DamageMultiplier, type) }))
             .ToArray();
 
@@ -200,21 +194,6 @@ public partial class AdminPanel : Control
         {
             SetStatus(L.Text("Invalid stat value. No change was published."));
         }
-    }
-
-    private void CreateItem()
-    {
-        var item = GameLootCatalog.CreateItem(_itemChoices[_items.Selected], Guid.NewGuid().ToString("N"), (ItemRarity)_rarities.GetSelectedId(),
-            new RollForHonor.Infrastructure.Dice.RandomDiceRoller(new Random()),
-            _runtime.CombatState.GetStats(_arena.Player.CombatantId).Get(new(StatType.Luck)));
-        var hud = _arena.GetNode<ArenaHud>("Presentation");
-        var acquired = hud.AcquireItem(item, recordAction: false) == RollForHonor.Application.Items.ItemAcquisitionStatus.Acquired;
-
-        var placed = !acquired && _arena.PlaceAdminItem(item);
-
-        hud.RecordAction(L.Format($"Admin: created {ItemPresentation.Name(item)}."));
-        SetStatus(acquired ? L.Text("Item created in inventory.") : placed ? L.Text("Item created on the ground.")
-            : L.Text("Item created; waiting for free ground nearby."));
     }
 
     private void SetStatus(string message) => L.SetText(_status, message);
