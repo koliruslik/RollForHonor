@@ -35,6 +35,9 @@ public partial class GameBootstrap : Node3D
     /// <summary>Gets the periodic use case after bootstrap enters the tree; scheduling remains with the caller.</summary>
     /// <exception cref="InvalidOperationException">The bootstrap has not entered the tree.</exception>
     public PeriodicEffectService Ticks => _ticks ?? throw new InvalidOperationException("Combat runtime is not initialized.");
+    /// <summary>Gets the independent-stack scheduler after runtime initialization.</summary>
+    public PeriodicEffectScheduler PeriodicEffects { get; private set; }
+
     /// <summary>Gets accumulated game time; engine delta already accounts for time scale and paused trees do not advance it.</summary>
     public TimeSpan GameTime => _gameTime;
     /// <summary>Gets or sets whether runtime combat reports are enabled when the session is composed.</summary>
@@ -60,14 +63,15 @@ public partial class GameBootstrap : Node3D
         var diagnostics = CombatDiagnosticsEnabled
             ? new LoggerCombatDiagnostics(new GodotCombatLogger(), DiagnosticView) : null;
         var impacts = new CombatImpactService(CombatState, new CombatSnapshotBuilder(),
-            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2), ratingRules: true),
+            new BasicAttackPipelineFactory(new DamageMultipliers(0, 0.5m, 1, 2), ratingRules: true, statusRules: Content.Combat.StatusEffectContent.Rules),
             () => new RandomDiceRoller(), diagnostics);
         _attacks = new AttackInitiationService(CombatState,
             new ResourceCostResolver(new AdditiveResourceCostPolicy()), new NoResourceCostModifiers(),
             impacts, () => _gameTime, diagnostics);
         _ticks = new PeriodicEffectService(CombatState,
-            new CombatPipeline([new RawDamageStep(new RawDamageResolver()), new SourceDamageStep(),
+            new CombatPipeline([new RawDamageStep(new RawDamageResolver()), new StatusDamageStep(), new SourceDamageStep(),
                 new DefenseStep(new DefenseResolver(new RatingArmorFormula()))]), () => new RandomDiceRoller());
+        PeriodicEffects = new(CombatState, _ticks);
     }
 
     /// <inheritdoc />

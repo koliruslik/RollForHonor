@@ -169,7 +169,7 @@ public static class LootReference
                     .Select(range => CombatGlossary.Link(range.Key))
                     .ToArray() : [];
             var topic = new InspectionTopic(L.Text(family.GetProperty("name_en").GetString()),
-                exists ? L.Format($"T{8 - rank} · {Range(family, tier)}\nItem level {tier.GetProperty("min_ilvl").GetInt32()}")
+                exists ? L.Format($"{tier.GetProperty("tier_id").GetString()} · {Range(family, tier)}\nItem level {tier.GetProperty("min_ilvl").GetInt32()}")
                     : L.Text("This family has no value range for the selected tier."), HonorTheme.Parchment, links);
             var slotTopic = new InspectionTopic(L.Text("Slots"), string.Join(", ", slots.Select(Slot)), HonorTheme.Secondary);
             return new ReferenceTableRow(family.GetProperty("id").GetString(),
@@ -313,6 +313,14 @@ public static class LootReference
 
     private static string Range(JsonElement family, JsonElement tier)
     {
+        if (family.GetProperty("effect").GetString() is "poison" or "ignite" or "bleed")
+        {
+            var kind = Enum.Parse<RollForHonor.Domain.Combat.Effects.Models.StatusEffectKind>(family.GetProperty("effect").GetString(), true);
+            var rule = RollForHonor.Godot.Content.Combat.StatusEffectContent.Rules.Single(value => value.Kind == kind);
+            var formula = StatusEffectPresentation.Damage(rule, tier.GetProperty("status_dice").GetInt32());
+            return L.Format($"{Percent(tier.GetProperty("minimum").GetDecimal())} · {formula} · {rule.Duration.TotalSeconds:0.##} s / {rule.TickInterval.TotalSeconds:0.##} s");
+        }
+
         if (family.GetProperty("effect").GetString() == "dice")
         {
             return $"{tier.GetProperty("minimum").GetInt32()}d{tier.GetProperty("maximum").GetInt32()}";

@@ -420,10 +420,11 @@ public sealed class GodotRoundTest : TestClass
             admin.GetNode<SpinBox>("Panel/Tabs/Stats/Value").Value = 27.5;
             admin.GetNode<Button>("Panel/Tabs/Stats/Apply").EmitSignal(Button.SignalName.Pressed);
             state.GetStats(arena.Player.CombatantId).Get(new(StatType.ManaRecovery)).ShouldBe(27.5m);
-            var rarityPicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/Rarity");
+            var rarityPicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/ItemBuilder/Rarity");
             rarityPicker.ItemCount.ShouldBe(5);
-            var basePicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/Item");
+            var basePicker = admin.GetNode<OptionButton>("Panel/Tabs/Items/ItemBuilder/Item");
             basePicker.Select(1);
+            basePicker.EmitSignal(OptionButton.SignalName.ItemSelected, 1);
 
             foreach (var rarity in Enum.GetValues<ItemRarity>())
             {
@@ -433,7 +434,7 @@ public sealed class GodotRoundTest : TestClass
                 rarityPicker.Select((int)rarity);
                 rarityPicker.EmitSignal(OptionButton.SignalName.ItemSelected, (int)rarity);
                 basePicker.Selected.ShouldBe(1);
-                admin.GetNode<Button>("Panel/Tabs/Items/Create").EmitSignal(Button.SignalName.Pressed);
+                admin.GetNode<Button>("Panel/Tabs/Items/ItemBuilder/Apply").EmitSignal(Button.SignalName.Pressed);
                 var created = state.ReadEquipment(arena.Player.CombatantId).OwnedItems.Values
                     .Concat(arena.Drops.Select(drop => drop.Item))
                     .Single(item => !before.Contains(item.Id));

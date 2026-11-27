@@ -67,6 +67,8 @@ public partial class GreyboxArena
     /// <inheritdoc />
     public override void _PhysicsProcess(double delta)
     {
+        StepPeriodicEffects();
+
         if (!RoundsEnabled)
         {
             return;

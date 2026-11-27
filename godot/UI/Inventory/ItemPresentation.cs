@@ -115,7 +115,21 @@ public static class ItemPresentation
             return $"+{modifier.Amount:0}d{sides} {modifier.Key.DamageKind} damage";
         }
 
-        var fractional = modifier.Operation != StatOperation.Flat || modifier.Key.Type is StatType.Resistance or StatType.CriticalMultiplier;
+        var status = RollForHonor.Godot.UI.Common.StatusEffectPresentation.ForStat(modifier.Key.Type);
+
+        if (status is not null && modifier.Key.Type == status.Stats.Guaranteed)
+        {
+            return CompactModifier(modifier);
+        }
+
+        if (status is not null && modifier.Key.Type == status.Stats.Dice)
+        {
+            var formula = RollForHonor.Godot.UI.Common.StatusEffectPresentation.Damage(status, modifier.Amount);
+            var name = RollForHonor.Godot.CombatDemo.DemoEffectCatalog.Name(status.Id);
+            return L.Format($"{formula} {name} per tick; {status.Duration.TotalSeconds:0.##} s");
+        }
+
+        var fractional = modifier.Operation != StatOperation.Flat || modifier.Key.Type is StatType.Resistance or StatType.CriticalMultiplier or StatType.PoisonChance or StatType.IgniteChance or StatType.BleedChance;
         var amount = modifier.Amount * (fractional ? 100 : 1);
         var number = amount.ToString("+0.##;-0.##;0", CultureInfo.InvariantCulture);
         var unit = fractional ? "%" : "";
@@ -127,6 +141,55 @@ public static class ItemPresentation
         };
 
         return L.Format($"{number}{unit}{operation} {StatName(modifier.Key)}");
+    }
+
+    /// <summary>Formats one concise item-property line without repeating the affix family heading.</summary>
+    /// <param name="modifier">The captured item property.</param>
+    /// <param name="label">Optional shared label for equal modifiers in one grouped affix.</param>
+    /// <returns>A localized value-first line; More modifiers retain their multiplicative meaning.</returns>
+    public static string CompactModifier(ItemModifier modifier, string label = null)
+    {
+        var key = modifier.Key;
+        var status = RollForHonor.Godot.UI.Common.StatusEffectPresentation.ForStat(key.Type);
+
+        if (status is not null && key.Type == status.Stats.Guaranteed)
+        {
+            return L.Format($"{CompactModifier(new ItemModifier(new(status.Stats.Chance), StatOperation.Flat, 1))} (guaranteed)");
+        }
+
+        if (status is not null && key.Type == status.Stats.Dice)
+        {
+            var formula = RollForHonor.Godot.UI.Common.StatusEffectPresentation.Damage(status, modifier.Amount);
+            var name = RollForHonor.Godot.CombatDemo.DemoEffectCatalog.Name(status.Id);
+            return L.Format($"{name}: {formula} / {status.TickInterval.TotalSeconds:0.##} s · {status.Duration.TotalSeconds:0.##} s");
+        }
+
+        var nameText = label ?? (key.Type switch
+        {
+            StatType.PoisonChance => L.Text("poison chance"),
+            StatType.IgniteChance => L.Text("ignite chance"),
+            StatType.BleedChance => L.Text("bleed chance"),
+            StatType.MaxHealth => L.Text("health"),
+            StatType.MaxMana => L.Text("mana"),
+            StatType.AddedDamage => L.Format($"{key.DamageKind?.ToString().ToLowerInvariant()} damage"),
+            _ => StatName(key)
+        });
+        var sides = DamageDiceStats.Sides(key.Type);
+
+        if (sides > 0)
+        {
+            return L.Format($"+{modifier.Amount:0}d{sides} {L.Text(key.DamageKind.ToString())}");
+        }
+
+        if (modifier.Operation == StatOperation.More)
+        {
+            return L.Format($"×{1 + modifier.Amount:0.##} {nameText}");
+        }
+
+        var fractional = modifier.Operation == StatOperation.Increased
+            || key.Type is StatType.Resistance or StatType.CriticalMultiplier or StatType.PoisonChance or StatType.IgniteChance or StatType.BleedChance;
+        var number = (modifier.Amount * (fractional ? 100 : 1)).ToString("+0.##;-0.##;0", CultureInfo.InvariantCulture);
+        return L.Format($"{number}{(fractional ? "%" : "")} {nameText}");
     }
 
     /// <summary>Resolves current catalog names while retaining legacy fixture labels.</summary>
@@ -147,6 +210,9 @@ public static class ItemPresentation
 
         return key.Type switch
         {
+            StatType.IgniteChance => L.Text("chance to ignite on hit"),
+            StatType.BleedChance => L.Text("chance to bleed on hit"),
+            StatType.PoisonChance => L.Text("chance to poison on hit"),
             StatType.MaxHealth => L.Text("maximum health"),
             StatType.MaxMana => L.Text("maximum mana"),
             StatType.AttackSpeed => L.Text("attack speed"),

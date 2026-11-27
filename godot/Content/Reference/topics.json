@@ -85,7 +85,7 @@
 	"id": "items.tiers",
 	"category": "Items",
 	"title": "Affix tiers",
-	"description": "T7 is the weakest tier and T1 is the strongest. A stronger tier has a higher item-level requirement. Level-1 drops use the weakest available tier. Luck improves the tier roll but cannot bypass the item-level requirement. The Affixes table shows every value range and level requirement.",
+	"description": "T7 is the weakest tier and T1 is the strongest for every affix family. A stronger tier has a higher item-level requirement. Level-1 drops use the weakest available tier. Luck improves the tier roll but cannot bypass the item-level requirement. The Affixes table shows every value range and level requirement.",
 	"related": [
 	  "items.quality",
       "rarity.Rare"

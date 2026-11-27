@@ -90,7 +90,7 @@ public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackIn
     {
         lock (_gate)
         {
-            return _data.Stats[id];
+            return RollForHonor.Domain.Combat.Effects.Services.StatusMovementProjector.Apply(_data.Stats[id], _data.Actors[id].Effects);
         }
     }
 
@@ -251,6 +251,7 @@ public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackIn
                     HealthChanged value => value.CombatantId,
                     EffectApplied value => value.CombatantId,
                     EffectRemoved value => value.CombatantId,
+                    EffectDurationRefreshed value => value.CombatantId,
                     CombatantDefeated value => value.CombatantId,
                     _ => throw new InvalidOperationException("Unsupported combat state change.")
                 };
@@ -266,6 +267,8 @@ public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackIn
                     EffectApplied => throw new InvalidOperationException("The effect identity is already active."),
                     EffectRemoved removed when actor.Effects.Any(effect => effect.Id == removed.EffectId) =>
                         Copy(actor, actor.Health, actor.Effects.Where(effect => effect.Id != removed.EffectId).ToArray()),
+                    EffectDurationRefreshed refreshed when actor.Effects.Any(effect => effect.Id == refreshed.EffectId) => actor,
+                    EffectDurationRefreshed => throw new InvalidOperationException("The refreshed effect is not active."),
                     EffectRemoved => throw new InvalidOperationException("The removed effect is not active."),
                     CombatantDefeated when actor.IsDefeated => actor,
                     _ => throw new InvalidOperationException("The defeat proposal is inconsistent.")

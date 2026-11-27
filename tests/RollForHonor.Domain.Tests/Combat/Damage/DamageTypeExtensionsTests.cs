@@ -12,7 +12,6 @@ public sealed class DamageTypeExtensionsTests
     [InlineData(DamageType.Fire, false)]
     [InlineData(DamageType.Cold, false)]
     [InlineData(DamageType.Lightning, false)]
-    [InlineData(DamageType.Poison, false)]
     [InlineData((DamageType)(-1), false)]
     public void IsPhysical_ClassifiesDamageTypes(DamageType type, bool expected)
     {

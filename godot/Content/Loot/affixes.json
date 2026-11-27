@@ -1818,204 +1818,6 @@
 	"enabled": true
   },
   {
-	"id": "added-poison",
-	"name_en": "Added Poison Damage",
-	"name_uk": "Додаткова отруйна шкода",
-	"effect": "added",
-	"slots": [
-	  "weapon",
-	  "offhand",
-	  "amulet",
-	  "ring1",
-      "ring2"
-	],
-	"weight": 40,
-	"min_tier": 1,
-	"unit": "flat",
-	"precision": 0,
-	"category": "prefix",
-	"tiers": {
-	  "1": {
-		"min_ilvl": 1,
-		"minimum": 1,
-		"maximum": 2,
-		"tier_id": "T7"
-	  },
-	  "2": {
-		"min_ilvl": 5,
-		"minimum": 2,
-		"maximum": 3,
-		"tier_id": "T6"
-	  },
-	  "3": {
-		"min_ilvl": 10,
-		"minimum": 3,
-		"maximum": 4,
-		"tier_id": "T5"
-	  },
-	  "4": {
-		"min_ilvl": 20,
-		"minimum": 4,
-		"maximum": 6,
-		"tier_id": "T4"
-	  },
-	  "5": {
-		"min_ilvl": 35,
-		"minimum": 6,
-		"maximum": 8,
-		"tier_id": "T3"
-	  },
-	  "6": {
-		"min_ilvl": 50,
-		"minimum": 7,
-		"maximum": 10,
-		"tier_id": "T2"
-	  },
-	  "7": {
-		"min_ilvl": 70,
-		"minimum": 10,
-		"maximum": 14,
-		"tier_id": "T1"
-	  }
-	},
-	"types": [
-      "Poison"
-	],
-	"enabled": true
-  },
-  {
-	"id": "increased-poison",
-	"name_en": "Increased Poison Damage",
-	"name_uk": "Збільшення отруйної шкоди",
-	"effect": "increased",
-	"slots": [
-	  "weapon",
-	  "offhand",
-	  "amulet",
-	  "ring1",
-      "ring2"
-	],
-	"weight": 35,
-	"min_tier": 1,
-	"unit": "fraction",
-	"precision": 2,
-	"category": "prefix",
-	"tiers": {
-	  "1": {
-		"min_ilvl": 1,
-		"minimum": 0.05,
-		"maximum": 0.08,
-		"tier_id": "T7"
-	  },
-	  "2": {
-		"min_ilvl": 5,
-		"minimum": 0.09,
-		"maximum": 0.13,
-		"tier_id": "T6"
-	  },
-	  "3": {
-		"min_ilvl": 10,
-		"minimum": 0.14,
-		"maximum": 0.19,
-		"tier_id": "T5"
-	  },
-	  "4": {
-		"min_ilvl": 20,
-		"minimum": 0.2,
-		"maximum": 0.27,
-		"tier_id": "T4"
-	  },
-	  "5": {
-		"min_ilvl": 35,
-		"minimum": 0.28,
-		"maximum": 0.36,
-		"tier_id": "T3"
-	  },
-	  "6": {
-		"min_ilvl": 50,
-		"minimum": 0.37,
-		"maximum": 0.48,
-		"tier_id": "T2"
-	  },
-	  "7": {
-		"min_ilvl": 70,
-		"minimum": 0.49,
-		"maximum": 0.62,
-		"tier_id": "T1"
-	  }
-	},
-	"types": [
-      "Poison"
-	],
-	"enabled": true
-  },
-  {
-	"id": "dice-poison",
-	"name_en": "Extra Poison Damage Dice",
-	"name_uk": "Додаткові кубики отруйної шкоди",
-	"effect": "dice",
-	"slots": [
-	  "weapon",
-	  "offhand",
-	  "amulet",
-	  "ring1",
-      "ring2"
-	],
-	"weight": 15,
-	"min_tier": 1,
-	"unit": "dice",
-	"precision": 0,
-	"category": "prefix",
-	"tiers": {
-	  "1": {
-		"min_ilvl": 1,
-		"minimum": 1,
-		"maximum": 4,
-		"tier_id": "T7"
-	  },
-	  "2": {
-		"min_ilvl": 5,
-		"minimum": 1,
-		"maximum": 6,
-		"tier_id": "T6"
-	  },
-	  "3": {
-		"min_ilvl": 10,
-		"minimum": 1,
-		"maximum": 8,
-		"tier_id": "T5"
-	  },
-	  "4": {
-		"min_ilvl": 20,
-		"minimum": 1,
-		"maximum": 10,
-		"tier_id": "T4"
-	  },
-	  "5": {
-		"min_ilvl": 35,
-		"minimum": 2,
-		"maximum": 6,
-		"tier_id": "T3"
-	  },
-	  "6": {
-		"min_ilvl": 50,
-		"minimum": 2,
-		"maximum": 8,
-		"tier_id": "T2"
-	  },
-	  "7": {
-		"min_ilvl": 70,
-		"minimum": 2,
-		"maximum": 12,
-		"tier_id": "T1"
-	  }
-	},
-	"types": [
-      "Poison"
-	],
-	"enabled": true
-  },
-  {
 	"id": "added-physical",
 	"name_en": "Added Physical Damage",
 	"name_uk": "Додаткова фізична шкода",
@@ -2306,8 +2108,7 @@
 	  "Slashing",
 	  "Fire",
 	  "Cold",
-	  "Lightning",
-      "Poison"
+      "Lightning"
 	],
 	"enabled": true
   },
@@ -3128,74 +2929,6 @@
 	"enabled": true
   },
   {
-	"id": "resist-poison",
-	"name_en": "Poison Resistance",
-	"name_uk": "Опір отруйній шкоді",
-	"effect": "resistance",
-	"slots": [
-	  "body",
-	  "helmet",
-	  "boots",
-	  "offhand",
-	  "amulet",
-	  "ring1",
-      "ring2"
-	],
-	"weight": 60,
-	"min_tier": 1,
-	"unit": "fraction",
-	"precision": 2,
-	"category": "suffix",
-	"tiers": {
-	  "1": {
-		"min_ilvl": 1,
-		"minimum": 0.03,
-		"maximum": 0.05,
-		"tier_id": "T7"
-	  },
-	  "2": {
-		"min_ilvl": 5,
-		"minimum": 0.06,
-		"maximum": 0.08,
-		"tier_id": "T6"
-	  },
-	  "3": {
-		"min_ilvl": 10,
-		"minimum": 0.09,
-		"maximum": 0.12,
-		"tier_id": "T5"
-	  },
-	  "4": {
-		"min_ilvl": 20,
-		"minimum": 0.13,
-		"maximum": 0.16,
-		"tier_id": "T4"
-	  },
-	  "5": {
-		"min_ilvl": 35,
-		"minimum": 0.17,
-		"maximum": 0.21,
-		"tier_id": "T3"
-	  },
-	  "6": {
-		"min_ilvl": 50,
-		"minimum": 0.22,
-		"maximum": 0.27,
-		"tier_id": "T2"
-	  },
-	  "7": {
-		"min_ilvl": 70,
-		"minimum": 0.28,
-		"maximum": 0.35,
-		"tier_id": "T1"
-	  }
-	},
-	"types": [
-      "Poison"
-	],
-	"enabled": true
-  },
-  {
 	"id": "resist-physical",
 	"name_en": "All Physical Resistances",
 	"name_uk": "Опір усій фізичній шкоді",
@@ -3368,8 +3101,7 @@
 	  "Slashing",
 	  "Fire",
 	  "Cold",
-	  "Lightning",
-      "Poison"
+      "Lightning"
 	],
 	"enabled": true
   },
@@ -3621,5 +3353,207 @@
 	  }
 	},
 	"enabled": false
+  },
+  {
+	"id": "poison-on-hit",
+	"name_en": "Chance to Poison on Hit",
+	"name_uk": "Шанс отруїти при влучанні",
+	"effect": "poison",
+	"slots": [
+      "weapon"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "chance; d4 per tick",
+	"precision": 2,
+	"category": "prefix",
+	"enabled": true,
+	"description_en": "Successful hits can apply an independent poison stack. Each stack deals pure damage once per second for five seconds. Armor, resistances, criticals and damage bonuses do not change its ticks.",
+	"description_uk": "Успішні влучання можуть накласти окремий стак отруєння. Кожен стак завдає чистої шкоди раз на секунду протягом п’яти секунд. Броня, опори, критичні удари й бонуси шкоди не змінюють його тики.",
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.1,
+		"maximum": 0.1,
+		"tier_id": "T7",
+		"status_dice": 1
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.15,
+		"maximum": 0.15,
+		"tier_id": "T6",
+		"status_dice": 1
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.2,
+		"maximum": 0.2,
+		"tier_id": "T5",
+		"status_dice": 1
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.25,
+		"maximum": 0.25,
+		"tier_id": "T4",
+		"status_dice": 2
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.3,
+		"maximum": 0.3,
+		"tier_id": "T3",
+		"status_dice": 2
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.35,
+		"maximum": 0.35,
+		"tier_id": "T2",
+		"status_dice": 3
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.4,
+		"maximum": 0.4,
+		"tier_id": "T1",
+		"status_dice": 3
+	  }
+	}
+  }
+,
+  {
+	"id": "ignite-on-hit",
+	"name_en": "Chance to Ignite on Hit",
+	"name_uk": "Шанс горіння при влучанні",
+	"effect": "ignite",
+	"slots": [
+      "weapon"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "chance; d4 per tick",
+	"precision": 2,
+	"category": "prefix",
+	"enabled": true,
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.2,
+		"maximum": 0.2,
+		"tier_id": "T7",
+		"status_dice": 1
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.25,
+		"maximum": 0.25,
+		"tier_id": "T6",
+		"status_dice": 1
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.3,
+		"maximum": 0.3,
+		"tier_id": "T5",
+		"status_dice": 1
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.35,
+		"maximum": 0.35,
+		"tier_id": "T4",
+		"status_dice": 2
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.4,
+		"maximum": 0.4,
+		"tier_id": "T3",
+		"status_dice": 2
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.45,
+		"maximum": 0.45,
+		"tier_id": "T2",
+		"status_dice": 3
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.5,
+		"maximum": 0.5,
+		"tier_id": "T1",
+		"status_dice": 3
+	  }
+	}
+  }
+,
+  {
+	"id": "bleed-on-hit",
+	"name_en": "Chance to Bleed on Hit",
+	"name_uk": "Шанс спричинити кровотечу при влучанні",
+	"effect": "bleed",
+	"slots": [
+      "weapon"
+	],
+	"weight": 40,
+	"min_tier": 1,
+	"unit": "chance; d4 per tick",
+	"precision": 2,
+	"category": "prefix",
+	"enabled": true,
+	"tiers": {
+	  "1": {
+		"min_ilvl": 1,
+		"minimum": 0.1,
+		"maximum": 0.1,
+		"tier_id": "T7",
+		"status_dice": 1
+	  },
+	  "2": {
+		"min_ilvl": 5,
+		"minimum": 0.15,
+		"maximum": 0.15,
+		"tier_id": "T6",
+		"status_dice": 1
+	  },
+	  "3": {
+		"min_ilvl": 10,
+		"minimum": 0.2,
+		"maximum": 0.2,
+		"tier_id": "T5",
+		"status_dice": 1
+	  },
+	  "4": {
+		"min_ilvl": 20,
+		"minimum": 0.25,
+		"maximum": 0.25,
+		"tier_id": "T4",
+		"status_dice": 2
+	  },
+	  "5": {
+		"min_ilvl": 35,
+		"minimum": 0.3,
+		"maximum": 0.3,
+		"tier_id": "T3",
+		"status_dice": 2
+	  },
+	  "6": {
+		"min_ilvl": 50,
+		"minimum": 0.35,
+		"maximum": 0.35,
+		"tier_id": "T2",
+		"status_dice": 2
+	  },
+	  "7": {
+		"min_ilvl": 70,
+		"minimum": 0.4,
+		"maximum": 0.4,
+		"tier_id": "T1",
+		"status_dice": 3
+	  }
+	}
   }
 ]

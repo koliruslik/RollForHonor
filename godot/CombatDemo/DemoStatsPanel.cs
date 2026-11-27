@@ -40,14 +40,14 @@ public partial class DemoStatsPanel : VBoxContainer
         AddNumber("DiceSides", L.Text("Damage die sides"), 2, 1000, 6);
         AddNumber("FlatDamage", L.Text("Flat damage"), -10000, 10000, flatDamage);
         _damageType = new OptionButton { Name = "DamageType" };
-        foreach (var type in Enum.GetValues<DamageType>())
+        foreach (var type in DamageTypes.HitTypes)
         {
             _damageType.AddItem(L.Text(type.ToString()), (int)type);
         }
 
         AddChild(_damageType);
         AddChild(new Label { Text = L.Text("Resistance % | negative = weakness") });
-        foreach (var type in Enum.GetValues<DamageType>())
+        foreach (var type in DamageTypes.HitTypes)
         {
             AddNumber(type.ToString(), L.Text(type.ToString()), -1000, 100, (double)(initial.Resistances.SingleOrDefault(value => value.Type == type)?.Value ?? 0) * 100);
         }
@@ -73,7 +73,7 @@ public partial class DemoStatsPanel : VBoxContainer
     /// <param name="current">The participant's live state, supplying identity and effects.</param>
     /// <returns>A complete replacement view; invalid HP bounds are rejected by the Domain model.</returns>
     public CombatantSnapshot BuildState(CombatantSnapshot current) => new(current.Id, Value("Health"), Value("MaxHealth"),
-        Value("Armor"), Value("Evasion"), Enum.GetValues<DamageType>()
+        Value("Armor"), Value("Evasion"), DamageTypes.HitTypes
             .Select(type => new ResistanceValue(type, (decimal)_numbers[type.ToString()].Value / 100)).ToArray(), current.Effects);
 
     /// <summary>Builds the next attack's immutable fixture payload from the current weapon/effect selections.</summary>

@@ -22,6 +22,9 @@ public sealed class AttackInstance
 
     /// <summary>Gets the identity shared by the instance's independently resolved impacts.</summary>
     public Guid Id { get; } = Guid.NewGuid();
+    /// <summary>Gets accepted launch cadence for status-chance normalization; null denotes a cadence-free fixture.</summary>
+    public decimal? AttacksPerSecond { get; }
+
     /// <summary>Gets the source identity read afresh at each admitted impact.</summary>
     public CombatantId SourceId { get; }
     /// <summary>Gets immutable base attack rules and damage formulas.</summary>
@@ -47,14 +50,17 @@ public sealed class AttackInstance
     /// <param name="executionRules">Optional rules, preserving unrestricted impacts when absent.</param>
     /// <param name="now">Monotonic game clock; required for timed attacks.</param>
     /// <param name="startedAt">Already observed launch time, avoiding an additional clock read.</param>
+    /// <param name="attackInterval">Accepted positive interval between attacks; zero or null denotes a cadence-free fixture.</param>
     /// <exception cref="ArgumentNullException">A required dependency is null.</exception>
     /// <exception cref="OverflowException">The expiry deadline exceeds the supported game-time range.</exception>
     internal AttackInstance(CombatantId sourceId, AttackPayload attack, CombatImpactService impacts,
-        AttackExecutionRules? executionRules = null, Func<TimeSpan>? now = null, TimeSpan? startedAt = null)
+        AttackExecutionRules? executionRules = null, Func<TimeSpan>? now = null, TimeSpan? startedAt = null, TimeSpan? attackInterval = null)
     {
         ArgumentNullException.ThrowIfNull(sourceId);
         ArgumentNullException.ThrowIfNull(attack);
         ArgumentNullException.ThrowIfNull(impacts);
+        AttacksPerSecond = attackInterval is { Ticks: > 0 } cadence
+            ? (decimal)TimeSpan.TicksPerSecond / cadence.Ticks : null;
         SourceId = sourceId;
         Attack = attack;
         _impacts = impacts;

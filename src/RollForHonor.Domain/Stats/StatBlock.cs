@@ -17,8 +17,9 @@ public sealed class StatBlock
 
     /// <summary>Reads one value without modifying the set.</summary>
     /// <param name="key">The scalar or qualified attribute.</param>
-    /// <returns>The stored value, or 1 for maximum HP, damage/critical and attack-speed coefficients and 0 otherwise.</returns>
+    /// <returns>The stored value, or neutral one for maximum HP, damage, attack-speed and status coefficients, two for critical multiplier, and zero otherwise.</returns>
     public decimal Get(StatKey key) => _values.GetValueOrDefault(key,
+        RollForHonor.Domain.Combat.Effects.Models.StatusStatKeys.IsMultiplier(key.Type) ? 1 :
         key.Type == StatType.CriticalMultiplier ? 2 : key.Type == StatType.CharacterLevel ? 1 :
         key.Type is StatType.MaxHealth or StatType.DamageMultiplier or StatType.CriticalMultiplier or StatType.AttackSpeed ? 1 : 0);
 

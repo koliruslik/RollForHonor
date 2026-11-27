@@ -25,11 +25,11 @@ public sealed class StatCalculator
         var keys = Enum.GetValues<StatType>()
             .Where(type => type is not (StatType.Resistance or StatType.AddedDamage) && DamageDiceStats.Sides(type) == 0)
             .Select(type => new StatKey(type))
-            .Concat(Enum.GetValues<DamageType>()
+            .Concat(DamageTypes.HitTypes
                 .SelectMany(damage => new[] { new StatKey(StatType.Resistance, damage), new StatKey(StatType.DamageMultiplier, damage), new StatKey(StatType.AddedDamage, damage) }));
 
         keys = keys.Concat(DamageDiceStats.Types
-            .SelectMany(type => Enum.GetValues<DamageType>()
+            .SelectMany(type => DamageTypes.HitTypes
                 .Select(damage => new StatKey(type, damage))));
 
         return new StatBlock(keys.Select(key => new KeyValuePair<StatKey, decimal>(key, CalculateValue(profile, key))));

@@ -360,18 +360,20 @@ public sealed class GodotInterfaceTest : TestClass
             var properties = tooltip.GetNode<RichTextLabel>("Card/Properties");
             properties.GetParsedText().ShouldContain("1d6 + 5");
             properties.GetParsedText().ShouldContain("AFFIXES");
-            properties.GetParsedText().ShouldContain("steady hand · T1");
+            properties.GetParsedText().ShouldNotContain("steady hand");
+            properties.GetParsedText().ShouldNotContain("T1");
             properties.GetParsedText().ShouldContain("+2 accuracy");
-            properties.GetParsedText().ShouldContain("barbed shaft · T1");
+            properties.GetParsedText().ShouldNotContain("barbed shaft");
             properties.GetParsedText().ShouldNotContain("72%");
             properties.GetParsedText().ShouldNotContain("Available tiers:");
             tooltip.SetDetailed(true);
             properties.GetParsedText().ShouldContain("[1/3] 72% T1");
-            properties.GetParsedText().ShouldContain("Available tiers: T1");
+            properties.GetParsedText().ShouldNotContain("Available tiers:");
             properties.GetParsedText().ShouldNotContain("T1–T16");
             tooltip.SetDetailed(false);
             properties.GetParsedText().ShouldNotContain("72%");
-            properties.GetParsedText().ShouldContain("steady hand · T1");
+            properties.GetParsedText().ShouldNotContain("steady hand");
+            properties.GetParsedText().ShouldNotContain("T1");
         }
         finally
         {
@@ -379,9 +381,9 @@ public sealed class GodotInterfaceTest : TestClass
         }
     }
 
-    /// <summary>Each affix displays its own full tier pool, regardless of the item's rarity and the selected tier.</summary>
+    /// <summary>Alt shows only the selected tier, independent of how many tiers an affix defines.</summary>
     [Test]
-    public void AltShowsAffixSpecificTierPools()
+    public void AltShowsOnlyCurrentAffixTier()
     {
         var card = new ItemDetailsPanel();
         TestScene.AddChild(card);
@@ -401,12 +403,12 @@ public sealed class GodotInterfaceTest : TestClass
                 card.SetDetailed(true);
                 card.ShowItem(item, null, false, null);
                 var text = card.GetNode<RichTextLabel>("Card/Properties").GetParsedText();
-                text.ShouldContain($"vitality · T{count}");
-                text.ShouldContain($"Available tiers: T1–T{count}");
+                text.ShouldContain($"T{count}");
+                text.ShouldNotContain("Available tiers:");
                 card.SetDetailed(false);
                 text = card.GetNode<RichTextLabel>("Card/Properties").GetParsedText();
-                text.ShouldContain("vitality");
-                text.ShouldContain("maximum health");
+                text.ShouldNotContain($"T{count}");
+                text.ShouldContain("health");
                 text.ShouldNotContain("Available tiers:");
             }
         }
@@ -445,7 +447,7 @@ public sealed class GodotInterfaceTest : TestClass
             {
                 card.SetDetailed(true);
                 await WaitForCardLayout(card);
-                card.Size.Y.ShouldBeGreaterThan(ordinaryHeight);
+                card.Size.Y.ShouldBeGreaterThanOrEqualTo(ordinaryHeight);
                 card.SetDetailed(false);
                 await WaitForCardLayout(card);
                 card.Size.Y.ShouldBe(ordinaryHeight);

@@ -88,9 +88,9 @@ public sealed class GodotPinnedInspectionTest : TestClass
             hud.ToggleInventory();
             hud.FindChild("oathkeeper-ring", true, false).EmitSignal(BaseButton.SignalName.Pressed);
             var text = hud.FindChild("ItemDetails", true, false).GetNode<RichTextLabel>("Card/Properties").GetParsedText();
-            text.Split("increased all damage").Length.ShouldBe(2);
+            text.Split("all damage").Length.ShouldBe(2);
             text[..text.IndexOf("AFFIXES", StringComparison.Ordinal)].ShouldNotContain("all damage");
-            text.ShouldContain("+5 maximum mana");
+            text.ShouldContain("+5 mana");
         }
         finally
         {

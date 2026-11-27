@@ -15,7 +15,7 @@ public partial class ArenaHud
         _comparison.SetDetailed(detailed);
         _itemTip.SetDetailed(detailed);
 
-        if (GetViewport().GuiIsDragging() || (!_inventory.Visible && _rounds.SelectedLootId is null) || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
+        if (GetViewport().GuiIsDragging() || (!_inventory.Visible && _rounds.SelectedLootId is null) || _admin.Visible || _pause.Visible || _settings.Visible || _reference.Visible || (_hoveredItem is null && !_itemTip.IsInspecting))
         {
             _itemTip.Hide();
         }

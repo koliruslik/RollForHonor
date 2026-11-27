@@ -85,7 +85,6 @@ public sealed class DefenseResolverTests
     [InlineData(DamageType.Fire)]
     [InlineData(DamageType.Cold)]
     [InlineData(DamageType.Lightning)]
-    [InlineData(DamageType.Poison)]
     public void Resolve_WhenDamageIsNonPhysical_SkipsArmorAndUsesMatchingResistance(DamageType type)
     {
         var resolver = new DefenseResolver(UnexpectedArmorFormula());

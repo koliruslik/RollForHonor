@@ -74,7 +74,7 @@ public sealed class AttackInitiationService
             return new AttackStartResult(AttackStartStatus.InsufficientResources, costs: costs);
 
         var readyAt = now + definition.Cooldown;
-        var attack = new AttackInstance(sourceId, definition.Attack, _impacts, definition.ExecutionRules, _now, now);
+        var attack = new AttackInstance(sourceId, definition.Attack, _impacts, definition.ExecutionRules, _now, now, definition.Cooldown);
         var proposal = new AttackStartProposal(requestId, attack.Id, sourceId, definition.Key, state.Version, costs, readyAt);
         diagnostics.ObserveProposal(proposal);
         return _state.TryStart(proposal) switch

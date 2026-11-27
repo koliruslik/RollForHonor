@@ -131,7 +131,14 @@ internal sealed class InventoryWindowController
 
         if (_selected is not null)
         {
-            SelectItem(_selected);
+            if (read.OwnedItems.TryGetValue(_selected.Id, out var current))
+            {
+                SelectItem(current);
+            }
+            else
+            {
+                CloseDetails();
+            }
         }
     }
 

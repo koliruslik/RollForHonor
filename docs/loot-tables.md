@@ -9,7 +9,7 @@ The native Reference browser uses these same files: Monsters, Items and Affixes.
 - Equipment rarity, slot and base are separate weighted choices. Base weights split the selected slot's probability.
 - Each rarity affix slot is occupied independently with probability 55%. Capacities: Common 0, Uncommon 2, Rare 4, Epic 6, Legendary 8.
 - Eligible families are weighted without replacement; prefix/suffix labels impose no additional quotas.
-- T1 is strongest and T7 weakest. The approved research ranks 1–7 are displayed as T7–T1, preserving all values and level gates.
+- Every affix family uses T1 strongest and T7 weakest. Internal power ranks 1–7 are displayed as T7–T1, preserving values and item-level gates.
 - Tier roll: d20 + floor((highest eligible research rank − 1) / 2) + min(5, floor(max(0, Luck) / 5)).
   Research ranks have thresholds 1, 9, 14, 17, 18, 19, 20; clamp to the family's eligible rank interval.
 - Quality: min(100, d100 + max(0, Luck)); interpolate within the selected range and round to the family's precision. Dice tiers grant fixed count/sides.
@@ -171,7 +171,7 @@ ID: `sentinel`. Item level: 1. Guaranteed gold: 6–14.
 
 ## Affix catalog
 
-58 families; 371 tiers. Fractions are coefficients (0.1 = 10%). Flat grouped damage/resistance grants the listed value to each listed damage type.
+57 families; 364 tiers. Fractions are coefficients (0.1 = 10%). Flat grouped damage/resistance grants the listed value to each listed damage type.
 
 ### Maximum Health / Максимальне здоров’я
 
@@ -657,60 +657,6 @@ Damage types: Lightning.
 | T6 | 5 | 1d6 | dice |
 | T7 | 1 | 1d4 | dice |
 
-### Added Poison Damage / Додаткова отруйна шкода
-
-`added-poison` · prefix · weight 40 · slots: weapon, offhand, amulet, ring1, ring2.
-
-Enabled.
-
-Damage types: Poison.
-
-| Tier | Minimum ilvl | Value range | Unit |
-| --- | ---: | --- | --- |
-| T1 | 70 | 10–14 | flat |
-| T2 | 50 | 7–10 | flat |
-| T3 | 35 | 6–8 | flat |
-| T4 | 20 | 4–6 | flat |
-| T5 | 10 | 3–4 | flat |
-| T6 | 5 | 2–3 | flat |
-| T7 | 1 | 1–2 | flat |
-
-### Increased Poison Damage / Збільшення отруйної шкоди
-
-`increased-poison` · prefix · weight 35 · slots: weapon, offhand, amulet, ring1, ring2.
-
-Enabled.
-
-Damage types: Poison.
-
-| Tier | Minimum ilvl | Value range | Unit |
-| --- | ---: | --- | --- |
-| T1 | 70 | 0.49–0.62 | fraction |
-| T2 | 50 | 0.37–0.48 | fraction |
-| T3 | 35 | 0.28–0.36 | fraction |
-| T4 | 20 | 0.2–0.27 | fraction |
-| T5 | 10 | 0.14–0.19 | fraction |
-| T6 | 5 | 0.09–0.13 | fraction |
-| T7 | 1 | 0.05–0.08 | fraction |
-
-### Extra Poison Damage Dice / Додаткові кубики отруйної шкоди
-
-`dice-poison` · prefix · weight 15 · slots: weapon, offhand, amulet, ring1, ring2.
-
-Enabled.
-
-Damage types: Poison.
-
-| Tier | Minimum ilvl | Value range | Unit |
-| --- | ---: | --- | --- |
-| T1 | 70 | 2d12 | dice |
-| T2 | 50 | 2d8 | dice |
-| T3 | 35 | 2d6 | dice |
-| T4 | 20 | 1d10 | dice |
-| T5 | 10 | 1d8 | dice |
-| T6 | 5 | 1d6 | dice |
-| T7 | 1 | 1d4 | dice |
-
 ### Added Physical Damage / Додаткова фізична шкода
 
 `added-physical` · prefix · weight 25 · slots: weapon, offhand, amulet, ring1, ring2.
@@ -785,7 +731,7 @@ Damage types: Fire, Cold, Lightning.
 
 Enabled.
 
-Damage types: Piercing, Bludgeoning, Slashing, Fire, Cold, Lightning, Poison.
+Damage types: Piercing, Bludgeoning, Slashing, Fire, Cold, Lightning.
 
 | Tier | Minimum ilvl | Value range | Unit |
 | --- | ---: | --- | --- |
@@ -1003,24 +949,6 @@ Damage types: Lightning.
 | T6 | 5 | 0.06–0.08 | fraction |
 | T7 | 1 | 0.03–0.05 | fraction |
 
-### Poison Resistance / Опір отруйній шкоді
-
-`resist-poison` · suffix · weight 60 · slots: body, helmet, boots, offhand, amulet, ring1, ring2.
-
-Enabled.
-
-Damage types: Poison.
-
-| Tier | Minimum ilvl | Value range | Unit |
-| --- | ---: | --- | --- |
-| T1 | 70 | 0.28–0.35 | fraction |
-| T2 | 50 | 0.22–0.27 | fraction |
-| T3 | 35 | 0.17–0.21 | fraction |
-| T4 | 20 | 0.13–0.16 | fraction |
-| T5 | 10 | 0.09–0.12 | fraction |
-| T6 | 5 | 0.06–0.08 | fraction |
-| T7 | 1 | 0.03–0.05 | fraction |
-
 ### All Physical Resistances / Опір усій фізичній шкоді
 
 `resist-physical` · suffix · weight 25 · slots: body, helmet, boots, offhand, amulet, ring1, ring2.
@@ -1061,7 +989,7 @@ Damage types: Fire, Cold, Lightning.
 
 Enabled.
 
-Damage types: Piercing, Bludgeoning, Slashing, Fire, Cold, Lightning, Poison.
+Damage types: Piercing, Bludgeoning, Slashing, Fire, Cold, Lightning.
 
 | Tier | Minimum ilvl | Value range | Unit |
 | --- | ---: | --- | --- |
@@ -1137,3 +1065,51 @@ Prepared; excluded from generation until separately enabled.
 | T2 | 50 | 0.23–0.3 | multiplier |
 | T3 | 35 | 0.16–0.22 | multiplier |
 | T4 | 20 | 0.1–0.15 | multiplier |
+
+### Chance to Poison on Hit / Шанс отруїти при влучанні
+
+`poison-on-hit` · prefix · weight 40 · slots: weapon.
+
+Enabled.
+
+| Tier | Minimum ilvl | Value range | Unit |
+| --- | ---: | --- | --- |
+| T1 | 70 | 40%; 3d4; 5s, every 1s | chance; d4 per tick |
+| T2 | 50 | 35%; 3d4; 5s, every 1s | chance; d4 per tick |
+| T3 | 35 | 30%; 2d4; 5s, every 1s | chance; d4 per tick |
+| T4 | 20 | 25%; 2d4; 5s, every 1s | chance; d4 per tick |
+| T5 | 10 | 20%; 1d4; 5s, every 1s | chance; d4 per tick |
+| T6 | 5 | 15%; 1d4; 5s, every 1s | chance; d4 per tick |
+| T7 | 1 | 10%; 1d4; 5s, every 1s | chance; d4 per tick |
+
+### Chance to Ignite on Hit / Шанс горіння при влучанні
+
+`ignite-on-hit` · prefix · weight 40 · slots: weapon.
+
+Enabled.
+
+| Tier | Minimum ilvl | Value range | Unit |
+| --- | ---: | --- | --- |
+| T1 | 70 | 50%; 3d4; 5s, every 1s | chance; d4 per tick |
+| T2 | 50 | 45%; 3d4; 5s, every 1s | chance; d4 per tick |
+| T3 | 35 | 40%; 2d4; 5s, every 1s | chance; d4 per tick |
+| T4 | 20 | 35%; 2d4; 5s, every 1s | chance; d4 per tick |
+| T5 | 10 | 30%; 1d4; 5s, every 1s | chance; d4 per tick |
+| T6 | 5 | 25%; 1d4; 5s, every 1s | chance; d4 per tick |
+| T7 | 1 | 20%; 1d4; 5s, every 1s | chance; d4 per tick |
+
+### Chance to Bleed on Hit / Шанс спричинити кровотечу при влучанні
+
+`bleed-on-hit` · prefix · weight 40 · slots: weapon.
+
+Enabled.
+
+| Tier | Minimum ilvl | Value range | Unit |
+| --- | ---: | --- | --- |
+| T1 | 70 | 40%; 3d4-3; 10s, every 1s | chance; d4 per tick |
+| T2 | 50 | 35%; 2d4-2; 10s, every 1s | chance; d4 per tick |
+| T3 | 35 | 30%; 2d4-2; 10s, every 1s | chance; d4 per tick |
+| T4 | 20 | 25%; 2d4-2; 10s, every 1s | chance; d4 per tick |
+| T5 | 10 | 20%; 1d4-1; 10s, every 1s | chance; d4 per tick |
+| T6 | 5 | 15%; 1d4-1; 10s, every 1s | chance; d4 per tick |
+| T7 | 1 | 10%; 1d4-1; 10s, every 1s | chance; d4 per tick |

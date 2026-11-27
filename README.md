@@ -14,11 +14,12 @@ d20 attacks, typed damage, defenses and effects.
 - Guaranteed world gold and optional equipment from accepted Sentinel tables; nearby gold is picked up automatically within 2.5 units (Ctrl+G toggles it). Items use manual pickup.
   G, mouse pickup and dragging into an open bag remain available. Drop bag items with the card button or by
   dragging them onto uncovered world space.
+- Weapon affixes can poison, ignite or bleed. Chances normalize to actual attack speed; poison stacks independently, ignite/bleed refresh only their duration, and bleeding slows movement.
 - Natural-one misses, rating-based glancing hits and armor, and a separate critical d20 (20+ succeeds, base ×2).
 - Flat health/mana recovery stats, initially 2 HP/s and 10 mana/s for the player.
 - An action journal for combat, defeats, pickups, equipment and sandbox changes.
 - Session-local gold wallets, world pickup, and captured Luck for gold and generated affixes.
-- Compact F3 admin tools for current monster/item catalogs and actor base stats.
+- F3 sandbox tools for monsters, actor stats, custom item/affix creation and drag-in editing of owned equipment.
 - A separate editable laboratory with projectile/melee attacks, vampirism,
   Burning/Bleeding fixtures, manual/automatic ticks and a detailed combat journal.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
@@ -26,10 +27,11 @@ d20 attacks, typed damage, defenses and effects.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
 - Captured Luck bonuses for affix-tier d20 rolls and capped d100 quality/gold amounts; existing rolls remain immutable.
 - Main-hand/offhand equipment with owned items, atomic stat updates and capacity-checked, version-checked equip/unequip operations.
-- Styled title/settings/pause screens, target selection, resource bars, combat history and dice traces.
+- Styled title/settings/pause screens, target selection, clickable status icons, resource bars, combat history and dice traces.
+- Floating damage uses type colors, pale glancing hits, bold criticals and localized gray misses.
 - Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
-- Character-sheet EHP averaged across seven damage types, with click-only details for each type and all 21 mixed pairs.
-- A searchable game reference with a bestiary, colored loot tables, 105 named bases across three branches and five generations (21 first-generation bases live), all 58 affix families and recent combat.
+- Character-sheet EHP averaged across six damage types, with click-only details for each type and all 15 mixed pairs.
+- A searchable game reference with a bestiary, colored loot tables, 105 named bases across three branches and five generations (21 first-generation bases live), all 57 affix families and recent combat.
 - Ukrainian/English interface with saved live language switching, localized item/affix names and searchable reference.
 - Engine-independent combat rules and Application use cases, version-checked
   in-memory state, console scenarios and automated tests.
@@ -67,7 +69,7 @@ or restarting creates a fresh session and resets its state.
 | Mouse | Face the cursor surface |
 | Right click | Shoot in the world; equip/remove items inside inventory |
 | Left click | Select/clear a world target; pin an item for comparison |
-| Alt | Show affix ranges, quality and tiers while inspecting items |
+| Alt | Show affix ranges, quality and current tier while inspecting items |
 | Mouse wheel | Zoom |
 | F3 | Toggle live admin tools |
 | G | Pick up the selected nearby item within 2.5 world units |

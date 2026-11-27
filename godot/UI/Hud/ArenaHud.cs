@@ -64,7 +64,7 @@ public partial class ArenaHud : CanvasLayer
         BuildTooltips();
         _navigation = new HudNavigationController(GetTree(), _pause, _pauseShade, _settings,
             _reference, _inspector, ClearItemInspection, CaptureReference, RefreshHints, ReloadPreferences);
-        _admin = UiLayout.Place(_design, new AdminPanel { Name = "Admin" }, new Rect2(670, 200, 580, 440));
+        _admin = UiLayout.Place(_design, new AdminPanel { Name = "Admin" }, new Rect2(590, 160, AdminPanel.PanelWidth, 740));
         _admin.Closed += () => _admin.Hide();
         _design.Resized += UpdateDockLayout;
         UpdateDockLayout();
@@ -83,6 +83,7 @@ public partial class ArenaHud : CanvasLayer
         _worldDropTarget.Visible = GetViewport().GuiIsDragging() && ItemCell.TryReadItem(data, out var dragged) && _items.CanDiscardItem(dragged);
         RefreshHud();
         _items.Refresh();
+        LayoutItemCards();
         RefreshHover();
         RefreshHints();
     }
@@ -128,7 +129,7 @@ public partial class ArenaHud : CanvasLayer
             }
             else
             {
-                _admin.Position = new Vector2((_design.Size.X - 580) / 2, 200);
+                _admin.Position = new Vector2((_design.Size.X - AdminPanel.PanelWidth) / 2, 160);
                 _admin.Open();
                 _admin.MoveToFront();
             }

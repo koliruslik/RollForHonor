@@ -148,7 +148,7 @@ public sealed class GodotCharacterStatsTest : TestClass
             hud._Process(0);
             var panel = (CharacterPanel)hud.FindChild("Character", true, false);
             var value = (Label)panel.FindChild("EffectiveHealthValue", true, false);
-            value.Text.ShouldBe("118.4");
+            value.Text.ShouldBe("121.4");
             var capture = OS.GetEnvironment("RFH_EHP_CAPTURE_DIRECTORY");
 
             if (!string.IsNullOrWhiteSpace(capture))
@@ -164,10 +164,10 @@ public sealed class GodotCharacterStatsTest : TestClass
             panel.InspectionRequested += topic => opened = topic;
             link.EmitSignal(RichTextLabel.SignalName.MetaClicked, "ehp");
             opened.ShouldNotBeNull();
-            opened.Facts.Count.ShouldBe(30);
-            opened.Links.Count.ShouldBe(28);
-            opened.Facts.Count(fact => fact.LinkIndex is not null).ShouldBe(28);
-            var mixed = opened.Links[7].Open();
+            opened.Facts.Count.ShouldBe(23);
+            opened.Links.Count.ShouldBe(21);
+            opened.Facts.Count(fact => fact.LinkIndex is not null).ShouldBe(21);
+            var mixed = opened.Links[6].Open();
             mixed.Links.Count.ShouldBe(4);
             mixed.Links[0].Open().Links.ShouldNotBeEmpty();
             var critical = (Label)panel.FindChild("CriticalMultiplierValue", true, false);
@@ -199,7 +199,7 @@ public sealed class GodotCharacterStatsTest : TestClass
                 new(profile.BaseValues.With(new(StatType.Armor), 45).With(new(StatType.Evasion), 45)
                     .With(new(StatType.CriticalMultiplier), 2.5m), profile.Modifiers));
             hud._Process(0);
-            value.Text.ShouldBe("121.6");
+            value.Text.ShouldBe("122.6");
             critical.Text.ShouldBe("+150%");
         }
         finally

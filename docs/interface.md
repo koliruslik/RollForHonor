@@ -20,7 +20,7 @@ size; their padding does not inherit the larger action-button minimum height.
 
 The HUD scales by viewport height and fills its actual width. Character stats dock
 to the left edge (360 design pixels), inventory to the right (560), both full-height.
-Selected and equipped-item cards use 320-pixel widths beside inventory. Each
+Selected and equipped-item cards use 400-pixel widths beside inventory. Each
 card's height follows its rendered properties and visible actions; comparison
 cards omit the action space. Alt details and wrapped text can increase its height.
 Cards are limited to the available screen height, with property scrolling on long
@@ -28,6 +28,12 @@ pinned cards. The action and result keep their own spacing below the properties.
 The bottom
 combat bar stays centered in the viewport; side panels never move the HUD. The title/settings use a
 centered 1920×1080 design surface. Captures cover 1920×1080, 1280×720 and ultrawide.
+
+Committed hits and periodic damage display floating amounts around enemies and
+training targets. Each damage type has its own post-defense number using the
+shared type color. Glancing hits use pale text, critical hits use bold text,
+and evaded attacks display a gray localized Miss / Промах. Numbers rise and fade,
+follow camera projection, survive target removal and freeze while paused.
 
 | Input | Result |
 | --- | --- |
@@ -59,8 +65,8 @@ Intelligence and Luck in a 2×2 arrangement of faceted d20 tiles, with level / 1
 above its resolved value. Click or focus/activate it to open the shared
 explanation, including the intended role and current implementation limits.
 The attributes default to zero; STR/DEX/INT gate equipment and Luck affects captured loot rolls.
-Health and mana show current/max values. The EHP row shows average full-health EHP across seven damage types. It has no
-hover tooltip; click it for each type and all 21 mixed 50/50 pairs, with nested
+Health and mana show current/max values. The EHP row shows average full-health EHP across six damage types. It has no
+hover tooltip; click it for each type and all 15 mixed 50/50 pairs, with nested
 resistance and defense explanations. Its reference assumptions are described in
 [Character stats](stats.md#effective-health-display). Typed
 damage values show signed percentage bonuses: a resolved coefficient of 1.06
@@ -158,15 +164,17 @@ Hover an item for a slightly translucent card placed beside the source. It
 chooses a free right/left/below/above position within the viewport, avoiding
 the cursor and hovered item/property whenever space permits. Alt inspection
 retains its stationary interactive behavior. Hover cards hide during dragging. Left-click
-pins it for comparison. Affix names, selected tiers and individual rolled values
-are always visible beneath the base properties. Hold Alt to add captured ranges
-and quality in the format `value [minimum/maximum] quality% tier`, plus the actual
-available rank bounds. Releasing Alt hides this additional information while
-keeping affixes visible. Available ranks always display as `T1` or `T1–Tx`,
-with T1 strongest. Live families use the accepted seven-tier table; level-1
-items use the weakest available tier. Legacy presentation fixtures can still use T1.
+pins it for comparison. Cards use 400 design pixels of width and compact
+value-first property lines. Affix family names are not repeated as headings.
+Equal grouped damage, resistance and attribute modifiers share one concise line;
+status affixes show chance and a compact periodic formula. The default view hides
+all tier labels. Alt adds only each captured current tier, range and quality;
+available tier pools are never listed on item cards or affix inspection cards.
+T1 is strongest and T7 weakest for every family. Releasing Alt removes the
+additional details. Long exceptional content remains scrollable, with action
+buttons and feedback kept inside the viewport.
 Damage and resistance text use matching, muted semantic colors for each of the
-seven damage types. The common word "damage" stays neutral and is not part of
+six damage types. The common word "damage" stays neutral and is not part of
 text links; the type or modifier is the underlined target. Item rarity retains its
 original green, blue, purple and gold accents. Italic text identifies affix modifiers and properties changed by
 affixes; rarity remains on the item frame and header. Underlined text is clickable.
@@ -414,8 +422,21 @@ Affixes use a T7–T1 selector with the selected tier's value range and minimum 
 plus slot/search filters. Switching tiers preserves search/filter state. All
 families have the same presentation; no status column or drop-status paragraph
 is shown. This UI choice does not enable additional families in generation.
-F3 lists the 21 released generation-1 bases. Its rarity selector creates Common,
-Uncommon, Rare, Epic or Legendary items and previews the corresponding name.
+F3 lists the 21 released generation-1 bases. Items selects a base, rarity and
+item level, then up to the rarity's configured affix capacity. Each row selects
+an enabled, slot-compatible family, a tier and explicit quality. Poison, ignite
+and bleed expose all T1–T7 tiers at any administrative item level, plus an
+admin-only T0 with T1 damage and guaranteed application on every successful hit
+regardless of attack speed. Other families retain their ilvl tier gates.
+Duplicate families, unavailable tiers and overflow beyond rarity capacity are
+rejected. Creation uses the normal inventory acquisition and ground fallback.
+
+Edit item accepts a native drag from inventory or equipment, or an owned-item
+selector. Loading does not remove the item. Save retains its identity, captured
+base and bag placement, replaces edited affixes and preserves untouched rolls.
+Equipped item/stat changes publish atomically; health/mana may clamp downward,
+but raising their maxima never heals/refills. A stale or removed item is rejected.
+The panel fits beside an open inventory, scaling to narrower design widths.
 Restart the session after content changes to create new captured items.
 
 Gold rows in nearby pickup retain a compact brass border even when another item
@@ -426,3 +447,22 @@ Sword and wand bases use their own vector icons in the bag, equipped slots,
 item details, nearby loot and the primary attack button. The attack button reads
 the currently equipped weapon, including its rarity color, when the HUD refreshes.
 The bow retains its bow icon.
+
+### Production status inspection
+
+The character offense section shows reference-speed chance and tick formula
+for poison, ignite and bleed. Click for base timing, cadence normalization,
+reapplication and defense rules loaded from the active status content.
+The selected-target HP panel expands only while at least one status is active;
+without effects it uses the compact name/HP layout. It shows clickable poison,
+ignite and bleed icons,
+with a stack badge for multiple instances. Clicking opens the existing inspection
+card with captured formulas, duration, interval, damage coefficient and slow,
+alongside the content-authored base rules. Pinned details retain the clicked
+snapshot. Small matching icons appear beside overhead enemy/target HP bars,
+respecting enemy-bar visibility preferences. Icons disappear when effects clear,
+expire or the target dies; switching selection refreshes the upper row.
+The journal
+records applications, refreshes and actual periodic damage without replacing
+the retained attack d20. Item inspection and the affix reference use the same
+content-authored duration, dice sides and per-die flat adjustment.

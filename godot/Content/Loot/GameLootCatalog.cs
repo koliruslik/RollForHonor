@@ -217,7 +217,7 @@ public static class GameLootCatalog
         throw new InvalidOperationException("A weighted table needs at least one positive entry.");
     }
 
-    private static ItemDefinition ReadBase(JsonElement entry)
+    internal static ItemDefinition ReadBase(JsonElement entry)
     {
         var size = entry.GetProperty("inventorySize");
         var modifiers = entry.GetProperty("modifiers").EnumerateArray()
@@ -242,7 +242,7 @@ public static class GameLootCatalog
                 entry.GetProperty("released").GetBoolean()) : null);
     }
 
-    private static AffixDefinition ReadFamily(JsonElement family) => new(family.GetProperty("id").GetString(),
+    internal static AffixDefinition ReadFamily(JsonElement family) => new(family.GetProperty("id").GetString(),
         family.GetProperty("id").GetString(), family.GetProperty("weight").GetInt32(),
         family.GetProperty("tiers").EnumerateObject()
             .Select(tier => new AffixTier(tier.Value.GetProperty("tier_id").GetString(), 0, ReadRanges(family, tier.Value), tier.Value.GetProperty("min_ilvl").GetInt32())));
@@ -256,6 +256,16 @@ public static class GameLootCatalog
                 .Select(kind => (DamageType?)Enum.Parse<DamageType>(kind.GetString()))
                 .ToArray()
             : new DamageType?[] { null };
+        if (effect is "poison" or "ignite" or "bleed")
+        {
+            var chance = tier.GetProperty("minimum").GetDecimal();
+            var count = tier.GetProperty("status_dice").GetInt32();
+            var keys = RollForHonor.Domain.Combat.Effects.Models.StatusStatKeys.For(
+                Enum.Parse<RollForHonor.Domain.Combat.Effects.Models.StatusEffectKind>(effect, true));
+            return [new(new(keys.Chance), StatOperation.Flat, chance, chance, 2),
+                new(new(keys.Dice), StatOperation.Flat, count, count, 0)];
+        }
+
         var type = effect switch
         {
             "hp" or "hp_percent" => StatType.MaxHealth,

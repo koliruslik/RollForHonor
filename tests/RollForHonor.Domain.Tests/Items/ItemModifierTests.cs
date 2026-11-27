@@ -58,7 +58,7 @@ public sealed class ItemModifierTests
     public void MultiStatAffixesProjectIntoExistingCalculatorWithStableOrigins()
     {
         var health = new StatKey(StatType.MaxHealth);
-        var ranges = Enum.GetValues<DamageType>()
+        var ranges = DamageTypes.HitTypes
             .Select(type => new AffixModifierRange(new StatKey(StatType.Resistance, type), StatOperation.Flat, 0.05m, 0.1m, 2))
             .Concat(
             [
@@ -76,7 +76,7 @@ public sealed class ItemModifierTests
         var stats = new StatCalculator().Calculate(new StatProfile(new StatBlock([new(health, 100)]), modifiers));
 
         Assert.Equal(144, stats.Get(health));
-        Assert.All(Enum.GetValues<DamageType>(), type => Assert.Equal(0.1m, stats.Get(new StatKey(StatType.Resistance, type))));
+        Assert.All(DamageTypes.HitTypes, type => Assert.Equal(0.1m, stats.Get(new StatKey(StatType.Resistance, type))));
         var sources = modifiers
             .Select(modifier => modifier.Source)
             .Distinct();

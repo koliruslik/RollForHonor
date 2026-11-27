@@ -114,6 +114,7 @@ public static class DemoCombatJournal
             {
                 HealthChanged health => L.Format($"  {(health.CombatantId == input.Source.Id ? sourceName : targetName)} HP: {health.PreviousHealth} → {health.CurrentHealth} (actual clamped change)"),
                 EffectApplied applied => L.Format($"  Apply {DemoEffectCatalog.Name(applied.Effect.Definition.Id)} to {(applied.CombatantId == input.Source.Id ? sourceName : targetName)}; source captured at application"),
+                EffectDurationRefreshed refreshed => L.Format($"  Refresh duration of {refreshed.EffectId}"),
                 EffectRemoved removed => L.Format($"  Remove status {removed.EffectId} from {(removed.CombatantId == input.Source.Id ? sourceName : targetName)}"),
                 CombatantDefeated => L.Text("  Combatant defeated"),
                 _ => $"  {change}"
@@ -136,7 +137,7 @@ public static class DemoCombatJournal
             DamageType.Fire => "#ff9955",
             DamageType.Cold => "#77d5ff",
             DamageType.Lightning => "#f3dd63",
-            DamageType.Poison => "#97d977",
+            DamageType.Pure => "#97d977",
             DamageType.Slashing => "#ffaaaa",
             DamageType.Bludgeoning => "#c1bdd6",
             _ => "#e1c8b1"

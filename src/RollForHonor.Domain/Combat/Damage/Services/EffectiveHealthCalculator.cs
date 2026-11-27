@@ -21,14 +21,14 @@ public sealed class EffectiveHealthCalculator
     /// <param name="accuracy">The fixed incoming accuracy bonus, excluding any critical check.</param>
     /// <returns>Maximum HP times baseline loss divided by defended loss; null means zero expected loss (immunity).</returns>
     /// <exception cref="ArgumentNullException">Target is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">The damage type is undefined or hit damage is not positive.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The damage type is undefined or pure, or hit damage is not positive.</exception>
     /// <exception cref="OverflowException">Accuracy totals or defended damage exceed supported ranges.</exception>
     public decimal? Calculate(CombatantSnapshot target, DamageType type = DamageType.Piercing, int hitDamage = 10, int accuracy = 4)
     {
         ArgumentNullException.ThrowIfNull(target);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(hitDamage);
 
-        if (!Enum.IsDefined(type))
+        if (!Enum.IsDefined(type) || type == DamageType.Pure)
         {
             throw new ArgumentOutOfRangeException(nameof(type));
         }
@@ -42,12 +42,17 @@ public sealed class EffectiveHealthCalculator
     /// <param name="accuracy">Incoming accuracy bonus, excluding critical checks.</param>
     /// <returns>Normalized full-health EHP; null means the entire packet causes zero expected loss.</returns>
     /// <exception cref="ArgumentNullException">Target or packet is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">The packet has no positive damage.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The packet has no positive damage or contains pure periodic damage.</exception>
     /// <exception cref="OverflowException">Damage sums or accuracy totals exceed supported ranges.</exception>
     public decimal? Calculate(CombatantSnapshot target, DamagePacket packet, int accuracy = 4)
     {
         ArgumentNullException.ThrowIfNull(target);
         ArgumentNullException.ThrowIfNull(packet);
+        if (packet.Components.Any(component => component.Type == DamageType.Pure))
+        {
+            throw new ArgumentOutOfRangeException(nameof(packet), "Pure periodic damage is not a reference hit category.");
+        }
+
         var hitDamage = packet.Sum();
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(hitDamage);
 

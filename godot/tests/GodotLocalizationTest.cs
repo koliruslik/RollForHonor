@@ -260,7 +260,8 @@ public sealed class GodotLocalizationTest : TestClass
             pane.GetNode<Label>("Card/Title").Text.ShouldContain("Тверда рука");
             var body = pane.GetNode<RichTextLabel>("Card/Body").GetParsedText();
             body.ShouldContain("72%");
-            body.ShouldContain("Доступні ранги");
+            body.ShouldNotContain("Доступні ранги");
+            body.ShouldContain("T1");
             pane.IsPinned.ShouldBeTrue();
             pane.Position.ShouldBe(position);
             runtime.CombatState.ReadEquipment(owner).Version.ShouldBe(before.Version);

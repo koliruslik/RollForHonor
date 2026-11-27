@@ -27,8 +27,12 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
     public void EveryBaseGeneratesWithoutInertAffixesOrCapacityFailures()
     {
         GameLootCatalog.Bases.Count.ShouldBe(203);
-        GameLootCatalog.Affixes.Count.ShouldBe(58);
-        GameLootCatalog.Affixes.Sum(family => family.GetProperty("tiers").EnumerateObject().Count()).ShouldBe(371);
+        GameLootCatalog.Affixes.Count.ShouldBe(57);
+        GameLootCatalog.Affixes
+            .SelectMany(family => family.GetProperty("tiers").EnumerateObject())
+            .All(tier => tier.Value.GetProperty("tier_id").GetString() == $"T{8 - int.Parse(tier.Name)}")
+            .ShouldBeTrue();
+        GameLootCatalog.Affixes.Sum(family => family.GetProperty("tiers").EnumerateObject().Count()).ShouldBe(364);
 
         foreach (var entry in GameLootCatalog.Bases.Where(entry => !entry.TryGetProperty("released", out var released) || released.GetBoolean()))
         {
@@ -77,9 +81,40 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
         {
             var arena = GD.Load<PackedScene>("res://Arena/RoundArena.tscn").Instantiate<GreyboxArena>();
             runtime.AddChild(arena);
+            var locale = TranslationServer.GetLocale();
 
             try
             {
+                if (branch == "dexterity")
+                {
+                    foreach (var language in new[] { "uk", "en" })
+                    {
+                        TranslationServer.SetLocale(language);
+
+                        for (var frame = 0; frame < 3; frame++)
+                        {
+                            await TestScene.ToSignal(TestScene.GetTree(), SceneTree.SignalName.ProcessFrame);
+                        }
+
+                        var panel = arena.GetNode<ArenaHud>("Presentation").GetNode<Panel>("Root/Design/StarterSelection/Choice");
+                        var description = panel.GetNode<Label>("Description");
+                        description.GetRect().End.X.ShouldBeLessThanOrEqualTo(panel.Size.X - 30);
+                        description.GetRect().End.Y.ShouldBeLessThanOrEqualTo(240);
+                        description.GetLineCount().ShouldBeGreaterThan(1);
+                        description.GetMinimumSize().Y.ShouldBeLessThanOrEqualTo(description.Size.Y);
+                        var starterCapture = OS.GetEnvironment("RFH_STARTER_CAPTURE_DIRECTORY");
+
+                        if (!string.IsNullOrEmpty(starterCapture))
+                        {
+                            await TestScene.ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+                            TestScene.GetViewport().GetTexture().GetImage()
+                                .SavePng(System.IO.Path.Combine(starterCapture, $"starter-{language}.png")).ShouldBe(Error.Ok);
+                        }
+                    }
+
+                    TranslationServer.SetLocale(locale);
+                }
+
                 arena.SelectStarterWeapon($"{branch}-weapon-travel").ShouldBeTrue();
                 arena.NeedsStarterWeapon.ShouldBeFalse();
                 TestScene.GetTree().Paused.ShouldBeFalse();
@@ -109,6 +144,7 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
             }
             finally
             {
+                TranslationServer.SetLocale(locale);
                 arena.Free();
             }
         }
@@ -222,7 +258,7 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
         var entries = LootReference.Create();
         entries.Single(entry => entry.Id == "loot.bases").Table.Rows.Count.ShouldBe(525);
         var affixes = entries.Single(entry => entry.Id == "loot.affixes").Table;
-        affixes.Rows.Count.ShouldBe(58);
+        affixes.Rows.Count.ShouldBe(57);
         affixes.Tiers.Count.ShouldBe(7);
         affixes.Columns.Any(column => column.Title == "Status").ShouldBeFalse();
         affixes.Rows.Single(row => row.Id == "dice-fire").Cells[2].ShouldContain("1d4");
@@ -277,7 +313,7 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
             reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(21);
             await Capture("sentinel-rare");
             reference.SelectSection("affixes");
-            reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(58);
+            reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(57);
             await Capture("affixes");
             var tier = reference.GetNode<OptionButton>("Book/Tier");
             tier.Select(2);
@@ -290,7 +326,7 @@ public sealed class GodotLootCatalogTest(Node testScene) : TestClass(testScene)
             reference.SelectSection("items");
             await Capture("items-uk");
             reference.SelectSection("affixes");
-            reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(58);
+            reference.GetNode<ReferenceTableView>("Book/Table").VisibleRowCount.ShouldBe(57);
             reference.GetNode<OptionButton>("Book/Tier").GetItemText(0).ShouldContain("Тір");
             await Capture("affixes-uk");
             reference.SelectSection("monsters");

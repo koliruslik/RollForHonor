@@ -66,8 +66,10 @@ public partial class GreyboxArena
         UiLayout.Place(_starterOverlay, new ColorRect { Color = new Color(0, 0, 0, 0.85f) }, new Rect2(0, 0, design.Size.X, 1080));
         var panel = UiLayout.Panel(_starterOverlay, "Choice", new Rect2((design.Size.X - 1000) / 2, 250, 1000, 500));
         UiLayout.Place(panel, UiLayout.Text(L.Text("Choose your starting weapon"), 30, HonorTheme.Brass, true), new Rect2(30, 24, 940, 54));
-        var note = UiLayout.Place(panel, UiLayout.Text(L.Text("Choose one Common weapon. No class is locked. For now, all three fire the same arrow and use the same mana and cooldown."), 20), new Rect2(30, 96, 940, 110));
+        var note = UiLayout.Text(L.Text("Choose one Common weapon. No class is locked. For now, all three fire the same arrow and use the same mana and cooldown."), 20);
+        note.Name = "Description";
         note.AutowrapMode = TextServer.AutowrapMode.WordSmart;
+        UiLayout.Place(panel, note, new Rect2(30, 96, 940, 110));
         var choices = GameLootCatalog.Bases.Where(entry => entry.TryGetProperty("generation", out var generation)
             && generation.GetInt32() == 1 && entry.GetProperty("slot").GetString() == "weapon").ToArray();
 

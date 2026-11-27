@@ -31,8 +31,8 @@ pool, for example T1–T16, T1–T15 or T1–T4. This is independent of item rar
 Author higher required power for stronger tiers: the generator selects by power
 threshold, not by parsing the tier ID. Custom IDs remain supported. The current
 isolated legacy starter-kit fixtures contain only temporary T1. Live content uses
-the accepted 371-tier table: T1 strongest through T7 weakest, reversing the research
-rank labels while preserving values and gates. See the [full catalog](loot-tables.md).
+364 live/prepared tier rows across 57 families after poison replacement. Every
+family uses T1 strongest through T7 weakest. Values and gates remain unchanged. See the [full catalog](loot-tables.md).
 
 `AffixInstance` retains its owned ID, definition/family/tier IDs, compatibility,
 natural/effective d100 quality, captured Luck/tier-roll context, concrete modifier values, captured selected-tier intervals and the
@@ -255,3 +255,58 @@ A playable run grants exactly one selected Common+0 bow, sword or wand with
 zero level/attribute requirements, already equipped. All three temporarily
 use the same projectile, damage, cadence and mana cost. Repeated choices cannot
 grant more items. The full starter kit remains a laboratory/test fixture.
+
+## On-hit status affixes
+
+`poison-on-hit`, `ignite-on-hit` and `bleed-on-hit` are weapon-only families.
+Poison replaces `added-poison`, `dice-poison`, `increased-poison` and
+`resist-poison`. Every family uses T1 strongest and T7 weakest. Item-level gates remain unchanged.
+
+| Tier | Poison chance / dice | Ignite chance / dice | Bleed chance / dice |
+| --- | --- | --- | --- |
+| T1 | 40% / 3d4 | 50% / 3d4 | 40% / 3d4−3 |
+| T2 | 35% / 3d4 | 45% / 3d4 | 35% / 2d4−2 |
+| T3 | 30% / 2d4 | 40% / 2d4 | 30% / 2d4−2 |
+| T4 | 25% / 2d4 | 35% / 2d4 | 25% / 2d4−2 |
+| T5 | 20% / 1d4 | 30% / 1d4 | 20% / 1d4−1 |
+| T6 | 15% / 1d4 | 25% / 1d4 | 15% / 1d4−1 |
+| T7 | 10% / 1d4 | 20% / 1d4 | 10% / 1d4−1 |
+
+These are authored chances at 1 attack/s. Actual chance is base chance ×
+reference attacks/s / accepted actual attacks/s, capped at 100% after
+normalization. A faster weapon, including attack-speed bonuses in its launch
+cadence, has proportionally lower per-hit chance. Proc rolls use configured
+precision rather than rounding fractional chances to whole percentages.
+Each successful hit can independently apply each enabled status, including
+glancing hits and hits whose direct damage is fully absorbed.
+
+Affix chance/dice tables live in `Content/Loot/affixes.json`. Status duration,
+tick interval, dice sides, flat damage per die, movement slow, defense category,
+reapplication/source-scaling policy, reference speed and probability precision
+live in `Content/Combat/status-effects.json`. UI descriptions and generated
+loot tables read the same status content. Fixed tier values are not changed by
+quality or Luck; Luck still affects tier eligibility within existing gates.
+
+All three statuses accept dedicated duration, damage, tick-rate and slow source
+coefficients through normal Flat/Increased/More stat modifiers. Chance and dice
+are ordinary source stats. These are inputs for equipment, buffs and a future
+talent system; no talent tree is implemented. See [combat](combat.md#production-status-effects).
+
+## Administrative item editing
+
+The F3 composer uses the same live base, affix and rarity rules as loot. It
+filters families by enabled state and equipment slot. Status families expose
+all T1–T7 tiers at every administrative ilvl; other families retain their ilvl
+gates. Administrative T0 is available only for poison, ignite and bleed: it uses
+T1 dice and guarantees application on each successful hit at any attack speed.
+T0 is composed outside the live loot catalog, so it cannot drop or enter the
+normal reference tier tables. Its guarantee is an equipped stat contribution;
+removing or replacing it removes the override. Quality is supplied explicitly
+to the normal affix roller. The composer does not enable
+prepared unsupported families. The inventory editor preserves unchanged captured
+affix instances, while edited rows get new captured values. Identity and base
+cannot change during an owned-item edit, so bag footprint and placement remain
+valid. The session adapter compares the exact expected item snapshot under its
+lock and atomically replaces ownership, loadout and equipped stat projections.
+Unrelated combat updates do not invalidate the draft; another item edit or loss
+of ownership does. This admin path does not implement paid crafting or sales.
