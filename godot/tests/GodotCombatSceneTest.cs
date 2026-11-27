@@ -265,7 +265,17 @@ public sealed class GodotCombatSceneTest : TestClass
             scene.Fire(true).Status.ShouldBe(AttackStartStatus.Started);
             await WaitForContact(scene);
             var read = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId);
-            read.Source.Health.ShouldBeLessThan(100);
+            scene.LastContact.Impact.IsCommitted.ShouldBeTrue();
+            var result = ((ResolvedCombat)scene.LastContact.Impact.Outcome).Resolution.Result.Target;
+            if (result.AttackRoll.Roll.Results.Single() == 1)
+            {
+                result.Outcome.ShouldBe(RollForHonor.Domain.Combat.Attacks.Models.AttackOutcome.Evaded);
+                read.Source.Health.ShouldBe(100);
+            }
+            else
+            {
+                read.Source.Health.ShouldBeLessThan(100);
+            }
             read.Target.Health.ShouldBe(50);
             Balance(scene).ShouldBe(100m);
             Runtime.CombatState.ReadForStart(scene.Target.CombatantId, "demo-arrow", Guid.NewGuid())
