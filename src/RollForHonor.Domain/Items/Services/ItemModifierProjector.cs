@@ -16,7 +16,7 @@ public sealed class ItemModifierProjector
         ArgumentNullException.ThrowIfNull(item);
 
         var itemSource = $"Item:{Encode(item.Id)}";
-        var implicitModifiers = item.Base.Modifiers
+        var implicitModifiers = ItemBaseScaling.Modifiers(item)
             .Select(modifier => ToStatModifier(modifier, $"{itemSource}:Base"));
         var affixModifiers = item.Affixes
             .SelectMany(affix => affix.Modifiers

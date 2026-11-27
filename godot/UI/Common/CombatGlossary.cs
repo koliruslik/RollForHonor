@@ -10,6 +10,22 @@ namespace RollForHonor.Godot.UI.Common;
 /// <summary>Maps the game's actual damage and defense rules to shared semantic colors and linked explanations.</summary>
 public static class CombatGlossary
 {
+    /// <summary>Gets a saturated battle-popup color so simultaneous damage types remain distinguishable.</summary>
+    /// <param name="type">The actual committed damage category.</param>
+    /// <returns>A distinct number color; the regular interface retains its muted palette.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The damage category is undefined.</exception>
+    public static Color DamageNumberColor(DamageType type) => new(type switch
+    {
+        DamageType.Piercing => "e5e8ee",
+        DamageType.Bludgeoning => "e6b979",
+        DamageType.Slashing => "ef8b9c",
+        DamageType.Fire => "ff864d",
+        DamageType.Cold => "74d8ff",
+        DamageType.Lightning => "ffe46b",
+        DamageType.Pure => "99db78",
+        _ => throw new ArgumentOutOfRangeException(nameof(type))
+    });
+
     /// <summary>Gets a distinct color for each authored damage category.</summary>
     /// <param name="type">The category.</param>
     /// <returns>A readable accent on the dark interface.</returns>

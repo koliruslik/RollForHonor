@@ -5,6 +5,7 @@ using RollForHonor.Application.Combat.Ports;
 using RollForHonor.Application.Combat.Services;
 using RollForHonor.Application.Equipment.Ports;
 using RollForHonor.Application.Items;
+using RollForHonor.Application.Items.Upgrades;
 using RollForHonor.Application.Resources;
 using RollForHonor.Domain.Combat.Resolution.Models;
 using RollForHonor.Domain.Combat.State.Changes;
@@ -23,7 +24,7 @@ namespace RollForHonor.Infrastructure.Combat;
 /// Item acquisition publishes version-checked ownership after Application validates bag capacity; administrative grants bypass capacity. Transfers and persistence are not implemented.
 /// Nothing is persisted, and a new adapter starts a separate session.
 /// </remarks>
-public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter, IItemReleaseStateAdapter, IManaRecoveryStateAdapter, IHealthRecoveryStateAdapter, IGoldPickupStateAdapter
+public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackInitiationAdapter, IItemAcquisitionStateAdapter, IItemReleaseStateAdapter, IManaRecoveryStateAdapter, IHealthRecoveryStateAdapter, IGoldPickupStateAdapter, IItemUpgradeStateAdapter
 {
     private readonly object _gate = new();
     private SessionData _data = new();
@@ -304,6 +305,7 @@ public sealed partial class InMemoryCombatState : ICombatStateAdapter, IAttackIn
     {
         internal long Version { get; init; }
         internal ImmutableDictionary<CombatantId, long> GoldBalances { get; init; } = ImmutableDictionary<CombatantId, long>.Empty;
+        internal ImmutableHashSet<Guid> UpgradeReceipts { get; init; } = ImmutableHashSet<Guid>.Empty;
         internal ImmutableDictionary<CombatantId, GoldReward> GoldRewards { get; init; } = ImmutableDictionary<CombatantId, GoldReward>.Empty;
         internal ImmutableHashSet<CombatantId> CollectedGold { get; init; } = ImmutableHashSet<CombatantId>.Empty;
         internal ImmutableDictionary<CombatantId, StatProfile> Profiles { get; init; } = ImmutableDictionary<CombatantId, StatProfile>.Empty;

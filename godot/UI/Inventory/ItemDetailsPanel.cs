@@ -128,7 +128,10 @@ public partial class ItemDetailsPanel : Control
 
         _item = item;
         var color = ItemPresentation.RarityColor(item.Rarity);
-        _panel.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), _hover ? 0.86f : 1), color, 0));
+        var frame = HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.8f), 0.3f), _hover ? 0.86f : 1), color, 0);
+        frame.ShadowColor = ItemPresentation.EnhancementGlow(item.Progression.Enhancement);
+        frame.ShadowSize = item.Progression.Enhancement >= 3 ? 8 : 0;
+        _panel.AddThemeStyleboxOverride("panel", frame);
         _header.AddThemeStyleboxOverride("panel", HonorTheme.Panel(new Color(HonorTheme.Ink.Lerp(color.Darkened(0.55f), 0.4f), _hover ? 0.86f : 1), color, 0));
         L.SetText(_caption, _hover ? L.Text("ITEM") : L.Text("SELECTED ITEM"));
         L.SetText(_name, ItemPresentation.Name(item));
@@ -156,6 +159,20 @@ public partial class ItemDetailsPanel : Control
         L.SetText(_caption, L.Text("CURRENTLY EQUIPPED"));
         _action.Hide();
         _discard.Hide();
+        RefreshLayout();
+    }
+
+    /// <summary>Shows a crafting item without equipment actions or a redundant close control.</summary>
+    /// <param name="item">The exact owned snapshot.</param>
+    /// <param name="slot">Its compatible equipment category.</param>
+    /// <param name="equipped">Whether canonical equipment currently contains the item.</param>
+    public void ShowUpgradeItem(ItemInstance item, EquipmentSlot? slot, bool equipped)
+    {
+        ShowItem(item, slot, equipped, null);
+        L.SetText(_caption, equipped ? L.Text("CURRENTLY EQUIPPED") : L.Text("SELECTED ITEM"));
+        _action.Hide();
+        _discard.Hide();
+        _close.Hide();
         RefreshLayout();
     }
 

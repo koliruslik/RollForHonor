@@ -3933,3 +3933,129 @@ msgstr "стихійні опори"
 
 msgid "all resistances"
 msgstr "усі опори"
+
+msgid "ITEM UPGRADES"
+msgstr "ПОЛІПШЕННЯ ПРЕДМЕТІВ"
+
+msgid "Upgrade items"
+msgstr "Поліпшити предмети"
+
+msgid "Enhance"
+msgstr "Посилити"
+
+msgid "Evolve"
+msgstr "Еволюція"
+
+msgid "Reroll"
+msgstr "Перегенерувати"
+
+msgid "Add affix"
+msgstr "Додати афікс"
+
+msgid "Lock affix"
+msgstr "Заблокувати афікс"
+
+msgid "Gold: {0}"
+msgstr "Золото: {0}"
+
+msgid "{0} · {1} gold"
+msgstr "{0} · {1} золота"
+
+msgid "{0}\nBase: ×{1:0.####} → ×{2:0.####}\nAffixes: {3}/{4}"
+msgstr "{0}\nОснова: ×{1:0.####} → ×{2:0.####}\nАфікси: {3}/{4}"
+
+msgid "{0}: {1:0.##} → {2:0.##}"
+msgstr "{0}: {1:0.##} → {2:0.##}"
+
+msgid "Rerolls all unlocked affixes. Locked affixes stay unchanged."
+msgstr "Перегенеровує всі незаблоковані афікси. Заблоковані афікси залишаються без змін."
+
+msgid "Adds one random affix within the current rarity capacity."
+msgstr "Додає один випадковий афікс у межах місткості поточної рідкості."
+
+msgid "Guaranteed result. Gold is spent only on success."
+msgstr "Гарантований результат. Золото списується лише за успішну операцію."
+
+msgid "Not enough gold."
+msgstr "Недостатньо золота."
+
+msgid "Item or Luck changed. Select the item again."
+msgstr "Предмет або удача змінилися. Виберіть предмет знову."
+
+msgid "A defeated character cannot upgrade items."
+msgstr "Переможений персонаж не може поліпшувати предмети."
+
+msgid "Upgrade prices are not configured for this generation."
+msgstr "Ціни поліпшення для цього покоління не налаштовані."
+
+msgid "No compatible affix pool for this item and level."
+msgstr "Немає сумісного пулу афіксів для цього предмета й рівня."
+
+msgid "Select an owned item below +10."
+msgstr "Виберіть власний предмет із посиленням нижче +10."
+
+msgid "Requires +3 / +5 / +7 / +10. Legendary cannot evolve."
+msgstr "Потрібно +3 / +5 / +7 / +10. Легендарний предмет не еволюціонує."
+
+msgid "Requires at least one unlocked affix."
+msgstr "Потрібен хоча б один незаблокований афікс."
+
+msgid "Requires an owned item with a free affix slot."
+msgstr "Потрібен власний предмет із вільним місцем для афікса."
+
+msgid "Upgrade could not be applied. No gold was spent."
+msgstr "Не вдалося виконати поліпшення. Золото не списано."
+
+msgid "Upgraded: {0}"
+msgstr "Поліпшено: {0}"
+
+msgid " + {0:0.##} added damage"
+msgstr " + {0:0.##} додаткової шкоди"
+
+msgid "{0} [{1}]"
+msgstr "{0} [{1}]"
+
+msgid "Maximum enhancement: +10."
+msgstr "Максимальне посилення: +10."
+
+msgid "Evolution changes rarity and carries excess enhancement."
+msgstr "Еволюція підвищує рідкість і переносить зайві рівні посилення."
+
+msgid "Affixes: {0}/{1}\n"
+msgstr "Афікси: {0}/{1}\n"
+
+msgid "Clear slot"
+msgstr "Очистити слот"
+
+msgid "Drag an item here from inventory or equipment."
+msgstr "Перетягніть сюди предмет з інвентарю або спорядження."
+
+msgid "Drag an item into the empty slot to upgrade it."
+msgstr "Перетягніть предмет у порожній слот, щоб поліпшити його."
+
+msgid "{0} · Enhancement +{1}/{2}"
+msgstr "{0} · Посилення +{1}/{2}"
+
+msgid "AFFIXES · {0}/{1}"
+msgstr "АФІКСИ · {0}/{1}"
+
+msgid "Reroll unlocked affixes"
+msgstr "Перегенерувати незаблоковані афікси"
+
+msgid "+ Empty affix slot"
+msgstr "+ Вільне місце для афікса"
+
+msgid "Green values show the next upgrade. Click an empty affix slot to fill it."
+msgstr "Зелені значення показують наступне поліпшення. Натисніть вільне місце, щоб додати афікс."
+
+msgid "Rarity limit reached, no free slots or no unlocked affixes."
+msgstr "Досягнуто межі рідкості, немає вільних місць або незаблокованих афіксів."
+
+msgid "{0} → {1} +{2}"
+msgstr "{0} → {1} +{2}"
+
+msgid "{0} → +{1}"
+msgstr "{0} → +{1}"
+
+msgid "{0} damage  {1}–{2}"
+msgstr "{0} шкода  {1}–{2}"

@@ -19,6 +19,7 @@ public partial class ArenaHud : CanvasLayer
     private InventoryWindowController _items;
     private WorldDropTarget _worldDropTarget;
     private AdminPanel _admin;
+    private ItemUpgradeWindow _upgrades;
     private GameBootstrap _runtime;
     private GreyboxArena _arena;
     private Control _design;
@@ -66,6 +67,14 @@ public partial class ArenaHud : CanvasLayer
             _reference, _inspector, ClearItemInspection, CaptureReference, RefreshHints, ReloadPreferences);
         _admin = UiLayout.Place(_design, new AdminPanel { Name = "Admin" }, new Rect2(590, 160, AdminPanel.PanelWidth, 740));
         _admin.Closed += () => _admin.Hide();
+        _upgrades = UiLayout.Place(_design, new ItemUpgradeWindow { Name = "ItemUpgrades" }, new Rect2(560, 120, 780, 820));
+        _upgrades.Applied += message =>
+        {
+            _items.Invalidate();
+            _items.Refresh();
+            _history.RecordAction(message);
+            RefreshHud();
+        };
         _design.Resized += UpdateDockLayout;
         UpdateDockLayout();
     }
@@ -83,6 +92,12 @@ public partial class ArenaHud : CanvasLayer
         _worldDropTarget.Visible = GetViewport().GuiIsDragging() && ItemCell.TryReadItem(data, out var dragged) && _items.CanDiscardItem(dragged);
         RefreshHud();
         _items.Refresh();
+        if (_upgrades.Visible)
+        {
+            _details.Hide();
+            _comparison.Hide();
+            _itemTip.Hide();
+        }
         LayoutItemCards();
         RefreshHover();
         RefreshHints();
@@ -188,6 +203,7 @@ public partial class ArenaHud : CanvasLayer
         _rounds.Configure(runtime, arena);
         _items.Configure(runtime, arena);
         _admin.Configure(runtime, arena);
+        _upgrades.Configure(runtime.CombatState, arena.Player.CombatantId);
         _combat?.Dispose();
         _combat = new CombatHudPresenter(runtime, arena, _design, _character, _history);
         RefreshParticipants();
@@ -208,6 +224,37 @@ public partial class ArenaHud : CanvasLayer
         }
 
         _items.ToggleInventory();
+        if (!_inventory.Visible)
+        {
+            _upgrades.Hide();
+        }
+    }
+
+    /// <summary>Opens the paid-upgrade window beside the inventory without pausing combat.</summary>
+    public void ToggleUpgrades()
+    {
+        if (_runtime is null || _arena.NeedsStarterWeapon || _pause.Visible || _settings.Visible || _reference.Visible)
+        {
+            return;
+        }
+
+        if (_upgrades.Visible)
+        {
+            _upgrades.Hide();
+            return;
+        }
+
+        if (!_inventory.Visible)
+        {
+            _items.ToggleInventory();
+        }
+
+        _character.Hide();
+        _admin.Hide();
+        _details.Hide();
+        _comparison.Hide();
+        _upgrades.Open();
+        UpdateOverlay();
     }
 
     /// <summary>Toggles the live character panel independently of the equipment window.</summary>
@@ -245,6 +292,12 @@ public partial class ArenaHud : CanvasLayer
 
     private void Escape()
     {
+        if (_upgrades.Visible)
+        {
+            _upgrades.Hide();
+            return;
+        }
+
         if (_admin.Visible)
         {
             _admin.Hide();

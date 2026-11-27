@@ -28,7 +28,8 @@ internal static class AdminItemCatalog
             throw new ArgumentException("The selected base or item level is not available.", nameof(baseId));
         }
 
-        return Factory().Create(id, GameLootCatalog.ReadBase(entry), rarity, generationLevel: level);
+        return Factory().Create(id, GameLootCatalog.ReadBase(entry), rarity, generationLevel: level,
+            progression: new(0, ItemUpgradeContent.Rules.RarityMultiplier(rarity), ItemUpgradeContent.Rules.EnhancementStep));
     }
 
     internal static JsonElement[] Families(ItemDefinition definition, int level)
@@ -91,7 +92,9 @@ internal static class AdminItemCatalog
             })
             .ToArray();
 
-        return Factory().Create(source.Id, source.Base, rarity, affixes, level);
+        var progression = source.Rarity == rarity ? source.Progression
+            : new ItemProgression(source.Progression.Enhancement, ItemUpgradeContent.Rules.RarityMultiplier(rarity), source.Progression.Step);
+        return Factory().Create(source.Id, source.Base, rarity, affixes, level, progression);
     }
 
     private static ItemFactory Factory() => new(ItemRuleContent.LoadRarityRules(), ItemStatRules.Default);

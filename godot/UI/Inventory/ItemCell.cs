@@ -107,11 +107,15 @@ public partial class ItemCell : Button
     /// <param name="icon">The SVG asset key.</param>
     /// <param name="color">The item's rarity color, or a neutral empty-slot color.</param>
     /// <param name="occupied">Whether the slot contains an owned item.</param>
-    public void SetAppearance(string icon, Color color, bool occupied)
+    /// <param name="enhancement">Enhancement level controlling a glow separate from rarity.</param>
+    public void SetAppearance(string icon, Color color, bool occupied, int enhancement = 0)
     {
         _image.Texture = GD.Load<Texture2D>($"res://UI/Assets/{icon}.svg");
         _image.Modulate = occupied ? Colors.White : new Color(1, 1, 1, 0.18f);
-        AddThemeStyleboxOverride("normal", HonorTheme.Panel(new Color(occupied ? "222b30" : "101416"), color, 0));
+        var frame = HonorTheme.Panel(new Color(occupied ? "222b30" : "101416"), color, 0);
+        frame.ShadowColor = ItemPresentation.EnhancementGlow(enhancement);
+        frame.ShadowSize = occupied && enhancement >= 3 ? 6 : 0;
+        AddThemeStyleboxOverride("normal", frame);
         var marker = GetNodeOrNull<Label>("EmptyMarker");
 
         if (marker is null)

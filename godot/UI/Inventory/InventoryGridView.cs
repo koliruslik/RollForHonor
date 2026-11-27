@@ -297,7 +297,7 @@ public partial class InventoryGridView : Control
         cell.MouseEntered += () => ItemHovered?.Invoke(item.Id);
         cell.MouseExited += () => ItemHovered?.Invoke("");
         AddChild(cell);
-        cell.SetAppearance(IconKey?.Invoke(item) ?? "bag", ItemPresentation.RarityColor(item.Rarity), true);
+        cell.SetAppearance(IconKey?.Invoke(item) ?? "bag", ItemPresentation.RarityColor(item.Rarity), true, item.Progression.Enhancement);
         cell.Size = extent;
     }
 }

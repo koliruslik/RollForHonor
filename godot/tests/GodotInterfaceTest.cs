@@ -358,7 +358,8 @@ public sealed class GodotInterfaceTest : TestClass
             var tooltip = (ItemDetailsPanel)hud.FindChild("ItemTooltip", true, false);
             tooltip.Visible.ShouldBeTrue();
             var properties = tooltip.GetNode<RichTextLabel>("Card/Properties");
-            properties.GetParsedText().ShouldContain("1d6 + 5");
+            properties.GetParsedText().ShouldContain("6–11");
+            properties.GetParsedText().ShouldNotContain("1d6 + 5");
             properties.GetParsedText().ShouldContain("AFFIXES");
             properties.GetParsedText().ShouldNotContain("steady hand");
             properties.GetParsedText().ShouldNotContain("T1");
@@ -367,6 +368,7 @@ public sealed class GodotInterfaceTest : TestClass
             properties.GetParsedText().ShouldNotContain("72%");
             properties.GetParsedText().ShouldNotContain("Available tiers:");
             tooltip.SetDetailed(true);
+            properties.GetParsedText().ShouldContain("1d6 + 5");
             properties.GetParsedText().ShouldContain("[1/3] 72% T1");
             properties.GetParsedText().ShouldNotContain("Available tiers:");
             properties.GetParsedText().ShouldNotContain("T1–T16");

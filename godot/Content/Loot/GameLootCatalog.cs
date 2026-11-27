@@ -179,7 +179,8 @@ public static class GameLootCatalog
             affixes.Add(new AffixRoller().Roll($"{instanceId}:{index}", definition, tierId, dice, luck, tierRoll, (eligible[^1] - 1) / 2));
         }
 
-        return factory.Create(instanceId, ReadBase(entry), rarity, affixes, level);
+        return factory.Create(instanceId, ReadBase(entry), rarity, affixes, level,
+            new(0, ItemUpgradeContent.Rules.RarityMultiplier(rarity), ItemUpgradeContent.Rules.EnhancementStep));
     }
 
     private static IReadOnlyList<JsonElement> Load(string name)

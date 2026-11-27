@@ -60,12 +60,11 @@ public partial class FloatingCombatText : Control
                 continue;
             }
 
-            var color = CombatGlossary.DamageColor(group.Key);
+            var color = CombatGlossary.DamageNumberColor(group.Key);
 
             if (result.Outcome == AttackOutcome.GlancingHit)
             {
-                color = color.Lerp(Colors.White, 0.45f);
-                color.A = 0.6f;
+                color.A = 0.65f;
             }
 
             Add(position, amount.ToString(CultureInfo.InvariantCulture), color, critical, row++);
@@ -116,7 +115,7 @@ public partial class FloatingCombatText : Control
         label.AddThemeColorOverride("font_outline_color", new Color(0, 0, 0, 0.9f));
         label.AddThemeConstantOverride("outline_size", 5);
         AddChild(label);
-        _active.Add(new Popup(label, position, new Vector2((_sequence++ % 5 - 2) * 30, -24 - row * 26)));
+        _active.Add(new Popup(label, position, new Vector2((_sequence++ % 5 - 2) * 30, -24 - row * 34)));
         _Process(0);
     }
 

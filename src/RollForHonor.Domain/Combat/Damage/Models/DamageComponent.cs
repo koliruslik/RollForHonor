@@ -17,19 +17,26 @@ public sealed record DamageComponent
     /// <summary>Gets the component's damage type.</summary>
     public DamageType Type { get; }
 
+    /// <summary>Gets the multiplier applied after this component's dice and flat base, before adding separate affix components.</summary>
+    public decimal Multiplier { get; }
+
     /// <summary>
     /// Creates a validated attack damage component.
     /// </summary>
     /// <param name="dice">The dice rolled to produce this component.</param>
     /// <param name="flatDamage">The signed flat value added after the roll.</param>
     /// <param name="type">A defined damage type.</param>
+    /// <param name="multiplier">A positive captured base-roll multiplier; defaults to one.</param>
     /// <exception cref="ArgumentNullException"><paramref name="dice"/> is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> is undefined.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The damage type is undefined or the multiplier is not positive.</exception>
     public DamageComponent(
         DiceFormula dice,
         int flatDamage,
-        DamageType type)
+        DamageType type,
+        decimal multiplier = 1)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(multiplier);
+        Multiplier = multiplier;
         ArgumentNullException.ThrowIfNull(dice);
 
         if (!Enum.IsDefined(type))
@@ -52,6 +59,8 @@ public sealed record DamageComponent
             _ => string.Empty
         };
 
-        return $"{Dice}{flatDamage} [{Type}]";
+        var formula = $"{Dice}{flatDamage}";
+        return Multiplier == 1 ? $"{formula} [{Type}]"
+            : $"({formula}) ×{Multiplier.ToString("0.####", CultureInfo.InvariantCulture)} [{Type}]";
     }
 }

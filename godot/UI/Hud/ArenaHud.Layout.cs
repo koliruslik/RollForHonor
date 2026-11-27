@@ -117,6 +117,7 @@ public partial class ArenaHud
         reference.Name = "ReferenceButton";
         BuildAbilities(bar);
         UiLayout.Place(_design, UiLayout.Button(L.Text("Character"), ToggleCharacter), new Rect2(16, 914, 193, 51));
+        UiLayout.Place(_design, UiLayout.Button(L.Text("Upgrade items"), ToggleUpgrades), new Rect2(225, 914, 193, 51)).Name = "UpgradeItemsButton";
         var menu = UiLayout.Place(_design, UiLayout.Button(L.Text("Menu"), Escape), new Rect2(1693, 974, 190, 51));
         menu.Name = "MenuButton";
         var hints = UiLayout.Panel(_design, "Hints", new Rect2(1637, 766, 250, 184));
@@ -182,6 +183,10 @@ public partial class ArenaHud
         var width = _design.Size.X;
         _inventoryGroup.Size = _design.Size;
         _inventory.Position = new Vector2(width - 560, 0);
+        if (_upgrades is not null)
+        {
+            _upgrades.Position = new Vector2(Math.Max(12, width - 1352), 120);
+        }
         LayoutItemCards();
         _pause.Position = new Vector2((width - 620) / 2, 238);
         _reference.Position = new Vector2((width - 1000) / 2, 90);

@@ -31,11 +31,13 @@ public sealed class ItemFactory
     /// <param name="rarity">The explicit rarity.</param>
     /// <param name="affixes">Optional existing affixes, copied in supplied order.</param>
     /// <param name="generationLevel">The positive immutable affix-gating level.</param>
+    /// <param name="progression">Captured progression; omitted preserves the legacy unscaled +0 base.</param>
     /// <returns>A new immutable item with no random rolls.</returns>
     /// <exception cref="ArgumentNullException">The definition is null.</exception>
     /// <exception cref="ArgumentException">Identity, capacity, compatibility, affix uniqueness or stat rules are violated.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The rarity is undefined or the generation level is not positive.</exception>
-    public ItemInstance Create(string id, ItemDefinition definition, ItemRarity rarity, IEnumerable<AffixInstance>? affixes = null, int generationLevel = 1)
+    public ItemInstance Create(string id, ItemDefinition definition, ItemRarity rarity, IEnumerable<AffixInstance>? affixes = null, int generationLevel = 1,
+        ItemProgression? progression = null)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(generationLevel);
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
@@ -45,7 +47,7 @@ public sealed class ItemFactory
         ValidateAffixes(definition, rarity, entries);
         ValidateModifiers(definition, entries);
 
-        return new ItemInstance(id, definition, rarity, entries, generationLevel);
+        return new ItemInstance(id, definition, rarity, entries, generationLevel, progression);
     }
 
     private void ValidateAffixes(ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes)

@@ -96,7 +96,9 @@ public static class L
             _ => ""
         };
 
-        return Format($"{component.Dice}{flat} [{component.Type}]");
+        var formula = component.Multiplier == 1 ? $"{component.Dice}{flat}"
+            : $"({component.Dice}{flat}) ×{component.Multiplier.ToString("0.####", CultureInfo.InvariantCulture)}";
+        return Format($"{formula} [{component.Type}]");
     }
 
     private sealed record Message(string Source, object[] Arguments)

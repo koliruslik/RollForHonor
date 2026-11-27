@@ -82,7 +82,8 @@ public sealed class PreferencesStore
         _languageInitialized = true;
         var arguments = OS.GetCmdlineArgs();
 
-        if (arguments.Any(value => value is "--language" or "-l" or "--run-tests" || value.StartsWith("--language=", StringComparison.Ordinal)))
+        if (arguments.Any(value => value is "--language" or "-l" or "--run-tests"
+            || value.StartsWith("--language=", StringComparison.Ordinal) || value.StartsWith("--run-tests=", StringComparison.Ordinal)))
         {
             return;
         }

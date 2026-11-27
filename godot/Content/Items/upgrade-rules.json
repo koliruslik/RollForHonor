@@ -1,0 +1,12 @@
+{
+  "resource": "gold",
+  "enhancement_step": 0.05,
+  "maximum_base_level": 0,
+  "enhancement_prices": [14, 20, 27, 39, 54, 77, 108, 153, 216, 305],
+  "evolution_gates": [3, 5, 7, 10],
+  "evolution_prices": [35, 70, 140, 280],
+  "reroll_base": 48,
+  "reroll_increment": 12,
+  "lock_multiplier": 1.5,
+  "addition_multiplier": 8
+}
