@@ -25,10 +25,11 @@ d20 attacks, typed damage, defenses and effects.
 - Shared character stats with editable player/enemy definitions and Flat/Increased/More modifiers.
 - Four primary attributes in a 2×2 grid of clickable d20 tiles: Strength, Dexterity, Intelligence and Luck; level cap 10.
 - Immutable item/affix models, configurable rarity capacity and procedural generation from a supplied pool.
+- Paid item upgrades: guaranteed enhancement capped by rarity, evolution with excess-level transfer, locked full-affix rerolls and random affix addition. Open **Upgrade items** beside the inventory controls.
 - Captured Luck bonuses for affix-tier d20 rolls and capped d100 quality/gold amounts; existing rolls remain immutable.
 - Main-hand/offhand equipment with owned items, atomic stat updates and capacity-checked, version-checked equip/unequip operations.
 - Styled title/settings/pause screens, target selection, clickable status icons, resource bars, combat history and dice traces.
-- Floating damage uses type colors, pale glancing hits, bold criticals and localized gray misses.
+- Floating damage shows separate numbers in distinct type colors, dim glancing hits, bold criticals and localized gray misses.
 - Independent live inventory/character windows, muted damage colors, pinnable and draggable explanation cards, Alt inspection and right-click equipment.
 - Character-sheet EHP averaged across six damage types, with click-only details for each type and all 15 mixed pairs.
 - A searchable game reference with a bestiary, colored loot tables, 105 named bases across three branches and five generations (21 first-generation bases live), all 57 affix families and recent combat.
