@@ -123,15 +123,16 @@ source is never a state-change recipient. When source and recipient IDs match,
 current recipient health still takes precedence over the captured health.
 
 Ticks reuse `CombatResolver`, `RawDamageStep`, optional explicitly chosen defense
-steps, and mandatory finalization. No universal periodic-defense rule, duration,
-scheduler, automatic equipment-modifier collection, or new reapplication policy is introduced.
+steps, and mandatory finalization. Production statuses add the explicit schedule
+and pure-damage policy described [below](#production-status-effects); manual fixtures
+retain their caller-selected formulas and defenses.
 Application owns active-effect selection and pipeline assembly. Its impact use
 case now invokes a supplied pipeline factory against current participant data
 and attempts commit through an adapter. `PeriodicEffectService` now reads a live
 recipient, calculates one tick with its captured source and attempts atomic commit.
-The workbench supplies manual/global-interval scheduling; full production effect
-aggregation and per-effect lifetime policies remain future work. The existing
-replacement-by-definition behavior remains.
+The workbench supplies manual/global-interval scheduling. Arena status rules use
+independent poison timers and duration-only ignite/bleed refreshes; manual workbench statuses retain the existing
+replacement-by-definition behavior.
 
 Concrete steps live under `Combat/Resolution/Services/Steps`. The step contract,
 pipeline executor, resolver, and mandatory result builder remain directly under
@@ -402,3 +403,57 @@ available; null `Origin` is unreported. The attack modifier is currently an aggr
 and a defense stage's input/output does not encode an unreported armor or resistance
 coefficient. Do not infer missing values from rounded damage differences. Full equipment
 aggregation and a named breakdown of every stat source remain separate work.
+
+## Production status effects
+
+`ApplyOnHitStatusesStep` receives explicit content rules from the Application
+pipeline factory. `AttackInitiationService` retains the accepted final cadence
+on the attack instance, including weapon and attack-speed inputs. Probability
+normalization uses that cadence; ordinary current offensive stats are still
+read at each impact. Cadence-free test fixtures use reference speed explicitly.
+Misses, zero chance, zero dice and periodic ticks never roll an on-hit status.
+Only committed impact proposals are observed by the session scheduler.
+
+The administrative T0 status tiers contribute an explicit guaranteed-application
+stat. While positive, it bypasses cadence normalization and returns 100% per
+successful hit; misses still cannot apply statuses. Normal chance scaling is
+unchanged. The override disappears when the equipped modifier is removed.
+
+| Status | Default duration / interval | Reapplication | Damage / defenses |
+| --- | --- | --- | --- |
+| Poison | 5 s / 1 s | Independent unlimited stacks | Pure; ignores armor/resistance and ordinary hit bonuses |
+| Ignite | 5 s / 1 s | Refresh remaining time only | Fire; captured global/fire bonuses and current fire resistance; no armor |
+| Bleed | 10 s / 1 s | Refresh remaining time only | Nd4−N pure damage, possibly zero; ignores armor/resistance and ordinary hit bonuses |
+
+Bleed also applies a default 10% movement slow through
+`StatusMovementProjector`. Effective movement speed is projected over the
+current resolved movement stat while the status is active. Refresh does not
+stack slowing; expiry/removal immediately restores normal resolved movement.
+
+`Content/Combat/status-effects.json` owns these base values. Dedicated source
+status coefficients can modify duration, damage, tick frequency and slowing
+using the existing stat calculator. `OnHitStatusRule.Capture` freezes those
+results and the source snapshot on initial application. Later source changes
+or death do not alter an existing effect. Refresh changes only expiry: it
+preserves the instance ID, source, damage, slowing, lifetime length and next
+scheduled tick. Frequent refreshes cannot postpone damage indefinitely.
+
+`PeriodicEffectScheduler` uses paused game time. The first tick is one captured
+interval after application. Complete intervals up to and including expiry tick;
+there is no additional fractional tick. Modified fractional durations expire at
+the exact captured deadline. Late frames consume due slots in chronological
+order. Duplicate resolution notifications and repeated advancement to the same
+time cannot repeat ticks or extend refresh duration twice.
+
+Ticks use `RawDamageStep`, `StatusDamageStep`, `SourceDamageStep`, defenses and
+mandatory health/defeat finalization through `PeriodicEffectService`. They roll
+only captured damage dice: no d20, critical, leech, costs, cooldowns or new statuses.
+Pure damage is internal and absent from hit/equipment/resistance/EHP categories.
+Defeated recipients stop ticking; round defeat/reward accounting uses the same
+canonical HP/defeat state as ordinary hits.
+
+Each due slot is attempted once. Version conflicts never reroll damage.
+Expiry uses a separate state-only transaction, retried on later advancement
+if its commit conflicts. Duration refresh is also a versioned state-change
+proposal: a rejected impact never extends a timer. Manual laboratory
+Burning/Bleeding fixtures retain their explicit scheduling/replacement rules.

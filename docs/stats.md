@@ -138,17 +138,17 @@ EHP is `MaxHealth × unprotected expected loss / defended expected loss`.
 The unprotected comparison has no armor, evasion or resistances. Zero expected
 loss is represented by null and displayed as ∞.
 
-The character sheet's `EHP` row shows the arithmetic mean of seven individual
+The character sheet's `EHP` row shows the arithmetic mean of six individual
 damage-type EHP values with equal weight. If a type is immune, its EHP and this
-arithmetic mean are infinite. The click-only card shows all seven types and all
-21 unordered type pairs. Each pair is a genuine 50/50 mixed packet: 5 + 5 damage,
+arithmetic mean are infinite. The click-only card shows all six types and all
+15 unordered type pairs. Each pair is a genuine 50/50 mixed packet: 5 + 5 damage,
 not the mean of its two single-type EHP values. All reference hits have 10 total
 damage and a d20 bonus of +4. Combined entries are excluded from the headline
 average so no type is counted twice. Click a category to inspect its component
 resistances, armor and evasion through nested cards. The row has no hover tooltip.
 
-At 100 HP, the STR/DEX/INT reference sets produce headline means of 118.4/135.7/
-121.6 respectively; individual physical values differ from unarmored nonphysical
+At 100 HP, the STR/DEX/INT reference sets produce headline means of 121.4/135.7/
+122.6 respectively; individual physical values differ from unarmored nonphysical
 values. Criticals, recovery, periodic damage and attack frequency are excluded.
 Armor depends on hit size. Reading EHP consumes no dice and changes no state;
 wounded current HP does not lower this full-health comparison.
@@ -158,3 +158,20 @@ The character sheet displays the critical coefficient as `Critical damage bonus`
 as +150%. The combat coefficient remains unchanged. Evasion, accuracy, critical
 roll bonus and critical damage bonus are clickable and link to related hit-quality
 and defense explanations. Item modifier labels use the same terminology.
+
+## Status modifiers and effective movement
+
+Each status has `Chance` and `Dice` stats plus neutral-one `DurationMultiplier`,
+`DamageMultiplier`, `TickRateMultiplier` and `SlowMultiplier` stats, prefixed
+`Poison`, `Ignite` or `Bleed`. For example, an Increased 0.5 modifier to
+`PoisonDurationMultiplier` changes the configured 5 s to 7.5 s for new stacks.
+An Increased 1 modifier to `BleedSlowMultiplier` changes base 10% slow to 20%.
+These modifiers use normal stat provenance and calculation, independently of
+base values in JSON; they do not implement a talent-selection UI.
+
+Chance is nonnegative before cadence normalization and capped afterward;
+this preserves chance bonuses on fast weapons. `GetStats` applies active
+captured movement slowing over stored resolved movement speed without
+rewriting base profiles or equipment. Removal/expiry immediately drops that
+projection. Ordinary outgoing damage boosts apply to ignite, while dedicated
+status damage modifiers can strengthen any of the three effects.
