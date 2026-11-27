@@ -97,7 +97,8 @@ public partial class InventoryPanel : Control
             pair.Value.DragFootprint = item is null ? Vector2I.One : new Vector2I(item.Base.Footprint.Width, item.Base.Footprint.Height);
 
             var icon = item is null ? ItemPresentation.Icon(pair.Key) : ItemPresentation.Icon(item, pair.Key);
-            pair.Value.SetAppearance(icon, item is null ? HonorTheme.Border : ItemPresentation.RarityColor(item.Rarity), item is not null);
+            pair.Value.SetAppearance(icon, item is null ? HonorTheme.Border : ItemPresentation.RarityColor(item.Rarity), item is not null,
+                item?.Progression.Enhancement ?? 0);
         }
 
         var equipped = state.Loadout.Slots.Values

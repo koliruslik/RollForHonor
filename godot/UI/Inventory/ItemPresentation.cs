@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Linq;
 using Godot;
@@ -12,6 +13,66 @@ namespace RollForHonor.Godot.UI.Inventory;
 /// <summary>Formats actual item data for the game interface without introducing separate stat arithmetic.</summary>
 public static class ItemPresentation
 {
+    /// <summary>Shows the retained dice-plus-flat formula and captured scaling for detailed inspection.</summary>
+    /// <param name="component">The actual captured base damage component.</param>
+    /// <param name="addedDamage">Nonnegative flat item damage applied after base scaling.</param>
+    /// <param name="includeType">Whether to append the localized damage type.</param>
+    /// <returns>The original dice expression, base multiplier and separately added damage.</returns>
+    /// <exception cref="ArgumentNullException">The component is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Added damage is negative.</exception>
+    /// <exception cref="OverflowException">Combining unscaled flat bonuses exceeds the integer range.</exception>
+    public static string WeaponDamageFormula(RollForHonor.Domain.Combat.Damage.Models.DamageComponent component,
+        int addedDamage = 0, bool includeType = true)
+    {
+        ArgumentNullException.ThrowIfNull(component);
+        ArgumentOutOfRangeException.ThrowIfNegative(addedDamage);
+        var flat = component.Multiplier == 1 ? checked(component.FlatDamage + addedDamage) : component.FlatDamage;
+        var formula = component.Dice.ToString() + (flat == 0 ? "" : flat > 0
+            ? " + " + flat.ToString(CultureInfo.InvariantCulture) : " - " + Math.Abs((long)flat).ToString(CultureInfo.InvariantCulture));
+        if (component.Multiplier != 1)
+        {
+            formula = $"({formula}) ×{component.Multiplier.ToString("0.####", CultureInfo.InvariantCulture)}";
+            if (addedDamage > 0)
+            {
+                formula += " + " + addedDamage.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        return includeType ? L.Format($"{formula} [{component.Type}]") : formula;
+    }
+
+    /// <summary>Shows a weapon component's actual integer damage interval after captured base scaling.</summary>
+    /// <param name="component">The captured base dice, flat amount, type and multiplier.</param>
+    /// <param name="addedDamage">An optional nonnegative flat item bonus added after base scaling.</param>
+    /// <param name="includeType">Whether to include the localized damage category.</param>
+    /// <returns>A readable damage range without exposing the internal multiplier.</returns>
+    /// <exception cref="ArgumentNullException">The component is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Added damage is negative.</exception>
+    /// <exception cref="OverflowException">An endpoint cannot be represented as integer damage.</exception>
+    public static string WeaponDamageRange(RollForHonor.Domain.Combat.Damage.Models.DamageComponent component,
+        int addedDamage = 0, bool includeType = true)
+    {
+        ArgumentNullException.ThrowIfNull(component);
+        ArgumentOutOfRangeException.ThrowIfNegative(addedDamage);
+        var minimum = checked((int)decimal.Ceiling(Math.Max(0m, (decimal)component.Dice.Count + component.FlatDamage)
+            * component.Multiplier) + addedDamage);
+        var maximum = checked((int)decimal.Ceiling(Math.Max(0m, (decimal)component.Dice.Count * component.Dice.Sides + component.FlatDamage)
+            * component.Multiplier) + addedDamage);
+        return includeType ? L.Format($"{component.Type} damage  {minimum}–{maximum}") : $"{minimum}–{maximum}";
+    }
+
+    /// <summary>Gets the enhancement glow color independently of item rarity.</summary>
+    /// <param name="enhancement">The captured enhancement level.</param>
+    /// <returns>Green at +3, blue at +5, purple at +7, gold at +10, or transparent below +3.</returns>
+    public static Color EnhancementGlow(int enhancement) => enhancement switch
+    {
+        >= 10 => new("dfb76b"),
+        >= 7 => new("b39bd0"),
+        >= 5 => new("78a9c9"),
+        >= 3 => new("8fb697"),
+        _ => Colors.Transparent
+    };
+
     /// <summary>Maps current rarity categories to distinguishable text and border colors.</summary>
     /// <param name="rarity">The item's explicit rarity.</param>
     /// <returns>The presentation color.</returns>
@@ -41,7 +102,8 @@ public static class ItemPresentation
     /// <summary>Formats an owned item's rarity-specific name without rerolling its properties.</summary>
     /// <param name="item">The immutable owned item.</param>
     /// <returns>The current localized display name.</returns>
-    public static string Name(ItemInstance item) => Name(item.Base.Id, item.Base.Name, item.Rarity);
+    public static string Name(ItemInstance item) => Name(item.Base.Id, item.Base.Name, item.Rarity)
+        + (item.Progression.Enhancement > 0 ? $" +{item.Progression.Enhancement}" : "");
 
     /// <summary>Finds the first compatible slot using the active rules.</summary>
     /// <param name="item">The captured item.</param>

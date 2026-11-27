@@ -36,6 +36,7 @@ public sealed class GodotInspectionTest : TestClass
             properties.EmitSignal(RichTextLabel.SignalName.MetaClicked, "0");
             var stack = hud.GetNode<InspectionStack>("Root/Design/Inspections");
             stack.Count.ShouldBe(1);
+            stack.GetNode<RichTextLabel>("Level0/Card/Body").GetParsedText().ShouldContain("6–11");
             stack.GetNode<RichTextLabel>("Level0/Card/Body").GetParsedText().ShouldContain("1d6 + 5");
             stack.GetNode<RichTextLabel>("Level0/Card/Body").EmitSignal(RichTextLabel.SignalName.MetaClicked, "1");
             stack.Count.ShouldBe(2);

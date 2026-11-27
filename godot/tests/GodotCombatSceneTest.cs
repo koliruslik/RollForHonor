@@ -232,11 +232,23 @@ public sealed class GodotCombatSceneTest : TestClass
             scene.ApplyDraft(true).ShouldBeTrue();
             Balance(scene).ShouldBe(90m);
             await WaitForContact(scene);
-            Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId).Target.Health.ShouldBe(59);
+            scene.LastContact.Impact.IsCommitted.ShouldBeTrue();
+            var result = ((ResolvedCombat)scene.LastContact.Impact.Outcome).Resolution.Result.Target;
+            var naturalMiss = result.AttackRoll.Roll.Results.Single() == 1;
+            if (naturalMiss)
+            {
+                result.Outcome.ShouldBe(RollForHonor.Domain.Combat.Attacks.Models.AttackOutcome.Evaded);
+            }
+
+            Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId).Target.Health.ShouldBe(naturalMiss ? 60 : 59);
             var text = scene.GetNode<RichTextLabel>("HUD/JournalPanel/Rows/Journal").GetParsedText();
             text.ShouldContain("armor 1000");
+            text.ShouldContain("HP 60/80");
             text.ShouldContain("Complete dice trace");
-            text.ShouldContain("60 → 59");
+            if (!naturalMiss)
+            {
+                text.ShouldContain("60 → 59");
+            }
             text.ShouldContain("AttackQuality");
         }
         finally { scene.Free(); }
@@ -253,7 +265,17 @@ public sealed class GodotCombatSceneTest : TestClass
             scene.Fire(true).Status.ShouldBe(AttackStartStatus.Started);
             await WaitForContact(scene);
             var read = Runtime.CombatState.Read(scene.Source.CombatantId, scene.Target.CombatantId);
-            read.Source.Health.ShouldBeLessThan(100);
+            scene.LastContact.Impact.IsCommitted.ShouldBeTrue();
+            var result = ((ResolvedCombat)scene.LastContact.Impact.Outcome).Resolution.Result.Target;
+            if (result.AttackRoll.Roll.Results.Single() == 1)
+            {
+                result.Outcome.ShouldBe(RollForHonor.Domain.Combat.Attacks.Models.AttackOutcome.Evaded);
+                read.Source.Health.ShouldBe(100);
+            }
+            else
+            {
+                read.Source.Health.ShouldBeLessThan(100);
+            }
             read.Target.Health.ShouldBe(50);
             Balance(scene).ShouldBe(100m);
             Runtime.CombatState.ReadForStart(scene.Target.CombatantId, "demo-arrow", Guid.NewGuid())

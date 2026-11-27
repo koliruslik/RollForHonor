@@ -309,4 +309,78 @@ cannot change during an owned-item edit, so bag footprint and placement remain
 valid. The session adapter compares the exact expected item snapshot under its
 lock and atomically replaces ownership, loadout and equipped stat projections.
 Unrelated combat updates do not invalidate the draft; another item edit or loss
-of ownership does. This admin path does not implement paid crafting or sales.
+of ownership does. This admin path remains free; paid crafting has a separate
+window. Sales are not implemented.
+
+## Paid item upgrades
+
+Open **Upgrade items** from the arena HUD. The inventory remains available beside
+the upgrade window. It opens with an empty slot: drag an owned bag/equipped
+item into it. Clear slot removes only the selection; reopening starts empty.
+This does not move ownership or unequip the item.
+Gameplay continues. Escape closes the upgrade window first.
+
+Operations are embedded in the item's properties rather than separate tabs.
+Current base values show the next result in green; the Enhance button is below
+them. At the current rarity's cap it becomes disabled and Evolve appears in
+the same block. Occupied affix rows include lock icons; click any empty row to
+pay for one random addition. The full unlocked reroll is below all affixes.
+
+`Content/Items/upgrade-rules.json` configures the initial gold resource, ten
+step prices, four evolution gates/fees, enhancement coefficient and affix prices.
+The current table supports first-generation bases (requirement level 0).
+Unreleased later generations cannot use these prices.
+
+| Operation | Behavior and current gold price |
+| --- | --- |
+| Enhance | Raises enhancement by one, stopping at Common +3, Uncommon +5, Rare +7, Epic +10 or Legendary +10. Step prices: 14/20/27/39/54/77/108/153/216/305. |
+| Evolve | Common +3 → Uncommon, Uncommon +5 → Rare, Rare +7 → Epic, Epic +10 → Legendary. Fees: 35/70/140/280. |
+| Reroll | Regenerates family, tier and quality/values for every unlocked affix, retaining occupied count. Base fee `48 + 12 × max(0, count - 1)`; each lock multiplies it by 1.5, rounded upward once at the end. |
+| Add affix | Adds one random eligible affix below current capacity. Costs eight times the base full-reroll fee before addition, independently of locks. |
+
+Enhancement/evolution always succeed for a valid paid request. Evolution keeps
+existing affixes and opens capacity without filling it. At the gate, the new
+rarity starts at +0. Previously captured/admin items above the new rarity cap
+still carry excess levels: Common +5 becomes Uncommon +2. Ordinary paid
+enhancement cannot exceed that rarity's gate. The first +0 → +3 → Uncommon +0 journey costs
+96 gold, approximately ten starter rewards at Luck 0. This is an income target,
+not a guarantee of enough gold on the tenth kill.
+
+`ItemProgression` captures enhancement, rarity-base multiplier and linear step.
+Enhancement adds 5% of that rarity's +0 base per step. Each evolution's base
+multiplier incorporates the old rarity's required enhancement, preserving its
+strength at the gate. Newly generated live rarity items use the same cumulative
+base curve. Existing captured/legacy unscaled snapshots are preserved.
+
+`ItemBaseScaling` scales flat base HP, mana, armor, evasion, accuracy, recovery
+and added damage, retaining fractional stat values for existing projection.
+It does not scale attributes, requirements, cadence, mana cost or affix rolls.
+Weapon dice remain unchanged: `(base roll + flat base) × captured multiplier`
+is clamped at zero and rounded upward to integer damage before separate source
+affix damage/dice, quality, criticals and defenses. Actual dice and multiplier
+remain in the component trace. Item cards, inspection and upgrade properties
+show readable integer damage intervals, with green next-result endpoints in
+the upgrade preview. Endpoints include captured base scaling and actual upward
+rounding; flat item damage is added after that scaling in item cards.
+Hold Alt to reveal the retained dice-plus-flat formula; opening the property's
+detailed explanation also shows it alongside the range. The upgrade preview
+switches between ranges and formulas while Alt is held. Dice are still rolled
+in combat; the interval is a presentation of the possible integer endpoints.
+
+Random crafting uses the enabled, slot-compatible live pool, the item's immutable
+generation-level gates and current resolved Luck. Tier thresholds match the live
+loot rank selection; administrative T0 cannot be crafted. Locked affixes retain
+identity, family, tier, quality and values; their families are excluded from the
+remaining pool. No compatible pool, no unlocked affixes and full capacity reject
+before payment. Locks are free selection controls; they affect only reroll cost.
+
+Application `ItemUpgradeService` quotes without rolling/spending and captures
+one random result per executed quote. `IItemUpgradeStateAdapter` reads coherent
+ownership, Luck and resource balances; the current session adapter supports gold.
+Quotes retain the exact item snapshot and Luck. Commit additionally checks the
+fresh execution version and publishes debit, canonical item, loadout and equipped
+stats with one immutable state replacement. Raising maxima never heals/refills.
+Stale requests, lost ownership, insufficient funds, defeated owners and projection
+overflow do not partially spend or change the item. Repeating a successful quote
+returns AlreadyApplied. Retrying a conflicted quote reuses its first captured
+result instead of rolling again. Save/load remains unimplemented.

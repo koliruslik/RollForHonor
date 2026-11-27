@@ -35,17 +35,23 @@ public sealed partial class InMemoryCombatState
                 return false;
             }
 
-            var loadout = new EquipmentLoadout(equipment.Loadout.Slots
-                .Select(pair => new KeyValuePair<RollForHonor.Domain.Items.Equipment.Models.EquipmentSlot, ItemInstance>(
-                    pair.Key, pair.Value.Id == expected.Id ? replacement : pair.Value)));
-            var updated = equipment with { OwnedItems = equipment.OwnedItems.SetItem(expected.Id, replacement), Loadout = loadout };
-            ValidateLoadout(updated, loadout);
-            var next = _data with { Equipment = _data.Equipment.SetItem(ownerId, updated) };
-
-            _data = equipment.Loadout.Slots.Values.Any(item => item.Id == expected.Id)
-                ? ApplyEquipmentStats(next, ownerId, equipment.NonEquipmentProfile, loadout)
-                : next with { Version = checked(_data.Version + 1) };
+            _data = StageOwnedItemChange(_data, ownerId, expected, replacement);
             return true;
         }
+    }
+
+    private SessionData StageOwnedItemChange(SessionData data, CombatantId ownerId, ItemInstance expected, ItemInstance replacement)
+    {
+        var equipment = data.Equipment[ownerId];
+        var loadout = new EquipmentLoadout(equipment.Loadout.Slots
+            .Select(pair => new KeyValuePair<EquipmentSlot, ItemInstance>(
+                pair.Key, pair.Value.Id == expected.Id ? replacement : pair.Value)));
+        var updated = equipment with { OwnedItems = equipment.OwnedItems.SetItem(expected.Id, replacement), Loadout = loadout };
+        ValidateLoadout(updated, loadout);
+        var next = data with { Equipment = data.Equipment.SetItem(ownerId, updated) };
+
+        return equipment.Loadout.Slots.Values.Any(item => item.Id == expected.Id)
+            ? ApplyEquipmentStats(next, ownerId, equipment.NonEquipmentProfile, loadout)
+            : next with { Version = checked(data.Version + 1) };
     }
 }

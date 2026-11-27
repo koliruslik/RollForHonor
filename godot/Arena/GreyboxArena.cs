@@ -227,12 +227,14 @@ public partial class GreyboxArena : Node3D
 
     private AttackDefinition CreatePlayerAttack()
     {
-        var weapon = _runtime.CombatState.ReadEquipment(Player.CombatantId).Loadout.GetItem(EquipmentSlot.Weapon)?.Base.Weapon;
+        var item = _runtime.CombatState.ReadEquipment(Player.CombatantId).Loadout.GetItem(EquipmentSlot.Weapon);
+        var weapon = item?.Base.Weapon;
 
         var speed = _runtime.CombatState.GetStats(Player.CombatantId).Get(new(StatType.AttackSpeed));
 
         return new AttackDefinition("arena-shot",
-            new(new(1, 20), 8, NaturalOutcomeShiftRules.Standard, weapon?.Damage ?? [new(new(1, 6), 3, DamageType.Piercing)], [], AttackTags.Projectile),
+            new(new(1, 20), 8, NaturalOutcomeShiftRules.Standard,
+                weapon is not null ? RollForHonor.Domain.Items.Services.ItemBaseScaling.WeaponDamage(item) : [new(new(1, 6), 3, DamageType.Piercing)], [], AttackTags.Projectile),
             TimeSpan.FromSeconds((double)(1 / Math.Max(0.01m, (weapon?.AttacksPerSecond ?? 4) * speed))),
             [new(new("mana"), weapon?.ManaCost ?? 10)],
             new(AttackRepeatPolicy.OncePerTarget, AttackStopCondition.CombatantContact | AttackStopCondition.EnvironmentContact, TimeSpan.FromSeconds(4)));

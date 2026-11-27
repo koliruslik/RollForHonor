@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -53,7 +54,7 @@ public partial class ItemDetailsPanel
             _properties.AddText(L.Format($"Mana cost  {weapon.ManaCost:0.##}\n"));
         }
 
-        foreach (var damage in weapon.Damage)
+        foreach (var damage in RollForHonor.Domain.Items.Services.ItemBaseScaling.WeaponDamage(_item))
         {
             WriteWeaponDamage(damage);
         }
@@ -62,21 +63,22 @@ public partial class ItemDetailsPanel
     private void WriteWeaponDamage(RollForHonor.Domain.Combat.Damage.Models.DamageComponent damage)
     {
         var key = new StatKey(StatType.AddedDamage, damage.Type);
-        var flat = _item.Base.Modifiers
+        var flat = RollForHonor.Domain.Items.Services.ItemBaseScaling.Modifiers(_item)
             .Concat(_item.Affixes
                 .SelectMany(affix => affix.Modifiers))
             .Where(modifier => modifier.Key == key)
             .Select(modifier => new StatModifier(modifier.Key, modifier.Operation, modifier.Amount, "item-tooltip"));
         var value = new StatCalculator().Calculate(new StatProfile(new StatBlock(), flat)).Get(key);
-        var text = new RollForHonor.Domain.Combat.Damage.Models.DamageComponent(damage.Dice, checked(damage.FlatDamage + (int)decimal.Floor(value)), damage.Type);
-        var display = L.Damage(text);
+        var added = Math.Max(0, checked((int)decimal.Floor(value)));
+        var formula = ItemPresentation.WeaponDamageFormula(damage, added);
+        var display = ItemPresentation.WeaponDamageRange(damage, added) + (_detailed ? "\n" + formula : "");
         var contributors = _item.Affixes
             .Where(affix => affix.Modifiers.Any(modifier => modifier.Key == key))
             .ToArray();
-        WriteProperty(display, contributors, new StatKey(StatType.DamageMultiplier, damage.Type));
+        WriteProperty(display, contributors, new StatKey(StatType.DamageMultiplier, damage.Type), formula);
     }
 
-    private void WriteProperty(string text, IReadOnlyList<AffixInstance> contributors, StatKey key)
+    private void WriteProperty(string text, IReadOnlyList<AffixInstance> contributors, StatKey key, string detail = null)
     {
         if (contributors.Count == 0 && key.DamageKind is null && key.Type is not (StatType.Armor or StatType.DamageMultiplier))
         {
@@ -87,12 +89,12 @@ public partial class ItemDetailsPanel
         var id = _inspections.Count.ToString();
         _sources[id] = string.Join("\n\n", contributors
             .Select(affix => ItemPresentation.AffixName(affix.DefinitionId) + "\n" + FormatAffix(affix)));
-        _inspections[id] = PropertyTopic(text, key, contributors);
+        _inspections[id] = PropertyTopic(text, key, contributors, detail);
         InspectionText.Link(_properties, text, id, CombatGlossary.StatColor(key), contributors.Count > 0);
         _properties.AddText("\n");
     }
 
-    private InspectionTopic PropertyTopic(string value, StatKey key, IReadOnlyList<AffixInstance> contributors)
+    private InspectionTopic PropertyTopic(string value, StatKey key, IReadOnlyList<AffixInstance> contributors, string detail)
     {
         var definition = CombatGlossary.Stat(key);
         var affixes = contributors
@@ -102,8 +104,13 @@ public partial class ItemDetailsPanel
             .Concat(affixes
                 .Select(topic => new InspectionLink(topic.Title, topic.Accent, () => topic)));
 
-        return new InspectionTopic(definition.Title, definition.Description, definition.Accent, links,
-            [new InspectionFact(value, CombatGlossary.StatColor(key), contributors.Count > 0)]);
+        var facts = new List<InspectionFact> { new(value, CombatGlossary.StatColor(key), contributors.Count > 0) };
+        if (detail is not null && !value.Contains(detail, StringComparison.Ordinal))
+        {
+            facts.Add(new(detail, CombatGlossary.StatColor(key)));
+        }
+
+        return new InspectionTopic(definition.Title, definition.Description, definition.Accent, links, facts);
     }
 
     private InspectionTopic AffixTopic(AffixInstance affix) => ItemInspectionTopics.Affix(_item.Rarity, affix, _detailed);
@@ -124,7 +131,7 @@ public partial class ItemDetailsPanel
         var implicitKeys = _item.Base.Modifiers
             .Select(modifier => (modifier.Key, modifier.Operation))
             .ToHashSet();
-        var groups = _item.Base.Modifiers
+        var groups = RollForHonor.Domain.Items.Services.ItemBaseScaling.Modifiers(_item)
             .Concat(_item.Affixes
                 .SelectMany(affix => affix.Modifiers))
             .GroupBy(modifier => (modifier.Key, modifier.Operation))

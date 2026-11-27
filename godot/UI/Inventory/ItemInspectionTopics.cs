@@ -16,15 +16,19 @@ public static class ItemInspectionTopics
     /// <returns>A rarity-colored explanation without rerolling or looking up replacement values.</returns>
     public static InspectionTopic Item(ItemInstance item)
     {
-        var facts = item.Base.Modifiers
+        var facts = RollForHonor.Domain.Items.Services.ItemBaseScaling.Modifiers(item)
             .Select(modifier => new InspectionFact(ItemPresentation.Modifier(modifier), CombatGlossary.StatColor(modifier.Key)))
             .ToList();
 
         if (item.Base.Weapon is { } weapon)
         {
             facts.Insert(0, new(L.Format($"Attack speed {weapon.AttacksPerSecond:0.##}/s · Mana cost {weapon.ManaCost:0.##}"), HonorTheme.Parchment));
-            facts.AddRange(weapon.Damage
-                .Select(part => new InspectionFact(L.Damage(part), CombatGlossary.DamageColor(part.Type))));
+            facts.AddRange(RollForHonor.Domain.Items.Services.ItemBaseScaling.WeaponDamage(item)
+                .SelectMany(part => new[]
+                {
+                    new InspectionFact(ItemPresentation.WeaponDamageRange(part), CombatGlossary.DamageColor(part.Type)),
+                    new InspectionFact(ItemPresentation.WeaponDamageFormula(part), CombatGlossary.DamageColor(part.Type))
+                }));
         }
 
         var links = item.Base.Modifiers

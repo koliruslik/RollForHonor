@@ -17,11 +17,16 @@ public sealed class ItemInstance
     /// <summary>Gets the immutable level used for affix gates, independent of display score and equip requirements.</summary>
     public int GenerationLevel { get; }
 
+    /// <summary>Gets captured enhancement and rarity scaling; affix values are unaffected.</summary>
+    public ItemProgression Progression { get; }
+
     /// <summary>Gets the occupied affix slots and their stored values.</summary>
     public IReadOnlyList<AffixInstance> Affixes { get; }
 
-    internal ItemInstance(string id, ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes, int generationLevel = 1)
+    internal ItemInstance(string id, ItemDefinition definition, ItemRarity rarity, AffixInstance[] affixes, int generationLevel = 1,
+        ItemProgression? progression = null)
     {
+        Progression = progression ?? new();
         GenerationLevel = generationLevel;
         Id = id;
         Base = definition;

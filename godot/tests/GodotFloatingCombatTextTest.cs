@@ -45,16 +45,34 @@ public sealed class GodotFloatingCombatTextTest : TestClass
             numbers.ShowResult(position, Result(AttackOutcome.Hit));
             var labels = numbers.GetChildren().OfType<Label>().ToArray();
             labels.Select(label => label.Text).ShouldBe(["7", "3"]);
-            labels[0].GetThemeColor("font_color").ShouldBe(CombatGlossary.DamageColor(DamageType.Fire));
-            labels[1].GetThemeColor("font_color").ShouldBe(CombatGlossary.DamageColor(DamageType.Cold));
+            labels[0].GetThemeColor("font_color").ShouldBe(CombatGlossary.DamageNumberColor(DamageType.Fire));
+            labels[1].GetThemeColor("font_color").ShouldBe(CombatGlossary.DamageNumberColor(DamageType.Cold));
             labels[0].Position.ShouldNotBe(labels[1].Position);
             labels.All(label => label.MouseFilter == Control.MouseFilterEnum.Ignore).ShouldBeTrue();
             await Capture("hit.png");
             numbers._Process(2);
             numbers.GetChildCount().ShouldBe(0);
+            var types = Enum.GetValues<DamageType>();
+            numbers.ShowResult(position, Result(AttackOutcome.Hit, types.Select((type, index) => new DamageAmount(type, 11 + index * 7)).ToArray()));
+            var typedLabels = numbers.GetChildren().OfType<Label>().ToArray();
+            typedLabels.Length.ShouldBe(types.Length);
+            typedLabels.Select(label => label.GetThemeColor("font_color")).Distinct().Count().ShouldBe(types.Length);
+            for (var index = 0; index < types.Length; index++)
+            {
+                typedLabels[index].GetThemeColor("font_color").ShouldBe(CombatGlossary.DamageNumberColor(types[index]));
+                if (index > 0)
+                {
+                    Math.Abs(typedLabels[index].Position.Y - typedLabels[index - 1].Position.Y).ShouldBeGreaterThanOrEqualTo(34);
+                }
+            }
+            await Capture("all-damage-types.png");
+            numbers._Process(2);
             numbers.ShowResult(position, Result(AttackOutcome.GlancingHit));
             var glance = numbers.GetChild<Label>(0);
             glance.GetThemeColor("font_color").A.ShouldBeLessThan(1);
+            var glanceColor = glance.GetThemeColor("font_color");
+            var fireColor = CombatGlossary.DamageNumberColor(DamageType.Fire);
+            new Color(glanceColor.R, glanceColor.G, glanceColor.B).ShouldBe(fireColor);
             ((SystemFont)glance.GetThemeFont("font")).FontWeight.ShouldBe(400);
             await Capture("glance.png");
             numbers._Process(2);

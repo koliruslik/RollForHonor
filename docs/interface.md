@@ -1,5 +1,21 @@
 # Game interface
 
+The arena's **Upgrade items** button opens paid crafting beside the inventory.
+Drag an owned item into the initially empty slot to open its editable properties.
+Base-stat lines show current values and the next improvement in green.
+Weapon damage is presented as a short typed range such as 6–13 → 7–14,
+including captured scaling and game rounding. Hold Alt or open the damage
+details to inspect the actual dice-plus-flat formula and captured base scaling.
+Enhance
+stops at the rarity cap; Evolve appears directly below it at that cap. Every
+occupied affix has its own lock icon, and every free affix row is a priced
+button which generates one affix. Reroll unlocked affixes is below the entire
+affix list. The shared list scrolls for long items. Clear slot resets selection
+without moving the item. Dim locks highlight when pressed and immediately
+reprice the reroll. Random outcomes appear after payment.
+Both English and Ukrainian are supported. Enhancement glow at +3/+5/+7/+10 is
+green/blue/purple/gold, independently of rarity borders. See [paid upgrades](items.md#paid-item-upgrades).
+
 [Project overview](../README.md) · [Documentation index](README.md)
 
 ## Screens and navigation
@@ -31,7 +47,9 @@ centered 1920×1080 design surface. Captures cover 1920×1080, 1280×720 and ult
 
 Committed hits and periodic damage display floating amounts around enemies and
 training targets. Each damage type has its own post-defense number using the
-shared type color. Glancing hits use pale text, critical hits use bold text,
+distinct battle-number color. Piercing is ivory, bludgeoning tan, slashing pink,
+fire orange, cold cyan, lightning yellow and pure/poison green. Glancing hits
+retain the type hue at lower opacity, critical hits use bold text,
 and evaded attacks display a gray localized Miss / Промах. Numbers rise and fade,
 follow camera projection, survive target removal and freeze while paused.
 
